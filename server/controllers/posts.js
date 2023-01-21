@@ -1,7 +1,12 @@
-export const getPosts = (req, res) => {
+import Post from '../models/post.js'
+
+export const getPosts = async (req, res) => {
+    const posts = await Post.find();
     res.json({
-        data: "laoshu",
-        name: "post",
-        date: "2023-01-20",
+        data: posts,
     })
+};
+
+export const createPost = async (req, res) => {
+    
 };

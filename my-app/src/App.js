@@ -11,6 +11,7 @@ import Room from "./Components/Assets/living_space.jpg"
 import Room2 from "./Components/Assets/living_space2.jpg"
 
 function App() {
+
   const keyinfo = [
     {
       profile: "1",

@@ -13,7 +13,7 @@ app.use('/', postRoutes);
 
 
 const PORT = process.env.PORT || 5000;
-const CONNECTION_URL = "mongodb://127.0.0.1/bunkmate" || process.env.CONNECTION_URL;
+const CONNECTION_URL = process.env.CONNECTION_URL || "mongodb://127.0.0.1/bunkmate";
 
 mongoose.set('strictQuery', false)
 mongoose.connect(CONNECTION_URL, {
