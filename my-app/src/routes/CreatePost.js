@@ -9,6 +9,7 @@ function CreatePost() {
     price: 0,
     number_of_bedrooms: 0,
     number_of_roommates: 0,
+    number_of_bathrooms: 0,
     tags: [],
     date_available: "",
   });
@@ -17,6 +18,15 @@ function CreatePost() {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
+    fetch('/', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+    },
+      body: JSON.stringify(formData),
+    }).then(response => response.json())
+    .then(response => console.log(JSON.stringify(response)))
   }
   console.log(formData);
   const inputs = [
@@ -71,6 +81,15 @@ function CreatePost() {
       errormessage: "",
       required: true,
       type: "date",
+      pattern: "^[1-9]*$"
+    },
+    {
+      id: 7,
+      name:'Number of bathrooms',
+      placeholder: 'Number of bathrooms',
+      keyname: 'number_of_bathrooms',
+      errormessage: "Roommates must be greater than 0",
+      required: true,
       pattern: "^[1-9]*$"
     },
   ]

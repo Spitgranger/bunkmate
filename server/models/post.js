@@ -1,19 +1,15 @@
 import mongoose from 'mongoose';
 
 const postSchema = mongoose.Schema({
-    title: {
-        type: String,
-        required: true,
-    },
-    message: {
+    address: {
         type: String,
         required: true,
     },
     price: Number,
     tags: [String],
-    num_roomates: Number,
-    num_bedrooms: Number,
-    num_bathrooms: Number,
+    number_of_roomates: Number,
+    number_of_bedrooms: Number,
+    number_of_bathrooms: Number,
     date_available: String,
 });
 
