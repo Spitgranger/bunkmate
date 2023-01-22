@@ -18,6 +18,7 @@
   background-repeat: no-repeat;
   background-size: 20px 20px;
   display: inline-block;
+  zoom: 0.8;
 
 }
 
@@ -69,9 +70,6 @@ img {
   justify-content: flex-end;
 }
 
-.dots:hover {
-  width: 16px;
-}
 
 .keyInfo {
   display: flex;

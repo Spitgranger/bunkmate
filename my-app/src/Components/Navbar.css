@@ -1,11 +1,10 @@
-
-
 nav {
+  margin: 10px 0 0 0;
   width: 100%;
+  zoom: 0.8;
   height: 100%;
   font-weight: 600;
   display: flex;
-  margin: 10px;
   flex-flow: row wrap;
   border-bottom: 2px solid black;
   min-width: 900px;
@@ -17,18 +16,25 @@ nav {
     inset 0px 20px 7px 0px grey;*/
 }
 
-
-
 nav ul a {
   text-decoration: none;
   float: right;
   color: black;
   flex: 1;
-  margin: 20px;
+  padding: 20px;
+  border-bottom: 3px solid white;
+}
+
+nav ul :hover {
+  background-color: rgb(246, 246, 246);
 }
 
 nav ul a:hover {
-  color: #00ccff;
+  border-bottom: 5px solid aqua;
+}
+
+nav ul a.current {
+  border-bottom: 5px solid aqua;
 }
 
 

@@ -7,7 +7,6 @@
 .App {
   background-color: white;
   height: 100vh;
-  zoom: 0.8;
   justify-items: center;
 }
 
@@ -29,6 +28,7 @@
   border: 2px solid black;
 
 }
+
 /*
 .login {
   width: 70%;

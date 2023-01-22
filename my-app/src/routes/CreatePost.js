@@ -4,8 +4,8 @@ import FormInput from '../Components/FormInput';
 import './CreatePost.css';
 
 function CreatePost() {
-  const [ formData, setFormData ] = useState({
-    address:"",
+  const [formData, setFormData] = useState({
+    address: "",
     price: 0,
     number_of_bedrooms: 0,
     number_of_roommates: 0,
@@ -13,7 +13,7 @@ function CreatePost() {
     date_available: "",
   });
   const onChange = (e) => {
-    setFormData({...formData, [e.target.name]: e.target.value});
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -22,7 +22,7 @@ function CreatePost() {
   const inputs = [
     {
       id: 1,
-      name:'Address',
+      name: 'Address',
       placeholder: 'Enter an Address',
       keyname: 'address',
       errormessage: "",
@@ -30,16 +30,16 @@ function CreatePost() {
     },
     {
       id: 2,
-      name:'Price',
+      name: 'Price',
       placeholder: 'Monthly Price',
       keyname: 'price',
-      errormessage: "Price Must be Greater then 0",
+      errormessage: "Price Must be greater then 0",
       required: true,
       pattern: "^[1-9]*$",
     },
     {
       id: 3,
-      name:'Number of Bedrooms',
+      name: 'Number of Bedrooms',
       placeholder: 'Number of Bedrooms',
       keyname: 'number_of_bedrooms',
       errormessage: "Bedrooms must be greater than 0",
@@ -48,7 +48,7 @@ function CreatePost() {
     },
     {
       id: 4,
-      name:'Number of roommates',
+      name: 'Number of roommates',
       placeholder: 'Number of allowed Roommates',
       keyname: 'number_of_roommates',
       errormessage: "Roommates must be greater than 0",
@@ -57,7 +57,7 @@ function CreatePost() {
     },
     {
       id: 5,
-      name:'Tags',
+      name: 'Tags',
       placeholder: 'Tags, each separated with a comma',
       keyname: 'tags',
       errormessage: "Tags are in an invalid format",
@@ -65,7 +65,7 @@ function CreatePost() {
     },
     {
       id: 6,
-      name:'Date Available',
+      name: 'Date Available',
       placeholder: 'Date Available',
       keyname: 'date_available',
       errormessage: "",
@@ -82,7 +82,7 @@ function CreatePost() {
         <h2>Create a Listing</h2>
         <form onSubmit={handleSubmit}>
           {inputs.map((input) => {
-            return <FormInput key={input.id} {...input} value={formData[input.name]} onChange={onChange}/>
+            return <FormInput key={input.id} {...input} value={formData[input.name]} onChange={onChange} />
           })}
           <button>Submit</button>
         </form>
