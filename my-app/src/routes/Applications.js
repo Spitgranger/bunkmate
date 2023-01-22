@@ -5,7 +5,9 @@ import { IoIosInformationCircle } from 'react-icons/io';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import { styled } from '@mui/material/styles';
-import { filledInputClasses } from '@mui/material';
+import Button from '@mui/material/Button'
+import IconButton from '@mui/material/IconButton';
+import CameraAltIcon from '@mui/icons-material/CameraAlt';
 
 const CssTextField = styled(TextField)({
   '& label.Mui-focused': {
@@ -23,13 +25,12 @@ function Inputs(props) {
         component="form"
         sx={{
           '& > :not(style)': { m: 1, width: '25ch' },
-          borderRadius: '30%'
         }}
         noValidate
         autoComplete="off"
       >
-        <CssTextField id="filled-basic" label={props.firstField} variant="filled" size="small" />
-        <CssTextField id="filled-basic" label={props.secondField} variant="filled" size="small" />
+        <CssTextField id="outlined-basic" label={props.firstField} variant="outlined" size="small"/>
+        <CssTextField id="outlined-basic" label={props.secondField} variant="outlined" size="small" />
       </Box>
     </section>
   );
@@ -47,13 +48,13 @@ function MultiLineInput(props) {
     >
       <div>
         <CssTextField
-          id="filled-multiline-static"
+          id="outlined-multiline-static"
           fullWidth
           placeholder='Tell Us a Bit About Yourself'
           label={props.field}
           multiline
           rows={4}
-          variant="filled"
+          variant="outlined"
         />
       </div>
     </Box>
@@ -65,7 +66,6 @@ function Sections(props) {
   return (
     <>
       <h2 className="profile">{props.title}
-        {<IoIosInformationCircle size={22} />}
       </h2>
       <h5>
         <i>
@@ -86,7 +86,19 @@ function Appliciation() {
           <Sections title="Profile" message="
             *Everything in this section will be visible to other people"
           />
-          <input value="Change Profile Picture" className="uploadPic" type="button"></input>
+          <label className="uploadPic">
+          <Button variant="contained" sx={{backgroundColor: "black", color: 'white', borderRadius: "10px", width: '360px', height: '60px' }}>
+                <input accept="image/*" className={"uploadButton"} id="icon-button-file" type="file" />
+                      <label htmlFor="icon-button-file">
+                        <IconButton sx={{color: "aqua"}} aria-label="upload picture" component="span">
+                          <CameraAltIcon />
+                        </IconButton>
+                      </label>
+                Upload Profile Picture
+              </Button>
+            </label>
+
+
 
           <section className="form">
 
@@ -99,6 +111,11 @@ function Appliciation() {
             {/*student or work */}
             {/*(highschool, undergrad, grad, finished school)*/}
             <br />
+            <hr 
+            color="grey"
+            width="100%"
+            size="1">
+            </hr>
 
             <section>
               <Sections title="Personal Info" message="
@@ -108,8 +125,13 @@ function Appliciation() {
               <Inputs firstField="Phone Number" secondField="Address" />
               {/*student or work */}
               {/*(highschool, undergrad, grad, finished school)*/}
-              <br />
             </section>
+            <br />
+            <hr 
+            color="grey"
+            width="100%"
+            size="1">
+            </hr>
 
             <section>
               <Sections title="Finances" message="*You can provide us proof later"
@@ -118,8 +140,10 @@ function Appliciation() {
 
             </section>
           </section>
+        <div className="continue">
+          <Button variant="contained" sx={{backgroundColor: "black", color: 'white', borderRadius: "10px", width: '180px', height: '60px' }}>Continue</Button>
+        </div>
         </section>
-        <br />
 
 
 
