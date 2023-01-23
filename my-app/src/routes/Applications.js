@@ -29,8 +29,8 @@ function Inputs(props) {
         noValidate
         autoComplete="off"
       >
-        <CssTextField id="outlined-basic" label={props.firstField} variant="outlined" size="small"/>
-        <CssTextField id="outlined-basic" label={props.secondField} variant="outlined" size="small" />
+        <CssTextField id="outlined-basic" label={props.firstField} variant="outlined" size="small" placeholder={props.placeHolder1}/>
+        <CssTextField id="outlined-basic" label={props.secondField} variant="outlined" size="small" placeholder={props.placeHolder2} />
       </Box>
     </section>
   );
@@ -107,7 +107,7 @@ function Appliciation() {
               <MultiLineInput field="About Me" />
             </section>
 
-            <Inputs firstField="Gender" secondField="Socials" />
+            <Inputs firstField="Gender" secondField="Socials" placeHolder2="ex. www.linkedin.com" />
             {/*student or work */}
             {/*(highschool, undergrad, grad, finished school)*/}
             <br />
@@ -121,7 +121,7 @@ function Appliciation() {
               <Sections title="Personal Info" message="
               *We collect this data for our algorithms, we won't share it with anyone else"
               />
-              <Inputs firstField="Email" secondField="Birthday" />
+              <Inputs firstField="Email" secondField="Birthday" placeHolder2="mm/dd/year" />
               <Inputs firstField="Phone Number" secondField="Address" />
               {/*student or work */}
               {/*(highschool, undergrad, grad, finished school)*/}
@@ -140,7 +140,7 @@ function Appliciation() {
 
             </section>
           </section>
-        <div className="continue">
+        <div className="continueButton">
           <Button variant="contained" sx={{backgroundColor: "black", color: 'white', borderRadius: "10px", width: '180px', height: '60px' }}>Continue</Button>
         </div>
         </section>

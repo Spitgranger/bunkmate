@@ -17,7 +17,7 @@ p {
 }
 
 .info {
-    margin-top: 5%;
+    margin-top: 3%;
     width: 100%;
     display: flex;
     align-items: center;
@@ -60,7 +60,7 @@ p {
     align-items: flex-start;
 }
 
-.continue {
+.continueButton {
     margin: 20px;
     display: flex;
     justify-content: center;
