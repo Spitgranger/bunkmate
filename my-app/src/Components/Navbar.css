@@ -27,14 +27,12 @@ nav ul a {
 
 nav ul :hover {
   background-color: rgb(246, 246, 246);
-}
-
-nav ul a:hover {
   border-bottom: 5px solid aqua;
 }
 
 nav ul a.current {
   border-bottom: 5px solid aqua;
+  background-color: rgb(246, 246, 246);
 }
 
 
