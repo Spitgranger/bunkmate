@@ -1,14 +1,12 @@
 nav {
-  margin: 10px 0 0 0;
   width: 100%;
   zoom: 0.8;
-  height: 100%;
   font-weight: 600;
   display: flex;
-  flex-flow: row wrap;
-  border-bottom: 2px solid black;
-  min-width: 900px;
+  box-shadow: 0px 0px 10px lightgrey;
+  min-width: 1000px;
   background-color: white;
+  align-items: center;
   justify-content: space-between;
   /* use for box shadow insetting */
 
@@ -16,13 +14,19 @@ nav {
     inset 0px 20px 7px 0px grey;*/
 }
 
+nav ul {
+  display: flex;
+  align-items: stretch;
+  white-space: nowrap;
+  margin: 0px;
+
+}
+
 nav ul a {
   text-decoration: none;
   float: right;
   color: black;
-  flex: 1;
-  padding: 20px;
-  border-bottom: 3px solid white;
+  padding: 30px 20px 30px 20px;
 }
 
 nav ul :hover {
@@ -37,12 +41,10 @@ nav ul a.current {
 
 
 .App-logo {
-  justify-self: center;
   display: flex;
   height: 80px;
   max-width: 90px;
   cursor: pointer;
-  align-items: center;
 }
 
 @media (prefers-reduced-motion: no-preference) {

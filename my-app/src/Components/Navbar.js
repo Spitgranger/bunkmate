@@ -19,13 +19,13 @@ function Navbar() {
         <nav>
             <img src={logo} className="App-logo" alt="logo" />
             <ul>
-                <a href="">Sign in</a>
+                <CheckActive to="/" page="Listings"></CheckActive>
+                <CheckActive to="/create" page="Post a Listing"></CheckActive>
+                <CheckActive to="/applications" page="Applications"></CheckActive>
                 <a href="">Roomates</a>
                 <a href="">Advertise</a>
-                <CheckActive to="/create" page="Post a Listing"></CheckActive>
-                <a href="">Store</a>
-                <CheckActive to="/applications" page="Applications"></CheckActive>
-                <CheckActive to="/" page="Listings"></CheckActive>
+                <a href="">Live Feed</a>
+                <a href="">Sign in</a>
             </ul>
         </nav>
     );

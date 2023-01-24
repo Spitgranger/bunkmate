@@ -21,18 +21,30 @@ p {
     width: 100%;
     display: flex;
     align-items: center;
-    flex-flow: column wrap
+    flex-flow: column wrap;
 }
+
+.uploadPicContainer {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    margin: 10px;
+}
+
 
 .uploadPic {
     border: 0px;
-    border-radius: 90px;
+    border-radius: 10px;
+    background-color: black;
+    color: white;
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 4px;
-    margin: 20px;
     cursor: pointer;
+    width: 50%;
+    border: 1px solid black;
+    min-width: 70%;
 }
 
 .uploadButton {
@@ -49,9 +61,6 @@ p {
 #multiline {
     margin: 8px;
     width: 97%;
-    flex: 1;
-    display: flex;
-    justify-content: center;
 }
 
 .form {

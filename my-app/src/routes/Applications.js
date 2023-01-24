@@ -29,7 +29,7 @@ function Inputs(props) {
         noValidate
         autoComplete="off"
       >
-        <CssTextField id="outlined-basic" label={props.firstField} variant="outlined" size="small" placeholder={props.placeHolder1}/>
+        <CssTextField id="outlined-basic" label={props.firstField} variant="outlined" size="small" placeholder={props.placeHolder1} />
         <CssTextField id="outlined-basic" label={props.secondField} variant="outlined" size="small" placeholder={props.placeHolder2} />
       </Box>
     </section>
@@ -86,18 +86,17 @@ function Appliciation() {
           <Sections title="Profile" message="
             *Everything in this section will be visible to other people"
           />
+          <div className="uploadPicContainer">
           <label className="uploadPic">
-          <Button variant="contained" sx={{backgroundColor: "black", color: 'white', borderRadius: "10px", width: '360px', height: '60px' }}>
-                <input accept="image/*" className={"uploadButton"} id="icon-button-file" type="file" />
-                      <label htmlFor="icon-button-file">
-                        <IconButton sx={{color: "aqua"}} aria-label="upload picture" component="span">
-                          <CameraAltIcon />
-                        </IconButton>
-                      </label>
-                Upload Profile Picture
-              </Button>
+            <input accept="image/*" className={"uploadButton"} id="icon-button-file" type="file" />
+            <label htmlFor="icon-button-file">
+              <IconButton sx={{ color: "aqua" }} aria-label="upload picture" component="span">
+                <CameraAltIcon />
+              </IconButton>
             </label>
-
+            Upload Profile Picture
+          </label>
+          </div>
 
 
           <section className="form">
@@ -111,10 +110,10 @@ function Appliciation() {
             {/*student or work */}
             {/*(highschool, undergrad, grad, finished school)*/}
             <br />
-            <hr 
-            color="grey"
-            width="100%"
-            size="1">
+            <hr
+              color="grey"
+              width="100%"
+              size="1">
             </hr>
 
             <section>
@@ -127,10 +126,10 @@ function Appliciation() {
               {/*(highschool, undergrad, grad, finished school)*/}
             </section>
             <br />
-            <hr 
-            color="grey"
-            width="100%"
-            size="1">
+            <hr
+              color="grey"
+              width="100%"
+              size="1">
             </hr>
 
             <section>
@@ -140,9 +139,9 @@ function Appliciation() {
 
             </section>
           </section>
-        <div className="continueButton">
-          <Button variant="contained" sx={{backgroundColor: "black", color: 'white', borderRadius: "10px", width: '180px', height: '60px' }}>Continue</Button>
-        </div>
+          <div className="continueButton">
+            <Button variant="contained" sx={{ backgroundColor: "black", color: 'white', borderRadius: "10px", width: '180px', height: '60px' }}>Continue</Button>
+          </div>
         </section>
 
 
