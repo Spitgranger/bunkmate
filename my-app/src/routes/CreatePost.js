@@ -18,7 +18,7 @@ function CreatePost() {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    fetch('/', {
+    fetch('/api', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
