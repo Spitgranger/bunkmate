@@ -12,11 +12,11 @@ export function Bookmark() {
 
   function count(number = 1) {
     return (number++);
- 
+
   }
-  
-  function handleSaveClick () {
-      return setFill(() => fill + 1)
+
+  function handleSaveClick() {
+    return setFill(() => fill + 1)
 
   }
 
@@ -35,12 +35,12 @@ export default function Post(info) {
 
   const [current, setCurrent] = useState(0); //image scroll state
 
-  function handleForwardClick () {
-      return setCurrent(count => (count + 1 === info.listing_img.length) ? 0: count + 1)
+  function handleForwardClick() {
+    return setCurrent(count => (count + 1 === info.listing_img.length) ? 0 : count + 1)
   }
 
-  function handleBackwardClick () {
-      return setCurrent(count => (count - 1 === -1) ? info.listing_img.length - 1: count - 1)
+  function handleBackwardClick() {
+    return setCurrent(count => (count - 1 === -1) ? info.listing_img.length - 1 : count - 1)
 
   }
 
@@ -79,7 +79,7 @@ export default function Post(info) {
                   value={i}
                   onCLick={() => setCurrent(i)} />
                 */}
-                    < BsFillCircleFill 
+                    < BsFillCircleFill
                       className="dots"
                       size={current === i ? 12 : 9}
                       onClick={() => setCurrent(i)}

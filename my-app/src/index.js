@@ -5,6 +5,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import CreatePost from './routes/CreatePost';
+import Applications from './routes/Applications';
 import Error from './Error';
 
 
@@ -19,12 +20,17 @@ const router = createBrowserRouter([
     path: "/create",
     element: <CreatePost />,
     errorElement: <Error />,
+  },
+  {
+    path: "/applications",
+    element: <Applications />,
+    errorElement: <Error />,
   }
 ]);
 
 root.render(
   <React.StrictMode>
-    <RouterProvider router={router}/>
+    <RouterProvider router={router} />
   </React.StrictMode>
 );
 
