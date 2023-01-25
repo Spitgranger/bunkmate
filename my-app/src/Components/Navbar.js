@@ -25,7 +25,7 @@ function Navbar() {
                 <a href="">Roomates</a>
                 <a href="">Advertise</a>
                 <a href="">Live Feed</a>
-                <a href="">Sign in</a>
+                <CheckActive to="/signin" page="Sign in"></CheckActive>
             </ul>
         </nav>
     );
