@@ -16,7 +16,7 @@ export default function Modal({ open, children, onClose, modalMessage, content }
             <button style={{ display: 'none' }} onClick={onClose}></button>
           </label>
         </div>
-        
+
         <div className="body">
           <h3>{modalMessage}</h3>
           {children}

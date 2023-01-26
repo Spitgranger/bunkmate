@@ -107,9 +107,6 @@ export default function Post(info) {
             <Modal modalMessage="Message" open={message} onClose={() => setMessage(false)}>
             </Modal>
           </label>
-          <div></div>
-          <div></div>
-          <div></div>
         </div>
       </div>
       <div className="Ammenities">

@@ -43,26 +43,6 @@ nav ul a.current {
   background-color: rgb(246, 246, 246);
 }
 
-h6 {
-  margin: 10px;
-}
-
-.socials>div {
-  margin: 20px;
-  display: flex;
-  border: 1px solid black;
-  justify-content: center;
-  border-radius: 10px;
-  padding: 5px;
-}
-
-.App-logo {
-  display: flex;
-  height: 80px;
-  max-width: 90px;
-  cursor: pointer;
-}
-
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
@@ -78,3 +58,4 @@ h6 {
     transform: rotate(360deg);
   }
 }
+

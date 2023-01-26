@@ -1,4 +1,50 @@
-.buttonWrapperStyles{
+.buttonWrapperStyles {
   position: relative;
   z-index: 1;
+}
+
+.content {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+}
+
+.disclaimerContainer {
+  display: flex;
+  justify-content: center;
+}
+
+#disclaimer {
+  width: 80%;
+  margin: 5px;
+  display: flex;
+  justify-content: center;
+  flex-flow: row wrap;
+}
+
+.socials>* {
+  cursor: pointer;
+}
+
+.socials>div {
+  margin: 20px;
+  display: flex;
+  border: 1px solid black;
+  justify-content: center;
+  border-radius: 10px;
+  padding: 5px;
+}
+
+.socials div div {
+  padding: 0px 20px 0px 20px;
+  width: 220px;
+  display: flex;
+  justify-content: center;
+}
+
+.App-logo {
+  display: flex;
+  height: 80px;
+  max-width: 90px;
+  cursor: pointer;
 }
