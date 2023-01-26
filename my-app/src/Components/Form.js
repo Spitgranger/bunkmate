@@ -15,30 +15,32 @@ const CssTextField = styled(TextField)({
   },
 });
 
-export function FormSingleLineInput(props) {
+
+export function FormSingleLineInput( {length, field1, field2, placeHolder1, placeHolder2} ) {
+  const check = length ? 1 : null; //if true then make use flex: 1 else: use flex null
   return (
     <Box
       component="form"
       id="line"
       sx={{
-        '& > :not(style)': { m: 1, width: '25ch' },
+        '& > :not(style)': { m: 1, flex: check, width:"100%" },
       }}
       noValidate
       autoComplete="off"
     >
       <CssTextField
         id="outlined-basic"
-        label={props.field1}
+        label={field1}
         variant="outlined"
         size="small"
-        placeholder={props.placeHolder1}
+        placeholder={placeHolder1}
       />
       <CssTextField
         id="outlined-basic"
-        label={props.field2}
+        label={field2}
         variant="outlined"
         size="small"
-        placeholder={props.placeHolder2}
+        placeholder={placeHolder2}
       />
     </Box>
   );
@@ -87,7 +89,7 @@ export function UploadFile(props) {
   );
 }
 
-export function ContinueButton() {
+export function ActionButton( {title} ) {
   return (
     <div className="continueButton">
       <Button
@@ -96,10 +98,10 @@ export function ContinueButton() {
           backgroundColor: "black",
           color: 'white',
           borderRadius: "10px",
-          width: '180px',
+          width: '100%',
           height: '60px'
         }}>
-        Continue
+        {title}
       </Button>
     </div >
   );

@@ -25,7 +25,7 @@ const router = createBrowserRouter([
     path: "/applications",
     element: <Applications />,
     errorElement: <Error />,
-  }
+  },
 ]);
 
 root.render(

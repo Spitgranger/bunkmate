@@ -1,10 +1,11 @@
 import "./Post.css"
-import { BsBook, BsBookmarks } from 'react-icons/bs'
+import { BsBookmarks } from 'react-icons/bs'
 import { BsBookmarksFill } from 'react-icons/bs'
 import { IoIosArrowDroprightCircle } from 'react-icons/io'
 import { IoIosArrowDropleftCircle } from 'react-icons/io'
 import { BsFillCircleFill } from 'react-icons/bs'
 import { useState } from 'react'
+import Modal from "./Modal";
 
 export function Bookmark() {
 
@@ -33,14 +34,15 @@ export function Bookmark() {
 
 export default function Post(info) {
 
-  const [current, setCurrent] = useState(0); //image scroll state
+  const [image, setImage] = useState(0); //image scroll state
+  const [message, setMessage] = useState(false); //image scroll state
 
   function handleForwardClick() {
-    return setCurrent(count => (count + 1 === info.listing_img.length) ? 0 : count + 1)
+    return setImage(count => (count + 1 === info.listing_img.length) ? 0 : count + 1)
   }
 
   function handleBackwardClick() {
-    return setCurrent(count => (count - 1 === -1) ? info.listing_img.length - 1 : count - 1)
+    return setImage(count => (count - 1 === -1) ? info.listing_img.length - 1 : count - 1)
 
   }
 
@@ -48,7 +50,7 @@ export default function Post(info) {
     <div className="listing">
       <div className="postBox">
         <div className="image">
-          <img src={info.listing_img[current]} alt="A Listing" />
+          <img src={info.listing_img[image]} alt="A Listing" />
           <div id="functionality">
             <div id="save" >
               <Bookmark />
@@ -77,13 +79,13 @@ export default function Post(info) {
                     {/* why doesn't this code work??????
                 <input type="button"
                   value={i}
-                  onCLick={() => setCurrent(i)} />
+                  onCLick={() => setImage(i)} />
                 */}
                     < BsFillCircleFill
                       className="dots"
-                      size={current === i ? 12 : 9}
-                      onClick={() => setCurrent(i)}
-                      color={current === i ? 'aqua' : 'white'}
+                      size={image === i ? 12 : 9}
+                      onClick={() => setImage(i)}
+                      color={image === i ? 'aqua' : 'white'}
                     />
                   </>
                 )
@@ -99,12 +101,12 @@ export default function Post(info) {
           <h5>| Baths: {info.num_bathrooms} | Beds: {info.num_bedrooms} | Roomates: {info.num_roomates} |</h5>
 
           <h5>Available After: {info.date_available}</h5>
-          <div id="message">
+          <label id="message" >
+            <button onClick={() => setMessage(true)} style={{ display: "none" }}></button>
             <h3>Message</h3>
-          </div>
-          <div></div>
-          <div></div>
-          <div></div>
+            <Modal modalMessage="Message" open={message} onClose={() => setMessage(false)}>
+            </Modal>
+          </label>
         </div>
       </div>
       <div className="Ammenities">
