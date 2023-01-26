@@ -1,12 +1,23 @@
 import { useState } from "react"
 import "./SignIn.css"
 import Modal from "../Components/Modal";
-import { FormSingleLineInput, ActionButton } from '../Components/Form';
+import { FormSingleLineInput, ActionButton } from '../Components/SubComponents/Form';
 import { FcGoogle } from 'react-icons/fc'
 import { IoLogoFacebook } from 'react-icons/io'
 import { BsApple } from 'react-icons/bs'
 import { MdEmail } from 'react-icons/md'
 
+function SignInPartner({ company, logo }) {
+
+  return (
+    <div style={{ alignItems: 'center' }}>
+      {logo}
+      <div>
+        Sign in with {company}
+      </div>
+    </div>)
+
+}
 
 function SignIn({ openModalName }) {
   const [isOpen, setIsOpen] = useState(false)
@@ -26,37 +37,17 @@ function SignIn({ openModalName }) {
                 We will call or text you to confirm your number.
                 Standard message and data rates apply. Alternatively,
                 you can use one of our sign in partners below
-                <u>Privacy Policy</u>
+                <u style={{ cursor: 'pointer' }}>Privacy Policy</u>
               </h6>
             </div>
             <div className="button" style={{ borderBottom: "1px solid lightgrey" }}>
               <ActionButton title="Submit" />
             </div>
             <div className="socials" >
-              <div style={{ alignItems: 'center' }}>
-                <FcGoogle />
-                <div>
-                  Sign in with Google
-                </div>
-              </div>
-              <div style={{ alignItems: 'center' }}>
-                <IoLogoFacebook color="blue" />
-                <div>
-                  Sign in with Facebook
-                </div>
-              </div>
-              <div style={{ alignItems: 'center' }}>
-                <BsApple />
-                <div>
-                  Sign in with Apple
-                </div>
-              </div>
-              <div style={{ alignItems: 'center' }}>
-                <MdEmail />
-                <div>
-                  Sign in with Email
-                </div>
-              </div>
+              <SignInPartner logo={<FcGoogle />} company="Google" />
+              <SignInPartner logo={<IoLogoFacebook color="blue" />} company="Facebook" />
+              <SignInPartner logo={<BsApple />} company="Apple" />
+              <SignInPartner logo={<MdEmail />} company="Email" />
             </div>
           </div>
         }>

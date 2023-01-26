@@ -1,8 +1,8 @@
 import './App.css';
 import Navbar from './Components/Navbar';
 import Post from './Components/Post';
-import { Rating } from './Components/Feedback';
-import { Like } from './Components/Feedback';
+import { Rating } from './Components/SubComponents/Feedback';
+import { Like } from './Components/SubComponents/Feedback';
 
 
 import Apartment2 from "./Components/Assets/apartment.jpg"

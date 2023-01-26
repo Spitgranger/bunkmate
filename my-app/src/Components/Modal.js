@@ -1,8 +1,12 @@
 import ReactDom from "react-dom";
 import "./Modal.css"
 import { IoIosCloseCircle } from 'react-icons/io';
+import { useState } from "react";
+
 
 export default function Modal({ open, children, onClose, modalMessage, content }) {
+  const [hover, setHover] = useState(false);
+
   if (!open) return null
 
   return ReactDom.createPortal(
@@ -12,8 +16,16 @@ export default function Modal({ open, children, onClose, modalMessage, content }
         <div className="topBar">
           <h5>Welcome To Bunkmate</h5>
           <label>
-            <IoIosCloseCircle size={30} className="closeButton" />
-            <button style={{ display: 'none' }} onClick={onClose}></button>
+            <IoIosCloseCircle
+              onClick={onClose}
+              style={{ cursor: "pointer" }}
+              color={hover ? "grey" : "black"}
+              size={30}
+              className="closeButton"
+              onMouseEnter={() => setHover(true)}
+              onMouseLeave={() => setHover(false)}
+              onMouseDown={() => setHover(false)}
+            />
           </label>
         </div>
 

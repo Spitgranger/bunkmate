@@ -1,4 +1,4 @@
-import logo from './logo.svg';
+import logo from './Assets/logo.svg';
 import './Navbar.css';
 import { Link, useResolvedPath, useMatch } from 'react-router-dom';
 import SignIn from '../routes/SignIn'
