@@ -2,7 +2,6 @@ import ReactDom from "react-dom";
 import "./Modal.css"
 import { IoIosCloseCircle } from 'react-icons/io';
 
-
 export default function Modal({ open, children, onClose, modalMessage, content }) {
   if (!open) return null
 

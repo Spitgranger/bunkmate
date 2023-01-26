@@ -11,9 +11,9 @@
   z-index: 1000;
   flex-flow: column nowrap;
   align-items: center;
-  height: 250px;
-  min-width: 300px;
-  max-width: 450px;
+  height: 600px;
+  min-width: 150px;
+  max-width: 420px;
 }
 
 .overlayStyles {
