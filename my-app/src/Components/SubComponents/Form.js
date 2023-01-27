@@ -112,9 +112,11 @@ const CssTextField = styled(TextField)({
   '& label.Mui-focused': {
     color: '#2fd0d8',
   },
-  '& label.Mui-underline:after': {
-    borderBottomColor: '#2fd0d8',
-  },
+  "& .MuiOutlinedInput-root": {
+    "&.Mui-focused fieldset": {
+      borderColor: '#2fd0d8',
+    }
+  }
 });
 
 export function FormSingleLineInput({ field, placeHolder, helperText }) {
