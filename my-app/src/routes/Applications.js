@@ -1,7 +1,15 @@
 import './Applications.css'
 import Navbar from '../Components/Navbar';
-import { MaterialUIPickers, FormSection, ActionButton, UploadFile, DropDownMenu, FormSingleLineInput, FormMultiLineInput, LineBox } from '../Components/SubComponents/Form';
-
+import { 
+  DatePicker, 
+  FormSection, 
+  ActionButton, 
+  UploadFile, 
+  DropDownMenu, 
+  FormSingleLineInput, 
+  FormMultiLineInput, 
+  LineBox,
+  MultipleSelectCheckmarks, } from '../Components/SubComponents/Form';
 
 function Appliciation() {
   return (
@@ -33,7 +41,7 @@ function Appliciation() {
           <FormSection title="Personal Info" message="*We collect this data for our algorithms, we won't share it with anyone else" />
           <LineBox flex={true} CssTextField={[
             <FormSingleLineInput field="Email" placeHolder="" />,
-            <MaterialUIPickers label="Birthday" />
+            <DatePicker label="Birthday" />
           ]
           } />
           <LineBox flex={true} CssTextField={[
@@ -50,11 +58,16 @@ function Appliciation() {
           {/*(highschool, undergrad, grad, finished school)*/}
           <br></br>
 
-          <FormSection title="Finances" message="*You can provide us proof later" />
+          <FormSection title="Finances and Verification" message="*You can provide us proof later" />
           {/* ranges from 10000 - 100000*/}
           <LineBox flex={true} CssTextField={[
-            <FormSingleLineInput field="Credit Score" placeHolder="740" />,
+            <FormSingleLineInput field="Credit Score" placeHolder="ex. 740" />,
             <DropDownMenu name="Annual Income" menuItem={["$10000 - $50000", "$50001 - $100000", "$100001 - $200000", "$200001 +"]} />,
+          ]
+          } />
+          <LineBox flex={true} CssTextField={[
+            <MultipleSelectCheckmarks title="Verification" menuItems={["Rental History", "Credit Checks", "Credit References", "None of these", "What's This?",]}/>,
+            <DropDownMenu name="Do you have a Guarantor?" menuItem={['Yes', 'No', "What's This?"]} />,
           ]
           } />
           <ActionButton title="Continue" />

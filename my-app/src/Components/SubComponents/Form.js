@@ -12,18 +12,66 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import moment from 'moment';
-import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import dayjs from 'dayjs';
-
 import Stack from '@mui/material/Stack';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import ListItemText from '@mui/material/ListItemText';
+import Checkbox from '@mui/material/Checkbox';
 
-import { TimePicker } from '@mui/x-date-pickers/TimePicker';
-import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
-import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+};
 
-export function MaterialUIPickers({ label }) {
+
+export function MultipleSelectCheckmarks( {title, menuItems} ) {
+  const [personName, setPersonName] = React.useState([]);
+
+  const handleChange = (event) => {
+      const {
+        target: { value },
+      } = event;
+      setPersonName(
+        // On autofill we get a stringified value.
+        typeof value === 'string' ? value.split(',') : value,
+      );
+    };
+  return (
+      <FormControl sx={{ m: 1, width: '100%', flex: 1, color: "black"}} size="small">
+        <InputLabel id="demo-multiple-checkbox-label">{title}</InputLabel>
+        <Select
+          labelId="demo-multiple-checkbox-label"
+          id="demo-multiple-checkbox"
+          multiple
+          value={personName}
+          onChange={handleChange}
+          input={<OutlinedInput label={title} />}
+          renderValue={(selected) => selected.join(', ')}
+          MenuProps={MenuProps}
+          autoWidth
+        >
+          {menuItems.map((name) => (
+            <MenuItem key={name} value={name}>
+              <Checkbox checked={personName.indexOf(name) > -1} />
+              <ListItemText primary={name} />
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+  );
+}
+
+
+
+
+export function DatePicker({ label }) {
   const [value, setValue] = React.useState(dayjs('2022-09-15T21:11:54'));
 
   const handleChange = (newValue) => {
@@ -52,7 +100,7 @@ export function LineBox({ flex, CssTextField }) {
       component="form"
       id="line"
       sx={{
-        '& > :not(style)': { m: 1, flex: check, width: "100%" },
+        '& > :not(style)': { m: 1, flex: check, width: "100%",},
       }}
       noValidate
       autoComplete="off"
