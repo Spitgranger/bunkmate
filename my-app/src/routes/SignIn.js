@@ -1,7 +1,7 @@
 import { useState } from "react"
 import "./SignIn.css"
 import Modal from "../Components/Modal";
-import { FormSingleLineInput, ActionButton } from '../Components/SubComponents/Form';
+import { LineBox, DropDownMenu, FormSingleLineInput, ActionButton } from '../Components/SubComponents/Form';
 import { FcGoogle } from 'react-icons/fc'
 import { IoLogoFacebook } from 'react-icons/io'
 import { BsApple } from 'react-icons/bs'
@@ -15,9 +15,15 @@ function SignInPartner({ company, logo }) {
       <div>
         Sign in with {company}
       </div>
-    </div>)
+    </div>);
 
 }
+
+const MenuItem = [
+    "Afghanistan (+93)",
+    "Austrailia (+93)",
+    "Canada (+1)"
+]
 
 function SignIn({ openModalName }) {
   const [isOpen, setIsOpen] = useState(false)
@@ -27,11 +33,18 @@ function SignIn({ openModalName }) {
         {openModalName}
         <Modal open={isOpen} modalMessage="Sign in or Sign up" onClose={() => setIsOpen(false)} content={
           <div className="content">
+           <LineBox flex={false} CssTextField={[
+            <DropDownMenu
+              menuItem={[
+                "Canada (+1)",
+                "Germany (+2)"]} 
+              name={MenuItem[1]}
+              placeHolder="wow"
+                />,
             <FormSingleLineInput
-              field1="Region"
-              field2="Phone Number"
-              placeHolder1="Canada"
-              placeHolder2="ex. +1 (XXX) XXX XXXX" />
+              field="Phone Number"
+              placeHolder="ex. +1 (XXX) XXX XXXX" />]
+           }/>
             <div className="disclaimerContainer">
               <h6 id="disclaimer">
                 We will call or text you to confirm your number.

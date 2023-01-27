@@ -68,9 +68,6 @@ export function MultipleSelectCheckmarks( {title, menuItems} ) {
   );
 }
 
-
-
-
 export function DatePicker({ label }) {
   const [value, setValue] = React.useState(dayjs('2022-09-15T21:11:54'));
 
@@ -134,7 +131,7 @@ export function FormSingleLineInput({ field, placeHolder, helperText }) {
     </>
   )
 }
-export function DropDownMenu({ name, menuItem, helperText }) {
+export function DropDownMenu({ name, menuItem, helperText, placeHolder }) {
   const [field, setField] = React.useState('');
 
   const handleChange = (event) => {
@@ -151,6 +148,7 @@ export function DropDownMenu({ name, menuItem, helperText }) {
         label={name}
         onChange={handleChange}
         helperText={helperText}
+        placeHolder={placeHolder}
       >
         {menuItem.map((item, i) => {
           return (<MenuItem key={i} value={item}>{item}</MenuItem>);
