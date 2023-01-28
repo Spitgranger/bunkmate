@@ -19,14 +19,24 @@ function SignInPartner({ company, logo }) {
 
 }
 
-const MenuItem = [
-    "Afghanistan (+93)",
-    "Austrailia (+93)",
-    "Canada (+1)"
-]
+const MenuItem = {
+    "Afghanistan (+93)": 93,
+    "Australia (+26)": 26,
+    "Canada (+1)": 1,
+    "United States (+1)": 1,
+}
+
+const keys = Object.keys(MenuItem)
 
 function SignIn({ openModalName }) {
   const [isOpen, setIsOpen] = useState(false)
+  {/* Change default to the user's current location */}
+  const [field, setField] = useState('United States (+1)')
+
+  const handleChange = (event) => {
+    setField(event.target.value);
+  }
+
   return (
     <>
       <div className='buttonWrapperStyles' >
@@ -34,16 +44,18 @@ function SignIn({ openModalName }) {
         <Modal open={isOpen} modalMessage="Sign in or Sign up" onClose={() => setIsOpen(false)} content={
           <div className="content">
            <LineBox flex={false} CssTextField={[
-            <DropDownMenu
-              menuItem={[
-                "Canada (+1)",
-                "Germany (+2)"]} 
-              name={MenuItem[1]}
-              placeHolder="wow"
-                />,
+            <DropDownMenu 
+            onChange={handleChange}
+            value={field}
+            label='Country Code'
+            menuItem={keys}
+            />,
             <FormSingleLineInput
               field="Phone Number"
-              placeHolder="ex. +1 (XXX) XXX XXXX" />]
+              placeHolder="Numbers Only"
+              inputAdornment={true}
+              inputAdornmentText={`+${MenuItem[field]}`}
+              />]
            }/>
             <div className="disclaimerContainer">
               <h6 id="disclaimer">

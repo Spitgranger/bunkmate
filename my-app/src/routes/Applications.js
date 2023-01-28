@@ -32,7 +32,7 @@ function Appliciation() {
           </div>
 
           <LineBox flex={true} CssTextField={[
-            <DropDownMenu name="Gender" menuItem={["Male", "Female", "Other"]} />,
+            <DropDownMenu label="Gender" menuItem={["Male", "Female", "Other"]} />,
             <FormSingleLineInput field="Linkedin Profile" placeHolder="(Optional)" />
           ]
           } />
@@ -51,7 +51,7 @@ function Appliciation() {
           } />
           <LineBox flex={true} CssTextField={[
             <FormSingleLineInput field="Employment" placeHolder="ex. N/A / Student / Researcher" />,
-            <DropDownMenu name="Current Education" menuItem={["Not in School", "High School", "Undergraduate Studies", "Graduate Studies"]} />,
+            <DropDownMenu label="Current Education" menuItem={["Not in School", "High School", "Undergraduate Studies", "Graduate Studies"]} />,
           ]
           } />
           {/*student or work */}
@@ -62,12 +62,12 @@ function Appliciation() {
           {/* ranges from 10000 - 100000*/}
           <LineBox flex={true} CssTextField={[
             <FormSingleLineInput field="Credit Score" placeHolder="ex. 740" />,
-            <DropDownMenu name="Annual Income" menuItem={["$10000 - $50000", "$50001 - $100000", "$100001 - $200000", "$200001 +"]} />,
+            <DropDownMenu label="Annual Income" menuItem={["$10000 - $50000", "$50001 - $100000", "$100001 - $200000", "$200001 +"]} />,
           ]
           } />
           <LineBox flex={true} CssTextField={[
             <MultipleSelectCheckmarks title="Verification" menuItems={["Rental History", "Credit Checks", "Credit References", "None of these", "What's This?",]}/>,
-            <DropDownMenu name="Do you have a Guarantor?" menuItem={['Yes', 'No', "What's This?"]} />,
+            <DropDownMenu label="Do you have a Guarantor?" menuItem={['Yes', 'No', "What's This?"]} />,
           ]
           } />
           <ActionButton title="Continue" />

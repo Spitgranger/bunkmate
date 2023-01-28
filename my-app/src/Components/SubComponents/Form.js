@@ -18,6 +18,7 @@ import Stack from '@mui/material/Stack';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import ListItemText from '@mui/material/ListItemText';
 import Checkbox from '@mui/material/Checkbox';
+import { InputAdornment } from "@mui/material";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -108,52 +109,61 @@ export function LineBox({ flex, CssTextField }) {
     </Box>
   );
 }
+
+/*
+fuck this useless complex syntax
+
 const CssTextField = styled(TextField)({
+  '& label': {
+    color: '#5c5c5c',
+  },
+
   '& label.Mui-focused': {
-    color: '#2fd0d8',
+    color: '#2497b7'
   },
   "& .MuiOutlinedInput-root": {
     "&.Mui-focused fieldset": {
-      borderColor: '#2fd0d8',
+      borderColor: '#2497b7',
     }
   }
 });
 
-export function FormSingleLineInput({ field, placeHolder, helperText }) {
+*/
+
+export function FormSingleLineInput({ field, placeHolder, helperText, inputAdornment, inputAdornmentText }) {
   return (
     <>
-      <CssTextField
+      <TextField
         id="outlined-basic"
         label={field}
         variant="outlined"
         size="small"
         placeholder={placeHolder}
         helperText={helperText}
+        InputProps={ inputAdornment ? {startAdornment: <InputAdornment position="start">{inputAdornmentText}</InputAdornment>}:null 
+        }
       />
     </>
   )
 }
-export function DropDownMenu({ name, menuItem, helperText, placeHolder }) {
-  const [field, setField] = React.useState('');
 
-  const handleChange = (event) => {
-    setField(event.target.value);
-  };
+
+export function DropDownMenu({ value, onChange, label, menuItem, helperText}) {
 
   return (
-    <FormControl sx={{ m: 1, width: '100%', flex: 1 }} size="small" fullWidth>
-      <InputLabel id="demo-select-small">{name}</InputLabel>
+    <FormControl placeholder="wow"sx={{ m: 1, width: '100%', flex: 1 }} size="small" fullWidth>
+      <InputLabel 
+      id="demo-select-small">{label}</InputLabel>
       <Select
         labelId="demo-simple-select-label"
         id="demo-simple-select"
-        value={field}
-        label={name}
-        onChange={handleChange}
+        value={value}
+        onChange={onChange}
         helperText={helperText}
-        placeHolder={placeHolder}
+        label={label}
       >
         {menuItem.map((item, i) => {
-          return (<MenuItem key={i} value={item}>{item}</MenuItem>);
+          return (<MenuItem key={i} value={item} >{item}</MenuItem>);
         })}
       </Select>
     </FormControl>
@@ -173,7 +183,7 @@ export function FormMultiLineInput(props) {
         autoComplete="on"
       >
         <div>
-          <CssTextField
+          <TextField
             id="outlined-multiline-static"
             fullWidth
             placeholder='Tell Us a Bit About Yourself'
