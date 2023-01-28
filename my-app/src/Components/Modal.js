@@ -11,7 +11,7 @@ export default function Modal({ open, children, onClose, modalMessage, content }
 
   return ReactDom.createPortal(
     <>
-      <div className='overlayStyles' />
+      <div className='overlayStyles' onClick={onClose} />
       <div className='modalStyles'>
         <div className="topBar">
           <h5>Welcome To Bunkmate</h5>
