@@ -130,7 +130,7 @@ const CssTextField = styled(TextField)({
 
 */
 
-export function FormSingleLineInput({ field, placeHolder, helperText, inputAdornment, inputAdornmentText }) {
+export function FormSingleLineInput({ type, field, placeHolder, helperText, inputAdornment, inputAdornmentText }) {
   return (
     <>
       <TextField
@@ -142,6 +142,7 @@ export function FormSingleLineInput({ field, placeHolder, helperText, inputAdorn
         helperText={helperText}
         InputProps={ inputAdornment ? {startAdornment: <InputAdornment position="start">{inputAdornmentText}</InputAdornment>}:null 
         }
+        type={type}
       />
     </>
   )

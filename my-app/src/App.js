@@ -305,16 +305,6 @@ function App() {
         </section>
         {/* TODO */}
         <section className="map">
-          <Rating />
-          <Like />
-          <section className="login">
-            <label >
-              <input value="username" className="username" type="text" ></input>
-              <input value="password" className="password" type="password" ></input>
-              <input className="submit" type="button" value="Submit"></input>
-            </label>
-
-          </section>
         </section>
       </body>
     </div>

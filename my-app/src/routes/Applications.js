@@ -23,34 +23,34 @@ function Appliciation() {
           <UploadFile message="Upload Profile Picture" />
 
           <LineBox flex={true} CssTextField={[
-            <FormSingleLineInput field="First Name" placeHolder="Sam" />,
-            <FormSingleLineInput field="Last Name" placeHolder="Jenkins" />
+            <FormSingleLineInput type="text" field="First Name" placeHolder="Sam" />,
+            <FormSingleLineInput type="text"field="Last Name" placeHolder="Jenkins" />
           ]
           } />
           <div id="multiline">
-            <FormMultiLineInput field="About Me" helperText="Max: 500 Characters" />
+            <FormMultiLineInput type="text" field="About Me" helperText="Max: 500 Characters" />
           </div>
 
           <LineBox flex={true} CssTextField={[
             <DropDownMenu label="Gender" menuItem={["Male", "Female", "Other"]} />,
-            <FormSingleLineInput field="Linkedin Profile" placeHolder="(Optional)" />
+            <FormSingleLineInput type="text" field="Linkedin Profile" placeHolder="(Optional)" />
           ]
           } />
           <br></br>
 
           <FormSection title="Personal Info" message="*We collect this data for our algorithms, we won't share it with anyone else" />
           <LineBox flex={true} CssTextField={[
-            <FormSingleLineInput field="Email" placeHolder="" />,
-            <DatePicker label="Birthday" />
+            <FormSingleLineInput type="text" field="Email" placeHolder="" />,
+            <DatePicker type="number" label="Birthday" />
           ]
           } />
           <LineBox flex={true} CssTextField={[
-            <FormSingleLineInput field="Phone Number" placeHolder="6472345124" />,
-            <FormSingleLineInput field="Address" placeHolder="31 West Street New York City" />
+            <FormSingleLineInput type="number"field="Phone Number" placeHolder="6472345124" />,
+            <FormSingleLineInput type="text" field="Address" placeHolder="31 West Street New York City" />
           ]
           } />
           <LineBox flex={true} CssTextField={[
-            <FormSingleLineInput field="Employment" placeHolder="ex. N/A / Student / Researcher" />,
+            <FormSingleLineInput type="text"field="Employment" placeHolder="ex. N/A / Student / Researcher" />,
             <DropDownMenu label="Current Education" menuItem={["Not in School", "High School", "Undergraduate Studies", "Graduate Studies"]} />,
           ]
           } />
@@ -61,7 +61,7 @@ function Appliciation() {
           <FormSection title="Finances and Verification" message="*You can provide us proof later" />
           {/* ranges from 10000 - 100000*/}
           <LineBox flex={true} CssTextField={[
-            <FormSingleLineInput field="Credit Score" placeHolder="ex. 740" />,
+            <FormSingleLineInput type="number"field="Credit Score" placeHolder="ex. 740" />,
             <DropDownMenu label="Annual Income" menuItem={["$10000 - $50000", "$50001 - $100000", "$100001 - $200000", "$200001 +"]} />,
           ]
           } />

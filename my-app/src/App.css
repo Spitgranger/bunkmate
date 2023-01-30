@@ -22,9 +22,3 @@
   display: flex;
   flex-wrap: wrap;
 }
-
-.map {
-  height: 900px;
-  border: 2px solid black;
-
-}

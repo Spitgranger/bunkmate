@@ -52,8 +52,9 @@ function SignIn({ openModalName }) {
             />,
             <FormSingleLineInput
               field="Phone Number"
-              placeHolder="Numbers Only"
+              placeHolder="6471234567"
               inputAdornment={true}
+              type="number"
               inputAdornmentText={`+${MenuItem[field]}`}
               />]
            }/>

@@ -21,12 +21,13 @@ function Navbar() {
                 <img src={logo} className="App-logo" alt="logo" />}>
             </CheckActive>
             <ul>
-                <CheckActive to="/" page="Listings"></CheckActive>
-                <CheckActive to="/create" page="Post a Listing"></CheckActive>
+                {/*<CheckActive to="/" page="Listings"></CheckActive> */}
+                {/*<CheckActive to="/create" page="Post a Listing"></CheckActive>*/}
+                <a>Bunkmates</a>
                 <CheckActive to="/applications" page="Applications"></CheckActive>
-                <a>Roomates</a>
-                <a>Advertise</a>
-                <a>Live Feed</a>
+                <a>Messages</a>
+                <a>Profile</a>
+                <a>Account</a>
                 <label>
                     <a><SignIn openModalName="Sign In" /></a>
 
