@@ -1,5 +1,4 @@
 import "./Form.css"
-import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField';
@@ -130,25 +129,6 @@ const CssTextField = styled(TextField)({
 
 */
 
-export function FormSingleLineInput({ type, field, placeHolder, helperText, inputAdornment, inputAdornmentText }) {
-  return (
-    <>
-      <TextField
-        id="outlined-basic"
-        label={field}
-        variant="outlined"
-        size="small"
-        placeholder={placeHolder}
-        helperText={helperText}
-        InputProps={ inputAdornment ? {startAdornment: <InputAdornment position="start">{inputAdornmentText}</InputAdornment>}:null 
-        }
-        type={type}
-      />
-    </>
-  )
-}
-
-
 export function DropDownMenu({ value, onChange, label, menuItem, helperText}) {
 
   return (
@@ -170,6 +150,48 @@ export function DropDownMenu({ value, onChange, label, menuItem, helperText}) {
     </FormControl>
   );
 }
+
+export function FormNumberSingleLineInput({ type, onChange ,onBlur, error, field, placeHolder, helperText, inputAdornment, inputAdornmentText }) {
+  /* Numbers only */
+  return (
+    <>
+      <TextField
+        id="outlined-basic"
+        label={field}
+        variant="outlined"
+        size="small"
+        placeholder={placeHolder}
+        onBlur={onBlur}
+        onChange={onChange}
+        error ={error}
+        helperText={helperText}
+        type={type}
+        InputProps={ inputAdornment ? {startAdornment: <InputAdornment position="start">{inputAdornmentText}</InputAdornment>}:null }
+      />
+    </>
+  )
+}
+export function FormSingleLineInput({ onChange, error, type, field, placeHolder, helperText, inputAdornment, inputAdornmentText }) {
+
+  return (
+    <>
+      <TextField
+        id="outlined-basic"
+        label={field}
+        variant="outlined"
+        size="small"
+        placeholder={placeHolder}
+        onChange={onChange}
+        error ={error}
+        helperText={helperText}
+        InputProps={ inputAdornment ? {startAdornment: <InputAdornment position="start">{inputAdornmentText}</InputAdornment>}:null }
+        type={type}
+      />
+    </>
+  )
+}
+
+
 
 
 export function FormMultiLineInput(props) {
@@ -216,11 +238,18 @@ export function UploadFile(props) {
   );
 }
 
-export function ActionButton({ title }) {
+export function ActionButton({ title, onClick, type }) {
+  const handleSave = (e) =>  {
+    e.preventDefault();
+  }
+
   return (
     <div className="continueButton">
       <Button
         variant="contained"
+        onClick={onClick}
+        type={type}
+        onSubmit={handleSave}
         sx={{
           backgroundColor: "black",
           color: 'white',
