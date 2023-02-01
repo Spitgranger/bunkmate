@@ -151,27 +151,7 @@ export function DropDownMenu({ value, onChange, label, menuItem, helperText}) {
   );
 }
 
-export function FormNumberSingleLineInput({ type, onChange ,onBlur, error, field, placeHolder, helperText, inputAdornment, inputAdornmentText }) {
-  /* Numbers only */
-  return (
-    <>
-      <TextField
-        id="outlined-basic"
-        label={field}
-        variant="outlined"
-        size="small"
-        placeholder={placeHolder}
-        onBlur={onBlur}
-        onChange={onChange}
-        error ={error}
-        helperText={helperText}
-        type={type}
-        InputProps={ inputAdornment ? {startAdornment: <InputAdornment position="start">{inputAdornmentText}</InputAdornment>}:null }
-      />
-    </>
-  )
-}
-export function FormSingleLineInput({ onChange, error, type, field, placeHolder, helperText, inputAdornment, inputAdornmentText }) {
+export function FormSingleLineInput({ onBlur ,onChange, error, type, field, placeHolder, helperText, inputAdornment, inputAdornmentText }) {
 
   return (
     <>
@@ -182,6 +162,7 @@ export function FormSingleLineInput({ onChange, error, type, field, placeHolder,
         size="small"
         placeholder={placeHolder}
         onChange={onChange}
+        onBlur={onBlur}
         error ={error}
         helperText={helperText}
         InputProps={ inputAdornment ? {startAdornment: <InputAdornment position="start">{inputAdornmentText}</InputAdornment>}:null }
@@ -255,7 +236,7 @@ export function ActionButton({ title, onClick, type }) {
           color: 'white',
           borderRadius: "10px",
           width: '100%',
-          height: '60px'
+          height: '60px',
         }}>
         {title}
       </Button>
