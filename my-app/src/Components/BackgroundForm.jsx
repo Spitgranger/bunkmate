@@ -20,6 +20,9 @@ function Background({ forwardButton }) {
   const handleCreditLength = (e) => {
     if (!e.target.value || parseInt(e.target.value > 999) || parseInt(e.target.value) < 0 || isNaN(parseInt(e.target.value))) {
       setCreditError(true);
+    } else {
+      setCreditError(false);
+      setCreditHelperText("");
     }
     /* Implement more robust solution in the future. FYI: Canada's max credit score is 900 while in america it's 850*/
     //const checkLength = e.target.value.length === 0 || e.target.value.length > 3;
@@ -27,12 +30,12 @@ function Background({ forwardButton }) {
 
     if (!e.target.value) {
       checkLength(e);
-    } else if (isNaN(e.target.value)){
+    } else if (isNaN(e.target.value)) {
       checkNumber(e);
     }
-    else if (parseInt(e.target.value) > 999) {
+    else if (parseInt(e.target.value) > 999 || parseInt(e.target.value) < 0) {
       checkRange(e);
-    } 
+    }
     //setCreditError(checkLength)
     //setCreditHelperText(checkLength ? 'Please Enter a score between 0 and 999' : '')
   }
