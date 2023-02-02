@@ -8,7 +8,7 @@ import {
   FormSingleLineInput, 
   FormMultiLineInput, 
   LineBox,
-  MultipleSelectCheckmarks, } from './SubComponents/Form';
+  } from './SubComponents/Form';
 
 
 function Background ({ forwardButton }) {
