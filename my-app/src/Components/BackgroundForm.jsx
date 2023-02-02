@@ -18,11 +18,16 @@ function Background({ forwardButton }) {
   const [creditHelperText, setCreditHelperText] = useState('');
 
   //Credit Score Validation
-  //field greater than 0 less than 999
-  //field can be left empty
-  //field must be a string
+    //field greater than 0 less than 999
+    //field can be left empty
+    //field must be a string
 
-
+  //Phone Number
+    //10 digits long
+    //only numbers no string
+  
+  //email validation
+    // use "@" symbol and "."
   const handleCreditLength = (e) => {
     console.log(e.target.value)
     if (!e.target.value || parseInt(e.target.value) > 999 || parseInt(e.target.value) < 0 || isNaN(parseInt(e.target.value))) {
@@ -31,18 +36,15 @@ function Background({ forwardButton }) {
       setCreditError(false);
       setCreditHelperText("");
     }
-    console.log(creditError);
 
     if (!e.target.value && creditError) {
       checkLength(e);
-    } else if (isNaN(e.target.value)) {
+    } else if (isNaN(e.target.value) && creditError) {
       checkNumber(e);
     }
     else if ((parseInt(e.target.value) > 999 || parseInt(e.target.value) < 0)) {
       checkRange(e);
     }
-    //setCreditError(checkLength)
-    //setCreditHelperText(checkLength ? 'Please Enter a score between 0 and 999' : '')
   }
   const checkRange = e => {
     if ((parseInt(e.target.value) > 999 || parseInt(e.target.value) < 0)) {
