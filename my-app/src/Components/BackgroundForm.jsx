@@ -24,6 +24,7 @@ function Background({ forwardButton }) {
       setCreditError(false);
       setCreditHelperText("");
     }
+    //hello
     /* Implement more robust solution in the future. FYI: Canada's max credit score is 900 while in america it's 850*/
     //const checkLength = e.target.value.length === 0 || e.target.value.length > 3;
     //console.log(checkLength)
