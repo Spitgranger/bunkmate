@@ -90,7 +90,7 @@ export function DatePicker({ label }) {
   );
 }
 
-export function LineBox({ flex, CssTextField }) {
+export function LineBox({ flex, CssTextField}) {
   const check = flex ? 1 : null; //if true then make use flex: 1 else: use flex null
   return (
     <Box
@@ -190,7 +190,7 @@ export function FormMultiLineInput(props) {
           <TextField
             id="outlined-multiline-static"
             fullWidth
-            placeholder='Tell Us a Bit About Yourself'
+            placeholder={props.placeHolder}
             label={props.field}
             multiline
             rows={4}
@@ -244,16 +244,17 @@ export function ActionButton({ title, onClick, type }) {
   );
 }
 
-export function FormSection(props) {
+export function FormSection({ title, message, children }) {
   return (
     <>
-      <h2 className="profile">{props.title}
+      <h2 className="profile">{title}
       </h2>
       <h5>
         <i>
-          {props.message}
+          {message}
         </i>
       </h5>
+      {children}
     </>
   );
 }
