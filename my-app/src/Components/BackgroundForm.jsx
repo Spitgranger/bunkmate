@@ -17,6 +17,11 @@ function Background({ forwardButton }) {
   const [creditError, setCreditError] = useState(false);
   const [creditHelperText, setCreditHelperText] = useState('');
 
+  //field greater than 0 less than 999
+  //field can be left empty
+  //field must be a string
+
+
   const handleCreditLength = (e) => {
     if (!e.target.value || parseInt(e.target.value) > 999 || parseInt(e.target.value) < 0 || isNaN(parseInt(e.target.value))) {
       setCreditError(true);
