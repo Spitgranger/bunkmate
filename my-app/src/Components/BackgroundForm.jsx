@@ -16,8 +16,8 @@ function Background({ forwardButton }) {
   /* Handles Credit Score Validation*/
   const [creditError, setCreditError] = useState(false);
   const [creditHelperText, setCreditHelperText] = useState('');
-
   const handleCreditLength = (e) => {
+    console.log(e.target.value)
     if (!e.target.value || parseInt(e.target.value) > 999 || parseInt(e.target.value) < 0 || isNaN(parseInt(e.target.value))) {
       setCreditError(true);
     } else {
@@ -30,19 +30,19 @@ function Background({ forwardButton }) {
     //const checkLength = e.target.value.length === 0 || e.target.value.length > 3;
     //console.log(checkLength)
 
-    if (!e.target.value) {
+    if (!e.target.value && creditError) {
       checkLength(e);
     } else if (isNaN(e.target.value)) {
       checkNumber(e);
     }
-    else if (parseInt(e.target.value) > 999 || parseInt(e.target.value) < 0) {
+    else if ((parseInt(e.target.value) > 999 || parseInt(e.target.value) < 0)) {
       checkRange(e);
     }
     //setCreditError(checkLength)
     //setCreditHelperText(checkLength ? 'Please Enter a score between 0 and 999' : '')
   }
   const checkRange = e => {
-    if ((parseInt(e.target.value) > 999 || parseInt(e.target.value < 0)) && creditError) {
+    if ((parseInt(e.target.value) > 999 || parseInt(e.target.value < 0))) {
       setCreditHelperText('Please Enter a score between 0 and 999')
     } else {
       setCreditHelperText("")
