@@ -75,17 +75,21 @@ function Background({ forwardButton }) {
   //email validation
   // use "@" symbol and "."
   const handleCreditLength = (e) => {
-    if (!e.target.value || parseInt(e.target.value) > 999 || parseInt(e.target.value) <= 0 || isNaN(parseInt(e.target.value))) {
+    const checkGreaterThan = parseInt(e.target.value) > 999
+    const checkLessThan = parseInt(e.target.value) <= 0
+    const checkIsNumber = isNaN(parseInt(e.target.value))
+    const checkIsEmpty = (!e.target.value)
+    if (!e.target.value || checkGreaterThan || checkLessThan || checkIsNumber) {
       setCreditError(true);
     } else {
       setCreditError(false);
     }
 
-    if (!e.target.value) {
+    if (checkIsEmpty) {
       setCreditHelperText("This field can't be blank")
-    } else if (isNaN(parseInt(e.target.value))) {
+    } else if (checkIsNumber) {
       setCreditHelperText('Only enter numbers')
-    } else if ((parseInt(e.target.value) > 999 || parseInt(e.target.value) <= 0)) {
+    } else if (checkGreaterThan || checkLessThan) {
       setCreditHelperText('Please Enter a score between 1 and 999')
     } else {
       setCreditHelperText("");
@@ -175,7 +179,7 @@ function Background({ forwardButton }) {
     ]
     } />
     <LineBox flex={true} CssTextField={[
-      <FormSingleLineInput type="number" helperText={phoneHelperText} field="Phone Number" placeHolder="6472345124" onBlur={handlePhoneLength} error={phoneError} />,
+      <FormSingleLineInput type="number"size="small" helperText={phoneHelperText} field="Phone Number" placeHolder="6472345124" onBlur={handlePhoneLength} error={phoneError} />,
       <FormSingleLineAddressInput type="text" field="Address" placeHolder="31 West Street" inputRef={inputRef} />
     ]
     } />
