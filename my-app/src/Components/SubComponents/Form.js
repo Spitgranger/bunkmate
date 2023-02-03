@@ -150,7 +150,7 @@ export function DropDownMenu({ value, onChange, label, menuItem, helperText }) {
   );
 }
 
-export function FormSingleLineInput({ onBlur, onChange, error, type, field, placeHolder, helperText, inputAdornment, inputAdornmentText, inputRef, value }) {
+export function FormSingleLineInput({ onBlur, onChange, error, type, field, placeHolder, helperText, inputAdornment, inputAdornmentText, size,inputRef, value }) {
 
   return (
     <>
@@ -195,26 +195,6 @@ export function FormSingleLineAddressInput({ onBlur, onChange, error, type, fiel
   )
 }
 
-
-  return (
-    <>
-      <TextField
-        id="outlined-basic"
-        label={field}
-        variant="outlined"
-        size="small"
-        placeholder={placeHolder}
-        onChange={onChange}
-        onBlur={onBlur}
-        error={error}
-        helperText={helperText}
-        InputProps={inputAdornment ? { startAdornment: <InputAdornment position="start">{inputAdornmentText}</InputAdornment> } : null}
-        type={type}
-        inputRef={inputRef}
-      />
-    </>
-  )
-}
 
 export function FormMultiLineInput(props) {
   return (

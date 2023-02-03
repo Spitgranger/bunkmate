@@ -1,5 +1,4 @@
 import { useState, useRef, useEffect } from 'react'
-import { cloneElement, useState } from 'react'
 import {
   DatePicker,
   FormSection,
@@ -12,7 +11,6 @@ import {
   LineBox,
 } from './SubComponents/Form';
 import "./BackgroundForm.css"
-import { json } from 'react-router';
 
 function Background({ forwardButton }) {
   const [values, setValues] = useState({
@@ -77,23 +75,20 @@ function Background({ forwardButton }) {
   //email validation
   // use "@" symbol and "."
   const handleCreditLength = (e) => {
-    console.log(e.target.value)
     if (!e.target.value || parseInt(e.target.value) > 999 || parseInt(e.target.value) <= 0 || isNaN(parseInt(e.target.value))) {
       setCreditError(true);
     } else {
       setCreditError(false);
-      setCreditHelperText("");
     }
 
     if (!e.target.value) {
       setCreditHelperText("This field can't be blank")
     } else if (isNaN(parseInt(e.target.value))) {
       setCreditHelperText('Only enter numbers')
-      console.log(creditError)
     } else if ((parseInt(e.target.value) > 999 || parseInt(e.target.value) <= 0)) {
       setCreditHelperText('Please Enter a score between 1 and 999')
     } else {
-      setCreditHelperText('')
+      setCreditHelperText("");
     }
   }
 
