@@ -1,35 +1,43 @@
 import { useState } from 'react'
+import  { IoChevronBack } from 'react-icons/io5';
 import { 
   FormSection, 
   ActionButton, 
   UploadFile, 
   LineBox,
+  FormSingleLineInput,
   } from './SubComponents/Form';
-
   
+  const backButtonStyles = {
+    display: 'flex',
+    alignItems: 'center',
+    padding: '8px'
+  }
+
+  const checkBoxStyles ={
+    margin: "5px"
+  }
+
 
 function Uploads ({ backwardButton, forwardButton }) {
 
       return (<>
           <label style={{cursor: 'pointer'}}>
-            <input style={{display: 'none'}}onClick={backwardButton}type="button" />{"<- back"}
+            <input style={{display: 'none'}}onClick={backwardButton}type="button" />
+              <h3 style={backButtonStyles}>              
+              <IoChevronBack/>Back</h3>
           </label>
 
           <FormSection title="Finances Check" message="*We collect this data for our algorithms, we won't share it with anyone else" />
               <LineBox flex={true} CssTextField={[
-                <UploadFile message="Upload Driver's License" />,
-                <UploadFile message="Upload SIN or SSN" />
+                <UploadFile accept=".jpeg,.jpg,.png,.pdf,.word"message="Void Check" />,
+                <UploadFile accept=".pdf,.xlsx,.csv"message="Credit Score" />
               ]
               } />
+              <FormSection message="*Please upload at least one of the two" />
               <LineBox flex={true} CssTextField={[
-                <UploadFile message="Void Check" />,
-                <UploadFile message="Credit Score" />
-              ]
-              } />
-              <FormSection message="*Please upload at least of the two" />
-              <LineBox flex={true} CssTextField={[
-                <UploadFile message="Void Check" />,
-                <UploadFile message="Credit Score" />
+                <UploadFile accept=".pdf, .word" message="T4 Document" />,
+                <UploadFile accept=".csv, .xlsx, .pdf"message="Pay Stub" />
               ]
               } />
           <br></br>
@@ -38,15 +46,19 @@ function Uploads ({ backwardButton, forwardButton }) {
             />
 
               <LineBox flex={true} CssTextField={[
-                <UploadFile message="Pay Stub" />,
-                <UploadFile message="T4 document" />,
+                <UploadFile accept=".jpeg,.jpg,.png,.pdf"message="Driver's License" />,
+                <FormSingleLineInput size="large"type="number" field="SIN/SSN" placeHolder="ex. 234234245"  />,
               ]
               } />
+
+
           <FormSection message="I consent to the usage and collection of my information to perform background checks, this information will be shared with our real estate partners and can be deleted upon request" />
-              <label style={{ padding: "10px"}}>
-                <input type="checkbox" />
-                ___________I understand and consent_____________
+              <div style={{display: "flex", justifyContent: "center"}}>
+              <label >
+                <input style={checkBoxStyles}type="checkbox" />
+                  I understand and consent
               </label>
+              </div>
             <ActionButton onClick={forwardButton} type="submit" title="Continue" />
         </>)
 }

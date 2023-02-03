@@ -97,7 +97,7 @@ export function LineBox({ flex, CssTextField}) {
       component="form"
       id="line"
       sx={{
-        '& > :not(style)': { m: 1, flex: check, width: "100%",},
+        '& > :not(style)': { m: 1, flex: check, width: "100%"},
       }}
       noValidate
       autoComplete="off"
@@ -151,7 +151,7 @@ export function DropDownMenu({ value, onChange, label, menuItem, helperText}) {
   );
 }
 
-export function FormSingleLineInput({ onBlur ,onChange, error, type, field, placeHolder, helperText, inputAdornment, inputAdornmentText }) {
+export function FormSingleLineInput({ size, onBlur ,onChange, error, type, field, placeHolder, helperText, inputAdornment, inputAdornmentText }) {
 
   return (
     <>
@@ -159,7 +159,7 @@ export function FormSingleLineInput({ onBlur ,onChange, error, type, field, plac
         id="outlined-basic"
         label={field}
         variant="outlined"
-        size="small"
+        size={size}
         placeholder={placeHolder}
         onChange={onChange}
         onBlur={onBlur}
@@ -208,7 +208,7 @@ export function UploadFile(props) {
     <div className="uploadFileContainer">
       <label className="uploadFile">
         {props.message}
-        <input className="uploadButton" accept="image/*" id="icon-button-file" type="file" />
+        <input className="uploadButton" accept={props.accept} id="icon-button-file" type="file" />
         <label htmlFor="icon-button-file">
           <IconButton sx={{ color: "aqua" }} aria-label="upload picture" component="span">
             <CameraAltIcon />

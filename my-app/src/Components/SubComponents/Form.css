@@ -12,14 +12,16 @@
   background-color: black;
   color: white;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  padding: 4px;
+  font-size: 15px;
+  padding: 10px;
   cursor: pointer;
   width: 100%;
   border: 1px solid black;
   min-width: 70%;
 }
+
 
 .uploadButton {
   display: none;
