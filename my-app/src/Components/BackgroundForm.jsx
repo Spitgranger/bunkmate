@@ -1,4 +1,4 @@
-import { cloneElement, useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import {
   DatePicker,
   FormSection,
@@ -6,69 +6,118 @@ import {
   UploadFile,
   DropDownMenu,
   FormSingleLineInput,
+  FormSingleLineAddressInput,
   FormMultiLineInput,
   LineBox,
 } from './SubComponents/Form';
-
+import "./BackgroundForm.css"
 
 function Background({ forwardButton }) {
+  const [values, setValues] = useState({
+    firstName: "",
+    lastName: "",
+    about: "",
+    city: "",
+    country: "",
+    address: "",
+    province: "",
+  });
 
+  const autoCompleteRef = useRef();
+  const inputRef = useRef();
+  const options = {
+    componentRestrictions: { country: "ca" },
+    fields: ["address_components"],
+    types: []
+  };
+  useEffect(() => {
+    autoCompleteRef.current = new window.google.maps.places.Autocomplete(
+      inputRef.current,
+      options
+    );
+    autoCompleteRef.current.addListener("place_changed", async function () {
+      const place = await autoCompleteRef.current.getPlace();
+      console.log({ place });
+      //loop through address components, takig each and checking their type
+      const addressComponents = place.address_components
+      addressComponents.forEach((component) => {
+        console.log(component);
+        console.log(component.types[0])
+        //each case, setting the form values accordingly.
+        switch (component.types[0]) {
+          case "locality":
+            setValues(prevValue => ({ ...prevValue, city: component.long_name }))
+            break;
+          case "administrative_area_level_1":
+            setValues(prevValue => ({ ...prevValue, province: component.long_name }))
+            break;
+          case "country":
+            setValues(prevValue => ({ ...prevValue, country: component.long_name }))
+        }
+      })
+      console.log(values);
+      //setValues({ ...values, city: place.address_components[3].long_name, country: place.address_components[6].long_name, province: place.address_components[5].long_name })
+    });
+  }, []);
   /* Handles Credit Score Validation*/
   const [creditError, setCreditError] = useState(false);
   const [creditHelperText, setCreditHelperText] = useState('');
 
   //Credit Score Validation
-    //field greater than 0 less than 999
-    //field can be left empty
-    //field must be a string
+  //field greater than 0 less than 999
+  //field can be left empty
+  //field must be a string
 
+  //Phone Number
+  //10 digits long
+  //only numbers no string
+
+  //email validation
+  // use "@" symbol and "."
   const handleCreditLength = (e) => {
-    console.log(e.target.value)
     if (!e.target.value || parseInt(e.target.value) > 999 || parseInt(e.target.value) <= 0 || isNaN(parseInt(e.target.value))) {
       setCreditError(true);
     } else {
       setCreditError(false);
-      setCreditHelperText("");
     }
 
     if (!e.target.value) {
       setCreditHelperText("This field can't be blank")
     } else if (isNaN(parseInt(e.target.value))) {
-        setCreditHelperText('Only enter numbers')
-        console.log(creditError)
+      setCreditHelperText('Only enter numbers')
     } else if ((parseInt(e.target.value) > 999 || parseInt(e.target.value) <= 0)) {
-        setCreditHelperText('Please Enter a score between 1 and 999')
-    } else{
-        setCreditHelperText('')
+      setCreditHelperText('Please Enter a score between 1 and 999')
+    } else {
+      setCreditHelperText("");
     }
   }
 
   //Phone Number
-    //field can't be empty
-    //10 digits long
-    //only numbers no string
-  
+  //field can't be empty
+  //10 digits long
+  //only numbers no string
+
   const [phoneError, setPhoneError] = useState(false);
   const [phoneHelperText, setPhoneHelperText] = useState('');
 
   const handlePhoneLength = (e) => {
-      if (e.target.value.length !== 10 || !e.target.value || isNaN(parseInt(e.target.value))){
-        setPhoneError(true)
-      }else{
-        setPhoneError(false)
-        setPhoneHelperText("")
-      }
+    if (e.target.value.length !== 10 || !e.target.value || isNaN(parseInt(e.target.value))) {
+      setPhoneError(true)
+    } else {
+      setPhoneError(false)
+      setPhoneHelperText("")
+    }
     if (e.target.value.length !== 10 && phoneError) {
       setPhoneHelperText('Please Enter a 10 digit phone number')
     }
     if (!e.target.value && phoneError) {
       setPhoneHelperText('Please fill in this field')
-    }else {
+    } else {
       setPhoneHelperText("")
     }
     if (isNaN(parseInt(e.target.value)) && phoneError) {
       setPhoneHelperText('Please input numbers only')
-    }else {
+    } else {
       setPhoneHelperText("")
     }
   }
@@ -76,8 +125,8 @@ function Background({ forwardButton }) {
 
   //Handles Email Syntax Validation
   //email validation
-    // use "@" symbol and "."
-    //field can't be empty
+  // use "@" symbol and "."
+  //field can't be empty
   const [emailError, setEmailError] = useState(false);
   const [emailHelperText, setEmailHelperText] = useState('');
 
@@ -92,7 +141,11 @@ function Background({ forwardButton }) {
       setEmailHelperText('')
     }
   };
-
+  /*
+  const handleChange = e => {
+  
+  }
+  */
   return (<>
     <FormSection title="Profile"
       message="*Everything in this section will be visible to other people"
@@ -100,8 +153,8 @@ function Background({ forwardButton }) {
     <UploadFile message="Upload Profile Picture" accept="image/*" />
 
     <LineBox flex={true} CssTextField={[
-      <FormSingleLineInput size="small"type="text" field="Legal First Name" placeHolder="Sam" />,
-      <FormSingleLineInput size="small"type="text" field="Legal Last Name" placeHolder="Jenkins" />
+      <FormSingleLineInput size="small" type="text" field="Legal First Name" placeHolder="Sam" />,
+      <FormSingleLineInput size="small" type="text" field="Legal Last Name" placeHolder="Jenkins" />
     ]
     } />
     <div id="multiline">
@@ -117,20 +170,22 @@ function Background({ forwardButton }) {
 
     <FormSection title="Personal Info" message="*We collect this data for our algorithms, we won't share it with anyone else. We'll ask you for proof on the next page" />
     <LineBox flex={true} CssTextField={[
-      <FormSingleLineInput size="small"type="text" field="Email" placeHolder="ex. bunkmates@gmail.com" onBlur={handleEmailSyntax} error={emailError} helperText={emailHelperText} />,
+      <FormSingleLineInput size="small" type="text" field="Email" placeHolder="ex. bunkmates@gmail.com" onBlur={handleEmailSyntax} error={emailError} helperText={emailHelperText} />,
       <DatePicker type="number" label="Birthday" />
     ]
     } />
     <LineBox flex={true} CssTextField={[
-      <FormSingleLineInput size="small"type="number" helperText={phoneHelperText} field="Phone Number" placeHolder="6472345124" onBlur={handlePhoneLength} error={phoneError} />,
-      <FormSingleLineInput size="small"type="text" field="Address" placeHolder="31 West Street" />
+      <FormSingleLineInput type="number" helperText={phoneHelperText} field="Phone Number" placeHolder="6472345124" onBlur={handlePhoneLength} error={phoneError} />,
+      <FormSingleLineAddressInput type="text" field="Address" placeHolder="31 West Street" inputRef={inputRef} />
     ]
     } />
-    <LineBox flex={true} CssTextField={[
-      <FormSingleLineInput size="small" type="text" field="City" placeHolder="New York" />,
-      <FormSingleLineInput size="small"type="text" field="Country" placeHolder="United States" />
-    ]
-    } />
+    {values.city && values.country && values.province ?
+      <LineBox flex={true} CssTextField={[
+        <FormSingleLineInput type="text" field="City" placeHolder="New York" value={values.city} />,
+        <FormSingleLineInput type="text" field="Country" placeHolder="United States" value={values.country} />,
+        <FormSingleLineInput type="text" field="Province/State" placeHolder="Ontario" value={values.province} />
+      ]
+      } /> : null}
     <LineBox flex={true} CssTextField={[
       <DropDownMenu label="Employment" menuItem={["Current Employed", "Currently Unemployed", "Currently Self Employed"]} />,
       <DropDownMenu label="Current Education" menuItem={["Not in School", "High School", "Undergraduate Studies", "Graduate Studies"]} />,
