@@ -10,7 +10,8 @@ import {
   FormMultiLineInput,
   LineBox,
 } from './SubComponents/Form';
-import "./BackgroundForm.css"
+import { IoChevronForward } from 'react-icons/io5';
+import CameraAltIcon from '@mui/icons-material/CameraAlt';
 
 function Background({ forwardButton }) {
   const [values, setValues] = useState({
@@ -68,17 +69,13 @@ function Background({ forwardButton }) {
   //field can be left empty
   //field must be a string
 
-  //Phone Number
-  //10 digits long
-  //only numbers no string
-
-  //email validation
-  // use "@" symbol and "."
   const handleCreditLength = (e) => {
-    const checkGreaterThan = parseInt(e.target.value) > 999
-    const checkLessThan = parseInt(e.target.value) <= 0
-    const checkIsNumber = isNaN(parseInt(e.target.value))
-    const checkIsEmpty = (!e.target.value)
+
+    const checkGreaterThan = parseInt(e.target.value) > 999;
+    const checkLessThan = parseInt(e.target.value) <= 0;
+    const checkIsNumber = isNaN(parseInt(e.target.value));
+    const checkIsEmpty = (!e.target.value);
+
     if (!e.target.value || checkGreaterThan || checkLessThan || checkIsNumber) {
       setCreditError(true);
     } else {
@@ -88,46 +85,45 @@ function Background({ forwardButton }) {
     if (checkIsEmpty) {
       setCreditHelperText("This field can't be blank")
     } else if (checkIsNumber) {
-      setCreditHelperText('Only enter numbers')
+      setCreditHelperText('Please enter numbers only')
     } else if (checkGreaterThan || checkLessThan) {
       setCreditHelperText('Please Enter a score between 1 and 999')
     } else {
       setCreditHelperText("");
     }
-  }
+  };
 
   //Phone Number
   //field can't be empty
   //10 digits long
   //only numbers no string
-
   const [phoneError, setPhoneError] = useState(false);
   const [phoneHelperText, setPhoneHelperText] = useState('');
 
   const handlePhoneLength = (e) => {
-    if (e.target.value.length !== 10 || !e.target.value || isNaN(parseInt(e.target.value))) {
-      setPhoneError(true)
+
+    const checkLength = e.target.value.length !== 10;
+    const checkIsEmpty = !e.target.value;
+    const checkIsNumber = isNaN(parseInt(e.target.value));
+
+    if (checkLength || checkIsEmpty || checkIsNumber) {
+      setPhoneError(true);
     } else {
-      setPhoneError(false)
-      setPhoneHelperText("")
+      setPhoneError(false);
     }
-    if (e.target.value.length !== 10 && phoneError) {
-      setPhoneHelperText('Please Enter a 10 digit phone number')
-    }
-    if (!e.target.value && phoneError) {
-      setPhoneHelperText('Please fill in this field')
-    } else {
-      setPhoneHelperText("")
-    }
-    if (isNaN(parseInt(e.target.value)) && phoneError) {
+
+    if (checkIsEmpty) {
+      setPhoneHelperText("This field can't be blank")
+    } else if (checkIsNumber) {
       setPhoneHelperText('Please input numbers only')
+    } else if (checkLength) {
+      setPhoneHelperText('Please enter a 10 digit phone number')
     } else {
-      setPhoneHelperText("")
+      setPhoneHelperText("");
     }
-  }
+  };
 
 
-  //Handles Email Syntax Validation
   //email validation
   // use "@" symbol and "."
   //field can't be empty
@@ -145,21 +141,16 @@ function Background({ forwardButton }) {
       setEmailHelperText('')
     }
   };
-  /*
-  const handleChange = e => {
-  
-  }
-  */
+
   return (<>
     <FormSection title="Profile"
       message="*Everything in this section will be visible to other people"
     />
-    <UploadFile message="Upload Profile Picture" accept="image/*" />
+    <UploadFile helperTextPos="45%" width="50%" type="file" message="Upload Profile Picture" accept="image/*" endIcon={<CameraAltIcon sx={{ color: "aqua" }} />} />
 
     <LineBox flex={true} CssTextField={[
       <FormSingleLineInput size="small" type="text" field="Legal First Name" placeHolder="Sam" />,
-      <FormSingleLineInput size="small" type="text" field="Legal Last Name" placeHolder="Jenkins" />
-    ]
+      <FormSingleLineInput size="small" type="text" field="Legal Last Name" placeHolder="Jenkins" />,]
     } />
     <div id="multiline">
       <FormMultiLineInput placeHolder="tell us a bit about yourself" type="text" field="About Me" helperText="Max: 500 Characters" />
@@ -179,7 +170,7 @@ function Background({ forwardButton }) {
     ]
     } />
     <LineBox flex={true} CssTextField={[
-      <FormSingleLineInput type="number"size="small" helperText={phoneHelperText} field="Phone Number" placeHolder="6472345124" onBlur={handlePhoneLength} error={phoneError} />,
+      <FormSingleLineInput type="text" size="small" helperText={phoneHelperText} field="Phone Number" placeHolder="6472345124" onBlur={handlePhoneLength} error={phoneError} />,
       <FormSingleLineAddressInput type="text" field="Address" placeHolder="31 West Street" inputRef={inputRef} />
     ]
     } />
@@ -199,12 +190,12 @@ function Background({ forwardButton }) {
     <FormSection title="Finances and Verification" message="*You can provide us proof later" />
     {/* ranges from 10000 - 100000*/}
     <LineBox flex={true} CssTextField={[
-      <FormSingleLineInput size="small" type="text" helperText={creditHelperText} onBlur={handleCreditLength} error={creditError} field="Credit Score" placeHolder="ex. 740" />,
+      <FormSingleLineInput size="small" helperText={creditHelperText} onBlur={handleCreditLength} error={creditError} field="Credit Score" placeHolder="ex. 740" />,
       <DropDownMenu label="Annual Income" menuItem={["< $10000", "$10000 - $50000", "$50001 - $100000", "$100001 - $200000", "> $200001"]} />,
     ]
     } />
 
-    <ActionButton onClick={forwardButton} type="submit" title="Continue" />
+    <ActionButton fontSize="15px" width="100%" onClick={forwardButton} type="submit" title="Continue" endIcon={<IoChevronForward color="aqua" />} />
   </>)
 }
 

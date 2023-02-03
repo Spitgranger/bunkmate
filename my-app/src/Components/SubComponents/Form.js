@@ -2,8 +2,6 @@ import "./Form.css"
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField';
-import IconButton from '@mui/material/IconButton';
-import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import * as React from 'react';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
@@ -18,7 +16,7 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import ListItemText from '@mui/material/ListItemText';
 import Checkbox from '@mui/material/Checkbox';
 import { InputAdornment } from "@mui/material";
-
+import { useState } from 'react'
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 const MenuProps = {
@@ -150,7 +148,7 @@ export function DropDownMenu({ value, onChange, label, menuItem, helperText }) {
   );
 }
 
-export function FormSingleLineInput({ onBlur, onChange, error, type, field, placeHolder, helperText, inputAdornment, inputAdornmentText, size,inputRef, value }) {
+export function FormSingleLineInput({ onBlur, onChange, error, type, field, placeHolder, helperText, inputAdornment, inputAdornmentText, size, inputRef, value }) {
 
   return (
     <>
@@ -225,41 +223,71 @@ export function FormMultiLineInput(props) {
 }
 
 export function UploadFile(props) {
-  return (
-    <div className="uploadFileContainer">
-      <label className="uploadFile">
-        {props.message}
-        <input className="uploadButton" accept={props.accept} id="icon-button-file" type="file" />
-        <label htmlFor="icon-button-file">
-          <IconButton sx={{ color: "aqua" }} aria-label="upload picture" component="span">
-            <CameraAltIcon />
-          </IconButton>
-        </label>
-      </label>
-    </div>
-  );
-}
 
-export function ActionButton({ title, onClick, type }) {
-  const handleSave = (e) => {
-    e.preventDefault();
+  const [helperText, setHelperText] = useState('')
+  const buttonStyles = {
+    backgroundColor: '#383838',
+    color: 'white',
+    borderRadius: "10px",
+    width: props.width,
+    height: '60px',
+    fontSize: props.fontSize,
+    ':hover': { bgcolor: 'black', color: "aqua" }
+  }
+  const handleMouseEnter = () => {
+    setHelperText(props.helperText)
   }
 
   return (
-    <div className="continueButton">
+    <div className="uploadFileContainer">
       <Button
         variant="contained"
-        onClick={onClick}
-        type={type}
-        onSubmit={handleSave}
-        sx={{
-          backgroundColor: "black",
-          color: 'white',
-          borderRadius: "10px",
-          width: '100%',
-          height: '60px',
-        }}>
-        {title}
+        component="label"
+        endIcon={props.endIcon}
+        sx={buttonStyles}
+        onMouseEnter={handleMouseEnter}
+      >
+        <h4 style={{ width: '80%', margin: '10px 0px 10px 0px' }}>
+          {props.message}
+        </h4>
+        <input aria-label="upload picture" className="uploadButton" hidden accept={props.accept} id="icon-button-file" multiple type={props.type} />
+      </Button>
+      <div style={{ width: props.helperTextPos, position: 'relative', left: '1px' }}>
+        {/* set the margin to 1px to remove default margin and position helper text properly*/}
+        <h5 style={{ margin: '1px' }}>{helperText}</h5>
+      </div>
+    </div >
+  );
+}
+
+export function ActionButton(props) {
+
+  const buttonStyles = {
+    backgroundColor: "#383838",
+    color: 'white',
+    borderRadius: "10px",
+    width: props.width,
+    height: '60px',
+    paddingTop: '2px',
+    fontSize: props.fontSize,
+    ':hover': { bgcolor: 'black', color: "aqua" },
+  }
+
+
+  return (
+    <div className="Button">
+      <Button
+        variant="contained"
+        onClick={props.onClick}
+        type={props.type}
+        endIcon={props.endIcon}
+        startIcon={props.startIcon}
+        sx={
+          buttonStyles
+        }>
+        <h3>
+          {props.title}
+        </h3>
       </Button>
     </div >
   );

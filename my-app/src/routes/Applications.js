@@ -6,7 +6,7 @@ import { useState } from 'react'
 function Appliciation() {
 
   /* sets the subpage of the form that you're on */
-  const [page, setpage]  = useState(0);
+  const [page, setpage] = useState(0);
 
   function handleContinueClick() {
     return (setpage(() => page + 1));
@@ -15,14 +15,12 @@ function Appliciation() {
     return (setpage(() => page - 1));
   }
   const pages = [
-                <Background forwardButton={handleContinueClick}/>, 
-                <Uploads
-                backwardButton={handleBackClick} 
-                forwardButton={handleContinueClick}
-                 />,
-                ]
-
-
+    <Background forwardButton={handleContinueClick} />,
+    <Uploads
+      backwardButton={handleBackClick}
+      forwardButton={handleContinueClick}
+    />,
+  ]
   return (
     <>
       <Navbar />
