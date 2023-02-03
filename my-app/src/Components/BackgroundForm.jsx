@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
+import { cloneElement, useState } from 'react'
 import {
   DatePicker,
   FormSection,
@@ -77,56 +78,60 @@ function Background({ forwardButton }) {
   // use "@" symbol and "."
   const handleCreditLength = (e) => {
     console.log(e.target.value)
-    if (!e.target.value || parseInt(e.target.value) > 999 || parseInt(e.target.value) < 0 || isNaN(parseInt(e.target.value))) {
+    if (!e.target.value || parseInt(e.target.value) > 999 || parseInt(e.target.value) <= 0 || isNaN(parseInt(e.target.value))) {
       setCreditError(true);
     } else {
       setCreditError(false);
       setCreditHelperText("");
     }
 
-    if (!e.target.value && creditError) {
-      checkLength(e);
-    } else if (isNaN(e.target.value) && creditError) {
-      checkNumber(e);
-    }
-    else if ((parseInt(e.target.value) > 999 || parseInt(e.target.value) < 0)) {
-      checkRange(e);
-    }
-  }
-  const checkRange = e => {
-    if ((parseInt(e.target.value) > 999 || parseInt(e.target.value) < 0)) {
-      setCreditHelperText('Please Enter a score between 0 and 999')
-    } else {
-      setCreditHelperText("")
-    }
-  }
-  const checkLength = (e) => {
-    if (!e.target.value && creditError) {
-      setCreditHelperText('Enter a Number')
-    } else {
-      setCreditHelperText("")
-    }
-  }
-  const checkNumber = (e) => {
-    if (e.target.value && creditError) {
+    if (!e.target.value) {
+      setCreditHelperText("This field can't be blank")
+    } else if (isNaN(parseInt(e.target.value))) {
       setCreditHelperText('Only enter numbers')
+      console.log(creditError)
+    } else if ((parseInt(e.target.value) > 999 || parseInt(e.target.value) <= 0)) {
+      setCreditHelperText('Please Enter a score between 1 and 999')
     } else {
-      setCreditHelperText("")
+      setCreditHelperText('')
     }
   }
 
-  /* Handles Phone Number Validation*/
+  //Phone Number
+  //field can't be empty
+  //10 digits long
+  //only numbers no string
+
   const [phoneError, setPhoneError] = useState(false);
   const [phoneHelperText, setPhoneHelperText] = useState('');
 
   const handlePhoneLength = (e) => {
-    const checkLength = e.target.value.length !== 10;
-    setPhoneError(checkLength)
-    setPhoneHelperText(checkLength ? 'Please Enter a 10 digit phone number' : '')
+    if (e.target.value.length !== 10 || !e.target.value || isNaN(parseInt(e.target.value))) {
+      setPhoneError(true)
+    } else {
+      setPhoneError(false)
+      setPhoneHelperText("")
+    }
+    if (e.target.value.length !== 10 && phoneError) {
+      setPhoneHelperText('Please Enter a 10 digit phone number')
+    }
+    if (!e.target.value && phoneError) {
+      setPhoneHelperText('Please fill in this field')
+    } else {
+      setPhoneHelperText("")
+    }
+    if (isNaN(parseInt(e.target.value)) && phoneError) {
+      setPhoneHelperText('Please input numbers only')
+    } else {
+      setPhoneHelperText("")
+    }
   }
 
 
-  /* Handles Email Syntax Validation */
+  //Handles Email Syntax Validation
+  //email validation
+  // use "@" symbol and "."
+  //field can't be empty
   const [emailError, setEmailError] = useState(false);
   const [emailHelperText, setEmailHelperText] = useState('');
 
@@ -150,11 +155,11 @@ function Background({ forwardButton }) {
     <FormSection title="Profile"
       message="*Everything in this section will be visible to other people"
     />
-    <UploadFile message="Upload Profile Picture" />
+    <UploadFile message="Upload Profile Picture" accept="image/*" />
 
     <LineBox flex={true} CssTextField={[
-      <FormSingleLineInput type="text" field="Legal First Name" placeHolder="Sam" />,
-      <FormSingleLineInput type="text" field="Legal Last Name" placeHolder="Jenkins" />
+      <FormSingleLineInput size="small" type="text" field="Legal First Name" placeHolder="Sam" />,
+      <FormSingleLineInput size="small" type="text" field="Legal Last Name" placeHolder="Jenkins" />
     ]
     } />
     <div id="multiline">
@@ -163,14 +168,14 @@ function Background({ forwardButton }) {
 
     <LineBox flex={true} CssTextField={[
       <DropDownMenu label="Gender" menuItem={["Male", "Female", "Other"]} />,
-      <FormSingleLineInput type="text" field="Linkedin Profile" placeHolder="(Optional)" />
+      <FormSingleLineInput size="small" type="text" field="Linkedin Profile" placeHolder="(Optional)" />
     ]
     } />
     <br></br>
 
     <FormSection title="Personal Info" message="*We collect this data for our algorithms, we won't share it with anyone else. We'll ask you for proof on the next page" />
     <LineBox flex={true} CssTextField={[
-      <FormSingleLineInput type="text" field="Email" placeHolder="ex. bunkmates@gmail.com" onBlur={handleEmailSyntax} error={emailError} helperText={emailHelperText} />,
+      <FormSingleLineInput size="small" type="text" field="Email" placeHolder="ex. bunkmates@gmail.com" onBlur={handleEmailSyntax} error={emailError} helperText={emailHelperText} />,
       <DatePicker type="number" label="Birthday" />
     ]
     } />
@@ -195,7 +200,7 @@ function Background({ forwardButton }) {
     <FormSection title="Finances and Verification" message="*You can provide us proof later" />
     {/* ranges from 10000 - 100000*/}
     <LineBox flex={true} CssTextField={[
-      <FormSingleLineInput type="number" helperText={creditHelperText} onBlur={handleCreditLength} error={creditError} field="Credit Score" placeHolder="ex. 740" />,
+      <FormSingleLineInput size="small" type="text" helperText={creditHelperText} onBlur={handleCreditLength} error={creditError} field="Credit Score" placeHolder="ex. 740" />,
       <DropDownMenu label="Annual Income" menuItem={["< $10000", "$10000 - $50000", "$50001 - $100000", "$100001 - $200000", "> $200001"]} />,
     ]
     } />
