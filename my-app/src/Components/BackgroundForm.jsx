@@ -176,9 +176,9 @@ function Background({ forwardButton }) {
     } />
     {values.city && values.country && values.province ?
       <LineBox flex={true} CssTextField={[
-        <FormSingleLineInput type="text" field="City" placeHolder="New York" value={values.city} />,
-        <FormSingleLineInput type="text" field="Country" placeHolder="United States" value={values.country} />,
-        <FormSingleLineInput type="text" field="Province/State" placeHolder="Ontario" value={values.province} />
+        <FormSingleLineInput size="small" type="text" field="City" placeHolder="New York" value={values.city} />,
+        <FormSingleLineInput size="small" type="text" field="Country" placeHolder="United States" value={values.country} />,
+        <FormSingleLineInput size="small" type="text" field="Province/State" placeHolder="Ontario" value={values.province} />
       ]
       } /> : null}
     <LineBox flex={true} CssTextField={[

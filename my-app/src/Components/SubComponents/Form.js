@@ -225,6 +225,8 @@ export function FormMultiLineInput(props) {
 export function UploadFile(props) {
 
   const [helperText, setHelperText] = useState('')
+  const [textColor, setTextColor] = useState('white')
+  const [icon, setIcon] = useState(props.endIcon)
   const buttonStyles = {
     backgroundColor: '#383838',
     color: 'white',
@@ -243,6 +245,7 @@ export function UploadFile(props) {
       <Button
         variant="contained"
         component="label"
+        startIcon={props.startIcon}
         endIcon={props.endIcon}
         sx={buttonStyles}
         onMouseEnter={handleMouseEnter}

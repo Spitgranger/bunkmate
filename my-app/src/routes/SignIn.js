@@ -67,7 +67,7 @@ function SignIn({ openModalName }) {
               </h6>
             </div>
             <div className="button" style={{ borderBottom: "1px solid lightgrey" }}>
-              <ActionButton title="Submit" />
+              <ActionButton width="100%" type="submit" title="Submit" />
             </div>
             <div className="socials" >
               <SignInPartner logo={<FcGoogle />} company="Google" />
