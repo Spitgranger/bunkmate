@@ -30,41 +30,40 @@ const MenuProps = {
   },
 };
 
-
-export function MultipleSelectCheckmarks( {title, menuItems} ) {
+export function MultipleSelectCheckmarks({ title, menuItems }) {
   const [personName, setPersonName] = React.useState([]);
 
   const handleChange = (event) => {
-      const {
-        target: { value },
-      } = event;
-      setPersonName(
-        // On autofill we get a stringified value.
-        typeof value === 'string' ? value.split(',') : value,
-      );
-    };
+    const {
+      target: { value },
+    } = event;
+    setPersonName(
+      // On autofill we get a stringified value.
+      typeof value === 'string' ? value.split(',') : value,
+    );
+  };
   return (
-      <FormControl sx={{ m: 1, width: '100%', flex: 1, color: "black"}} size="small">
-        <InputLabel id="demo-multiple-checkbox-label">{title}</InputLabel>
-        <Select
-          labelId="demo-multiple-checkbox-label"
-          id="demo-multiple-checkbox"
-          multiple
-          value={personName}
-          onChange={handleChange}
-          input={<OutlinedInput label={title} />}
-          renderValue={(selected) => selected.join(', ')}
-          MenuProps={MenuProps}
-          autoWidth
-        >
-          {menuItems.map((name) => (
-            <MenuItem key={name} value={name}>
-              <Checkbox checked={personName.indexOf(name) > -1} />
-              <ListItemText primary={name} />
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
+    <FormControl sx={{ m: 1, width: '100%', flex: 1, color: "black" }} size="small">
+      <InputLabel id="demo-multiple-checkbox-label">{title}</InputLabel>
+      <Select
+        labelId="demo-multiple-checkbox-label"
+        id="demo-multiple-checkbox"
+        multiple
+        value={personName}
+        onChange={handleChange}
+        input={<OutlinedInput label={title} />}
+        renderValue={(selected) => selected.join(', ')}
+        MenuProps={MenuProps}
+        autoWidth
+      >
+        {menuItems.map((name) => (
+          <MenuItem key={name} value={name}>
+            <Checkbox checked={personName.indexOf(name) > -1} />
+            <ListItemText primary={name} />
+          </MenuItem>
+        ))}
+      </Select>
+    </FormControl>
   );
 }
 
@@ -90,14 +89,14 @@ export function DatePicker({ label }) {
   );
 }
 
-export function LineBox({ flex, CssTextField}) {
+export function LineBox({ flex, CssTextField }) {
   const check = flex ? 1 : null; //if true then make use flex: 1 else: use flex null
   return (
     <Box
       component="form"
       id="line"
       sx={{
-        '& > :not(style)': { m: 1, flex: check, width: "100%",},
+        '& > :not(style)': { m: 1, flex: check, width: "100%", },
       }}
       noValidate
       autoComplete="off"
@@ -129,12 +128,12 @@ const CssTextField = styled(TextField)({
 
 */
 
-export function DropDownMenu({ value, onChange, label, menuItem, helperText}) {
+export function DropDownMenu({ value, onChange, label, menuItem, helperText }) {
 
   return (
-    <FormControl placeholder="wow"sx={{ m: 1, width: '100%', flex: 1 }} size="small" fullWidth>
-      <InputLabel 
-      id="demo-select-small">{label}</InputLabel>
+    <FormControl placeholder="wow" sx={{ m: 1, width: '100%', flex: 1 }} size="small" fullWidth>
+      <InputLabel
+        id="demo-select-small">{label}</InputLabel>
       <Select
         labelId="demo-simple-select-label"
         id="demo-simple-select"
@@ -151,7 +150,7 @@ export function DropDownMenu({ value, onChange, label, menuItem, helperText}) {
   );
 }
 
-export function FormSingleLineInput({ onBlur ,onChange, error, type, field, placeHolder, helperText, inputAdornment, inputAdornmentText }) {
+export function FormSingleLineInput({ onBlur, onChange, error, type, field, placeHolder, helperText, inputAdornment, inputAdornmentText, inputRef, value }) {
 
   return (
     <>
@@ -163,17 +162,38 @@ export function FormSingleLineInput({ onBlur ,onChange, error, type, field, plac
         placeholder={placeHolder}
         onChange={onChange}
         onBlur={onBlur}
-        error ={error}
+        error={error}
         helperText={helperText}
-        InputProps={ inputAdornment ? {startAdornment: <InputAdornment position="start">{inputAdornmentText}</InputAdornment>}:null }
+        InputProps={inputAdornment ? { startAdornment: <InputAdornment position="start">{inputAdornmentText}</InputAdornment> } : null}
         type={type}
+        inputRef={inputRef}
+        value={value}
       />
     </>
   )
 }
 
+export function FormSingleLineAddressInput({ onBlur, onChange, error, type, field, placeHolder, helperText, inputAdornment, inputAdornmentText, inputRef }) {
 
-
+  return (
+    <>
+      <TextField
+        id="outlined-basic"
+        label={field}
+        variant="outlined"
+        size="small"
+        placeholder={placeHolder}
+        onChange={onChange}
+        onBlur={onBlur}
+        error={error}
+        helperText={helperText}
+        InputProps={inputAdornment ? { startAdornment: <InputAdornment position="start">{inputAdornmentText}</InputAdornment> } : null}
+        type={type}
+        inputRef={inputRef}
+      />
+    </>
+  )
+}
 
 export function FormMultiLineInput(props) {
   return (
@@ -220,7 +240,7 @@ export function UploadFile(props) {
 }
 
 export function ActionButton({ title, onClick, type }) {
-  const handleSave = (e) =>  {
+  const handleSave = (e) => {
     e.preventDefault();
   }
 
