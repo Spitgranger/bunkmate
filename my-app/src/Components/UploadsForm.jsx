@@ -63,7 +63,8 @@ function Uploads({ backwardButton, forwardButton }) {
         <IoChevronBack />Back</h3>
     </label>
 
-    <FormSection title="Finances Check" message="*We collect this data for our algorithms, we won't share it with anyone else" />
+    <FormSection title="Finances Check" message="*if you have good finances you'll get a 'Strong Financials' badge that'll be visible to other users" />
+
     <LineBox flex={true} CssTextField={[
       <UploadFile helperTextPos='85%' helperText="Supported Files: jpg, png, pdf, docx, doc" width="100%" fontSize="14px" endIcon={<MdUpload color="aqua" size={25} />} type="file" accept={["image/jpeg", "image/jpg", "image/png", "application/pdf", "application/docx", "application/doc"]} message="Void Check" />,
       <UploadFile helperTextPos='85%' helperText="Supported Files: pdf" width="100%" fontSize="14px" endIcon={<MdUpload color="aqua" size={25} />} type="file" accept="application/pdf" message="Credit Score" />
@@ -95,6 +96,7 @@ function Uploads({ backwardButton, forwardButton }) {
         I understand and consent
       </label>
     </div>
+    {/* disable cotinue button if the user has not filled out all mandatory fields and / or still has errors*/}
     <ActionButton fontSize="15px" width="100%" onClick={forwardButton} type="submit" title="Continue" endIcon={<IoChevronForward color="aqua" />} />
   </>)
 }
