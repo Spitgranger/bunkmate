@@ -8,8 +8,8 @@ import {
   FormSingleLineInput,
 } from './SubComponents/Form';
 import { IoChevronForward } from 'react-icons/io5';
-import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import { MdUpload } from "react-icons/md"
+
 
 const backButtonStyles = {
   display: 'flex',
@@ -22,8 +22,40 @@ const checkBoxStyles = {
 }
 
 
-function Uploads({ backwardButton, forwardButton }) {
 
+function Uploads({ backwardButton, forwardButton }) {
+  //SSN/SIN validation
+  //Must be 9 characters long
+  //The field must be filled
+  //Numbers only no special characters
+  const [sinError, setSinError] = useState(false);
+  const [sinHelperText, setSinHelperText] = useState('');
+
+  const handleSocialNumberValidation = (e) => {
+
+    const checkLength = e.target.value.length !== 9;
+    const checkIsEmpty = !e.target.value;
+    const checkIsNumber = isNaN(parseInt(e.target.value));
+    const validFormat = !/^\d+$/.test(e.target.value);
+
+    if (checkLength || checkIsEmpty || checkIsNumber || validFormat) {
+      setSinError(true);
+    } else {
+      setSinError(false);
+    }
+
+    if (checkIsEmpty) {
+      setSinHelperText("This field can't be blank")
+    } else if (checkIsNumber) {
+      setSinHelperText('Please input numbers only')
+    } else if (checkLength) {
+      setSinHelperText('Please enter your 9 digit SIN/SSN (no spaces or special characters)')
+    } else if (validFormat) {
+      setSinHelperText("Please enter numbers only (no spaces or special characters)");
+    } else {
+      setSinHelperText("");
+    }
+  };
   return (<>
     <label style={{ cursor: 'pointer' }}>
       <input style={{ display: 'none' }} onClick={backwardButton} type="button" />
@@ -50,9 +82,10 @@ function Uploads({ backwardButton, forwardButton }) {
 
     <LineBox flex={true} CssTextField={[
       <UploadFile helperTextPos='85%' helperText="Supported Files: jpg, png, pdf" width="100%" fontSize="14px" endIcon={<MdUpload color="aqua" size={25} />} type="file" accept={["image/jpeg", "image/jpg", "image/png", "application/pdf"]} message="Driver's License" />,
-      <FormSingleLineInput size="large" type="number" field="SIN/SSN" placeHolder="ex. 234234245" />,
+      <FormSingleLineInput type="text" size="large" helperText={sinHelperText} field="SIN/SSN" placeHolder="ex. 234452874" onBlur={handleSocialNumberValidation} error={sinError} />,
     ]
     } />
+
 
 
     <FormSection message="I consent to the usage and collection of my information to perform background checks, this information will be shared with our real estate partners and can be deleted upon request" />

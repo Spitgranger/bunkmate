@@ -60,16 +60,16 @@ function Background({ forwardButton }) {
       //setValues({ ...values, city: place.address_components[3].long_name, country: place.address_components[6].long_name, province: place.address_components[5].long_name })
     });
   }, []);
-  /* Handles Credit Score Validation*/
-  const [creditError, setCreditError] = useState(false);
-  const [creditHelperText, setCreditHelperText] = useState('');
+
 
   //Credit Score Validation
   //field greater than 0 less than 999
   //field can be left empty
   //field must be a string
+  const [creditError, setCreditError] = useState(false);
+  const [creditHelperText, setCreditHelperText] = useState('');
 
-  const handleCreditLength = (e) => {
+  const handleCreditValidation = (e) => {
 
     const checkGreaterThan = parseInt(e.target.value) > 999;
     const checkLessThan = parseInt(e.target.value) <= 0;
@@ -91,7 +91,7 @@ function Background({ forwardButton }) {
     } else if (checkGreaterThan || checkLessThan) {
       setCreditHelperText('Please Enter a score between 1 and 999')
     } else if (validFormat) {
-      setCreditHelperText('Not in a valid format');
+      setCreditHelperText('Not in a valid format (no special characters)');
     } else {
       setCreditHelperText("");
     }
@@ -100,11 +100,11 @@ function Background({ forwardButton }) {
   //Phone Number
   //field can't be empty
   //10 digits long
-  //only numbers no string
+  //only numbers no special characters
   const [phoneError, setPhoneError] = useState(false);
   const [phoneHelperText, setPhoneHelperText] = useState('');
 
-  const handlePhoneLength = (e) => {
+  const handlePhoneValidation = (e) => {
 
     const checkLength = e.target.value.length !== 10;
     const checkIsEmpty = !e.target.value;
@@ -122,9 +122,9 @@ function Background({ forwardButton }) {
     } else if (checkIsNumber) {
       setPhoneHelperText('Please input numbers only')
     } else if (checkLength) {
-      setPhoneHelperText('Please enter a 10 digit phone number')
+      setPhoneHelperText('Please enter a 10 digit phone number (no spaces or special characters)')
     } else if (validFormat) {
-      setPhoneHelperText("Number is not in a valid format");
+      setPhoneHelperText("Please enter numbers only (no spaces or special characters)");
     } else {
       setPhoneHelperText("");
     }
@@ -137,7 +137,7 @@ function Background({ forwardButton }) {
   const [emailError, setEmailError] = useState(false);
   const [emailHelperText, setEmailHelperText] = useState('');
 
-  const handleEmailSyntax = (e) => {
+  const handleEmailValidation = (e) => {
     const email = e.target.value
     const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     if (!emailRegex.test(email)) {
@@ -149,11 +149,12 @@ function Background({ forwardButton }) {
     }
   };
 
-  //text verification
+  //Multilinetext verification
   //can't exceed 500 characters
   const [textHelperText, setTextHelperText] = useState("Max: 500 Characters");
   const [textError, setTextError] = useState(false);
-  const handleTextField = (e) => {
+
+  const handleTextFieldValidation = (e) => {
     const length = values.about.split("").length
     setValues(prevValue => (
       { ...prevValue, about: e.target.value }
@@ -167,7 +168,6 @@ function Background({ forwardButton }) {
     }
   }
 
-  console.log(values.about)
   return (<>
     <FormSection title="Profile"
       message="*Everything in this section will be visible to other people"
@@ -179,7 +179,7 @@ function Background({ forwardButton }) {
       <FormSingleLineInput size="small" type="text" field="Legal Last Name" placeHolder="Jenkins" />,]
     } />
     <div id="multiline">
-      <FormMultiLineInput placeHolder="Tell us a bit about yourself" type="text" field="About Me" helperText={textHelperText} onBlur={handleTextField} error={textError} />
+      <FormMultiLineInput placeHolder="Tell us a bit about yourself" type="text" field="About Me" helperText={textHelperText} onBlur={handleTextFieldValidation} error={textError} />
     </div>
 
     <LineBox flex={true} CssTextField={[
@@ -191,13 +191,13 @@ function Background({ forwardButton }) {
 
     <FormSection title="Personal Info" message="*We collect this data for our algorithms, we won't share it with anyone else. We'll ask you for proof on the next page" />
     <LineBox flex={true} CssTextField={[
-      <FormSingleLineInput size="small" type="text" field="Email" placeHolder="ex. bunkmates@gmail.com" onBlur={handleEmailSyntax} error={emailError} helperText={emailHelperText} />,
+      <FormSingleLineInput size="small" type="text" field="Email" placeHolder="ex. bunkmates@gmail.com" onBlur={handleEmailValidation} error={emailError} helperText={emailHelperText} />,
       <DatePicker type="number" label="Birthday" />
     ]
     } />
     <LineBox flex={true} CssTextField={[
-      <FormSingleLineInput type="text" size="small" helperText={phoneHelperText} field="Phone Number" placeHolder="6472345124" onBlur={handlePhoneLength} error={phoneError} />,
-      <FormSingleLineAddressInput type="text" field="Address" placeHolder="31 West Street" inputRef={inputRef} />
+      <FormSingleLineInput type="text" size="small" helperText={phoneHelperText} field="Phone Number" placeHolder="ex. 6472345124" onBlur={handlePhoneValidation} error={phoneError} />,
+      <FormSingleLineAddressInput type="text" field="Address" placeHolder="ex. 31 West Street" inputRef={inputRef} />
     ]
     } />
     {values.city && values.country && values.province ?
@@ -216,7 +216,7 @@ function Background({ forwardButton }) {
     <FormSection title="Finances and Verification" message="*You can provide us proof later" />
     {/* ranges from 10000 - 100000*/}
     <LineBox flex={true} CssTextField={[
-      <FormSingleLineInput size="small" helperText={creditHelperText} onBlur={handleCreditLength} error={creditError} field="Credit Score" placeHolder="ex. 740" />,
+      <FormSingleLineInput size="small" helperText={creditHelperText} onBlur={handleCreditValidation} error={creditError} field="Credit Score" placeHolder="ex. 740" />,
       <DropDownMenu label="Annual Income" menuItem={["< $10000", "$10000 - $50000", "$50001 - $100000", "$100001 - $200000", "> $200001"]} />,
     ]
     } />
