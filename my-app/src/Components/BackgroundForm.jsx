@@ -206,11 +206,11 @@ function Background({ forwardButton }) {
   //can't exceed 500 characters
   const [textHelperText, setTextHelperText] = useState("Max: 500 Characters");
   const [textError, setTextError] = useState(false);
-  //NOTE THE WAY THAT THIS STATE IS UPDATED PROBABLY NEEDS TO BE CHANGED
+  //{NOTE THE WAY THAT THIS STATE IS UPDATED PROBABLY NEEDS TO BE CHANGED} DONE!
   const handleTextField = (e) => {
-    setValues({
-      ...values, about: e.target.value
-    }, checkValidity(e))
+    setValues(prevValue => ({
+      ...prevValue, about: e.target.value
+    }), checkValidity(e))
   }
   const checkValidity = (e) => {
     const length = e.target.value.split("").length
