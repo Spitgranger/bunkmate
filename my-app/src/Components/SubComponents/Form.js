@@ -67,7 +67,7 @@ export function MultipleSelectCheckmarks({ title, menuItems }) {
   );
 }
 
-export function DatePicker({ label, onChange, value }) {
+export function DatePicker({ label, onChange, value, onError }) {
   // const [value, setValue] = React.useState(dayjs('2022-09-15T21:11:54'));
 
   // const handleChange = (newValue) => {
@@ -82,6 +82,7 @@ export function DatePicker({ label, onChange, value }) {
           inputFormat="MM/DD/YYYY"
           value={value}
           onChange={onChange}
+          onError={onError}
           renderInput={(params) => <TextField {...params} size="small" />}
         />
       </Stack>
