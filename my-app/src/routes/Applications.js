@@ -1,37 +1,32 @@
-import './Applications.css'
+import './Applications.css';
 import Navbar from '../Components/Navbar';
-import { FormSection, ActionButton, UploadFile, FormSingleLineInput, FormMultiLineInput } from '../Components/Form';
-
+import Background from '../Components/BackgroundForm'
+import Uploads from '../Components/UploadsForm'
+import { useState } from 'react'
 function Appliciation() {
+
+  /* sets the subpage of the form that you're on */
+  const [page, setpage] = useState(0);
+
+  function handleContinueClick() {
+    return (setpage(() => page + 1));
+  }
+  function handleBackClick() {
+    return (setpage(() => page - 1));
+  }
+  const pages = [
+    <Background forwardButton={handleContinueClick} />,
+    <Uploads
+      backwardButton={handleBackClick}
+      forwardButton={handleContinueClick}
+    />,
+  ]
   return (
     <>
       <Navbar />
       <div className="info">
         <section className="section">
-          <FormSection title="Profile" 
-          message="*Everything in this section will be visible to other people"
-          />
-          <UploadFile message="Upload Profile Picture" />
-
-          <FormSingleLineInput length={true} field1="First Name" field2="Last Name" placeHolder1="ex. Sam" placeHolder2="ex. Jenkins" />
-          <div id="multiline">
-            <FormMultiLineInput field="About Me" />
-          </div>
-
-          <FormSingleLineInput length= {true} field1="Gender" field2="Socials" placeHolder2="ex. www.linkedin.com" />
-          <br></br>
-
-          <FormSection title="Personal Info" message="*We collect this data for our algorithms, we won't share it with anyone else" />
-          <FormSingleLineInput length={true}field1="Email" field2="Birthday" placeHolder2="mm/dd/year" />
-          <FormSingleLineInput length={true} field1="Phone Number" field2="Address" placeHolder1="647 XXX XXXX" placeHolder2="31 West Street New York City" />
-          <FormSingleLineInput length={true}field1="Employment" field2="Education" placeHolder1="ex. Carpenter" placeHolder2="ex. Undergrad" />
-          {/*student or work */}
-          {/*(highschool, undergrad, grad, finished school)*/}
-          <br></br>
-
-          <FormSection title="Finances" message="*You can provide us proof later" />
-          <FormSingleLineInput length={true}field1="Credit Score" field2="Annual Income" placeHolder1="ex. 740" placeHolder2="ex. $70000 Usd" />
-          <ActionButton title="Continue"/>
+          {pages[page]}
         </section>
 
 

@@ -1,8 +1,8 @@
 import './App.css';
 import Navbar from './Components/Navbar';
 import Post from './Components/Post';
-import { Rating } from './Components/Feedback';
-import { Like } from './Components/Feedback';
+import { Rating } from './Components/SubComponents/Feedback';
+import { Like } from './Components/SubComponents/Feedback';
 
 
 import Apartment2 from "./Components/Assets/apartment.jpg"
@@ -305,16 +305,6 @@ function App() {
         </section>
         {/* TODO */}
         <section className="map">
-          <Rating />
-          <Like />
-          <section className="login">
-            <label >
-              <input value="username" className="username" type="text" ></input>
-              <input value="password" className="password" type="password" ></input>
-              <input className="submit" type="button" value="Submit"></input>
-            </label>
-
-          </section>
         </section>
       </body>
     </div>

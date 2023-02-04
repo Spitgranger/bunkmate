@@ -46,6 +46,7 @@ nav ul a.current {
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
+    outline: none;
   }
 }
 
@@ -58,4 +59,3 @@ nav ul a.current {
     transform: rotate(360deg);
   }
 }
-
