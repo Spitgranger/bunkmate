@@ -17,6 +17,8 @@ import ListItemText from '@mui/material/ListItemText';
 import Checkbox from '@mui/material/Checkbox';
 import { InputAdornment } from "@mui/material";
 import { useState } from 'react'
+import { BsFillCheckCircleFill } from "react-icons/bs";
+import { MdOutlineError } from "react-icons/md";
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 const MenuProps = {
@@ -224,21 +226,64 @@ export function FormMultiLineInput(props) {
 
 export function UploadFile(props) {
 
+
+  //setFile to current file only if conditions are satifised
+  const [file, setFile] = useState(null) //**********STORE FILES IN BACKEND***************
+  //changes state depending on correct file type upload
   const [helperText, setHelperText] = useState('')
+  const [helperTextColor, setHelperTextColor] = useState('black')
   const [textColor, setTextColor] = useState('white')
   const [icon, setIcon] = useState(props.endIcon)
+  const [error, setError] = useState(false)
+  const [backgroundColor, setBackgroundColor] = useState('#383838')
+
+  const errorMessage = `Invalid file type. ${props.helperText}`;
+
+  const handleMouseEnter = () => {
+    setHelperText(error ? errorMessage : props.helperText)
+  }
+
+  const handleUpload = (e) => {
+    const uploadedFile = e.target.files[0];
+    const allowedTypes = props.accept
+
+    if (uploadedFile && allowedTypes.includes(uploadedFile.type)) {
+
+      setFile(uploadedFile);
+      setTextColor('aqua');
+      setError(false);
+      setHelperTextColor('black');
+      setBackgroundColor('black');
+      setIcon(<BsFillCheckCircleFill color="aqua" />)
+
+    } else {
+      console.log(uploadedFile)
+      setFile(null);
+      setTextColor('red')
+      setHelperText(errorMessage)
+      setHelperTextColor('red');
+      setError(true)
+      setIcon(<MdOutlineError color="red" />)
+
+    }
+  };
+
+  const handleHover = () => {
+    //if there is error turn hover color text to red else aqua
+    return error ? 'red' : 'aqua'
+  }
+
   const buttonStyles = {
-    backgroundColor: '#383838',
-    color: 'white',
+    backgroundColor: backgroundColor,
+    color: textColor,
     borderRadius: "10px",
     width: props.width,
     height: '60px',
     fontSize: props.fontSize,
-    ':hover': { bgcolor: 'black', color: "aqua" }
+    ':hover': { bgcolor: 'black', color: handleHover }
   }
-  const handleMouseEnter = () => {
-    setHelperText(props.helperText)
-  }
+
+
 
   return (
     <div className="uploadFileContainer">
@@ -246,9 +291,10 @@ export function UploadFile(props) {
         variant="contained"
         component="label"
         startIcon={props.startIcon}
-        endIcon={props.endIcon}
+        endIcon={icon}
         sx={buttonStyles}
         onMouseEnter={handleMouseEnter}
+        onChange={handleUpload}
       >
         <h4 style={{ width: '80%', margin: '10px 0px 10px 0px' }}>
           {props.message}
@@ -257,7 +303,7 @@ export function UploadFile(props) {
       </Button>
       <div style={{ width: props.helperTextPos, position: 'relative', left: '1px' }}>
         {/* set the margin to 1px to remove default margin and position helper text properly*/}
-        <h5 style={{ margin: '1px' }}>{helperText}</h5>
+        <h5 style={{ color: helperTextColor, margin: '1px' }}>{helperText}</h5>
       </div>
     </div >
   );

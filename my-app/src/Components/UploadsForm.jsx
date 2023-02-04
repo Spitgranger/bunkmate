@@ -33,14 +33,14 @@ function Uploads({ backwardButton, forwardButton }) {
 
     <FormSection title="Finances Check" message="*We collect this data for our algorithms, we won't share it with anyone else" />
     <LineBox flex={true} CssTextField={[
-      <UploadFile helperTextPos='85%' helperText="Supported Files: jpg, png, pdf, word" width="100%" fontSize="14px" endIcon={<MdUpload color="aqua" />} type="file" accept=".jpeg,.jpg,.png,.pdf,.word" message="Void Check" />,
-      <UploadFile helperTextPos='85%' helperText="Suppored Files: pdf, xlsx, csv" width="100%" fontSize="14px" endIcon={<MdUpload color="aqua" />} type="file" accept=".pdf,.xlsx,.csv" message="Credit Score" />
+      <UploadFile helperTextPos='85%' helperText="Supported Files: jpg, png, pdf, docx, doc" width="100%" fontSize="14px" endIcon={<MdUpload color="aqua" />} type="file" accept={["image/jpeg", "image/jpg", "image/png", "application/pdf", "application/docx", "application/doc"]} message="Void Check" />,
+      <UploadFile helperTextPos='85%' helperText="Suppored Files: pdf" width="100%" fontSize="14px" endIcon={<MdUpload color="aqua" />} type="file" accept="application/pdf" message="Credit Score" />
     ]
     } />
     <FormSection message="*Please upload at least one of the two" />
     <LineBox flex={true} CssTextField={[
-      <UploadFile helperTextPos='85%' helperText="Suppored Files: pdf, word" width="100%" fontSize="14px" endIcon={<MdUpload color="aqua" />} type="file" accept=".pdf, .word" message="T4 Document" />,
-      <UploadFile helperTextPos='85%' helperText="Suppored Files: pdf, xlsx, csv" width="100%" fontSize="14px" endIcon={<MdUpload color="aqua" />} type="file" accept=".csv, .xlsx, .pdf" message="Pay Stub" />
+      <UploadFile helperTextPos='85%' helperText="Suppored Files: pdf, docx, doc" width="100%" fontSize="14px" endIcon={<MdUpload color="aqua" />} type="file" accept={["application/pdf", "application/docx", "application/doc"]} message="T4 Document" />,
+      <UploadFile helperTextPos='85%' helperText="Suppored Files: pdf" width="100%" fontSize="14px" endIcon={<MdUpload color="aqua" />} type="file" accept="application/pdf" message="Pay Stub" />
     ]
     } />
     <br></br>
@@ -49,7 +49,7 @@ function Uploads({ backwardButton, forwardButton }) {
     />
 
     <LineBox flex={true} CssTextField={[
-      <UploadFile helperTextPos='85%' helperText="Suppored Files: jpg, png, pdf" width="100%" fontSize="14px" endIcon={<MdUpload color="aqua" />} type="file" accept=".jpeg,.jpg,.png,.pdf" message="Driver's License" />,
+      <UploadFile helperTextPos='85%' helperText="Suppored Files: jpg, png, pdf" width="100%" fontSize="14px" endIcon={<MdUpload color="aqua" />} type="file" accept={["image/jpeg", "image/jpg", "image/png" ,"application/pdf"]} message="Driver's License" />,
       <FormSingleLineInput size="large" type="number" field="SIN/SSN" placeHolder="ex. 234234245" />,
     ]
     } />

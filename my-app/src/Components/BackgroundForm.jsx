@@ -149,7 +149,7 @@ function Background({ forwardButton }) {
     <UploadFile helperTextPos="45%" width="50%" type="file" message="Upload Profile Picture" accept="image/*" endIcon={<CameraAltIcon sx={{ color: "aqua" }} />} />
 
     <LineBox flex={true} CssTextField={[
-      <FormSingleLineInput size="small" type="text" field="Legal First Name" placeHolder="Sam" />,
+      <FormSingleLineInput size='small' type="text" field="Legal First Name" placeHolder="Sam" />,
       <FormSingleLineInput size="small" type="text" field="Legal Last Name" placeHolder="Jenkins" />,]
     } />
     <div id="multiline">
