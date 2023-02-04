@@ -1,62 +1,79 @@
 import { useState } from "react"
 import "./SignIn.css"
 import Modal from "../Components/Modal";
-import { FormSingleLineInput, ActionButton } from '../Components/Form';
+import { LineBox, DropDownMenu, FormSingleLineInput, ActionButton } from '../Components/SubComponents/Form';
 import { FcGoogle } from 'react-icons/fc'
 import { IoLogoFacebook } from 'react-icons/io'
 import { BsApple } from 'react-icons/bs'
 import { MdEmail } from 'react-icons/md'
 
+function SignInPartner({ company, logo }) {
+
+  return (
+    <div style={{ alignItems: 'center' }}>
+      {logo}
+      <div>
+        Sign in with {company}
+      </div>
+    </div>);
+
+}
+
+const MenuItem = {
+  "Canada (+1)": 1,
+  "United States (+1)": 1,
+  "United Kingdom (+44)": 44,
+}
+
+const keys = Object.keys(MenuItem)
 
 function SignIn({ openModalName }) {
   const [isOpen, setIsOpen] = useState(false)
+  {/* Change default to the user's current location */ }
+  const [field, setField] = useState('United States (+1)')
+
+  const handleChange = (event) => {
+    setField(event.target.value);
+  }
+
   return (
     <>
       <div className='buttonWrapperStyles' >
         {openModalName}
         <Modal open={isOpen} modalMessage="Sign in or Sign up" onClose={() => setIsOpen(false)} content={
           <div className="content">
-            <FormSingleLineInput
-              field1="Region"
-              field2="Phone Number"
-              placeHolder1="Canada"
-              placeHolder2="ex. +1 (XXX) XXX XXXX" />
+            <LineBox flex={false} CssTextField={[
+              <DropDownMenu
+                onChange={handleChange}
+                value={field}
+                label='Country Code'
+                menuItem={keys}
+              />,
+              <FormSingleLineInput
+                field="Phone Number"
+                placeHolder="6471234567"
+                inputAdornment={true}
+                size="small"
+                type="number"
+                inputAdornmentText={`+${MenuItem[field]}`}
+              />]
+            } />
             <div className="disclaimerContainer">
               <h6 id="disclaimer">
                 We will call or text you to confirm your number.
                 Standard message and data rates apply. Alternatively,
                 you can use one of our sign in partners below
-                <u>Privacy Policy</u>
+                <u style={{ cursor: 'pointer' }}>Privacy Policy</u>
               </h6>
             </div>
             <div className="button" style={{ borderBottom: "1px solid lightgrey" }}>
-              <ActionButton title="Submit" />
+              <ActionButton width="100%" type="submit" title="Submit" />
             </div>
             <div className="socials" >
-              <div style={{ alignItems: 'center' }}>
-                <FcGoogle />
-                <div>
-                  Sign in with Google
-                </div>
-              </div>
-              <div style={{ alignItems: 'center' }}>
-                <IoLogoFacebook color="blue" />
-                <div>
-                  Sign in with Facebook
-                </div>
-              </div>
-              <div style={{ alignItems: 'center' }}>
-                <BsApple />
-                <div>
-                  Sign in with Apple
-                </div>
-              </div>
-              <div style={{ alignItems: 'center' }}>
-                <MdEmail />
-                <div>
-                  Sign in with Email
-                </div>
-              </div>
+              <SignInPartner logo={<FcGoogle />} company="Google" />
+              <SignInPartner logo={<IoLogoFacebook color="blue" />} company="Facebook" />
+              <SignInPartner logo={<BsApple />} company="Apple" />
+              <SignInPartner logo={<MdEmail />} company="Email" />
             </div>
           </div>
         }>

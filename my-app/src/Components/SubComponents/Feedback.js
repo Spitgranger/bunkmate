@@ -7,13 +7,24 @@ export function Rating() {
 
   /* TODO change default state of rating to average rating of all users */
   const [rating, setRating] = useState(4);
-  const [hover, setHover] = useState(null)
+  const [hover, setHover] = useState(null);
+
 
   return (
     <>
       {[...Array(5)].map((star, i) => {
+
         const index = i + 1; //index starts at 1
+
         const width = 20; //size starts at 20
+
+        const handleSizeChange = () => {
+          return (index === hover ? width + 5 : width)
+        }
+
+        const handleColorChange = () => {
+          return (index <= (hover || rating) ? '#00FFFF' : '#000000')
+        }
         return (
           <label className="starRating">
             <FaStar
@@ -21,8 +32,8 @@ export function Rating() {
               className="star"
               onMouseEnter={() => setHover(index)} //event listener
               onMouseLeave={() => setHover(null)} //event listener
-              size={index === hover ? width + 5 : width}
-              color={index <= (hover || rating) ? '#00FFFF' : '#000000'}
+              size={handleSizeChange}
+              color={handleColorChange}
             />
           </label>
         );
