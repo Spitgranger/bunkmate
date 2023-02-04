@@ -16,7 +16,7 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import ListItemText from '@mui/material/ListItemText';
 import Checkbox from '@mui/material/Checkbox';
 import { InputAdornment } from "@mui/material";
-import { useState } from 'react'
+import { useState, memo } from 'react'
 import { BsFillCheckCircleFill } from "react-icons/bs";
 import { MdOutlineError } from "react-icons/md";
 const ITEM_HEIGHT = 48;
@@ -150,7 +150,7 @@ export function DropDownMenu({ value, onChange, label, menuItem }) {
   );
 }
 
-export function FormSingleLineInput({ onBlur, onChange, error, type, field, placeHolder, helperText, inputAdornment, inputAdornmentText, size, inputRef, value }) {
+function NormalFormSingleLineInput({ onBlur, onChange, error, type, field, placeHolder, helperText, inputAdornment, inputAdornmentText, size, inputRef, value }) {
 
   return (
     <>
@@ -195,9 +195,15 @@ export function FormSingleLineAddressInput({ onBlur, onChange, error, type, fiel
     </>
   )
 }
+const arePropsEqual = (newProps, oldProps) => {
+  return newProps.value === oldProps.value;
+}
 
+export const FormMultiLineInput = memo(NormalFormMultiLineInput, arePropsEqual);
+export const FormSingleLineInput = memo(NormalFormSingleLineInput, arePropsEqual);
 
-export function FormMultiLineInput(props) {
+function NormalFormMultiLineInput(props) {
+  console.log("rendered")
   return (
     <div id="multiline">
       <Box
@@ -230,7 +236,6 @@ export function FormMultiLineInput(props) {
 }
 
 export function UploadFile(props) {
-
 
   //setFile to current file only if conditions are satifised
   const [file, setFile] = useState(null) //**********STORE FILES IN BACKEND***************
@@ -299,7 +304,7 @@ export function UploadFile(props) {
         endIcon={icon}
         sx={buttonStyles}
         onMouseEnter={handleMouseEnter}
-        onChange={handleUpload}
+        onChange={(e) => { handleUpload(e); props.handleFileUpload(e); }}
       >
         <h4 style={{ width: '80%', margin: '10px 0px 10px 0px' }}>
           {props.message}

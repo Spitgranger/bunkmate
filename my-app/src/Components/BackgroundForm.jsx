@@ -17,6 +17,7 @@ import dayjs from 'dayjs';
 function Background({ forwardButton }) {
   const page1 = JSON.parse(localStorage.getItem("page1"))
   const [values, setValues] = useState(page1 ? page1 : {
+    picture: "",
     firstName: "",
     lastName: "",
     about: "",
@@ -40,10 +41,32 @@ function Background({ forwardButton }) {
       newValue.toISOString();
       setValue((newValue), setValues(prevValue => ({ ...prevValue, birthday: newValue.toISOString().split('T')[0] })));
     }
-    catch (errpr) {
+    catch (error) {
       return
     }
   };
+
+  //Handle conversion of uploaded file to base64 string
+  const handleConversion = (file, callback) => {
+    let reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = function () {
+      callback(reader.result);
+    };
+    reader.onerror = function (error) {
+      console.log('Error: ', error);
+    };
+  }
+  //handle file uploads
+  const handleFileUpload = e => {
+    const file = e.target.files[0];
+    console.log(file.name);
+    handleConversion(file, (result) => {
+      setValues((prevValue) => (
+        { ...prevValue, picture: result }
+      ));
+    });
+  }
 
   const autoCompleteRef = useRef();
   const inputRef = useRef();
@@ -203,15 +226,12 @@ function Background({ forwardButton }) {
   const handleGenderChange = e => {
     setValues(prevValue => ({ ...prevValue, gender: e.target.value }));
   }
-
   const handleNameChange = e => {
     setValues(prevValue => ({ ...prevValue, firstName: e.target.value }));
   }
-
   const handleEducationChange = e => {
     setValues(prevValue => ({ ...prevValue, education: e.target.value }));
   }
-
   const handleEmploymentChange = e => {
     setValues(prevValue => ({ ...prevValue, employment: e.target.value }));
   }
@@ -234,12 +254,16 @@ function Background({ forwardButton }) {
     setValues(prevValue => ({ ...prevValue, phone: e.target.value }));
   }
 
+  //memoize inputs to save rerendering all components on one change.
+
   return (<>
+
+
     <FormSection title="Profile"
       message="*Everything in this section will be visible to other people"
     />
-    <UploadFile helperText="Supported Files: jpg, png, " helperTextPos="45%" width="50%" type="file" message="Upload Profile Picture" accept={["image/jpg", "image/jpeg", "image/png"]} endIcon={<CameraAltIcon sx={{ color: "aqua" }} />} />
-
+    <UploadFile helperText="Supported Files: jpg, png, " helperTextPos="45%" width="50%" type="file" message="Upload Profile Picture" accept={["image/jpg", "image/jpeg", "image/png"]} endIcon={<CameraAltIcon sx={{ color: "aqua" }} />} handleFileUpload={handleFileUpload} />
+    {values.picture ? <img src={values.picture} style={{ width: "30%", height: "40%", borderRadius: "5px" }}></img> : null}
     <LineBox flex={true} CssTextField={[
       <FormSingleLineInput size='small' type="text" field="Legal First Name" placeHolder="Sam" onChange={handleNameChange} value={values.firstName} />,
       <FormSingleLineInput size="small" type="text" field="Legal Last Name" placeHolder="Jenkins" onChange={handleLastNameChange} value={values.lastName} />,]
