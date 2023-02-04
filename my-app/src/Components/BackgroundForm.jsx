@@ -34,7 +34,7 @@ function Background({ forwardButton }) {
     credit: "",
     birthday: "",
   });
-  const [value, setValue] = useState(page1.birthday ? page1.birthday : dayjs('2022-09-15T21:11:54'));//if there is already a birthday use it, else default value.
+  const [value, setValue] = useState(page1?.birthday ? page1?.birthday : dayjs('2022-09-15T21:11:54'));//if there is already a birthday use it, else default value.
   const handleChange = (newValue) => {
     setValue((newValue), setValues(prevValue => ({ ...prevValue, birthday: newValue.toISOString().split('T')[0] })));
   };
