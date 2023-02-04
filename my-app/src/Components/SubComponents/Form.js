@@ -10,7 +10,7 @@ import Select from '@mui/material/Select';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
-import dayjs from 'dayjs';
+
 import Stack from '@mui/material/Stack';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import ListItemText from '@mui/material/ListItemText';
@@ -67,12 +67,12 @@ export function MultipleSelectCheckmarks({ title, menuItems }) {
   );
 }
 
-export function DatePicker({ label }) {
-  const [value, setValue] = React.useState(dayjs('2022-09-15T21:11:54'));
+export function DatePicker({ label, onChange, value }) {
+  // const [value, setValue] = React.useState(dayjs('2022-09-15T21:11:54'));
 
-  const handleChange = (newValue) => {
-    setValue(newValue);
-  };
+  // const handleChange = (newValue) => {
+  //   setValue(newValue);
+  // };
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -81,7 +81,7 @@ export function DatePicker({ label }) {
           label={label}
           inputFormat="MM/DD/YYYY"
           value={value}
-          onChange={handleChange}
+          onChange={onChange}
           renderInput={(params) => <TextField {...params} size="small" />}
         />
       </Stack>
@@ -128,7 +128,7 @@ const CssTextField = styled(TextField)({
 
 */
 
-export function DropDownMenu({ value, onChange, label, menuItem, helperText }) {
+export function DropDownMenu({ value, onChange, label, menuItem }) {
 
   return (
     <FormControl placeholder="wow" sx={{ m: 1, width: '100%', flex: 1 }} size="small" fullWidth>
@@ -139,7 +139,6 @@ export function DropDownMenu({ value, onChange, label, menuItem, helperText }) {
         id="demo-simple-select"
         value={value}
         onChange={onChange}
-        helperText={helperText}
         label={label}
       >
         {menuItem.map((item, i) => {
@@ -173,7 +172,7 @@ export function FormSingleLineInput({ onBlur, onChange, error, type, field, plac
   )
 }
 
-export function FormSingleLineAddressInput({ onBlur, onChange, error, type, field, placeHolder, helperText, inputAdornment, inputAdornmentText, inputRef }) {
+export function FormSingleLineAddressInput({ onBlur, onChange, error, type, field, placeHolder, helperText, inputAdornment, inputAdornmentText, inputRef, value }) {
 
   return (
     <>
@@ -190,6 +189,7 @@ export function FormSingleLineAddressInput({ onBlur, onChange, error, type, fiel
         InputProps={inputAdornment ? { startAdornment: <InputAdornment position="start">{inputAdornmentText}</InputAdornment> } : null}
         type={type}
         inputRef={inputRef}
+        value={value}
       />
     </>
   )
@@ -220,6 +220,7 @@ export function FormMultiLineInput(props) {
             helperText={props.helperText}
             onBlur={props.onBlur}
             onChange={props.onChange}
+            value={props.value}
           />
         </div>
       </Box>
