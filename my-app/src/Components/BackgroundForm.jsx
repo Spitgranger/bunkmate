@@ -160,7 +160,6 @@ function Background({ forwardButton }) {
   }
   const checkValidity = (e) => {
     const length = e.target.value.split("").length
-    console.log(length);
     if (length > 500) {
       setTextError(true);
       setTextHelperText(`Character limit reached. Delete ${length - 500} characters`)
@@ -181,7 +180,7 @@ function Background({ forwardButton }) {
       <FormSingleLineInput size="small" type="text" field="Legal Last Name" placeHolder="Jenkins" />,]
     } />
     <div id="multiline">
-      <FormMultiLineInput placeHolder="Tell us a bit about yourself" type="text" field="About Me" helperText={textHelperText} onBlur={handleTextFieldValidation} error={textError} />
+      <FormMultiLineInput placeHolder="Tell us a bit about yourself" type="text" field="About Me" helperText={textHelperText} onBlur={handleTextField} error={textError} />
     </div>
 
     <LineBox flex={true} CssTextField={[
