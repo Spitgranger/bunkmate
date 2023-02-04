@@ -341,6 +341,7 @@ export function ActionButton(props) {
         type={props.type}
         endIcon={props.endIcon}
         startIcon={props.startIcon}
+        disabled={props.disabled}
         sx={
           buttonStyles
         }>

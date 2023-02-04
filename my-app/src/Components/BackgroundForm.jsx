@@ -123,7 +123,7 @@ function Background({ forwardButton }) {
   const [creditHelperText, setCreditHelperText] = useState('');
 
   const handleCreditValidation = (e) => {
-
+    handleValidation(values)
     const checkGreaterThan = parseInt(e.target.value) > 999;
     const checkLessThan = parseInt(e.target.value) <= 0;
     const checkIsNumber = isNaN(parseInt(e.target.value));
@@ -216,11 +216,21 @@ function Background({ forwardButton }) {
     const length = e.target.value.split("").length
     if (length > 500) {
       setTextError(true);
-      setTextHelperText(`Character limit reached. Delete ${length - 500} characters`)
+      setTextHelperText(`Character limit reached. Delete ${length - 500} Characters`)
     } else {
       setTextError(false);
-      setTextHelperText("Max: 500 Characters")
+      setTextHelperText(`${length} / 500 Characters`)
     }
+  }
+
+  const [error, setError] = useState(false);
+  const handleValidation = (values) => {
+    if (!values.credit) {
+      setError(true)
+    } else {
+      setError(false)
+    }
+
   }
 
   const handleGenderChange = e => {
@@ -311,7 +321,7 @@ function Background({ forwardButton }) {
     ]
     } />
 
-    <ActionButton fontSize="15px" width="100%" onClick={() => { forwardButton(); localStorage.setItem("page1", JSON.stringify(values)) }} type="submit" title="Continue" endIcon={<IoChevronForward color="aqua" />} />
+    <ActionButton disabled={error} fontSize="15px" width="100%" onClick={() => { forwardButton(); localStorage.setItem("page1", JSON.stringify(values)) }} type="submit" title="Continue" endIcon={<IoChevronForward color="aqua" />} />
   </>)
 }
 
