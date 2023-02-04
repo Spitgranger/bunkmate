@@ -216,7 +216,10 @@ export function FormMultiLineInput(props) {
             multiline
             rows={4}
             variant="outlined"
+            error={props.error}
             helperText={props.helperText}
+            onBlur={props.onBlur}
+            onChange={props.onChange}
           />
         </div>
       </Box>
