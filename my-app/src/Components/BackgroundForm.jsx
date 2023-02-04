@@ -154,10 +154,13 @@ function Background({ forwardButton }) {
   const [textHelperText, setTextHelperText] = useState("Max: 500 Characters");
   const [textError, setTextError] = useState(false);
   const handleTextField = (e) => {
-    const length = values.about.split("").length
-    setValues(prevValue => (
-      { ...prevValue, about: e.target.value }
-    ))
+    setValues({
+      ...values, about: e.target.value
+    }, checkValidity(e))
+  }
+  const checkValidity = (e) => {
+    const length = e.target.value.split("").length
+    console.log(length);
     if (length > 500) {
       setTextError(true);
       setTextHelperText(`Character limit reached. Delete ${length - 500} characters`)
@@ -167,7 +170,6 @@ function Background({ forwardButton }) {
     }
   }
 
-  console.log(values.about)
   return (<>
     <FormSection title="Profile"
       message="*Everything in this section will be visible to other people"
