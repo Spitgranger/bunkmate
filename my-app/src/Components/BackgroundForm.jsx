@@ -153,14 +153,14 @@ function Background({ forwardButton }) {
     <FormSection title="Profile"
       message="*Everything in this section will be visible to other people"
     />
-    <UploadFile helperTextPos="45%" width="50%" type="file" message="Upload Profile Picture" accept="image/*" endIcon={<CameraAltIcon sx={{ color: "aqua" }} />} />
+    <UploadFile helperText="Supported Files: jpg, png, " helperTextPos="45%" width="50%" type="file" message="Upload Profile Picture" accept={["image/jpg", "image/jpeg", "image/png"]} endIcon={<CameraAltIcon sx={{ color: "aqua" }} />} />
 
     <LineBox flex={true} CssTextField={[
       <FormSingleLineInput size='small' type="text" field="Legal First Name" placeHolder="Sam" />,
       <FormSingleLineInput size="small" type="text" field="Legal Last Name" placeHolder="Jenkins" />,]
     } />
     <div id="multiline">
-      <FormMultiLineInput placeHolder="tell us a bit about yourself" type="text" field="About Me" helperText="Max: 500 Characters" />
+      <FormMultiLineInput placeHolder="Tell us a bit about yourself" type="text" field="About Me" helperText="Max: 500 Characters" />
     </div>
 
     <LineBox flex={true} CssTextField={[

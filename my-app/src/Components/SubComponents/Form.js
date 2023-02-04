@@ -263,7 +263,7 @@ export function UploadFile(props) {
       setHelperText(errorMessage)
       setHelperTextColor('red');
       setError(true)
-      setIcon(<MdOutlineError color="red" />)
+      setIcon(<MdOutlineError color="red" size={25} />)
 
     }
   };
