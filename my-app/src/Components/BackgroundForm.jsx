@@ -150,10 +150,14 @@ function Background({ forwardButton }) {
   };
 
   //text verification
+  //can't exceed 500 characters
   const [textHelperText, setTextHelperText] = useState("Max: 500 Characters");
   const [textError, setTextError] = useState(false);
-  const handleTextField = () => {
+  const handleTextField = (e) => {
     const length = values.about.split("").length
+    setValues(prevValue => (
+      { ...prevValue, about: e.target.value }
+    ))
     if (length > 500) {
       setTextError(true);
       setTextHelperText(`Character limit reached. Delete ${length - 500} characters`)
@@ -163,12 +167,7 @@ function Background({ forwardButton }) {
     }
   }
 
-  const handleTextChange = e => {
-    setValues(prevValue => (
-      { ...prevValue, about: e.target.value }
-    ))
-  }
-
+  console.log(values.about)
   return (<>
     <FormSection title="Profile"
       message="*Everything in this section will be visible to other people"
@@ -180,7 +179,7 @@ function Background({ forwardButton }) {
       <FormSingleLineInput size="small" type="text" field="Legal Last Name" placeHolder="Jenkins" />,]
     } />
     <div id="multiline">
-      <FormMultiLineInput placeHolder="tell us a bit about yourself" type="text" field="About Me" helperText={textHelperText} onBlur={handleTextField} onChange={handleTextChange} error={textError} />
+      <FormMultiLineInput placeHolder="Tell us a bit about yourself" type="text" field="About Me" helperText={textHelperText} onBlur={handleTextField} error={textError} />
     </div>
 
     <LineBox flex={true} CssTextField={[
