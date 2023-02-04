@@ -153,12 +153,14 @@ function Background({ forwardButton }) {
   //can't exceed 500 characters
   const [textHelperText, setTextHelperText] = useState("Max: 500 Characters");
   const [textError, setTextError] = useState(false);
-
-  const handleTextFieldValidation = (e) => {
-    const length = values.about.split("").length
-    setValues(prevValue => (
-      { ...prevValue, about: e.target.value }
-    ))
+  const handleTextField = (e) => {
+    setValues({
+      ...values, about: e.target.value
+    }, checkValidity(e))
+  }
+  const checkValidity = (e) => {
+    const length = e.target.value.split("").length
+    console.log(length);
     if (length > 500) {
       setTextError(true);
       setTextHelperText(`Character limit reached. Delete ${length - 500} characters`)
