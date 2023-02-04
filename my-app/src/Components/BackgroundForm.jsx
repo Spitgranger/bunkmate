@@ -75,8 +75,10 @@ function Background({ forwardButton }) {
     const checkLessThan = parseInt(e.target.value) <= 0;
     const checkIsNumber = isNaN(parseInt(e.target.value));
     const checkIsEmpty = (!e.target.value);
+    const validFormat = !/^\d+$/.test(e.target.value);
+    console.log(validFormat);
 
-    if (!e.target.value || checkGreaterThan || checkLessThan || checkIsNumber) {
+    if (!e.target.value || checkGreaterThan || checkLessThan || checkIsNumber || validFormat) {
       setCreditError(true);
     } else {
       setCreditError(false);
@@ -88,6 +90,8 @@ function Background({ forwardButton }) {
       setCreditHelperText('Please enter numbers only')
     } else if (checkGreaterThan || checkLessThan) {
       setCreditHelperText('Please Enter a score between 1 and 999')
+    } else if (validFormat) {
+      setCreditHelperText('Not in a valid format');
     } else {
       setCreditHelperText("");
     }
@@ -105,8 +109,9 @@ function Background({ forwardButton }) {
     const checkLength = e.target.value.length !== 10;
     const checkIsEmpty = !e.target.value;
     const checkIsNumber = isNaN(parseInt(e.target.value));
+    const validFormat = !/^\d+$/.test(e.target.value);
 
-    if (checkLength || checkIsEmpty || checkIsNumber) {
+    if (checkLength || checkIsEmpty || checkIsNumber || validFormat) {
       setPhoneError(true);
     } else {
       setPhoneError(false);
@@ -118,6 +123,8 @@ function Background({ forwardButton }) {
       setPhoneHelperText('Please input numbers only')
     } else if (checkLength) {
       setPhoneHelperText('Please enter a 10 digit phone number')
+    } else if (validFormat) {
+      setPhoneHelperText("Number is not in a valid format");
     } else {
       setPhoneHelperText("");
     }
