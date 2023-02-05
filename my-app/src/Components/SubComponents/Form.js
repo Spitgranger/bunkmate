@@ -174,7 +174,6 @@ function NormalFormSingleLineInput({ onBlur, onChange, error, type, field, place
 }
 
 export function FormSingleLineAddressInput({ onBlur, onChange, error, type, field, placeHolder, helperText, inputAdornment, inputAdornmentText, inputRef, value }) {
-
   return (
     <>
       <TextField
@@ -203,7 +202,6 @@ export const FormMultiLineInput = memo(NormalFormMultiLineInput, arePropsEqual);
 export const FormSingleLineInput = memo(NormalFormSingleLineInput, arePropsEqual);
 
 function NormalFormMultiLineInput(props) {
-  console.log("rendered")
   return (
     <div id="multiline">
       <Box
