@@ -299,7 +299,7 @@ function Background({ forwardButton }) {
       ]
       } /> : null}
     <LineBox flex={true} CssTextField={[
-      <DropDownMenu label="Employment" menuItem={["Current Employed", "Currently Unemployed", "Currently Self Employed"]} value={values.employment} onChange={(e) => { handleFieldChange(e, "employment") }} />,
+      <DropDownMenu label="Employment" menuItem={["Currently Employed", "Currently Unemployed", "Currently Self Employed"]} value={values.employment} onChange={(e) => { handleFieldChange(e, "employment") }} />,
       <DropDownMenu label="Current Education" menuItem={["Not in School", "High School", "Undergraduate Studies", "Graduate Studies"]} value={values.education} onChange={(e) => { handleFieldChange(e, 'education') }} />,
     ]
     } />

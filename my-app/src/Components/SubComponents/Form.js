@@ -270,6 +270,7 @@ export function UploadFile(props) {
       setTextColor('red')
       setHelperText(errorMessage)
       setHelperTextColor('red');
+      setBackgroundColor('black');
       setError(true)
       setIcon(<MdOutlineError color="red" size={25} />)
 
@@ -365,3 +366,19 @@ export function FormSection({ title, message, children }) {
     </>
   );
 }
+
+export function FormProgressBar({ steps, currentStep, children }) {
+  const progressPercentage = (currentStep / steps) * 100;
+  console.log(progressPercentage)
+  return (
+    <div className="progress-bar" style={{ width: '100%' }}>
+      <div className="progress-bar-filled" style={{ borderRadius: '10px', backgroundColor: "aqua", height: '20px', width: `${progressPercentage}%` }} />
+      {children}
+    </div>
+  );
+};
+
+
+
+
+

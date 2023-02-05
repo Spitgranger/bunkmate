@@ -83,7 +83,7 @@ function Uploads({ backwardButton, forwardButton }) {
 
     <LineBox flex={true} CssTextField={[
       <UploadFile helperTextPos='85%' helperText="Supported Files: jpg, png, pdf" width="100%" fontSize="14px" endIcon={<MdUpload color="aqua" size={25} />} type="file" accept={["image/jpeg", "image/jpg", "image/png", "application/pdf"]} message="Driver's License" />,
-      <FormSingleLineInput type="text" size="large" helperText={sinHelperText} field="SIN/SSN" placeHolder="ex. 234452874" onBlur={handleSocialNumberValidation} error={sinError} />,
+      <FormSingleLineInput type="text" size="large" helperText={sinHelperText} field="SIN/SSN" placeHolder="ex. 234452874" onChange={handleSocialNumberValidation} error={sinError} />,
     ]
     } />
 
