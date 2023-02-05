@@ -129,14 +129,12 @@ function Background({ forwardButton }) {
     const checkIsNumber = isNaN(parseInt(e.target.value));
     const checkIsEmpty = (!e.target.value);
     const validFormat = !/^\d+$/.test(e.target.value);
-    console.log(validFormat);
 
     if (!e.target.value || checkGreaterThan || checkLessThan || checkIsNumber || validFormat) {
       setCreditError(true);
     } else {
       setCreditError(false);
     }
-
     if (checkIsEmpty) {
       setCreditHelperText("This field can't be blank")
     } else if (checkIsNumber) {
@@ -148,6 +146,7 @@ function Background({ forwardButton }) {
     } else {
       setCreditHelperText("");
     }
+    console.log(creditError)
   };
 
   //Phone Number
@@ -291,12 +290,12 @@ function Background({ forwardButton }) {
 
     <FormSection title="Personal Info" message="*We collect this data for our algorithms, we won't share it with anyone else. We'll ask you for proof on the next page" />
     <LineBox flex={true} CssTextField={[
-      <FormSingleLineInput size="small" type="text" field="Email" placeHolder="ex. bunkmates@gmail.com" onBlur={handleEmailValidation} error={emailError} helperText={emailHelperText} value={values.email} onChange={handleEmailChange} />,
+      <FormSingleLineInput size="small" type="text" field="Email" placeHolder="ex. bunkmates@gmail.com" error={emailError} helperText={emailHelperText} value={values.email} onChange={(e) => { handleEmailChange(e); handleEmailValidation(e); }} />,
       <DatePicker label="Birthday" onChange={handleChange} value={value} />
     ]
     } />
     <LineBox flex={true} CssTextField={[
-      <FormSingleLineInput type="text" size="small" helperText={phoneHelperText} field="Phone Number" placeHolder="6472345124" onBlur={handlePhoneValidation} error={phoneError} onChange={handlePhoneChange} value={values.phone} />,
+      <FormSingleLineInput type="text" size="small" helperText={phoneHelperText} field="Phone Number" placeHolder="6472345124" error={phoneError} onChange={(e) => { handlePhoneChange(e); handlePhoneValidation(e); }} value={values.phone} />,
       <FormSingleLineAddressInput type="text" field="Address" placeHolder="31 West Street" inputRef={inputRef} value={values.address} onChange={handleAddressChange} />
     ]
     } />
@@ -316,7 +315,7 @@ function Background({ forwardButton }) {
     <FormSection title="Finances and Verification" message="*You can provide us proof later" />
     {/* ranges from 10000 - 100000*/}
     <LineBox flex={true} CssTextField={[
-      <FormSingleLineInput size="small" helperText={creditHelperText} onBlur={handleCreditValidation} error={creditError} field="Credit Score" placeHolder="ex. 740" value={values.credit} onChange={handleCreditChange} />,
+      <FormSingleLineInput size="small" helperText={creditHelperText} error={creditError} field="Credit Score" placeHolder="ex. 740" value={values.credit} onChange={(e) => { handleCreditChange(e); handleCreditValidation(e) }} />,
       <DropDownMenu label="Annual Income" menuItem={["< $10000", "$10000 - $50000", "$50001 - $100000", "$100001 - $200000", "> $200001"]} value={values.income} onChange={handleIncomeChange} />,
     ]
     } />
