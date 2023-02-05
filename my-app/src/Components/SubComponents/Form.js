@@ -371,13 +371,12 @@ export function FormProgressBar({ steps, currentStep, children }) {
   const progressPercentage = (currentStep / steps) * 100;
   console.log(progressPercentage)
   return (
-    <div className="progress-bar" style={{ width: '100%' }}>
-      <div className="progress-bar-filled" style={{ borderRadius: '10px', backgroundColor: "aqua", height: '20px', width: `${progressPercentage}%` }} />
+    <div className="progress-bar" style={{ width: '55%'}}>
       {children}
+      <div className="progress-bar-filled" style={{ borderRadius: '10px', backgroundColor: "aqua", height: '5px', width: `${progressPercentage}%` }} />
     </div>
   );
 };
-
 
 
 

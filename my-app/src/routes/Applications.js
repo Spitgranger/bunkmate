@@ -38,7 +38,7 @@ function Appliciation() {
     '.progressBar': {
       display: 'flex',
       justifyContent: 'space-between',
-      flexFlow: 'row wrap',
+      flexFlow: 'row nowrap',
     },
 
     '.progressBar >*': {
@@ -56,7 +56,6 @@ function Appliciation() {
     <>
       <Navbar />
       <div className="info">
-        <section className="section">
           <FormProgressBar steps={totalSteps} currentStep={page}>
             <div className="progressBar" style={progressBarStyles['.progressBar']}>
               <h5 className="1" style={progressBarStyles[`.${page + 1}`]}>(1) Background</h5>
@@ -64,6 +63,7 @@ function Appliciation() {
               <h5 className="1" style={progressBarStyles[`.${page - 1}`]}>(3) LifeStyle</h5>
             </div>
           </FormProgressBar>
+        <section className="section">
           {pages[page]}
         </section>
 
