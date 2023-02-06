@@ -48,7 +48,7 @@ const Social = () => {
         setProfile(<Profile profile={profiles[index]} />)
     }
     return (
-        <div>as
+        <div>
             <Navbar />
             <div className="content-container">
                 <PlacesAutocomplete setSelected={setSelected} />
