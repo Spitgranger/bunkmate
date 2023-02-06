@@ -62,9 +62,10 @@ const PlacesAutocomplete = (props) => {
             <TextField
                 value={value}
                 onChange={handleInput}
+                variant="outlined"
                 disabled={!ready}
                 placeholder="Search for a roommate..."
-                sx={{ minWidth: "100%", margin: "none", padding: 0 }}
+                sx={{ minWidth: "100%", margin: "none", padding: 0, backdropFIlter: "blur(3px)" }}
 
             />
             {/* We can use the "status" to decide whether we should display the dropdown or not */}

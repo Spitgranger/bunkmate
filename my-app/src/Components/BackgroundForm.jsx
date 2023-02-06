@@ -232,35 +232,63 @@ function Background({ forwardButton }) {
     }
   }
 
-  //have a useState component that records all input fields in an object that have booleans as values and inputerror as a property
-  //handleEmptyStringValidation: by default all values are false, if there is an error the inputerror is set to true
-  
-  //*only for textfields: if texterror or emailerror or birthdayerror
-  //if inputerror is true for any of the fields then the button is disabled else enabled
-
-
   //memoize inputs to save rerendering all components on one change.
 
+  //have a useState component that records all input fields in an object that have booleans as values and inputerror as a proper /
+  // handleEmptyStringValidation: by default all values are false, if there is an error the inputerror is set to true
+
+  //*only for textfields: if texterror or emailerror or birthdayerror
+  //if inputerror is true for any of the fields then the button is disabled else enabled
 
   //global storage of error values (goes here) controls the disabling of buttons
 
   //checks to see if there are too many strings
-  const [globalError, setGlobalError] = useState(true);
-  const handleEmptyStringValidation = (e) => {
-    if (!e.target.value) {
-      setGlobalError(true)
+  const [globalError, setGlobalError] = useState(true)
+  const [fieldError, setFieldError] = useState({
+    firstName: null,
+    /*picture: true,
+    lastName: true,
+    about: true,
+    city: true,
+    gender: true,
+    country: true,
+    address: true,
+    province: true,
+    links: true,
+    employment: true,
+    phone: true,
+    education: true,
+    email: true,
+    income: true,
+    credit: true,
+    birthday: true,*/
+  });
+
+  const handleEmptyStringValidation = (e, field) => {
+    if (e.target.value) {
+      setFieldError(prevValue => ({ ...prevValue, [field]: false }))
+      console.log(false)
       //assign value of true to field property
-    } else {
-      //do nothing
+    } else if (!e.target.value) {
+      console.log(true)
       //asign value of false to field property
+      setFieldError(prevValue => ({ ...prevValue, [field]: true }))
+    }
+
+    if (Object.values(fieldError).every(val => val === false)) {
       setGlobalError(false)
+      console.log((Object.values(fieldError)))
+    } else if (Object.values(fieldError).every(val => val === true)) {
+      setGlobalError(true)
+      console.log((Object.values(fieldError)))
     }
 
   }
+
   // if all properties within object are false
-    //set global error(false)
+  //set global error(false)
   // else (if even one property or all properties in the object are true)
-    //set global error (true)
+  //set global error (true)
 
 
   const handleFieldChange = (e, field) => {
@@ -278,16 +306,16 @@ function Background({ forwardButton }) {
     <UploadFile helperText="Supported Files: jpg, png, " helperTextPos="45%" width="50%" type="file" message="Upload Profile Picture" accept={["image/jpg", "image/jpeg", "image/png"]} endIcon={<CameraAltIcon sx={{ color: "aqua" }} />} handleFileUpload={handleFileUpload} />
     {values.picture ? <img src={values.picture} style={{ width: "30%", height: "40%", borderRadius: "5px" }}></img> : null}
     <LineBox flex={true} CssTextField={[
-      <FormSingleLineInput size='small' type="text" field="Legal First Name" placeHolder="Sam" onChange={(e) => { handleFieldChange(e, 'firstName'); handleEmptyStringValidation(e); }} value={values.firstName} />,
+      <FormSingleLineInput size='small' type="text" field="Legal First Name" placeHolder="Sam" onChange={(e) => { handleFieldChange(e, 'firstName'); handleEmptyStringValidation(e, 'firstName'); }} value={values.firstName} />,
       <FormSingleLineInput size="small" type="text" field="Legal Last Name" placeHolder="Jenkins" onChange={(e) => { handleFieldChange(e, 'lastName'); handleEmptyStringValidation(e); }} value={values.lastName} />,]
     } />
     <div id="multiline">
-      <FormMultiLineInput placeHolder="Tell us a bit about yourself" type="text" field="About Me" helperText={textHelperText} onChange={(e) => { handleTextField(e); handleEmptyStringValidation(e); } } error={textError} value={values.about} />
+      <FormMultiLineInput placeHolder="Tell us a bit about yourself" type="text" field="About Me" helperText={textHelperText} onChange={(e) => { handleTextField(e); }} error={textError} value={values.about} />
     </div>
 
     <LineBox flex={true} CssTextField={[
       <DropDownMenu label="Gender" menuItem={["Male", "Female", "Other"]} value={values.gender} onChange={(e) => { handleFieldChange(e, 'gender') }} />,
-      <FormSingleLineInput error={link} helperText={LinkHelperText} onChange={(e) => { handleFieldChange(e, 'links'); handleLinkValidation(e) }} size="small" type="text" field="Social Media Profile" placeHolder="ex. https://www.linktr.ee/john_smith" value={values.links} />
+      <FormSingleLineInput error={link} helperText={LinkHelperText} onChange={(e) => { handleFieldChange(e, 'links'); handleLinkValidation(e, 'links') }} size="small" type="text" field="Social Media Profile" placeHolder="ex. https://www.linktr.ee/john_smith" value={values.links} />
     ]
     } />
     <br></br>
