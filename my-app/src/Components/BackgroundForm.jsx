@@ -239,7 +239,7 @@ function Background({ forwardButton }) {
 
   //checks to see if individual fields are empty
   const [fieldError, setFieldError] = useState({
-    firstName: null,
+    firstName: true,
     /*picture: true,
     lastName: true,
     about: true,
@@ -258,22 +258,24 @@ function Background({ forwardButton }) {
     birthday: true,*/
   });
 
+
   const handleEmptyStringValidation = (e, field) => {
     if (e.target.value) {
       setFieldError(prevValue => ({ ...prevValue, [field]: false }))
     } else if (!e.target.value) {
       setFieldError(prevValue => ({ ...prevValue, [field]: true }))
     }
-    handleGlobalError(fieldError);
+    // 
   }
 
   const handleGlobalError = (fieldError) => {
     //checks to see if all items within the object are false
+    console.log(Object.values(fieldError).every(val => val === false))
     if (Object.values(fieldError).every(val => val === false)) {
       setGlobalError(false)
-    } else if (Object.values(fieldError).every(val => val !== false)) {
+    } else if (Object.values(fieldError).every(val => !(val === false))) {
       setGlobalError(true)
-    } 
+    }
   }
   // if all properties within object are false
   //set global error(false)
@@ -284,7 +286,7 @@ function Background({ forwardButton }) {
   const handleFieldChange = (e, field) => {
     setValues(prevValue => ({ ...prevValue, [field]: e.target.value }));
   }
-
+  useEffect(() => handleGlobalError(fieldError), [fieldError])
 
   return (<>
 
@@ -296,7 +298,7 @@ function Background({ forwardButton }) {
     {values.picture ? <img src={values.picture} style={{ width: "30%", height: "40%", borderRadius: "5px" }}></img> : null}
     <LineBox flex={true} CssTextField={[
       <FormSingleLineInput size='small' type="text" field="Legal First Name" placeHolder="Sam" onChange={(e) => { handleFieldChange(e, 'firstName'); handleEmptyStringValidation(e, 'firstName'); }} value={values.firstName} />,
-      <FormSingleLineInput size="small" type="text" field="Legal Last Name" placeHolder="Jenkins" onChange={(e) => { handleFieldChange(e, 'lastName'); handleEmptyStringValidation(e); }} value={values.lastName} />,]
+      <FormSingleLineInput size="small" type="text" field="Legal Last Name" placeHolder="Jenkins" onChange={(e) => { handleFieldChange(e, 'lastName');/* handleEmptyStringValidation(e); */ }} value={values.lastName} />,]
     } />
     <div id="multiline">
       <FormMultiLineInput placeHolder="Tell us a bit about yourself" type="text" field="About Me" helperText={textHelperText} onChange={(e) => { handleTextField(e); }} error={textError} value={values.about} />
