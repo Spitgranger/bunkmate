@@ -4,10 +4,9 @@ import Background from '../Components/BackgroundForm'
 import Uploads from '../Components/UploadsForm'
 import { FormProgressBar } from '../Components/SubComponents/Form'
 import { useState } from 'react'
-import { FcRight } from 'react-icons/fc';
+
+
 function Appliciation() {
-
-
 
   /* sets the subpage of the form that you're on 
   also controls progress bar*/
@@ -47,7 +46,7 @@ function Appliciation() {
       justifyContent: 'center',
     },
     '.1': {
-      color: 'aqua',
+      color: '#0eb8be',
     },
 
   }
@@ -56,6 +55,7 @@ function Appliciation() {
     <>
       <Navbar />
       <div className="info">
+        <div className="page">
           <FormProgressBar steps={totalSteps} currentStep={page}>
             <div className="progressBar" style={progressBarStyles['.progressBar']}>
               <h5 className="1" style={progressBarStyles[`.${page + 1}`]}>(1) Background</h5>
@@ -63,9 +63,10 @@ function Appliciation() {
               <h5 className="1" style={progressBarStyles[`.${page - 1}`]}>(3) LifeStyle</h5>
             </div>
           </FormProgressBar>
-        <section className="section">
-          {pages[page]}
-        </section>
+          <section className="subPage">
+            {pages[page]}
+          </section>
+        </div>
 
 
 

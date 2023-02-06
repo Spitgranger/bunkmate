@@ -150,7 +150,7 @@ export function DropDownMenu({ value, onChange, label, menuItem }) {
   );
 }
 
-function NormalFormSingleLineInput({ onBlur, onChange, error, type, field, placeHolder, helperText, inputAdornment, inputAdornmentText, size, inputRef, value }) {
+function NormalFormSingleLineInput({ onerror, onBlur, onChange, error, type, field, placeHolder, helperText, inputAdornment, inputAdornmentText, size, inputRef, value }) {
 
   return (
     <>
@@ -163,6 +163,7 @@ function NormalFormSingleLineInput({ onBlur, onChange, error, type, field, place
         onChange={onChange}
         onBlur={onBlur}
         error={error}
+        onerror={onerror}
         helperText={helperText}
         InputProps={inputAdornment ? { startAdornment: <InputAdornment position="start">{inputAdornmentText}</InputAdornment> } : null}
         type={type}
@@ -371,7 +372,7 @@ export function FormProgressBar({ steps, currentStep, children }) {
   const progressPercentage = (currentStep / steps) * 100;
   console.log(progressPercentage)
   return (
-    <div className="progress-bar" style={{ width: '55%'}}>
+    <div className="progress-bar" style={{width: '90%'}}>
       {children}
       <div className="progress-bar-filled" style={{ borderRadius: '10px', backgroundColor: "aqua", height: '5px', width: `${progressPercentage}%` }} />
     </div>

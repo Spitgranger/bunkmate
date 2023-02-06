@@ -28,6 +28,7 @@ const MenuItem = {
 const keys = Object.keys(MenuItem)
 
 function SignIn({ openModalName }) {
+
   const [isOpen, setIsOpen] = useState(false)
   {/* Change default to the user's current location */ }
   const [field, setField] = useState('United States (+1)')

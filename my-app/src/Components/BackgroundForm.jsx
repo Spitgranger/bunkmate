@@ -54,13 +54,11 @@ function Background({ forwardButton }) {
       callback(reader.result);
     };
     reader.onerror = function (error) {
-      console.log('Error: ', error);
     };
   }
   //handle file uploads
   const handleFileUpload = e => {
     const file = e.target.files[0];
-    console.log(file.name);
     handleConversion(file, (result) => {
       setValues((prevValue) => (
         { ...prevValue, picture: result }
@@ -82,12 +80,9 @@ function Background({ forwardButton }) {
     );
     autoCompleteRef.current.addListener("place_changed", async function () {
       const place = await autoCompleteRef.current.getPlace();
-      console.log({ place });
       //loop through address components, takig each and checking their type
       const addressComponents = place.address_components
       addressComponents.forEach((component) => {
-        console.log(component);
-        console.log(component.types[0])
         //each case, setting the form values accordingly.
         switch (component.types[0]) {
           case "street_number":
@@ -109,7 +104,6 @@ function Background({ forwardButton }) {
             break;
         }
       })
-      console.log(values);
       //setValues({ ...values, city: place.address_components[3].long_name, country: place.address_components[6].long_name, province: place.address_components[5].long_name })
     });
   }, []);
@@ -123,7 +117,6 @@ function Background({ forwardButton }) {
   const [creditHelperText, setCreditHelperText] = useState('');
 
   const handleCreditValidation = (e) => {
-    handleValidation(values)
     const checkGreaterThan = parseInt(e.target.value) > 999;
     const checkLessThan = parseInt(e.target.value) <= 0;
     const checkIsNumber = isNaN(parseInt(e.target.value));
@@ -146,7 +139,6 @@ function Background({ forwardButton }) {
     } else {
       setCreditHelperText("");
     }
-    console.log(creditError)
   };
 
   //Phone Number
@@ -240,22 +232,42 @@ function Background({ forwardButton }) {
     }
   }
 
-  const [error, setError] = useState(false);
-  const handleValidation = (values) => {
-    if (!values.credit) {
-      setError(true)
+  //have a useState component that records all input fields in an object that have booleans as values and inputerror as a property
+  //handleEmptyStringValidation: by default all values are false, if there is an error the inputerror is set to true
+  
+  //*only for textfields: if texterror or emailerror or birthdayerror
+  //if inputerror is true for any of the fields then the button is disabled else enabled
+
+
+  //memoize inputs to save rerendering all components on one change.
+
+
+  //global storage of error values (goes here) controls the disabling of buttons
+
+  //checks to see if there are too many strings
+  const [globalError, setGlobalError] = useState(true);
+  const handleEmptyStringValidation = (e) => {
+    if (!e.target.value) {
+      setGlobalError(true)
+      //assign value of true to field property
     } else {
-      setError(false)
+      //do nothing
+      //asign value of false to field property
+      setGlobalError(false)
     }
 
   }
+  // if all properties within object are false
+    //set global error(false)
+  // else (if even one property or all properties in the object are true)
+    //set global error (true)
+
 
   const handleFieldChange = (e, field) => {
     setValues(prevValue => ({ ...prevValue, [field]: e.target.value }));
 
   }
 
-  //memoize inputs to save rerendering all components on one change.
 
   return (<>
 
@@ -266,11 +278,11 @@ function Background({ forwardButton }) {
     <UploadFile helperText="Supported Files: jpg, png, " helperTextPos="45%" width="50%" type="file" message="Upload Profile Picture" accept={["image/jpg", "image/jpeg", "image/png"]} endIcon={<CameraAltIcon sx={{ color: "aqua" }} />} handleFileUpload={handleFileUpload} />
     {values.picture ? <img src={values.picture} style={{ width: "30%", height: "40%", borderRadius: "5px" }}></img> : null}
     <LineBox flex={true} CssTextField={[
-      <FormSingleLineInput size='small' type="text" field="Legal First Name" placeHolder="Sam" onChange={(e) => { handleFieldChange(e, 'firstName') }} value={values.firstName} />,
-      <FormSingleLineInput size="small" type="text" field="Legal Last Name" placeHolder="Jenkins" onChange={(e) => { handleFieldChange(e, 'lastName') }} value={values.lastName} />,]
+      <FormSingleLineInput size='small' type="text" field="Legal First Name" placeHolder="Sam" onChange={(e) => { handleFieldChange(e, 'firstName'); handleEmptyStringValidation(e); }} value={values.firstName} />,
+      <FormSingleLineInput size="small" type="text" field="Legal Last Name" placeHolder="Jenkins" onChange={(e) => { handleFieldChange(e, 'lastName'); handleEmptyStringValidation(e); }} value={values.lastName} />,]
     } />
     <div id="multiline">
-      <FormMultiLineInput placeHolder="Tell us a bit about yourself" type="text" field="About Me" helperText={textHelperText} onChange={handleTextField} error={textError} value={values.about} />
+      <FormMultiLineInput placeHolder="Tell us a bit about yourself" type="text" field="About Me" helperText={textHelperText} onChange={(e) => { handleTextField(e); handleEmptyStringValidation(e); } } error={textError} value={values.about} />
     </div>
 
     <LineBox flex={true} CssTextField={[
@@ -299,7 +311,7 @@ function Background({ forwardButton }) {
       ]
       } /> : null}
     <LineBox flex={true} CssTextField={[
-      <DropDownMenu label="Employment" menuItem={["Currently Employed", "Currently Unemployed", "Currently Self Employed"]} value={values.employment} onChange={(e) => { handleFieldChange(e, "employment") }} />,
+      <DropDownMenu label="Employment Status" menuItem={["Currently Employed", "Currently Unemployed", "Currently Self Employed"]} value={values.employment} onChange={(e) => { handleFieldChange(e, "employment") }} />,
       <DropDownMenu label="Current Education" menuItem={["Not in School", "High School", "Undergraduate Studies", "Graduate Studies"]} value={values.education} onChange={(e) => { handleFieldChange(e, 'education') }} />,
     ]
     } />
@@ -307,12 +319,12 @@ function Background({ forwardButton }) {
     <FormSection title="Finances and Verification" message="*You can provide us proof later" />
     {/* ranges from 10000 - 100000*/}
     <LineBox flex={true} CssTextField={[
-      <FormSingleLineInput size="small" helperText={creditHelperText} error={creditError} field="Credit Score" placeHolder="ex. 740" value={values.credit} onChange={(e) => { handleFieldChange(e, 'credit'); handleCreditValidation(e); }} />,
+      <FormSingleLineInput size="small" helperText={creditHelperText} error={creditError} field="Credit Score" placeHolder="ex. 740" value={values.credit} onChange={(e) => { handleFieldChange(e, 'credit'); handleCreditValidation(e); handleEmptyStringValidation(e); }} />,
       <DropDownMenu label="Annual Income" menuItem={["< $10000", "$10000 - $50000", "$50001 - $100000", "$100001 - $200000", "> $200001"]} value={values.income} onChange={(e) => { handleFieldChange(e, 'income') }} />,
     ]
     } />
 
-    <ActionButton disabled={error} fontSize="15px" width="100%" onClick={() => { forwardButton(); localStorage.setItem("page1", JSON.stringify(values)) }} type="submit" title="Continue" endIcon={<IoChevronForward color="aqua" />} />
+    <ActionButton disabled={globalError} fontSize="15px" width="100%" onClick={() => { forwardButton(); localStorage.setItem("page1", JSON.stringify(values)); }} type="submit" title="Continue" endIcon={<IoChevronForward color="aqua" />} />
   </>)
 }
 
