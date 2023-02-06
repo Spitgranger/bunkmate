@@ -246,15 +246,20 @@ export function UploadFile(props) {
   const [error, setError] = useState(false)
   const [backgroundColor, setBackgroundColor] = useState('#383838')
 
-  const errorMessage = `Invalid file type. ${props.helperText}`;
 
   const handleMouseEnter = () => {
-    setHelperText(error ? errorMessage : props.helperText)
+    setHelperText(props.helperText)
   }
 
+  const errorMessage = `Invalid file type. ${props.helperText}`;
+  const handleMouseLeave = (e) => {
+    setHelperText(e.target.files[0].name === "" ? props.helperText : `Successfully uploaded ${e.target.file[0].name}`)
+  }
   const handleUpload = (e) => {
     const uploadedFile = e.target.files[0];
     const allowedTypes = props.accept
+
+
 
     if (uploadedFile && allowedTypes.includes(uploadedFile.type)) {
 
@@ -263,17 +268,17 @@ export function UploadFile(props) {
       setError(false);
       setHelperTextColor('black');
       setBackgroundColor('black');
-      setIcon(<BsFillCheckCircleFill color="aqua" />)
+      setIcon(<BsFillCheckCircleFill color="aqua" />);
 
     } else {
       console.log(uploadedFile)
       setFile(null);
       setTextColor('red')
-      setHelperText(errorMessage)
+      setHelperText(errorMessage);
       setHelperTextColor('red');
       setBackgroundColor('black');
-      setError(true)
-      setIcon(<MdOutlineError color="red" size={25} />)
+      setError(true);
+      setIcon(<MdOutlineError color="red" size={25} />);
 
     }
   };
@@ -304,6 +309,7 @@ export function UploadFile(props) {
         endIcon={icon}
         sx={buttonStyles}
         onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
         onChange={(e) => { handleUpload(e); props.handleFileUpload(e); }}
       >
         <h4 style={{ width: '80%', margin: '10px 0px 10px 0px' }}>
@@ -372,7 +378,7 @@ export function FormProgressBar({ steps, currentStep, children }) {
   const progressPercentage = (currentStep / steps) * 100;
   console.log(progressPercentage)
   return (
-    <div className="progress-bar" style={{width: '90%'}}>
+    <div className="progress-bar" style={{ width: '90%' }}>
       {children}
       <div className="progress-bar-filled" style={{ borderRadius: '10px', backgroundColor: "aqua", height: '5px', width: `${progressPercentage}%` }} />
     </div>
