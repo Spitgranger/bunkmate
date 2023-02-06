@@ -234,16 +234,10 @@ function Background({ forwardButton }) {
 
   //memoize inputs to save rerendering all components on one change.
 
-  //have a useState component that records all input fields in an object that have booleans as values and inputerror as a proper /
-  // handleEmptyStringValidation: by default all values are false, if there is an error the inputerror is set to true
-
-  //*only for textfields: if texterror or emailerror or birthdayerror
-  //if inputerror is true for any of the fields then the button is disabled else enabled
-
-  //global storage of error values (goes here) controls the disabling of buttons
-
-  //checks to see if there are too many strings
+  //checks to see if all fields are empty
   const [globalError, setGlobalError] = useState(true)
+
+  //checks to see if individual fields are empty
   const [fieldError, setFieldError] = useState({
     firstName: null,
     /*picture: true,
@@ -267,24 +261,20 @@ function Background({ forwardButton }) {
   const handleEmptyStringValidation = (e, field) => {
     if (e.target.value) {
       setFieldError(prevValue => ({ ...prevValue, [field]: false }))
-      console.log(false)
-      //assign value of true to field property
     } else if (!e.target.value) {
-      console.log(true)
-      //asign value of false to field property
       setFieldError(prevValue => ({ ...prevValue, [field]: true }))
     }
-
-    if (Object.values(fieldError).every(val => val === false)) {
-      setGlobalError(false)
-      console.log((Object.values(fieldError)))
-    } else if (Object.values(fieldError).every(val => val === true)) {
-      setGlobalError(true)
-      console.log((Object.values(fieldError)))
-    }
-
+    handleGlobalError(fieldError);
   }
 
+  const handleGlobalError = (fieldError) => {
+    //checks to see if all items within the object are false
+    if (Object.values(fieldError).every(val => val === false)) {
+      setGlobalError(false)
+    } else if (Object.values(fieldError).every(val => val !== false)) {
+      setGlobalError(true)
+    } 
+  }
   // if all properties within object are false
   //set global error(false)
   // else (if even one property or all properties in the object are true)
@@ -293,7 +283,6 @@ function Background({ forwardButton }) {
 
   const handleFieldChange = (e, field) => {
     setValues(prevValue => ({ ...prevValue, [field]: e.target.value }));
-
   }
 
 
