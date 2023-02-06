@@ -7,6 +7,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import CreatePost from './routes/CreatePost';
 import Applications from './routes/Applications';
 import Error from './Error';
+import Social from './routes/Social';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -25,6 +26,11 @@ const router = createBrowserRouter([
     path: "/applications",
     element: <Applications />,
     errorElement: <Error />,
+  },
+  {
+    path: '/bunkmates',
+    element: <Social />,
+    errorElement: <Error />
   },
 ]);
 
