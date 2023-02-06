@@ -150,7 +150,7 @@ export function DropDownMenu({ value, onChange, label, menuItem }) {
   );
 }
 
-function NormalFormSingleLineInput({ onerror, onBlur, onChange, error, type, field, placeHolder, helperText, inputAdornment, inputAdornmentText, size, inputRef, value }) {
+function NormalFormSingleLineInput({ onError, onBlur, onChange, error, type, field, placeHolder, helperText, inputAdornment, inputAdornmentText, size, inputRef, value }) {
 
   return (
     <>
@@ -163,7 +163,7 @@ function NormalFormSingleLineInput({ onerror, onBlur, onChange, error, type, fie
         onChange={onChange}
         onBlur={onBlur}
         error={error}
-        onerror={onerror}
+        onError={onError}
         helperText={helperText}
         InputProps={inputAdornment ? { startAdornment: <InputAdornment position="start">{inputAdornmentText}</InputAdornment> } : null}
         type={type}
