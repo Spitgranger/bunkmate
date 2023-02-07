@@ -63,7 +63,8 @@ function Uploads({ backwardButton, forwardButton }) {
         <IoChevronBack />Back</h3>
     </label>
 
-    <FormSection title="Finances Check" message="*if you have good finances you'll get a 'Strong Financials' badge that'll be visible to other users" />
+    <FormSection title="Finances Check"
+      message="*if you have good finances you'll get a 'Strong Financials' badge that'll be visible to other users" />
 
     <LineBox flex={true} CssTextField={[
       <UploadFile helperTextPos='85%' helperText="Supported Files: jpg, png, pdf, docx, doc" width="100%" fontSize="14px" endIcon={<MdUpload color="aqua" size={25} />} type="file" accept={["image/jpeg", "image/jpg", "image/png", "application/pdf", "application/docx", "application/doc"]} message="Void Check" />,
@@ -78,11 +79,16 @@ function Uploads({ backwardButton, forwardButton }) {
     } />
     <br></br>
     <FormSection title="Background Check"
-      message={"*We'll use this data to perform a FREE background check. Should you pass you'll receive a 'No Criminal History' and 'ID verified' badge."}
+      message={"*Please upload at least one of the two. We'll use this data to perform a FREE background check. Should you pass you'll receive a 'No Criminal History' and 'ID verified' badge."}
     />
 
     <LineBox flex={true} CssTextField={[
       <UploadFile helperTextPos='85%' helperText="Supported Files: jpg, png, pdf" width="100%" fontSize="14px" endIcon={<MdUpload color="aqua" size={25} />} type="file" accept={["image/jpeg", "image/jpg", "image/png", "application/pdf"]} message="Driver's License" />,
+      <UploadFile helperTextPos='85%' helperText="Supported Files: jpg, png, pdf" width="100%" fontSize="14px" endIcon={<MdUpload color="aqua" size={25} />} type="file" accept={["image/jpeg", "image/jpg", "image/png", "application/pdf"]} message="Passport" />,
+    ]
+    } />
+    <LineBox flex={true} CssTextField={[
+
       <FormSingleLineInput type="text" size="large" helperText={sinHelperText} field="SIN/SSN" placeHolder="ex. 234452874" onChange={handleSocialNumberValidation} error={sinError} />,
     ]
     } />

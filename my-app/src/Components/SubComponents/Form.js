@@ -19,6 +19,8 @@ import { InputAdornment } from "@mui/material";
 import { useState, memo } from 'react'
 import { BsFillCheckCircleFill } from "react-icons/bs";
 import { MdOutlineError } from "react-icons/md";
+import Slider from '@mui/material/Slider'
+
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 const MenuProps = {
@@ -97,7 +99,7 @@ export function LineBox({ flex, CssTextField }) {
       component="form"
       id="line"
       sx={{
-        '& > :not(style)': { m: 1, flex: check, width: "100%", },
+        '& > :not(style)': { m: 1, flex: check, width: "100%" },
       }}
       noValidate
       autoComplete="off"
@@ -344,6 +346,7 @@ export function ActionButton(props) {
       <Button
         variant="contained"
         onClick={props.onClick}
+        onSubmit={props.onSubmit}
         type={props.type}
         endIcon={props.endIcon}
         startIcon={props.startIcon}
@@ -387,4 +390,42 @@ export function FormProgressBar({ steps, currentStep, children }) {
 
 
 
+const marks = [
+  {
+    value: 0,
+    label: '0°C',
+  },
+  {
+    value: 20,
+    label: '20°C',
+  },
+  {
+    value: 37,
+    label: '37°C',
+  },
+  {
+    value: 100,
+    label: '100°C',
+  },
+];
 
+function valuetext(value) {
+  return `${value}°C`;
+}
+
+export function DiscreteSliderMarks() {
+  return (
+    <Box sx={{ width: 300 }}>
+      <br></br>
+      <br></br>
+      <Slider
+        aria-label="Custom marks"
+        defaultValue={20}
+        getAriaValueText={valuetext}
+        step={null}
+        valueLabelDisplay="auto"
+        marks={marks}
+      />
+    </Box>
+  );
+}

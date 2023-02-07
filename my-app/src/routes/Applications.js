@@ -2,6 +2,7 @@ import './Applications.css';
 import Navbar from '../Components/Navbar';
 import Background from '../Components/BackgroundForm'
 import Uploads from '../Components/UploadsForm'
+import Lifestyle from '../Components/LifestyleForm'
 import { FormProgressBar } from '../Components/SubComponents/Form'
 import { useState } from 'react'
 
@@ -27,7 +28,7 @@ function Appliciation() {
       backwardButton={handleBackClick}
       forwardButton={handleContinueClick}
     />,
-    <Uploads
+    <Lifestyle
       backwardButton={handleBackClick}
       forwardButton={handleContinueClick}
     />,
@@ -59,7 +60,7 @@ function Appliciation() {
           <FormProgressBar steps={totalSteps} currentStep={page}>
             <div className="progressBar" style={progressBarStyles['.progressBar']}>
               <h5 className="1" style={progressBarStyles[`.${page + 1}`]}>(1) Background</h5>
-              <h5 className="1" style={progressBarStyles[`.${page + 0}`]}>(2) Uploads</h5>
+              <h5 className="1" style={progressBarStyles[`.${page}`]}>(2) Uploads</h5>
               <h5 className="1" style={progressBarStyles[`.${page - 1}`]}>(3) LifeStyle</h5>
             </div>
           </FormProgressBar>
