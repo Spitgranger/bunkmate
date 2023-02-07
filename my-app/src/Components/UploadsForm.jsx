@@ -38,6 +38,7 @@ function Uploads({ backwardButton, forwardButton }) {
     const checkIsNumber = isNaN(parseInt(e.target.value));
     const validFormat = !/^\d+$/.test(e.target.value);
 
+
     if (checkLength || checkIsEmpty || checkIsNumber || validFormat) {
       setSinError(true);
     } else {

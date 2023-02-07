@@ -124,8 +124,6 @@ function Lifestyle({ backwardButton, forwardButton }) {
     />
     <LineBox flex={true} CssTextField={[
       //slider
-      <DiscreteSliderMarks />,
-      <DiscreteSliderMarks />,
     ]
     }
     />

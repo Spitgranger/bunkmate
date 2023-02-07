@@ -16,7 +16,7 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import ListItemText from '@mui/material/ListItemText';
 import Checkbox from '@mui/material/Checkbox';
 import { InputAdornment } from "@mui/material";
-import { useState, memo } from 'react'
+import { useState, memo, useCallback } from 'react'
 import { BsFillCheckCircleFill } from "react-icons/bs";
 import { MdOutlineError } from "react-icons/md";
 import Slider from '@mui/material/Slider'
@@ -241,7 +241,7 @@ export function UploadFile(props) {
   //setFile to current file only if conditions are satifised
   const [file, setFile] = useState(null) //**********STORE FILES IN BACKEND***************
   //changes state depending on correct file type upload
-  const [helperText, setHelperText] = useState('')
+  const [helperText, setHelperText] = useState(props.helperText)
   const [helperTextColor, setHelperTextColor] = useState('black')
   const [textColor, setTextColor] = useState('white')
   const [icon, setIcon] = useState(props.endIcon)
@@ -249,15 +249,10 @@ export function UploadFile(props) {
   const [backgroundColor, setBackgroundColor] = useState('#383838')
 
 
-  const handleMouseEnter = () => {
-    setHelperText(props.helperText)
-  }
 
-  const errorMessage = `Invalid file type. ${props.helperText}`;
-  const handleMouseLeave = (e) => {
-    setHelperText(e.target.files[0].name === "" ? props.helperText : `Successfully uploaded ${e.target.file[0].name}`)
-  }
   const handleUpload = (e) => {
+    const errorMessage = `Invalid file type. ${props.helperText}`;
+    const successMessage = `Successfully uploaded: ${e.target.files[0].name}`;
     const uploadedFile = e.target.files[0];
     const allowedTypes = props.accept
 
@@ -270,10 +265,10 @@ export function UploadFile(props) {
       setError(false);
       setHelperTextColor('black');
       setBackgroundColor('black');
+      setHelperText(successMessage);
       setIcon(<BsFillCheckCircleFill color="aqua" />);
 
     } else {
-      console.log(uploadedFile)
       setFile(null);
       setTextColor('red')
       setHelperText(errorMessage);
@@ -310,8 +305,6 @@ export function UploadFile(props) {
         startIcon={props.startIcon}
         endIcon={icon}
         sx={buttonStyles}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
         onChange={(e) => { handleUpload(e); props.handleFileUpload(e); }}
       >
         <h4 style={{ width: '80%', margin: '10px 0px 10px 0px' }}>
@@ -379,7 +372,6 @@ export function FormSection({ title, message, children }) {
 
 export function FormProgressBar({ steps, currentStep, children }) {
   const progressPercentage = (currentStep / steps) * 100;
-  console.log(progressPercentage)
   return (
     <div className="progress-bar" style={{ width: '90%' }}>
       {children}

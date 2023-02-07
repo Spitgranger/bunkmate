@@ -234,12 +234,12 @@ function Background({ forwardButton }) {
 
   //memoize inputs to save rerendering all components on one change.
 
-  //checks to see if all fields are empty
-  const [globalError, setGlobalError] = useState(true)
 
   //checks to see if individual fields are empty
+
+
   const [fieldError, setFieldError] = useState({
-    /*firstName: null,
+    firstName: null,
     lastName: null,
     about: null,
     gender: null,
@@ -250,20 +250,20 @@ function Background({ forwardButton }) {
     employment: null,
     education: null,
     credit: null,
-    income: null,*/
+    income: null,
 
 
   });
-
-
   const handleEmptyStringValidation = (e, field) => {
-    if (e.target.value || values.field !== "") {
+    console.log(values.firstName)
+    if (e.target.value) {
       setFieldError(prevValue => ({ ...prevValue, [field]: false }))
-    } else if (!e.target.value || values.field == "") {
+    } else if (!e.target.value) {
       setFieldError(prevValue => ({ ...prevValue, [field]: true }))
     }
-    // 
   }
+  //checks to see if all fields are empty
+  const [globalError, setGlobalError] = useState(true)
 
   const handleGlobalError = (fieldError) => {
     //checks to see if all items within the object are false
@@ -273,6 +273,7 @@ function Background({ forwardButton }) {
       setGlobalError(true)
     }
   }
+  useEffect(() => handleGlobalError(fieldError), [fieldError])
   // if all properties within object are false
   //set global error(false)
   // else (if even one property or all properties in the object are true)
@@ -282,7 +283,6 @@ function Background({ forwardButton }) {
   const handleFieldChange = (e, field) => {
     setValues(prevValue => ({ ...prevValue, [field]: e.target.value }));
   }
-  useEffect(() => handleGlobalError(fieldError), [fieldError])
 
   return (<>
 
