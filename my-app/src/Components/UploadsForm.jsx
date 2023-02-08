@@ -9,6 +9,7 @@ import {
 } from './SubComponents/Form';
 import { IoChevronForward } from 'react-icons/io5';
 import { MdUpload } from "react-icons/md"
+import { useEffect } from 'react';
 
 
 const backButtonStyles = {
@@ -24,14 +25,8 @@ const checkBoxStyles = {
 
 
 function Uploads({ backwardButton, forwardButton }) {
-  const page2 = JSON.parse(localStorage.getItem("page2"))
-  const [values, setValues] = useState(page2 ? page2 : {
-    t4: "",
-    paystub: "",
-    license: "",
-    passport: "",
-    sin: "",
-  });
+  const page2 = JSON.parse(localStorage.getItem("page1"))
+  const [values, setValues] = useState(page2);
 
   const handleFieldChange = (values, field) => {
     console.log(values)
@@ -45,12 +40,11 @@ function Uploads({ backwardButton, forwardButton }) {
   const [sinError, setSinError] = useState(false);
   const [sinHelperText, setSinHelperText] = useState('');
 
-  const handleSocialNumberValidation = (values, field) => {
-    console.log(field)
-    const checkLength = values.field !== 9;
-    const checkIsEmpty = !values.field;
-    const checkIsNumber = isNaN(parseInt(values[field]));
-    const validFormat = !/^\d+$/.test(values[field]);
+  const handleSocialNumberValidation = (values) => {
+    const checkLength = values?.sin.length !== 9;
+    const checkIsEmpty = !values?.sin;
+    const checkIsNumber = isNaN(parseInt(values?.sin));
+    const validFormat = !/^\d+$/.test(values?.sin);
 
 
     if (checkLength || checkIsEmpty || checkIsNumber || validFormat) {
@@ -71,6 +65,12 @@ function Uploads({ backwardButton, forwardButton }) {
       setSinHelperText("");
     }
   };
+
+  const handleSSNChange = (e) => {
+    setValues((prevValue) => ({ ...prevValue, sin: e.target.value }));
+  }
+  useEffect(() => { if (values?.sin) { handleSocialNumberValidation(values) } else { return } }, [values])
+
   return (<>
     <label style={{ cursor: 'pointer' }}>
       <input style={{ display: 'none' }} onClick={backwardButton} type="button" />
@@ -104,7 +104,7 @@ function Uploads({ backwardButton, forwardButton }) {
     } />
     <LineBox flex={true} CssTextField={[
 
-      <FormSingleLineInput type="text" size="large" helperText={sinHelperText} value={values.sin} field="SIN/SSN" placeHolder="ex. 234452874" onChange={() => { handleSocialNumberValidation(values, 'sin') }} error={sinError} />,
+      <FormSingleLineInput type="text" size="large" helperText={sinHelperText} value={values?.sin} field="SIN/SSN" placeHolder="ex. 234452874" onChange={(e) => { handleSSNChange(e) }} error={sinError} />,
     ]
     } />
 
