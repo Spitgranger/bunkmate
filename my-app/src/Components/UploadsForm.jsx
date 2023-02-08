@@ -11,6 +11,7 @@ import { IoChevronForward } from 'react-icons/io5';
 import { MdUpload } from "react-icons/md"
 
 
+
 const backButtonStyles = {
   display: 'flex',
   alignItems: 'center',
@@ -74,7 +75,7 @@ function Uploads({ backwardButton, forwardButton }) {
     } />
     <FormSection message="*Please upload at least one of the two" />
     <LineBox flex={true} CssTextField={[
-      <UploadFile helperTextPos='85%' helperText="Supported Files: pdf, docx, doc" width="100%" fontSize="14px" endIcon={<MdUpload color="aqua" size={25} />} type="file" accept={["application/pdf", "application/docx", "application/doc"]} message="T4 Document" />,
+      <UploadFile helperTextPos={'85%'} helperText="Supported Files: pdf, docx, doc" width="100%" fontSize="14px" endIcon={<MdUpload color="aqua" size={25} />} type="file" accept={["application/pdf", "application/docx", "application/doc"]} message="T4 Document" />,
       <UploadFile helperTextPos='85%' helperText="Supported Files: pdf" width="100%" fontSize="14px" endIcon={<MdUpload color="aqua" size={25} />} type="file" accept="application/pdf" message="Pay Stub" />
     ]
     } />

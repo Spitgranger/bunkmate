@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, useMemo, useCallback } from 'react'
 import {
   DatePicker,
   FormSection,
@@ -239,6 +239,8 @@ function Background({ forwardButton }) {
 
 
   const [fieldError, setFieldError] = useState({
+    /*birthday: null,*/
+    picture: null,
     firstName: null,
     lastName: null,
     about: null,
@@ -254,15 +256,26 @@ function Background({ forwardButton }) {
 
 
   });
+  //checks to see if all fields are empty
   const handleEmptyStringValidation = (e, field) => {
-    console.log(values.firstName)
+    console.log(fieldError)
     if (e.target.value) {
       setFieldError(prevValue => ({ ...prevValue, [field]: false }))
     } else if (!e.target.value) {
       setFieldError(prevValue => ({ ...prevValue, [field]: true }))
     }
   }
-  //checks to see if all fields are empty
+
+  //event handler built just for validating images
+  const handleUploadPictureValidation = (e, field) => {
+    if (e.target.files[0]) {
+      setFieldError(prevValue => ({ ...prevValue, [field]: false }))
+    } else if (!e.target.files[0]) {
+      setFieldError(prevValue => ({ ...prevValue, [field]: true }))
+    }
+  }
+
+  //globalError will be set to false once all fields are validated
   const [globalError, setGlobalError] = useState(true)
 
   const handleGlobalError = (fieldError) => {
@@ -274,24 +287,25 @@ function Background({ forwardButton }) {
     }
   }
   useEffect(() => handleGlobalError(fieldError), [fieldError])
-  // if all properties within object are false
-  //set global error(false)
-  // else (if even one property or all properties in the object are true)
-  //set global error (true)
 
 
-  const handleFieldChange = (e, field) => {
-    setValues(prevValue => ({ ...prevValue, [field]: e.target.value }));
-  }
-
+  const handleFieldChange = useCallback((e, field) => {
+    setValues(prevValue => ({ ...prevValue, [field]: e.target.value}));
+  }, []);
+/*
+  useEffect(() => {
+    handleFieldChange();},[values, handleFieldChange]);
+*/
   return (<>
 
 
     <FormSection title="Profile"
       message="*Everything in this section will be visible to other people"
     />
-    <UploadFile helperText="Supported Files: jpg, png, " helperTextPos="45%" width="50%" type="file" message="Upload Profile Picture" accept={["image/jpg", "image/jpeg", "image/png"]} endIcon={<CameraAltIcon sx={{ color: "aqua" }} />} handleFileUpload={handleFileUpload} />
-    {values.picture ? <img src={values.picture} style={{ width: "30%", height: "40%", borderRadius: "5px" }}></img> : null}
+    <div style={{ display: 'flex', justifyContent: 'center', borderRadius: "90px"  }}>
+      {values.picture ? <img src={values.picture} style={{ width: "100px", height: "100px", borderRadius: "50px" }}></img> : null}
+    </div>
+    <UploadFile helperText="Supported Files: jpg, png" helperTextPos="45%" onChange={(e) => handleUploadPictureValidation(e, "picture")} width="50%" type="file" message="Upload Profile Picture" accept={["image/jpg", "image/jpeg", "image/png"]} endIcon={<CameraAltIcon sx={{ color: "aqua" }} />} handleFileUpload={handleFileUpload} />
     <LineBox flex={true} CssTextField={[
       <FormSingleLineInput size='small' type="text" field="Legal First Name" placeHolder="Sam" onChange={(e) => { handleFieldChange(e, 'firstName'); handleEmptyStringValidation(e, 'firstName'); }} value={values.firstName} />,
       <FormSingleLineInput size="small" type="text" field="Legal Last Name" placeHolder="Jenkins" onChange={(e) => { handleFieldChange(e, 'lastName'); handleEmptyStringValidation(e, 'lastName'); }} value={values.lastName} />,]
