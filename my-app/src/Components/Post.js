@@ -4,7 +4,7 @@ import { BsBookmarksFill } from 'react-icons/bs'
 import { IoIosArrowDroprightCircle } from 'react-icons/io'
 import { IoIosArrowDropleftCircle } from 'react-icons/io'
 import { BsFillCircleFill } from 'react-icons/bs'
-import { useState } from 'react'
+import { useState, useId } from 'react'
 import Modal from "./Modal";
 
 export function Bookmark() {
@@ -20,7 +20,6 @@ export function Bookmark() {
     return setFill(() => fill + 1)
 
   }
-
   return (
     <label>
       <input type="check"
@@ -32,7 +31,10 @@ export function Bookmark() {
   )
 }
 
+
 export default function Post(info) {
+
+  const id = useId()
 
   const [image, setImage] = useState(0); //image scroll state
   const [message, setMessage] = useState(false); //image scroll state
@@ -83,6 +85,7 @@ export default function Post(info) {
                 */}
                     < BsFillCircleFill
                       className="dots"
+                      key={id}
                       size={image === i ? 12 : 9}
                       onClick={() => setImage(i)}
                       color={image === i ? 'aqua' : 'white'}
@@ -110,8 +113,8 @@ export default function Post(info) {
         </div>
       </div>
       <div className="Ammenities">
-        {info.tags?.map((tag, i) => {
-          return (<div id="tags" key={i}>{tag}</div>);
+        {info.tags?.map(tag => {
+          return (<div id="tags" key={id}>{tag}</div>);
         })
         }
       </div>

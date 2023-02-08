@@ -16,7 +16,7 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import ListItemText from '@mui/material/ListItemText';
 import Checkbox from '@mui/material/Checkbox';
 import { InputAdornment } from "@mui/material";
-import { useState, memo, useCallback } from 'react'
+import { useState, memo, useCallback, useId } from 'react'
 import { BsFillCheckCircleFill } from "react-icons/bs";
 import { MdOutlineError } from "react-icons/md";
 import Slider from '@mui/material/Slider'
@@ -132,7 +132,7 @@ const CssTextField = styled(TextField)({
 */
 
 export function DropDownMenu({ value, onChange, label, menuItem }) {
-
+  const id = useId()
   return (
     <FormControl placeholder="wow" sx={{ m: 1, width: '100%', flex: 1 }} size="small" fullWidth>
       <InputLabel
@@ -144,8 +144,8 @@ export function DropDownMenu({ value, onChange, label, menuItem }) {
         onChange={onChange}
         label={label}
       >
-        {menuItem.map((item, i) => {
-          return (<MenuItem key={i} value={item} >{item}</MenuItem>);
+        {menuItem.map(item => {
+          return (<MenuItem key={id} value={item} >{item}</MenuItem>);
         })}
       </Select>
     </FormControl>
@@ -153,7 +153,6 @@ export function DropDownMenu({ value, onChange, label, menuItem }) {
 }
 
 function NormalFormSingleLineInput({ onError, onBlur, onChange, error, type, field, placeHolder, helperText, inputAdornment, inputAdornmentText, size, inputRef, value }) {
-  console.log("rendered")
   return (
     <>
       <TextField

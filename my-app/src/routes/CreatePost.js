@@ -1,9 +1,10 @@
 import Navbar from '../Components/Navbar';
-import React, { useState } from 'react';
+import React, { useState, useId } from 'react';
 import FormInput from '../Components/FormInput';
 import './CreatePost.css';
 
 function CreatePost() {
+  const id = useId()
   const [formData, setFormData] = useState({
     address: "",
     price: 0,
@@ -23,15 +24,14 @@ function CreatePost() {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
-    },
+      },
       body: JSON.stringify(formData),
     }).then(response => response.json())
-    .then(response => console.log(JSON.stringify(response)))
+      .then(response => console.log(JSON.stringify(response)))
   }
   console.log(formData);
   const inputs = [
     {
-      id: 1,
       name: 'Address',
       placeholder: 'Enter an Address',
       keyname: 'address',
@@ -39,7 +39,6 @@ function CreatePost() {
       required: true,
     },
     {
-      id: 2,
       name: 'Price',
       placeholder: 'Monthly Price',
       keyname: 'price',
@@ -48,7 +47,6 @@ function CreatePost() {
       pattern: "^[1-9]*$",
     },
     {
-      id: 3,
       name: 'Number of Bedrooms',
       placeholder: 'Number of Bedrooms',
       keyname: 'number_of_bedrooms',
@@ -57,7 +55,6 @@ function CreatePost() {
       pattern: "^[1-9]*$"
     },
     {
-      id: 4,
       name: 'Number of roommates',
       placeholder: 'Number of allowed Roommates',
       keyname: 'number_of_roommates',
@@ -66,7 +63,6 @@ function CreatePost() {
       pattern: "^[1-9]*$"
     },
     {
-      id: 5,
       name: 'Tags',
       placeholder: 'Tags, each separated with a comma',
       keyname: 'tags',
@@ -74,7 +70,6 @@ function CreatePost() {
       required: true,
     },
     {
-      id: 6,
       name: 'Date Available',
       placeholder: 'Date Available',
       keyname: 'date_available',
@@ -84,8 +79,7 @@ function CreatePost() {
       pattern: "^[1-9]*$"
     },
     {
-      id: 7,
-      name:'Number of bathrooms',
+      name: 'Number of bathrooms',
       placeholder: 'Number of bathrooms',
       keyname: 'number_of_bathrooms',
       errormessage: "Roommates must be greater than 0",
@@ -101,7 +95,7 @@ function CreatePost() {
         <h2>Create a Listing</h2>
         <form onSubmit={handleSubmit}>
           {inputs.map((input) => {
-            return <FormInput key={input.id} {...input} value={formData[input.name]} onChange={onChange} />
+            return <FormInput key={id} {...input} value={formData[input.name]} onChange={onChange} />
           })}
           <button>Submit</button>
         </form>
