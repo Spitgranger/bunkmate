@@ -153,7 +153,7 @@ export function DropDownMenu({ value, onChange, label, menuItem }) {
 }
 
 function NormalFormSingleLineInput({ onError, onBlur, onChange, error, type, field, placeHolder, helperText, inputAdornment, inputAdornmentText, size, inputRef, value }) {
-
+  console.log("rendered")
   return (
     <>
       <TextField
@@ -198,7 +198,8 @@ export function FormSingleLineAddressInput({ onBlur, onChange, error, type, fiel
   )
 }
 const arePropsEqual = (newProps, oldProps) => {
-  return newProps.value === oldProps.value;
+  let result = newProps.value === oldProps.value && newProps.error === oldProps.error && oldProps.helperText === newProps.helperText;
+  return result;
 }
 
 export const FormMultiLineInput = memo(NormalFormMultiLineInput, arePropsEqual);
