@@ -11,7 +11,6 @@ import { IoChevronForward } from 'react-icons/io5';
 import { MdUpload } from "react-icons/md"
 
 
-
 const backButtonStyles = {
   display: 'flex',
   alignItems: 'center',
@@ -25,6 +24,20 @@ const checkBoxStyles = {
 
 
 function Uploads({ backwardButton, forwardButton }) {
+  const page2 = JSON.parse(localStorage.getItem("page2"))
+  const [values, setValues] = useState(page2 ? page2 : {
+    t4: "",
+    paystub: "",
+    license: "",
+    passport: "",
+    sin: "",
+  });
+
+  const handleFieldChange = (values, field) => {
+    console.log(values)
+    setValues(prevValue => ({ ...prevValue, [field]: values.field }));
+  }
+
   //SSN/SIN validation
   //Must be 9 characters long
   //The field must be filled
@@ -32,12 +45,12 @@ function Uploads({ backwardButton, forwardButton }) {
   const [sinError, setSinError] = useState(false);
   const [sinHelperText, setSinHelperText] = useState('');
 
-  const handleSocialNumberValidation = (e) => {
-
-    const checkLength = e.target.value.length !== 9;
-    const checkIsEmpty = !e.target.value;
-    const checkIsNumber = isNaN(parseInt(e.target.value));
-    const validFormat = !/^\d+$/.test(e.target.value);
+  const handleSocialNumberValidation = (values, field) => {
+    console.log(field)
+    const checkLength = values.field !== 9;
+    const checkIsEmpty = !values.field;
+    const checkIsNumber = isNaN(parseInt(values[field]));
+    const validFormat = !/^\d+$/.test(values[field]);
 
 
     if (checkLength || checkIsEmpty || checkIsNumber || validFormat) {
@@ -91,7 +104,7 @@ function Uploads({ backwardButton, forwardButton }) {
     } />
     <LineBox flex={true} CssTextField={[
 
-      <FormSingleLineInput type="text" size="large" helperText={sinHelperText} field="SIN/SSN" placeHolder="ex. 234452874" onChange={handleSocialNumberValidation} error={sinError} />,
+      <FormSingleLineInput type="text" size="large" helperText={sinHelperText} value={values.sin} field="SIN/SSN" placeHolder="ex. 234452874" onChange={() => { handleSocialNumberValidation(values, 'sin') }} error={sinError} />,
     ]
     } />
 

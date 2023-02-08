@@ -240,7 +240,7 @@ function Background({ forwardButton }) {
 
   const [fieldError, setFieldError] = useState({
     /*birthday: null,*/
-    picture: null,
+    /*picture: null,*/
     firstName: null,
     lastName: null,
     about: null,
@@ -289,12 +289,13 @@ function Background({ forwardButton }) {
   useEffect(() => handleGlobalError(fieldError), [fieldError])
 
 
-  const handleFieldChange = useCallback((e, field) => {
+  const handleFieldChange = (e, field) => {
+    console.log(values.firstName)
     setValues(prevValue => ({ ...prevValue, [field]: e.target.value}));
-  }, []);
+  }
 /*
   useEffect(() => {
-    handleFieldChange();},[values, handleFieldChange]);
+    handleFieldChange();},[values]);
 */
   return (<>
 
