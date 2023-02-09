@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useReducer } from 'react'
 import { IoChevronBack } from 'react-icons/io5';
 import {
   FormSection,
@@ -24,14 +24,11 @@ const checkBoxStyles = {
 
 
 
+
+
 function Uploads({ backwardButton, forwardButton }) {
   const page2 = JSON.parse(localStorage.getItem("page1"))
   const [values, setValues] = useState(page2);
-
-  const handleFieldChange = (values, field) => {
-    console.log(values)
-    setValues(prevValue => ({ ...prevValue, [field]: values.field }));
-  }
 
   //SSN/SIN validation
   //Must be 9 characters long

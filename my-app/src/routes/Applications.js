@@ -32,6 +32,7 @@ function Appliciation() {
       backwardButton={handleBackClick}
       forwardButton={handleContinueClick}
     />,
+    <div>you're done</div>
   ]
 
   const progressBarStyles = {

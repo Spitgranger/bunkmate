@@ -249,7 +249,7 @@ function Background({ forwardButton }) {
 
   const [fieldError, setFieldError] = useState({
     /*birthday: null,*/
-    //picture: true,
+    picture: true,
     firstName: true,
     lastName: true,
     about: true,
