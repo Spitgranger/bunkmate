@@ -16,7 +16,7 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import ListItemText from '@mui/material/ListItemText';
 import Checkbox from '@mui/material/Checkbox';
 import { InputAdornment } from "@mui/material";
-import { useState, memo, useCallback, useId } from 'react'
+import { useState, memo, useCallback } from 'react'
 import { BsFillCheckCircleFill } from "react-icons/bs";
 import { MdOutlineError } from "react-icons/md";
 import Slider from '@mui/material/Slider'
@@ -131,8 +131,7 @@ const CssTextField = styled(TextField)({
 
 */
 
-export function DropDownMenu({ value, onChange, label, menuItem }) {
-  const id = useId()
+export function DropDownMenu({ defaultValue, value, onChange, label, menuItem }) {
   return (
     <FormControl placeholder="wow" sx={{ m: 1, width: '100%', flex: 1 }} size="small" fullWidth>
       <InputLabel
@@ -142,10 +141,11 @@ export function DropDownMenu({ value, onChange, label, menuItem }) {
         id="demo-simple-select"
         value={value}
         onChange={onChange}
+        defaultValue={defaultValue}
         label={label}
       >
-        {menuItem.map(item => {
-          return (<MenuItem key={id} value={item} >{item}</MenuItem>);
+        {menuItem.map((item, i) => {
+          return (<MenuItem key={i} value={item} >{item}</MenuItem>);
         })}
       </Select>
     </FormControl>
@@ -305,6 +305,7 @@ export function UploadFile(props) {
         startIcon={props.startIcon}
         endIcon={icon}
         sx={buttonStyles}
+        disabled={props.disabled}
         onChange={(e) => { handleUpload(e); props.handleFileUpload(e); }}
       >
         <h4 style={{ width: '80%', margin: '10px 0px 10px 0px' }}>

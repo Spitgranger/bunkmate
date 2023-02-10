@@ -3,7 +3,6 @@ import Navbar from './Components/Navbar';
 import Post from './Components/Post';
 import { Rating } from './Components/SubComponents/Feedback';
 import { Like } from './Components/SubComponents/Feedback';
-import { useId } from 'react'
 
 
 import Apartment2 from "./Components/Assets/apartment.jpg"
@@ -12,7 +11,6 @@ import Room from "./Components/Assets/living_space.jpg"
 import Room2 from "./Components/Assets/living_space2.jpg"
 
 function App() {
-  const id = useId()
   const keyinfo = [
     {
       profile: "1",
@@ -298,8 +296,8 @@ function App() {
       </header>
       <body>
         <section className="Listings">
-          {keyinfo.map(info => (
-            <Post key={id} {...info} />
+          {keyinfo.map((info, i) => (
+            <Post key={i} {...info} />
           ))}
 
 

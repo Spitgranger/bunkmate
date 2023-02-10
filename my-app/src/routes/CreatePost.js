@@ -1,10 +1,9 @@
 import Navbar from '../Components/Navbar';
-import React, { useState, useId } from 'react';
+import React, { useState } from 'react';
 import FormInput from '../Components/FormInput';
 import './CreatePost.css';
 
 function CreatePost() {
-  const id = useId()
   const [formData, setFormData] = useState({
     address: "",
     price: 0,
@@ -94,8 +93,8 @@ function CreatePost() {
       <div className='formInput'>
         <h2>Create a Listing</h2>
         <form onSubmit={handleSubmit}>
-          {inputs.map((input) => {
-            return <FormInput key={id} {...input} value={formData[input.name]} onChange={onChange} />
+          {inputs.map((input, i) => {
+            return <FormInput key={i} {...input} value={formData[input.name]} onChange={onChange} />
           })}
           <button>Submit</button>
         </form>
