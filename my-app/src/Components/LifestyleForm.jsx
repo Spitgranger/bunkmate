@@ -10,8 +10,10 @@ import {
   DiscreteSliderMarks,
 
 } from './SubComponents/Form';
+import dayjs from 'dayjs';
 import { IoChevronForward } from 'react-icons/io5';
 import { MdUpload } from "react-icons/md"
+import { ActionTypes } from '@mui/base';
 
 //styles
 const backButtonStyles = {
@@ -30,8 +32,8 @@ function Lifestyle({ backwardButton, forwardButton }) {
   const actions = {
     checkGlobalError: "check_global_error",
     checkLocalError: "check_local_error", //TODO
-    checkEmpty: "check_empty_string",
-    checkValues: "check_values"
+    checkValues: "check_values",
+    checkDate: "check_dates"
   }
 
   const page3 = JSON.parse(localStorage.getItem("page3"))
@@ -51,62 +53,49 @@ function Lifestyle({ backwardButton, forwardButton }) {
     numRoommates: "",
     roommateAge: "",
     roommateGender: "",
+    dateValue: "",
   }
 
   const initialState = {
     values: values,
     globalError: true,
-    fieldError: {
-      rentBudget: true,
-      idealLocation: true,
-      idealLengthStay: true,
-      havePets: true,
-      sleepSchedule: true,
-      cleanliness: true,
-      drinking: true,
-      smoking: true,
-      occupation: true,
-      allergies: true,
-      tolerateGuests: true,
-      toleratePets: true,
-      numRoommates: true,
-      roommateAge: true,
-      roommateGender: true,
-    },
   }
-
   const [state, dispatch] = useReducer(reducer, initialState)
 
   const handleEmptyStringValidation = (e, name) => {
     dispatch({ type: actions.checkValues, payload: e.target.value, name: name })
-    dispatch({ type: actions.checkEmpty, payload: e.target.value, name: name })
     dispatch({ type: actions.checkGlobalError })
   }
+  const handleDateChange = (newValue) => {
+    dispatch({ type: actions.checkDate, payload: newValue })
+    console.log(state.values)
+  }
 
-  console.log(state.values)
-  console.log(Object.keys(state.values).length)
+
   /* calling reducer function again gets the next state*/
   reducer(state, { type: actions.checkValues })
 
   function reducer(state, action) {
     switch (action.type) {
       case actions.checkGlobalError: {
-        if (Object.values(state.values).some(val => val === "")) {
-          return { ...state, globalError: state.globalError = true }
-          //NOT VERY ROBUST PLEASE FIX LATER
-        } else if (Object.values(state.values).every(val => val !== "")) {
-          return { ...state, globalError: state.globalError = false };
+        if (Object.values(state.values).some(val => val === "" || val === null)) {
+          return { ...state, globalError: true }
+        } else if (Object.values(state.values).every(val => val !== "") ) {
+          return { ...state, globalError: false };
+        }
+        break;
+      }
+      case actions.checkDate: {
+        try {
+          action.payload.toISOString();
+          console.log(action.payload.toISOString())
+          return { ...state, values: { ...state.values, dateValue: action.payload.toISOString().split('T')[0] } }
+        } catch (error) {
+          return { ...state, dateValue: "" }
         }
       }
       case actions.checkValues: {
         return { ...state, values: { ...state.values, [action.name]: action.payload } };
-      }
-      case actions.checkEmpty: {
-        if (action.payload === "" || action.payload === undefined) {
-          return { ...state, fieldError: { ...state.fieldError, [action.name]: true } };
-        } else if (action.payload !== undefined || action.payload !== "") {
-          return { ...state, fieldError: { ...state.fieldError, [action.name]: false } };
-        }
       }
     }
     throw Error('unknown action: ' + action.type)
@@ -128,7 +117,7 @@ function Lifestyle({ backwardButton, forwardButton }) {
     <FormSection title="Living Preferences" />
 
     <LineBox flex={true} CssTextField={[
-      <DatePicker label="Move in date" />,
+      <DatePicker onChange={(newValue) => handleDateChange(newValue, 'dateValue') } value={state?.dateValue} label="Move in date" />,
       //$ input adornmnet start
       <FormSingleLineInput value={state?.values?.rentBudget} onChange={(e) => handleEmptyStringValidation(e, 'rentBudget')} size="small" field="Rent Budget" placeHolder="ex. 900 dollars" />,
     ]

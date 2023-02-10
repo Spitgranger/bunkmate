@@ -47,6 +47,7 @@ function Background({ forwardButton }) {
   };
 
   //Handle conversion of uploaded file to base64 string
+
   const handleConversion = (file, callback) => {
     let reader = new FileReader();
     reader.readAsDataURL(file);
