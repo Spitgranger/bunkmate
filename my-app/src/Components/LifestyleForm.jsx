@@ -24,38 +24,56 @@ const backButtonStyles = {
 
 
 //jsx code
-const actions = {
-  checkGlobalError: "check_global_error",
-  checkLocalError: "check_local_error", //TODO
-  checkEmpty: "check_empty_string",
-  checkValues: "check_values"
-}
 
-const page3 = JSON.parse(localStorage.getItem("page3"))
-
-const initialState = {
-  values: page3,
-  globalError: true,
-  fieldError: {
-    rentBudget: true,
-    idealLocation: true,
-    idealLengthStay: true,
-    havePets: true,
-    sleepSchedule: true,
-    cleanliness: true,
-    drinking: true,
-    smoking: true,
-    occupation: true,
-    allergies: true,
-    tolerateGuests: true,
-    toleratePets: true,
-    numRoommates: true,
-    roommateAge: true,
-    roommateGender: true,
-  },
-}
 
 function Lifestyle({ backwardButton, forwardButton }) {
+  const actions = {
+    checkGlobalError: "check_global_error",
+    checkLocalError: "check_local_error", //TODO
+    checkEmpty: "check_empty_string",
+    checkValues: "check_values"
+  }
+
+  const page3 = JSON.parse(localStorage.getItem("page3"))
+  const values = page3 || {
+    rentBudget: "",
+    idealLocation: "",
+    idealLengthStay: "",
+    havePets: "",
+    sleepSchedule: "",
+    cleanliness: "",
+    drinking: "",
+    smoking: "",
+    occupation: "",
+    allergies: "",
+    tolerateGuests: "",
+    toleratePets: "",
+    numRoommates: "",
+    roommateAge: "",
+    roommateGender: "",
+  }
+
+  const initialState = {
+    values: values,
+    globalError: true,
+    fieldError: {
+      rentBudget: true,
+      idealLocation: true,
+      idealLengthStay: true,
+      havePets: true,
+      sleepSchedule: true,
+      cleanliness: true,
+      drinking: true,
+      smoking: true,
+      occupation: true,
+      allergies: true,
+      tolerateGuests: true,
+      toleratePets: true,
+      numRoommates: true,
+      roommateAge: true,
+      roommateGender: true,
+    },
+  }
 
   const [state, dispatch] = useReducer(reducer, initialState)
 
@@ -74,10 +92,9 @@ function Lifestyle({ backwardButton, forwardButton }) {
     switch (action.type) {
       case actions.checkGlobalError: {
         if (Object.values(state.values).some(val => val === "")) {
-          console.log(state.values)
           return { ...state, globalError: state.globalError = true }
           //NOT VERY ROBUST PLEASE FIX LATER
-        } else if (Object.values(state.values).every(val => val !== "") && Object.keys(state.values).length === 16) {
+        } else if (Object.values(state.values).every(val => val !== "")) {
           return { ...state, globalError: state.globalError = false };
         }
       }
@@ -94,6 +111,9 @@ function Lifestyle({ backwardButton, forwardButton }) {
     }
     throw Error('unknown action: ' + action.type)
   }
+  useEffect(() => {
+    dispatch({ type: actions.checkGlobalError })
+  }, [state.globalError])
 
 
 
