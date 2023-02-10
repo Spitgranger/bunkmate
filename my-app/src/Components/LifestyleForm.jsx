@@ -68,10 +68,7 @@ function Lifestyle({ backwardButton, forwardButton }) {
   }
   const handleDateChange = (newValue) => {
     dispatch({ type: actions.checkDate, payload: newValue })
-    console.log(state.values)
   }
-
-
   /* calling reducer function again gets the next state*/
   reducer(state, { type: actions.checkValues })
 
@@ -80,7 +77,7 @@ function Lifestyle({ backwardButton, forwardButton }) {
       case actions.checkGlobalError: {
         if (Object.values(state.values).some(val => val === "" || val === null)) {
           return { ...state, globalError: true }
-        } else if (Object.values(state.values).every(val => val !== "") ) {
+        } else if (Object.values(state.values).every(val => val !== "")) {
           return { ...state, globalError: false };
         }
         break;
@@ -89,9 +86,9 @@ function Lifestyle({ backwardButton, forwardButton }) {
         try {
           action.payload.toISOString();
           console.log(action.payload.toISOString())
-          return { ...state, values: { ...state.values, dateValue: action.payload.toISOString().split('T')[0] } }
+          return { ...state, values: { ...state.values, dateValue: state.values.dateValue = action.payload.toISOString().split('T')[0] } }
         } catch (error) {
-          return { ...state, dateValue: "" }
+          return { ...state, values: { ...state.values, dateValue: "" } }
         }
       }
       case actions.checkValues: {
@@ -102,7 +99,7 @@ function Lifestyle({ backwardButton, forwardButton }) {
   }
   useEffect(() => {
     dispatch({ type: actions.checkGlobalError })
-  }, [state.globalError])
+  }, [state.globalError, state.values.dateValue])
 
 
 
@@ -117,7 +114,7 @@ function Lifestyle({ backwardButton, forwardButton }) {
     <FormSection title="Living Preferences" />
 
     <LineBox flex={true} CssTextField={[
-      <DatePicker onChange={(newValue) => handleDateChange(newValue, 'dateValue') } value={state?.dateValue} label="Move in date" />,
+      <DatePicker onChange={(newValue) => { handleDateChange(newValue); console.log(state.values) }} value={state.dateValue} label="Move in date" />,
       //$ input adornmnet start
       <FormSingleLineInput value={state?.values?.rentBudget} onChange={(e) => handleEmptyStringValidation(e, 'rentBudget')} size="small" field="Rent Budget" placeHolder="ex. 900 dollars" />,
     ]
