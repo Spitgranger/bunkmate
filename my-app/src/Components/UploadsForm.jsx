@@ -83,27 +83,31 @@ function Uploads({ backwardButton, forwardButton }) {
       <UploadFile helperTextPos='85%' helperText="Supported Files: pdf" width="100%" fontSize="14px" endIcon={<MdUpload color="aqua" size={25} />} type="file" accept="application/pdf" message="Credit Score" />
     ]
     } />
-    <FormSection message="*Please upload at least one of the two" />
+    <FormSection message="*Please upload at least two of the three" />
     <LineBox flex={true} CssTextField={[
       <UploadFile helperTextPos={'85%'} helperText="Supported Files: pdf, docx, doc" width="100%" fontSize="14px" endIcon={<MdUpload color="aqua" size={25} />} type="file" accept={["application/pdf", "application/docx", "application/doc"]} message="T4 Document" />,
-      <UploadFile helperTextPos='85%' helperText="Supported Files: pdf" width="100%" fontSize="14px" endIcon={<MdUpload color="aqua" size={25} />} type="file" accept="application/pdf" message="Pay Stub" />
+      <UploadFile helperTextPos='85%' helperText="Supported Files: pdf" width="100%" fontSize="14px" endIcon={<MdUpload color="aqua" size={25} />} type="file" accept="application/pdf" message="Pay Stubs" />,
+      <UploadFile  helperTextPos='85%' helperText="Supported Files: jpg, png, pdf" width="100%" fontSize="14px" endIcon={<MdUpload color="aqua" size={25} />} type="file" accept={["image/jpeg", "image/jpg", "image/png", "application/pdf"]} message="Driver's License" />,
     ]
     } />
+
+
     <br></br>
     <FormSection title="Background Check"
-      message={"*Please upload at least one of the two. We'll use this data to perform a FREE background check. Should you pass you'll receive a 'No Criminal History' and 'ID verified' badge."}
+      message={"*Please upload at least two of the four. We'll use this data to perform a FREE background check. Should you pass you'll receive a 'No Criminal History' and 'ID verified' badge."}
     />
 
     <LineBox flex={true} CssTextField={[
-      <UploadFile helperTextPos='85%' helperText="Supported Files: jpg, png, pdf" width="100%" fontSize="14px" endIcon={<MdUpload color="aqua" size={25} />} type="file" accept={["image/jpeg", "image/jpg", "image/png", "application/pdf"]} message="Driver's License" />,
-      <UploadFile helperTextPos='85%' helperText="Supported Files: jpg, png, pdf" width="100%" fontSize="14px" endIcon={<MdUpload color="aqua" size={25} />} type="file" accept={["image/jpeg", "image/jpg", "image/png", "application/pdf"]} message="Passport" />,
+      <UploadFile  helperTextPos='85%' helperText="Supported Files: jpg, png, pdf" width="100%" fontSize="14px" endIcon={<MdUpload color="aqua" size={25} />} type="file" accept={["image/jpeg", "image/jpg", "image/png", "application/pdf"]} message="Driver's License" />,
+      <UploadFile  helperTextPos='85%' helperText="Supported Files: jpg, png, pdf" width="100%" fontSize="14px" endIcon={<MdUpload color="aqua" size={25} />} type="file" accept={["image/jpeg", "image/jpg", "image/png", "application/pdf"]} message="Passport" />,
     ]
     } />
     <LineBox flex={true} CssTextField={[
-
+      <UploadFile  helperTextPos='85%' helperText="Supported Files: jpg, png, pdf" width="100%" fontSize="14px" endIcon={<MdUpload color="aqua" size={25} />} type="file" accept={["image/jpeg", "image/jpg", "image/png", "application/pdf"]} message="Study Permit" />,
       <FormSingleLineInput type="text" size="large" helperText={sinHelperText} value={values?.sin} field="SIN/SSN" placeHolder="ex. 234452874" onChange={(e) => { handleSSNChange(e) }} error={sinError} />,
     ]
     } />
+
 
 
 

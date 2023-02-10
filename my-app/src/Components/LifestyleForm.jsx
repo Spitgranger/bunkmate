@@ -65,15 +65,16 @@ function Lifestyle({ backwardButton, forwardButton }) {
     dispatch({ type: actions.checkGlobalError })
   }
 
-
+  console.log(state.values)
+  console.log(Object.keys(state.values).length)
   /* calling reducer function again gets the next state*/
   reducer(state, { type: actions.checkValues })
 
   function reducer(state, action) {
     switch (action.type) {
       case actions.checkGlobalError: {
-        console.log(state.values.length)
-        if (Object.values(state.values).some(val => val === "" )) {
+        if (Object.values(state.values).some(val => val === "")) {
+          console.log(state.values)
           return { ...state, globalError: state.globalError = true }
           //NOT VERY ROBUST PLEASE FIX LATER
         } else if (Object.values(state.values).every(val => val !== "") && Object.keys(state.values).length === 16) {
@@ -81,7 +82,6 @@ function Lifestyle({ backwardButton, forwardButton }) {
         }
       }
       case actions.checkValues: {
-        console.log(state.values)
         return { ...state, values: { ...state.values, [action.name]: action.payload } };
       }
       case actions.checkEmpty: {
@@ -116,28 +116,28 @@ function Lifestyle({ backwardButton, forwardButton }) {
 
     <LineBox flex={true} CssTextField={[
       <FormSingleLineInput value={state?.values?.idealLocation} onChange={(e) => handleEmptyStringValidation(e, 'idealLocation')} size="small" type="text" field="Ideal Location" placeHolder="ex. Toronto" />,
-      <DropDownMenu value={state?.values?.idealLengthStay} onChange={(e) => handleEmptyStringValidation(e, 'idealLengthStay')} label="Ideal length of stay" menuItem={["1-3 months", "4-6 months", "7-12 months", "1 year plus"]} />,
+      <DropDownMenu defaultValue={""} value={state?.values?.idealLengthStay} onChange={(e) => handleEmptyStringValidation(e, 'idealLengthStay')} label="Ideal length of stay" menuItem={["1-3 months", "4-6 months", "7-12 months", "1 year plus"]} />,
     ]
     } />
 
     <br></br>
     <FormSection title="Habits and LifeStyle" />
     <LineBox flex={true} CssTextField={[
-      <DropDownMenu value={state?.values?.havePets} onChange={(e) => handleEmptyStringValidation(e, 'havePets')} label="Do you have pets" menuItem={["Yes", "No"]} />,
-      <DropDownMenu value={state?.values?.sleepSchedule} onChange={(e) => handleEmptyStringValidation(e, 'sleepSchedule')} label="Sleep Schedule" menuItem={["Early Bird", "Normal", "Night Owl"]} />,
-      <DropDownMenu value={state?.values?.cleanliness} onChange={(e) => handleEmptyStringValidation(e, 'cleanliness')} label="Cleanliness" menuItem={["Not clean", "Clean", "Very Clean"]} />,
+      <DropDownMenu defaultValue={""} value={state?.values?.havePets} onChange={(e) => handleEmptyStringValidation(e, 'havePets')} label="Do you have pets" menuItem={["Yes", "No"]} />,
+      <DropDownMenu defaultValue={""} value={state?.values?.sleepSchedule} onChange={(e) => handleEmptyStringValidation(e, 'sleepSchedule')} label="Sleep Schedule" menuItem={["Early Bird", "Normal", "Night Owl"]} />,
+      <DropDownMenu defaultValue={""} value={state?.values?.cleanliness} onChange={(e) => handleEmptyStringValidation(e, 'cleanliness')} label="Cleanliness" menuItem={["Not clean", "Clean", "Very Clean"]} />,
     ]
     } />
 
     <LineBox flex={true} CssTextField={[
-      <DropDownMenu value={state?.values?.drinking} onChange={(e) => handleEmptyStringValidation(e, 'drinking')} label="Drinking" menuItem={["Don't Drink", "Light Drinker", "Moderate Drinker", "Heavy Drinker"]} />,
-      <DropDownMenu value={state?.values?.smoking} onChange={(e) => handleEmptyStringValidation(e, 'smoking')} label="Smoking" menuItem={["Don't Smoke", "Light Smoker", "Moderate Smoker", "Heavy Smoker"]} />,
+      <DropDownMenu defaultvalue={""} value={state?.values?.drinking} onChange={(e) => handleEmptyStringValidation(e, 'drinking')} label="Drinking" menuItem={["Don't Drink", "Light Drinker", "Moderate Drinker", "Heavy Drinker"]} />,
+      <DropDownMenu dfeaultValue={""} value={state?.values?.smoking} onChange={(e) => handleEmptyStringValidation(e, 'smoking')} label="Smoking" menuItem={["Don't Smoke", "Light Smoker", "Moderate Smoker", "Heavy Smoker"]} />,
     ]
     } />
 
     <LineBox flex={true} CssTextField={[
-      <FormSingleLineInput value={state?.values?.occupation} onChange={(e) => handleEmptyStringValidation(e, 'occupation')} size="small" type="text" field="Occupation" placeHolder="ex. Student/Pharmacist" />,
-      <FormSingleLineInput value={state?.values?.allergies} onChange={(e) => handleEmptyStringValidation(e, 'allergies')} size="small" type="text" field="Allergies?" placeHolder="ex. None/Nuts/Shellfish" />,
+      <FormSingleLineInput defaultValue={""} value={state?.values?.occupation} onChange={(e) => handleEmptyStringValidation(e, 'occupation')} size="small" type="text" field="Occupation" placeHolder="ex. Student/Pharmacist" />,
+      <FormSingleLineInput defaultvalue={""} value={state?.values?.allergies} onChange={(e) => handleEmptyStringValidation(e, 'allergies')} size="small" type="text" field="Allergies?" placeHolder="ex. None/Nuts/Shellfish" />,
     ]
     } />
 
@@ -145,18 +145,18 @@ function Lifestyle({ backwardButton, forwardButton }) {
     <FormSection title="Roomate Preferences" />
 
     <LineBox flex={true} CssTextField={[
-      <DropDownMenu value={state?.values?.tolerateGuests} onChange={(e) => handleEmptyStringValidation(e, 'tolerateGuests')} label="Ok with guests?" menuItem={["Yes", "No"]} />,
-      <DropDownMenu value={state?.values?.toleratePets} onChange={(e) => handleEmptyStringValidation(e, 'toleratePets')} label="Ok with pets?" menuItem={["Yes", "No"]} />,
+      <DropDownMenu defaultValue={""} value={state?.values?.tolerateGuests} onChange={(e) => handleEmptyStringValidation(e, 'tolerateGuests')} label="Ok with guests?" menuItem={["Yes", "No"]} />,
+      <DropDownMenu defaultValue={""} value={state?.values?.toleratePets} onChange={(e) => handleEmptyStringValidation(e, 'toleratePets')} label="Ok with pets?" menuItem={["Yes", "No"]} />,
     ]
     } />
 
     <LineBox flex={true} CssTextField={[
-      <DropDownMenu value={state?.values?.numRoommates} onChange={(e) => handleEmptyStringValidation(e, 'numRoommates')} label="Number of roomates" menuItem={["No Roomates", "1 Roomate", "2 Roomates", "3+ Roomates"]} />,
+      <DropDownMenu defaultvalue={""} value={state?.values?.numRoommates} onChange={(e) => handleEmptyStringValidation(e, 'numRoommates')} label="Number of roomates" menuItem={["No Roomates", "1 Roomate", "2 Roomates", "3+ Roomates"]} />,
     ]} />
     <LineBox flex={true} CssTextField={[
       //slider
-      <DropDownMenu value={state?.values?.roommateAge} onChange={(e) => handleEmptyStringValidation(e, 'roommateAge')} label="Prefered roomate age" menuItem={['18 - 25', '26 - 30', '31-35', '36-40', '40+']} />,
-      <DropDownMenu value={state?.values?.roommateGender} onChange={(e) => handleEmptyStringValidation(e, 'roommateGender')} label="Prefered roomate gender" menuItem={["Male", "Female", "Other", "Any"]} />,
+      <DropDownMenu defaultValue={""} value={state?.values?.roommateAge} onChange={(e) => handleEmptyStringValidation(e, 'roommateAge')} label="Prefered roomate age" menuItem={['18 - 25', '26 - 30', '31-35', '36-40', '40+']} />,
+      <DropDownMenu defaultValue={""} value={state?.values?.roommateGender} onChange={(e) => handleEmptyStringValidation(e, 'roommateGender')} label="Prefered roomate gender" menuItem={["Male", "Female", "Other", "Any"]} />,
     ]
     }
     />

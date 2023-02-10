@@ -153,7 +153,6 @@ function Background({ forwardButton }) {
   const [phoneHelperText, setPhoneHelperText] = useState('');
 
   const handlePhoneValidation = (values) => {
-    console.log(values);
     const checkLength = values.phone.length !== 10;
     const checkIsEmpty = !values.phone;
     const checkIsNumber = isNaN(parseInt(values.phone));
@@ -180,7 +179,6 @@ function Background({ forwardButton }) {
     } else {
       setPhoneHelperText("");
     }
-    console.log(phoneError)
   };
 
 
@@ -210,7 +208,7 @@ function Background({ forwardButton }) {
 
   const handleLinkValidation = (e) => {
     const link = e.target.value
-    const linkRegex = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/
+    const linkRegex = /^(?:(?:https?|ftp):\/\/)(?:\S+(?::\S*)?@)?(?:(?!10(?:\.\d{1,3}){3})(?!127(?:\.\d{1,3}){3})(?!169\.254(?:\.\d{1,3}){2})(?!192\.168(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]+-?)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]+-?)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/[^\s]*)?$/i;
     if (!linkRegex.test(link)) {
       setLink(true);
       setLinkHelperText('Please enter a valid url')
@@ -245,8 +243,6 @@ function Background({ forwardButton }) {
 
 
   //checks to see if individual fields are empty
-
-
   const [fieldError, setFieldError] = useState({
     /*birthday: null,*/
     picture: true,
@@ -367,7 +363,7 @@ function Background({ forwardButton }) {
     {/* ranges from 10000 - 100000*/}
     <LineBox flex={true} CssTextField={[
       <FormSingleLineInput size="small" helperText={creditHelperText} error={creditError} field="Credit Score" placeHolder="ex. 740" value={values.credit} onChange={(e) => { handleFieldChange(e, 'credit'); }} />,
-      <DropDownMenu label="Annual Income" menuItem={["< $10000", "$10000 - $50000", "$50001 - $100000", "$100001 - $200000", "> $200001"]} value={values.income} onChange={(e) => { handleFieldChange(e, 'income'); }} />,
+      <DropDownMenu default={""} label="Annual Income" menuItem={["< $10000", "$10000 - $50000", "$50001 - $100000", "$100001 - $200000", "> $200001"]} value={values.income} onChange={(e) => { handleFieldChange(e, 'income'); }} />,
     ]
     } />
 
