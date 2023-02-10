@@ -197,7 +197,7 @@ export function FormSingleLineAddressInput({ onBlur, onChange, error, type, fiel
   )
 }
 const arePropsEqual = (newProps, oldProps) => {
-  let result = newProps.value === oldProps.value && newProps.error === oldProps.error && oldProps.helperText === newProps.helperText;
+  let result = newProps.value === oldProps.value && newProps.error === oldProps.error && oldProps.helperText === newProps.helperText && oldProps.inputAdornmentText === newProps.inputAdornmentText;
   return result;
 }
 
