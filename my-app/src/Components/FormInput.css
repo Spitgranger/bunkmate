@@ -3,7 +3,7 @@ input {
     margin: 10px 0px;
 }
 span {
-    color: red;
+    color: hsl(0, 100%, 50%);
     font-size: 12px;
     padding: 2px;
     display: none;

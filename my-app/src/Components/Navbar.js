@@ -23,7 +23,7 @@ function Navbar() {
             <ul>
                 {/*<CheckActive to="/" page="Listings"></CheckActive> */}
                 {/*<CheckActive to="/create" page="Post a Listing"></CheckActive>*/}
-                <a>Bunkmates</a>
+                <CheckActive to="/bunkmates" page="Bunkmates"></CheckActive>
                 <CheckActive to="/applications" page="Applications"></CheckActive>
                 <a>Messages</a>
                 <a>Profile</a>

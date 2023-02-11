@@ -20,7 +20,6 @@ export function Bookmark() {
     return setFill(() => fill + 1)
 
   }
-
   return (
     <label>
       <input type="check"
@@ -32,7 +31,9 @@ export function Bookmark() {
   )
 }
 
+
 export default function Post(info) {
+
 
   const [image, setImage] = useState(0); //image scroll state
   const [message, setMessage] = useState(false); //image scroll state
@@ -83,6 +84,7 @@ export default function Post(info) {
                 */}
                     < BsFillCircleFill
                       className="dots"
+                      key={i}
                       size={image === i ? 12 : 9}
                       onClick={() => setImage(i)}
                       color={image === i ? 'aqua' : 'white'}
