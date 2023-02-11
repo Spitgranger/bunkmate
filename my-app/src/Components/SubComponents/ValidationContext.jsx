@@ -182,7 +182,7 @@ export default function ValidationProvider({ children }) {
   const [aboutHelperText, setAboutHelperText] = useState("Max: 500 Characters");
   const [aboutError, setAboutError] = useState(false);
 
-  const handleAboutValiation = (e) => {
+  const handleAboutValidation = (e) => {
     setValues(prevValue => ({
       ...prevValue, about: e.target.value
     }));
@@ -254,7 +254,7 @@ export default function ValidationProvider({ children }) {
             <PhoneValidationContext.Provider value={{ phoneError, phoneHelperText }}>
               <CreditValidationContext.Provider value={{ creditError, creditHelperText }}>
                 <EmailValidationContext.Provider value={{ emailError, emailHelperText }}>
-                  <AboutValidationContext.Provider value={{ aboutHelperText, aboutError, handleAboutValiation }}>
+                  <AboutValidationContext.Provider value={{ aboutHelperText, aboutError, handleAboutValidation }}>
                     <GlobalValidationContext.Provider value={globalError}>
                       {children}
                     </GlobalValidationContext.Provider>
