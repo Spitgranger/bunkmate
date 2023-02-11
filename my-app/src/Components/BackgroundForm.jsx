@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useMemo, useCallback } from 'react'
+import { useState, useRef, useEffect, useContext, useMemo, useCallback } from 'react'
 import {
   DatePicker,
   FormSection,
@@ -12,60 +12,33 @@ import {
 } from './SubComponents/Form';
 import { IoChevronForward } from 'react-icons/io5';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
-import dayjs from 'dayjs';
+import {
+
+  LinkValidationContext,
+  ValuesObjectContext,
+  ImageValidationContext,
+  BirthdayValidationContext,
+  GlobalValidationContext,
+  PhoneValidationContext,
+  CreditValidationContext,
+  AboutValidationContext,
+  EmailValidationContext,
+
+} from './SubComponents/ValidationContext';
+
 
 function Background({ forwardButton }) {
-  const page1 = JSON.parse(localStorage.getItem("page1"))
-  const [values, setValues] = useState(page1 ? page1 : {
-    picture: "",
-    firstName: "",
-    lastName: "",
-    about: "",
-    city: "",
-    gender: "",
-    country: "",
-    address: "",
-    province: "",
-    links: "",
-    employment: "",
-    phone: "",
-    education: "",
-    email: "",
-    income: "",
-    credit: "",
-    birthday: "",
-  });
-  const [value, setValue] = useState(page1?.birthday ? page1?.birthday : dayjs('2022-09-15T21:11:54'));//if there is already a birthday use it, else default value.
-  const handleChange = (newValue) => {
-    try {
-      newValue.toISOString();
-      setValue((newValue), setValues(prevValue => ({ ...prevValue, birthday: newValue.toISOString().split('T')[0] })));
-    }
-    catch (error) {
-      return
-    }
-  };
 
-  //Handle conversion of uploaded file to base64 string
+  const { link, LinkHelperText, handleLinkValidation } = useContext(LinkValidationContext)
+  const { values, setValues } = useContext(ValuesObjectContext)
+  const handleFileUpload = useContext(ImageValidationContext)
+  const { birthday, handleBirthdayChange } = useContext(BirthdayValidationContext)
+  const globalError = useContext(GlobalValidationContext)
+  const { phoneError, phoneHelperText } = useContext(PhoneValidationContext)
+  const { creditError, creditHelperText } = useContext(CreditValidationContext)
+  const { emailError, emailHelperText } = useContext(EmailValidationContext)
+  const { aboutError, aboutHelperText, handleAboutValidation } = useContext(AboutValidationContext)
 
-  const handleConversion = (file, callback) => {
-    let reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = function () {
-      callback(reader.result);
-    };
-    reader.onerror = function (error) {
-    };
-  }
-  //handle file uploads
-  const handleFileUpload = e => {
-    const file = e.target.files[0];
-    handleConversion(file, (result) => {
-      setValues((prevValue) => (
-        { ...prevValue, picture: result }
-      ));
-    });
-  }
 
   const autoCompleteRef = useRef();
   const inputRef = useRef();
@@ -109,208 +82,10 @@ function Background({ forwardButton }) {
     });
   }, []);
 
-
-  //Credit Score Validation
-  //field greater than 0 less than 999
-  //field can be left empty
-  //field must be a string
-  const [creditError, setCreditError] = useState(true);
-  const [creditHelperText, setCreditHelperText] = useState('');
-
-  const handleCreditValidation = (values) => {
-    const checkGreaterThan = parseInt(values.credit) > 999;
-    const checkLessThan = parseInt(values.credit) <= 0;
-    const checkIsNumber = isNaN(parseInt(values.credit));
-    const checkIsEmpty = (!values.credit);
-    const validFormat = !/^\d+$/.test(values.credit);
-    return [checkGreaterThan, checkLessThan, checkIsNumber, checkIsEmpty, validFormat];
-  };
-
-  const handleCreditLogic = (logic) => {
-    const [checkGreaterThan, checkLessThan, checkIsNumber, checkIsEmpty, validFormat] = logic;
-    if (!values.credit || checkGreaterThan || checkLessThan || checkIsNumber || validFormat) {
-      setCreditError(true);
-    } else {
-      setCreditError(false);
-    }
-    if (checkIsEmpty) {
-      setCreditHelperText("This field can't be blank")
-    } else if (checkIsNumber) {
-      setCreditHelperText('Please enter numbers only')
-    } else if (checkGreaterThan || checkLessThan) {
-      setCreditHelperText('Please Enter a score between 1 and 999')
-    } else if (validFormat) {
-      setCreditHelperText('Not in a valid format (no special characters)');
-    } else {
-      setCreditHelperText("");
-    }
-  }
-
-  //Phone Number
-  //field can't be empty
-  //10 digits long
-  //only numbers no special characters
-  const [phoneError, setPhoneError] = useState(false);
-  const [phoneHelperText, setPhoneHelperText] = useState('');
-
-  const handlePhoneValidation = (values) => {
-    const checkLength = values.phone.length !== 10;
-    const checkIsEmpty = !values.phone;
-    const checkIsNumber = isNaN(parseInt(values.phone));
-    const validFormat = !/^\d+$/.test(values.phone);
-    return [checkLength, checkIsEmpty, checkIsNumber, validFormat];
-  };
-
-  const handlePhoneLogic = (logic) => {
-    const [checkLength, checkIsEmpty, checkIsNumber, validFormat] = logic
-    if (checkLength || checkIsEmpty || checkIsNumber || validFormat) {
-      setPhoneError(true);
-    } else {
-      setPhoneError(false);
-    }
-
-    if (checkIsEmpty) {
-      setPhoneHelperText("This field can't be blank")
-    } else if (checkIsNumber) {
-      setPhoneHelperText('Please input numbers only')
-    } else if (checkLength) {
-      setPhoneHelperText('Please enter a 10 digit phone number (no spaces or special characters)')
-    } else if (validFormat) {
-      setPhoneHelperText("Please enter numbers only (no spaces or special characters)");
-    } else {
-      setPhoneHelperText("");
-    }
-  };
-
-
-  //email validation
-  // use "@" symbol and "."
-  //field can't be empty
-  const [emailError, setEmailError] = useState(false);
-  const [emailHelperText, setEmailHelperText] = useState('');
-
-  const handleEmailValidation = (values) => {
-    const email = values.email
-    const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-
-    if (!emailRegex.test(email)) {
-      setEmailError(true);
-      setEmailHelperText('Please enter a valid email address')
-    } else {
-      setEmailError(false);
-      setEmailHelperText('')
-    }
-  };
-
-  //Social media link valdiation
-  //must follow a specific syntax
-  const [link, setLink] = useState(false);
-  const [LinkHelperText, setLinkHelperText] = useState('Optional');
-
-  const handleLinkValidation = (e) => {
-    const link = e.target.value
-    const linkRegex = /^(?:(?:https?|ftp):\/\/)(?:\S+(?::\S*)?@)?(?:(?!10(?:\.\d{1,3}){3})(?!127(?:\.\d{1,3}){3})(?!169\.254(?:\.\d{1,3}){2})(?!192\.168(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]+-?)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]+-?)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/[^\s]*)?$/i;
-    if (!linkRegex.test(link)) {
-      setLink(true);
-      setLinkHelperText('Please enter a valid url')
-    } else {
-      setLink(false);
-      setLinkHelperText('')
-    }
-  };
-
-  //Multilinetext validation
-  //can't exceed 500 characters
-  const [textHelperText, setTextHelperText] = useState("Max: 500 Characters");
-  const [textError, setTextError] = useState(false);
-  //{NOTE THE WAY THAT THIS STATE IS UPDATED PROBABLY NEEDS TO BE CHANGED} DONE!
-  const handleTextField = (e) => {
-    setValues(prevValue => ({
-      ...prevValue, about: e.target.value
-    }));
-  }
-  const checkValidity = (values) => {
-    const length = values.about.split("").length
-    if (length > 500) {
-      setTextError(true);
-      setTextHelperText(`Character limit reached. Delete ${length - 500} Characters`)
-    } else {
-      setTextError(false);
-      setTextHelperText(`${length} / 500 Characters`)
-    }
-  }
-
-  //memoize inputs to save rerendering all components on one change.
-
-
-  //checks to see if individual fields are empty
-  const [fieldError, setFieldError] = useState({
-    /*birthday: null,*/
-    picture: true,
-    firstName: true,
-    lastName: true,
-    about: true,
-    gender: true,
-    email: true,
-    phone: true,
-    address: true,
-    employment: true,
-    education: true,
-    credit: true,
-    income: true,
-  });
-  //checks to see if all fields are empty
-  const handleEmptyStringValidation = (field) => {
-    if (values[field]) {
-      setFieldError(prevValue => ({ ...prevValue, [field]: false }))
-    } else if (!values[field]) {
-      setFieldError(prevValue => ({ ...prevValue, [field]: true }))
-    }
-  }
-
-  //event handler built just for validating images
-  /*
-  const handleUploadPictureValidation = (picture) => {
-    if (values[picture]) {
-      setFieldError(prevValue => ({ ...prevValue, [field]: false }))
-    } else if (!values) {
-      setFieldError(prevValue => ({ ...prevValue, [field]: true }))
-    }
-  }
-*/
-  //globalError will be set to false once all fields are validated
-  const [globalError, setGlobalError] = useState(true)
-
-  const handleGlobalError = (fieldError) => {
-    //checks to see if all items within the object are false
-    if (Object.values(fieldError).every(val => val === false)) {
-      setGlobalError(false)
-    } else if (Object.values(fieldError).some(val => val === true)) {
-      setGlobalError(true)
-    }
-  }
-  useEffect(() => { handleGlobalError(fieldError); }, [fieldError])
-
   const handleFieldChange = (e, field) => {
     setValues(prevValue => ({ ...prevValue, [field]: e.target.value }));
   };
 
-  useEffect(() => {
-    handleCreditLogic(handleCreditValidation(values));
-    handlePhoneLogic(handlePhoneValidation(values));
-    handleEmailValidation(values);
-    checkValidity(values);
-    Object.keys(fieldError).forEach((value) => handleEmptyStringValidation(value));
-  }, [values]);
-  /*
-    useEffect(() => {
-      setCreditError(creditError);
-    }, [creditError])
-  
-    useEffect(() => {
-      setPhoneError(phoneError)
-    }, [phoneError])
-  */
   return (<>
 
 
@@ -326,12 +101,12 @@ function Background({ forwardButton }) {
       <FormSingleLineInput size="small" type="text" field="Legal Last Name" placeHolder="Jenkins" onChange={(e) => { handleFieldChange(e, 'lastName'); }} value={values.lastName} />,]
     } />
     <div id="multiline">
-      <FormMultiLineInput placeHolder="Tell us a bit about yourself" type="text" field="About Me" helperText={textHelperText} onChange={(e) => { handleTextField(e); }} error={textError} value={values.about} />
+      <FormMultiLineInput placeHolder="Tell us a bit about yourself" type="text" field="About Me" helperText={aboutHelperText} onChange={(e) => { handleAboutValidation(e); }} error={aboutError} value={values.about} />
     </div>
 
     <LineBox flex={true} CssTextField={[
       <DropDownMenu label="Gender" menuItem={["Male", "Female", "Other"]} value={values.gender} onChange={(e) => { handleFieldChange(e, 'gender'); }} />,
-      <FormSingleLineInput error={link} helperText={LinkHelperText} onChange={(e) => { handleFieldChange(e, 'links'); handleLinkValidation(e, 'links'); }} size="small" type="text" field="Social Media Profile" placeHolder="ex. https://www.linktr.ee/john_smith" value={values.links} />
+      <FormSingleLineInput error={link} helperText={LinkHelperText} onChange={(e) => { handleFieldChange(e, 'links'); handleLinkValidation(e); }} size="small" type="text" field="Social Media Profile" placeHolder="ex. https://www.linktr.ee/john_smith" value={values.links} />
     ]
     } />
     <br></br>
@@ -339,7 +114,7 @@ function Background({ forwardButton }) {
     <FormSection title="Personal Info" message="*We collect this data for our algorithms, we won't share it with anyone else. We'll ask you for proof on the next page" />
     <LineBox flex={true} CssTextField={[
       <FormSingleLineInput size="small" type="text" field="Email" placeHolder="ex. bunkmates@gmail.com" error={emailError} helperText={emailHelperText} value={values.email} onChange={(e) => { handleFieldChange(e, 'email'); }} />,
-      <DatePicker label="Birthday" value={value} onChange={handleChange} />
+      <DatePicker label="Birthday" value={birthday} onChange={handleBirthdayChange} />
     ]
     } />
     <LineBox flex={true} CssTextField={[

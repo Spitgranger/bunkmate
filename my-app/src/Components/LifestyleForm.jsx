@@ -7,13 +7,8 @@ import {
   FormSingleLineInput,
   DatePicker,
   DropDownMenu,
-  DiscreteSliderMarks,
 
 } from './SubComponents/Form';
-import dayjs from 'dayjs';
-import { IoChevronForward } from 'react-icons/io5';
-import { MdUpload } from "react-icons/md"
-import { ActionTypes } from '@mui/base';
 
 //styles
 const backButtonStyles = {
@@ -22,11 +17,7 @@ const backButtonStyles = {
   padding: '8px'
 }
 
-
-
-
 //jsx code
-
 
 function Lifestyle({ backwardButton, forwardButton }) {
   const actions = {
@@ -71,11 +62,12 @@ function Lifestyle({ backwardButton, forwardButton }) {
   }
   /* calling reducer function again gets the next state*/
   reducer(state, { type: actions.checkValues })
+  console.log(state?.values)
 
   function reducer(state, action) {
     switch (action.type) {
       case actions.checkGlobalError: {
-        if (Object.values(state.values).some(val => val === "" || val === null)) {
+        if (Object.values(state.values).some(val => val === "")) {
           return { ...state, globalError: true }
         } else if (Object.values(state.values).every(val => val !== "")) {
           return { ...state, globalError: false };
@@ -85,7 +77,6 @@ function Lifestyle({ backwardButton, forwardButton }) {
       case actions.checkDate: {
         try {
           action.payload.toISOString();
-          console.log(action.payload.toISOString())
           return { ...state, values: { ...state.values, dateValue: state.values.dateValue = action.payload.toISOString().split('T')[0] } }
         } catch (error) {
           return { ...state, values: { ...state.values, dateValue: "" } }
@@ -114,7 +105,7 @@ function Lifestyle({ backwardButton, forwardButton }) {
     <FormSection title="Living Preferences" />
 
     <LineBox flex={true} CssTextField={[
-      <DatePicker onChange={(newValue) => { handleDateChange(newValue); console.log(state.values) }} value={state.dateValue} label="Move in date" />,
+      <DatePicker onChange={(newValue) => { handleDateChange(newValue); }} value={state.values.dateValue} label="Move in date" />,
       //$ input adornmnet start
       <FormSingleLineInput value={state?.values?.rentBudget} onChange={(e) => handleEmptyStringValidation(e, 'rentBudget')} size="small" field="Rent Budget" placeHolder="ex. 900 dollars" />,
     ]
