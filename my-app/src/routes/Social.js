@@ -54,7 +54,9 @@ const Social = () => {
         <div>
             <Navbar />
             <div className="content-container">
-                <PlacesAutocomplete setSelected={setSelected} />
+                <div className="search-bar-container" style={{ height: '200px', position: 'absolute', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                    <PlacesAutocomplete setSelected={setSelected} />
+                </div>
                 <div className="map-container">
                     <GoogleMap
                         center={center}

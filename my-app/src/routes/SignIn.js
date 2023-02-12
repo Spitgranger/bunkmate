@@ -53,6 +53,7 @@ function SignIn({ openModalName }) {
               <FormSingleLineInput
                 field="Phone Number"
                 placeHolder="6471234567"
+                position={"start"}
                 inputAdornment={true}
                 size="small"
                 type="number"

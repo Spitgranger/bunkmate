@@ -19,7 +19,7 @@ const backButtonStyles = {
 
 //jsx code
 
-function Lifestyle({ backwardButton, forwardButton }) {
+function Lifestyle({ backwardButton }) {
   const actions = {
     checkGlobalError: "check_global_error",
     checkLocalError: "check_local_error", //TODO
@@ -29,6 +29,7 @@ function Lifestyle({ backwardButton, forwardButton }) {
 
   const page3 = JSON.parse(localStorage.getItem("page3"))
   const values = page3 || {
+    cannabis: "",
     rentBudget: "",
     idealLocation: "",
     idealLengthStay: "",
@@ -107,7 +108,7 @@ function Lifestyle({ backwardButton, forwardButton }) {
     <LineBox flex={true} CssTextField={[
       <DatePicker onChange={(newValue) => { handleDateChange(newValue); }} value={state.values.dateValue} label="Move in date" />,
       //$ input adornmnet start
-      <FormSingleLineInput value={state?.values?.rentBudget} onChange={(e) => handleEmptyStringValidation(e, 'rentBudget')} size="small" field="Rent Budget" placeHolder="ex. 900 dollars" />,
+      <FormSingleLineInput inputAdornment={true} inputAdornmentText={"$"} position={"start"} value={state?.values?.rentBudget} onChange={(e) => handleEmptyStringValidation(e, 'rentBudget')} size="small" field="Monthly Rent Budget" placeHolder="ex. 900" />,
     ]
     } />
 
@@ -133,8 +134,8 @@ function Lifestyle({ backwardButton, forwardButton }) {
     } />
 
     <LineBox flex={true} CssTextField={[
+      <DropDownMenu dfeaultValue={""} value={state?.values?.cannabis} onChange={(e) => handleEmptyStringValidation(e, 'cannabis')} label="Cannabis" menuItem={["No Cannabis Use", "Light Cannabis Use", "Moderate Cannabis Use", "Heavy Cannabis User"]} />,
       <FormSingleLineInput defaultValue={""} value={state?.values?.occupation} onChange={(e) => handleEmptyStringValidation(e, 'occupation')} size="small" type="text" field="Occupation" placeHolder="ex. Student/Pharmacist" />,
-      <FormSingleLineInput defaultvalue={""} value={state?.values?.allergies} onChange={(e) => handleEmptyStringValidation(e, 'allergies')} size="small" type="text" field="Allergies?" placeHolder="ex. None/Nuts/Shellfish" />,
     ]
     } />
 
@@ -148,12 +149,12 @@ function Lifestyle({ backwardButton, forwardButton }) {
     } />
 
     <LineBox flex={true} CssTextField={[
-      <DropDownMenu defaultvalue={""} value={state?.values?.numRoommates} onChange={(e) => handleEmptyStringValidation(e, 'numRoommates')} label="Number of roomates" menuItem={["No Roomates", "1 Roomate", "2 Roomates", "3+ Roomates"]} />,
+      <DropDownMenu defaultValue={""} value={state?.values?.roommateAge} onChange={(e) => handleEmptyStringValidation(e, 'roommateAge')} label="Preferred roomate age" menuItem={['18 - 25', '26 - 30', '31-35', '36-40', '40+']} />,
     ]} />
     <LineBox flex={true} CssTextField={[
       //slider
-      <DropDownMenu defaultValue={""} value={state?.values?.roommateAge} onChange={(e) => handleEmptyStringValidation(e, 'roommateAge')} label="Prefered roomate age" menuItem={['18 - 25', '26 - 30', '31-35', '36-40', '40+']} />,
-      <DropDownMenu defaultValue={""} value={state?.values?.roommateGender} onChange={(e) => handleEmptyStringValidation(e, 'roommateGender')} label="Prefered roomate gender" menuItem={["Male", "Female", "Other", "Any"]} />,
+      <DropDownMenu defaultvalue={""} value={state?.values?.numRoommates} onChange={(e) => handleEmptyStringValidation(e, 'numRoommates')} label="Number of roomates" menuItem={["No Roomates", "1 Roomate", "2 Roomates", "3+ Roomates"]} />,
+      <DropDownMenu defaultValue={""} value={state?.values?.roommateGender} onChange={(e) => handleEmptyStringValidation(e, 'roommateGender')} label="Preferred roomate gender" menuItem={["Male", "Female", "Other", "Any"]} />,
     ]
     }
     />

@@ -75,7 +75,7 @@ export default function ValidationProvider({ children }) {
 
   //Birthday Validation
   //must follow a specific syntax
-  const [birthday, setBirthday] = useState(page1?.birthday ? page1?.birthday : dayjs('2022-09-15T21:11:54'));//if there is already a birthday use it, else default value.
+  const [birthday, setBirthday] = useState("");//if there is already a birthday use it, else default value.
   const handleBirthdayChange = (newValue) => {
     try {
       newValue.toISOString();

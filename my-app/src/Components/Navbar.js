@@ -25,7 +25,7 @@ function Navbar() {
                 {/*<CheckActive to="/create" page="Post a Listing"></CheckActive>*/}
                 <CheckActive to="/bunkmates" page="Bunkmates"></CheckActive>
                 <CheckActive to="/applications" page="Applications"></CheckActive>
-                <a>Messages</a>
+                <CheckActive to="/messages" page="Messages"></CheckActive>
                 <a>Profile</a>
                 <a>Account</a>
                 <label>
