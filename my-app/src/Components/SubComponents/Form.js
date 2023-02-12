@@ -10,15 +10,17 @@ import Select from '@mui/material/Select';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
-import dayjs from 'dayjs';
+
 import Stack from '@mui/material/Stack';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import ListItemText from '@mui/material/ListItemText';
 import Checkbox from '@mui/material/Checkbox';
 import { InputAdornment } from "@mui/material";
-import { useState } from 'react'
+import { useState, memo, useCallback } from 'react'
 import { BsFillCheckCircleFill } from "react-icons/bs";
 import { MdOutlineError } from "react-icons/md";
+import Slider from '@mui/material/Slider'
+
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 const MenuProps = {
@@ -67,12 +69,12 @@ export function MultipleSelectCheckmarks({ title, menuItems }) {
   );
 }
 
-export function DatePicker({ label }) {
-  const [value, setValue] = React.useState(dayjs('2022-09-15T21:11:54'));
+export function DatePicker({ label, onChange, value }) {
+  // const [value, setValue] = React.useState(dayjs('2022-09-15T21:11:54'));
 
-  const handleChange = (newValue) => {
-    setValue(newValue);
-  };
+  // const handleChange = (newValue) => {
+  //   setValue(newValue);
+  // };
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -81,7 +83,7 @@ export function DatePicker({ label }) {
           label={label}
           inputFormat="MM/DD/YYYY"
           value={value}
-          onChange={handleChange}
+          onChange={onChange}
           renderInput={(params) => <TextField {...params} size="small" />}
         />
       </Stack>
@@ -96,7 +98,7 @@ export function LineBox({ flex, CssTextField }) {
       component="form"
       id="line"
       sx={{
-        '& > :not(style)': { m: 1, flex: check, width: "100%", },
+        '& > :not(style)': { m: 1, flex: check, width: "100%" },
       }}
       noValidate
       autoComplete="off"
@@ -128,8 +130,7 @@ const CssTextField = styled(TextField)({
 
 */
 
-export function DropDownMenu({ value, onChange, label, menuItem, helperText }) {
-
+export function DropDownMenu({ defaultValue, value, onChange, label, menuItem }) {
   return (
     <FormControl placeholder="wow" sx={{ m: 1, width: '100%', flex: 1 }} size="small" fullWidth>
       <InputLabel
@@ -139,7 +140,7 @@ export function DropDownMenu({ value, onChange, label, menuItem, helperText }) {
         id="demo-simple-select"
         value={value}
         onChange={onChange}
-        helperText={helperText}
+        defaultValue={defaultValue}
         label={label}
       >
         {menuItem.map((item, i) => {
@@ -150,11 +151,12 @@ export function DropDownMenu({ value, onChange, label, menuItem, helperText }) {
   );
 }
 
-export function FormSingleLineInput({ onBlur, onChange, error, type, field, placeHolder, helperText, inputAdornment, inputAdornmentText, size, inputRef, value }) {
 
+function NormalFormSingleLineInput({ onError, onBlur, onChange, error, type, field, placeHolder, helperText, inputAdornment, inputAdornmentText, size, inputRef, value, name }) {
   return (
     <>
       <TextField
+        name={name}
         id="outlined-basic"
         label={field}
         variant="outlined"
@@ -163,6 +165,7 @@ export function FormSingleLineInput({ onBlur, onChange, error, type, field, plac
         onChange={onChange}
         onBlur={onBlur}
         error={error}
+        onError={onError}
         helperText={helperText}
         InputProps={inputAdornment ? { startAdornment: <InputAdornment position="start">{inputAdornmentText}</InputAdornment> } : null}
         type={type}
@@ -173,8 +176,7 @@ export function FormSingleLineInput({ onBlur, onChange, error, type, field, plac
   )
 }
 
-export function FormSingleLineAddressInput({ onBlur, onChange, error, type, field, placeHolder, helperText, inputAdornment, inputAdornmentText, inputRef }) {
-
+export function FormSingleLineAddressInput({ onBlur, onChange, error, type, field, placeHolder, helperText, inputAdornment, inputAdornmentText, inputRef, value, position }) {
   return (
     <>
       <TextField
@@ -187,16 +189,23 @@ export function FormSingleLineAddressInput({ onBlur, onChange, error, type, fiel
         onBlur={onBlur}
         error={error}
         helperText={helperText}
-        InputProps={inputAdornment ? { startAdornment: <InputAdornment position="start">{inputAdornmentText}</InputAdornment> } : null}
+        InputProps={inputAdornment ? { startAdornment: <InputAdornment position={position}>{inputAdornmentText}</InputAdornment> } : null}
         type={type}
         inputRef={inputRef}
+        value={value}
       />
     </>
   )
 }
+const arePropsEqual = (newProps, oldProps) => {
+  let result = newProps.value === oldProps.value && newProps.error === oldProps.error && oldProps.helperText === newProps.helperText && oldProps.inputAdornmentText === newProps.inputAdornmentText;
+  return result;
+}
 
+export const FormMultiLineInput = memo(NormalFormMultiLineInput, arePropsEqual);
+export const FormSingleLineInput = memo(NormalFormSingleLineInput, arePropsEqual);
 
-export function FormMultiLineInput(props) {
+function NormalFormMultiLineInput(props) {
   return (
     <div id="multiline">
       <Box
@@ -220,6 +229,7 @@ export function FormMultiLineInput(props) {
             helperText={props.helperText}
             onBlur={props.onBlur}
             onChange={props.onChange}
+            value={props.value}
           />
         </div>
       </Box>
@@ -229,26 +239,25 @@ export function FormMultiLineInput(props) {
 
 export function UploadFile(props) {
 
-
   //setFile to current file only if conditions are satifised
   const [file, setFile] = useState(null) //**********STORE FILES IN BACKEND***************
   //changes state depending on correct file type upload
-  const [helperText, setHelperText] = useState('')
+  const [helperText, setHelperText] = useState(props.helperText)
   const [helperTextColor, setHelperTextColor] = useState('black')
   const [textColor, setTextColor] = useState('white')
   const [icon, setIcon] = useState(props.endIcon)
   const [error, setError] = useState(false)
   const [backgroundColor, setBackgroundColor] = useState('#383838')
 
-  const errorMessage = `Invalid file type. ${props.helperText}`;
 
-  const handleMouseEnter = () => {
-    setHelperText(error ? errorMessage : props.helperText)
-  }
 
   const handleUpload = (e) => {
+    const errorMessage = `Invalid file type. ${props.helperText}`;
+    const successMessage = `Successfully uploaded: ${e.target.files[0].name}`;
     const uploadedFile = e.target.files[0];
     const allowedTypes = props.accept
+
+
 
     if (uploadedFile && allowedTypes.includes(uploadedFile.type)) {
 
@@ -257,16 +266,17 @@ export function UploadFile(props) {
       setError(false);
       setHelperTextColor('black');
       setBackgroundColor('black');
-      setIcon(<BsFillCheckCircleFill color="aqua" />)
+      setHelperText(successMessage);
+      setIcon(<BsFillCheckCircleFill color="aqua" />);
 
     } else {
-      console.log(uploadedFile)
       setFile(null);
       setTextColor('red')
-      setHelperText(errorMessage)
+      setHelperText(errorMessage);
       setHelperTextColor('red');
-      setError(true)
-      setIcon(<MdOutlineError color="red" size={25} />)
+      setBackgroundColor('black');
+      setError(true);
+      setIcon(<MdOutlineError color="red" size={25} />);
 
     }
   };
@@ -296,8 +306,8 @@ export function UploadFile(props) {
         startIcon={props.startIcon}
         endIcon={icon}
         sx={buttonStyles}
-        onMouseEnter={handleMouseEnter}
-        onChange={handleUpload}
+        disabled={props.disabled}
+        onChange={(e) => { handleUpload(e); props.handleFileUpload(e); }}
       >
         <h4 style={{ width: '80%', margin: '10px 0px 10px 0px' }}>
           {props.message}
@@ -331,9 +341,11 @@ export function ActionButton(props) {
       <Button
         variant="contained"
         onClick={props.onClick}
+        onSubmit={props.onSubmit}
         type={props.type}
         endIcon={props.endIcon}
         startIcon={props.startIcon}
+        disabled={props.disabled}
         sx={
           buttonStyles
         }>
@@ -357,5 +369,57 @@ export function FormSection({ title, message, children }) {
       </h5>
       {children}
     </>
+  );
+}
+
+export function FormProgressBar({ steps, currentStep, children }) {
+  const progressPercentage = (currentStep / steps) * 100;
+  return (
+    <div className="progress-bar" style={{ width: '90%' }}>
+      {children}
+      <div className="progress-bar-filled" style={{ borderRadius: '10px', backgroundColor: "aqua", height: '5px', width: `${progressPercentage}%` }} />
+    </div>
+  );
+};
+
+
+
+const marks = [
+  {
+    value: 0,
+    label: '0°C',
+  },
+  {
+    value: 20,
+    label: '20°C',
+  },
+  {
+    value: 37,
+    label: '37°C',
+  },
+  {
+    value: 100,
+    label: '100°C',
+  },
+];
+
+function valuetext(value) {
+  return `${value}°C`;
+}
+
+export function DiscreteSliderMarks() {
+  return (
+    <Box sx={{ width: 300 }}>
+      <br></br>
+      <br></br>
+      <Slider
+        aria-label="Custom marks"
+        defaultValue={20}
+        getAriaValueText={valuetext}
+        step={null}
+        valueLabelDisplay="auto"
+        marks={marks}
+      />
+    </Box>
   );
 }
