@@ -151,10 +151,11 @@ export function DropDownMenu({ defaultValue, value, onChange, label, menuItem })
   );
 }
 
-function NormalFormSingleLineInput({ onError, onBlur, onChange, error, type, field, placeHolder, helperText, inputAdornment, inputAdornmentText, size, inputRef, value }) {
+function NormalFormSingleLineInput({ onError, onBlur, onChange, error, type, field, placeHolder, helperText, inputAdornment, inputAdornmentText, size, inputRef, value, name }) {
   return (
     <>
       <TextField
+        name={name}
         id="outlined-basic"
         label={field}
         variant="outlined"

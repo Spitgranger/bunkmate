@@ -2,6 +2,8 @@ import logo from './Assets/logo.svg';
 import './Navbar.css';
 import { Link, useResolvedPath, useMatch } from 'react-router-dom';
 import SignIn from '../routes/SignIn'
+import { Avatar, Typography, Button } from '@mui/material';
+import { useState } from 'react';
 
 function CheckActive({ to, page, ...props }) {
     const fullPath = useResolvedPath(to)
@@ -15,6 +17,11 @@ function CheckActive({ to, page, ...props }) {
 }
 
 function Navbar() {
+    const logout = () => {
+        localStorage.clear();
+        setUser(null);
+    }
+    const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile')))
     return (
         <nav>
             <CheckActive to="/" page={
@@ -28,10 +35,17 @@ function Navbar() {
                 <a>Messages</a>
                 <a>Profile</a>
                 <a>Account</a>
-                <label>
-                    <a><SignIn openModalName="Sign In" /></a>
-
-                </label>
+                {user ? (
+                    <div className="profile-wrapper">
+                        <Avatar alt={user.response.result.email}>{user.response.result.email.charAt(0)}</Avatar>
+                        <Typography variant='h6'>{user.response.result.email}</Typography>
+                        <Button variant="contained" color="secondary" onClick={logout}>Logout</Button>
+                    </div>
+                ) :
+                    <label>
+                        <a><SignIn openModalName="Sign In" /></a>
+                    </label>
+                }
             </ul>
         </nav>
     );
