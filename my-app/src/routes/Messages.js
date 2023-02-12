@@ -1,6 +1,6 @@
+import Navbar from '../Components/Navbar';
 import React, { useEffect, useState } from 'react';
 import { StreamChat } from 'stream-chat';
-import Navbar from '../Components/Navbar'
 import {
   Chat,
   Channel,
@@ -17,11 +17,11 @@ const filters = { type: 'messaging' };
 const options = { state: true, presence: true, limit: 10 };
 const sort = { last_message_at: -1 };
 
-function Messages() {
-  const [client, setClient] = useState(null);
+const Messages = () => {
+const [client, setClient] = useState(null);
 
-  useEffect(() => {
-    const newClient = new StreamChat('asnpsp7e72h6');
+useEffect(() => {
+const newClient = new StreamChat('asnpsp7e72h6');
 
     const handleConnectionChange = ({ online = false }) => {
       if (!online) return console.log('connection lost');
@@ -42,26 +42,23 @@ function Messages() {
       newClient.off('connection.changed', handleConnectionChange);
       newClient.disconnectUser().then(() => console.log('connection closed'));
     };
-  }, []);
+}, []);
 
-  if (!client) return null;
+if (!client) return null;
 
-  return (
-    <>
-      <Chat client={client}>
-        <ChannelList filters={filters} sort={sort} options={options} />
-        <Channel>
-          <Window>
-            <Navbar />
-            <ChannelHeader />
-            <MessageList />
-            <MessageInput />
-          </Window>
-          <Thread />
-        </Channel>
-      </Chat>
-    </>
-  );
+return (
+<Chat client={client}>
+<ChannelList filters={filters} sort={sort} options={options} />
+<Channel>
+<Window>
+<ChannelHeader />
+<MessageList />
+<MessageInput />
+</Window>
+<Thread />
+</Channel>
+</Chat>
+);
 };
 
-export default Messages
+export default Messages;
