@@ -75,8 +75,8 @@ const PlacesAutocomplete = (props) => {
 
                 InputProps={{
                     style: {
-                    paddingBottom: '10px',
-                    paddingLeft: '25px',
+                    paddingBottom: '15px',
+                    paddingLeft: '10px',
                         color: 'white',
                     }
                 }}
@@ -84,7 +84,7 @@ const PlacesAutocomplete = (props) => {
             />
             {/* We can use the "status" to decide whether we should display the dropdown or not */}
             {status === "OK" && <Paper sx={{ 
-                padding: '10px',
+                padding: '0px',
                 minWidth: "100%",
                 backgroundColor: 'black', 
                 color: 'white',
