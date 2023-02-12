@@ -11,7 +11,7 @@ const libraries = ["places"];
 const Profile = ({ profile }) => {
     return (
         <OverlayView mapPaneName={OVERLAY_MOUSE_TARGET} position={profile.location}>
-            <Card sx={{ maxWidth: 400, position: "absolute", zIndex: "2" }}>
+            <Card sx={{ width: 300, position: "absolute", zIndex: "2" }}>
                 <CardActionArea>
                     <CardMedia
                         component="img"
