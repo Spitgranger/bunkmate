@@ -65,17 +65,20 @@ const Messages = () => {
   });
 
   return (
-    <Chat client={client}>
-      <ChannelList filters={filters} sort={sort} options={options} />
-      <Channel>
-        <Window>
-          <ChannelHeader />
-          <MessageList />
-          <MessageInput />
-        </Window>
-        <Thread />
-      </Channel>
-    </Chat>
+    <>
+      <Navbar />
+      <Chat client={client}>
+        <ChannelList filters={filters} sort={sort} options={options} />
+        <Channel>
+          <Window>
+            <ChannelHeader />
+            <MessageList />
+            <MessageInput />
+          </Window>
+          <Thread />
+        </Channel>
+      </Chat>
+    </>
   );
 };
 
