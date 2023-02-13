@@ -13,21 +13,16 @@ import {
 } from 'stream-chat-react';
 import '@stream-io/stream-chat-css/dist/css/index.css';
 
-
-
-
 // Define values.
 const api_key = 'asnpsp7e72h6'
 const api_secret = 'djzm2aq63636qg2mjeqx9x5422hb4qu78pqepyf7fx7j7fuu44zwdgathr24zeyu'
 const user_id = 'john'
-
 // Initialize a Server Client
-
 
 const filters = { type: 'messaging' };
 const options = { state: true, presence: true, limit: 10 };
 const sort = { last_message_at: -1 };
-
+const user = JSON.parse(localStorage.getItem("profile"));
 const Messages = () => {
   const [client, setClient] = useState(null);
 
@@ -42,27 +37,27 @@ const Messages = () => {
     newClient.on('connection.changed', handleConnectionChange)
     newClient.connectUser(
       {
-        id: 'john',
-        name: 'John',
+        id: user.response.result.email,
+        name: user.response.result.email,
         image: 'https://getstream.io/random_svg/?name=John',
         user_details: "GJKDJGK",
       },
-      newClient.devToken("john")
+      user.response.streamToken,
     );
     return () => {
       newClient.off('connection.changed', handleConnectionChange);
       // newClient.disconnectUser().then(() => console.log('connection closed'));
     };
   }, []);
-
+  if (!user) {
+    return (
+      <>
+        <Navbar />
+        <h1>YOU NEED TO BE LOGGED IN TO MESSAGE</h1>
+      </>
+    )
+  }
   if (!client) return null;
-
-  const channel = client.channel('messaging', {
-    image: 'dave.png',
-    name: 'Create a Messaging Channel',
-    members: ['john', 'trey-anastasio'],
-    // option to add custom fields
-  });
 
   return (
     <Chat client={client}>
