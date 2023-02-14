@@ -2,12 +2,19 @@ import logo from './Assets/logo.svg';
 import './Navbar.css';
 import { Link, useResolvedPath, useMatch } from 'react-router-dom';
 import RenderWhich from '../routes/SignIn'
-import { Avatar, Typography, Button, Menu, MenuItem, Divider, Tooltip, IconButton, Icon, Box } from '@mui/material';
+import { Avatar, Typography, Button, Menu, MenuItem, Divider, Tooltip, IconButton, ListItemIcon } from '@mui/material';
 import { useState, useId, useContext } from 'react';
 import { SignInOpenContext } from './GlobalStateManagement/SignInContext';
 import { SignInModeContext } from './GlobalStateManagement/SignInContext';
 import { SignInModalMessage } from './GlobalStateManagement/SignInContext';
-
+import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
+import LoginIcon from '@mui/icons-material/Login';
+import LogoutIcon from '@mui/icons-material/Logout';
+import HelpCenterIcon from '@mui/icons-material/HelpCenter';
+import ConnectWithoutContactIcon from '@mui/icons-material/ConnectWithoutContact';
+import SettingsApplicationsIcon from '@mui/icons-material/SettingsApplications';
+import SettingsApplications from '@mui/icons-material/SettingsApplications';
+import Logout from '@mui/icons-material/Logout';
 
 
 function CheckActive({ to, page, ...props }) {
@@ -27,7 +34,7 @@ function Navbar() {
 
     const id = useId()
 
-    const logout = () => {
+    const handleLogout = () => {
         localStorage.clear();
         setUser(null);
     }
@@ -65,7 +72,7 @@ function Navbar() {
     }
 
     const MenuItemsStyles = {
-        padding: '15px',
+        padding: '10px',
         color: 'black'
     }
 
@@ -149,11 +156,11 @@ function Navbar() {
                         <a>Profile</a>
                     </div>
                 </Tooltip>
-                {/*hidden*/}
+                {/*hidden, used for Sign in pages*/}
                 <RenderWhich />
                 {user ? (
                     <>
-                        <Tooltip title={`${user?.response?.result?.email}'s account`}>
+                        <Tooltip title={`My Account`}>
                             <a style={{ display: 'flex', alignItems: 'center', height: '21px' }}>
                                 <IconButton
                                     onClick={handleClick}
@@ -169,12 +176,38 @@ function Navbar() {
                             </a>
                         </Tooltip>
                         <DropDownMenu>
-                            <Button sx={{ padding: '15px', color: 'black' }} >My Account</Button>
+                            <MenuItem sx={MenuItemsStyles} onClick={handleClose}>
+                                <ListItemIcon>
+                                    <AssignmentIndIcon />
+                                </ListItemIcon>
+                                {`${user?.response?.result.email}'s Account`}
+                            </MenuItem>
                             <Divider />
-                            <Button sx={MenuItemsStyles} >Contact</Button>
-                            <Button sx={MenuItemsStyles} >Settings</Button>
-                            <Button sx={MenuItemsStyles} >Help</Button>
-                            <Button sx={MenuItemsStyles} onClick={logout}>Logout</Button>
+                            <MenuItem sx={MenuItemsStyles} onClick={handleClose}>
+                                <ListItemIcon>
+                                    <ConnectWithoutContactIcon />
+                                </ListItemIcon>
+                                Contact
+                            </MenuItem>
+                            <MenuItem sx={MenuItemsStyles} onClick={handleClose}>
+                                <ListItemIcon>
+                                    <SettingsApplications />
+                                </ListItemIcon>
+                                Settings
+                            </MenuItem>
+                            <MenuItem sx={MenuItemsStyles} onClick={handleClose}>
+                                <ListItemIcon>
+                                    <HelpCenterIcon />
+                                </ListItemIcon>
+                                Help
+                            </MenuItem>
+                            <MenuItem sx={MenuItemsStyles} onClick={handleLogout}>
+                                <ListItemIcon>
+                                    <Logout />
+                                </ListItemIcon>
+                                Logout
+                            </MenuItem>
+
                         </DropDownMenu>
                     </>
                 ) :
@@ -197,12 +230,38 @@ function Navbar() {
                             </label>
                         </Tooltip>
                         <DropDownMenu>
-                            <Button sx={MenuItemsStyles} onClick={handleSignIn}>Sign in</Button>
-                            <Button sx={MenuItemsStyles} onClick={handleSignUp}>Sign up</Button>
+                            <MenuItem sx={MenuItemsStyles} onClick={handleSignIn}>
+                                <ListItemIcon>
+                                    <LoginIcon />
+                                </ListItemIcon>
+                                Sign In
+                            </MenuItem >
+
+                            <MenuItem sx={MenuItemsStyles} onClick={handleSignUp}>
+                                <ListItemIcon>
+                                    <AssignmentIndIcon />
+                                </ListItemIcon>
+                                Sign Up
+                            </MenuItem>
                             <Divider />
-                            <Button sx={MenuItemsStyles} >Contact</Button>
-                            <Button sx={MenuItemsStyles} >Settings</Button>
-                            <Button sx={MenuItemsStyles} >Help</Button>
+                            <MenuItem sx={MenuItemsStyles} onClick={handleClose}>
+                                <ListItemIcon>
+                                    <ConnectWithoutContactIcon />
+                                </ListItemIcon>
+                                Contact
+                            </MenuItem>
+                            <MenuItem sx={MenuItemsStyles} onClick={handleClose}>
+                                <ListItemIcon>
+                                    <SettingsApplications />
+                                </ListItemIcon>
+                                Settings
+                            </MenuItem>
+                            <MenuItem sx={MenuItemsStyles} onClick={handleClose}>
+                                <ListItemIcon>
+                                    <HelpCenterIcon />
+                                </ListItemIcon>
+                                Help
+                            </MenuItem>
                         </DropDownMenu>
                     </>
                 }

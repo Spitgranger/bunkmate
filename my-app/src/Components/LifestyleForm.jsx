@@ -39,7 +39,6 @@ function Lifestyle({ backwardButton }) {
     drinking: "",
     smoking: "",
     occupation: "",
-    allergies: "",
     tolerateGuests: "",
     toleratePets: "",
     numRoommates: "",
