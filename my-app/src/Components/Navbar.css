@@ -16,10 +16,9 @@ nav {
 
 nav ul {
   display: flex;
-  align-items: stretch;
+  align-items: center;
   white-space: nowrap;
   margin: 0px;
-
 }
 
 nav ul a {
@@ -29,13 +28,16 @@ nav ul a {
   padding: 30px 20px 30px 20px;
 }
 
-nav ul :hover {
-  background-color: rgb(246, 246, 246);
-  border-bottom: 5px solid aqua;
+a .accountAnchor {
+  display: flex;
+  align-items: center;
+  height: 21;
+
 }
 
-nav ul label :hover {
-  border-bottom: 0px none;
+nav ul a:hover {
+  background-color: rgb(246, 246, 246);
+  border-bottom: 5px solid aqua;
 }
 
 nav ul a.current {

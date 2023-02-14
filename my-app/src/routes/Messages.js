@@ -11,7 +11,8 @@ import {
   Thread,
   Window,
 } from 'stream-chat-react';
-import '@stream-io/stream-chat-css/dist/css/index.css';
+import 'stream-chat-react/dist/css/index.css';
+import SignInProvider from '../Components/GlobalStateManagement/SignInContext';
 
 // Define values.
 const api_key = 'asnpsp7e72h6'
@@ -37,12 +38,12 @@ const Messages = () => {
     newClient.on('connection.changed', handleConnectionChange)
     newClient.connectUser(
       {
-        id: user.response.result.email,
-        name: user.response.result.email,
+        id: user?.response?.result?.email,
+        name: user?.response?.result?.email,
         image: 'https://getstream.io/random_svg/?name=John',
         user_details: "GJKDJGK",
       },
-      user.response.streamToken,
+      user?.response?.streamToken,
     );
     return () => {
       newClient.off('connection.changed', handleConnectionChange);
@@ -61,7 +62,9 @@ const Messages = () => {
 
   return (
     <>
-      <Navbar />
+      <SignInProvider>
+        <Navbar />
+      </SignInProvider>
       <Chat client={client}>
         <ChannelList filters={filters} sort={sort} options={options} />
         <Channel>

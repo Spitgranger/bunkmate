@@ -24,7 +24,7 @@ import {
   AboutValidationContext,
   EmailValidationContext,
 
-} from './SubComponents/ValidationContext';
+} from './GlobalStateManagement/ValidationContext';
 
 
 function Background({ forwardButton }) {

@@ -5,7 +5,8 @@ import Uploads from '../Components/UploadsForm'
 import Lifestyle from '../Components/LifestyleForm'
 import { FormProgressBar } from '../Components/SubComponents/Form'
 import { useState, createContext } from 'react'
-import ValidationProvider from '../Components/SubComponents/ValidationContext'
+import ValidationProvider from '../Components/GlobalStateManagement/ValidationContext'
+import SignInProvider from '../Components/GlobalStateManagement/SignInContext';
 
 function Appliciation() {
 
@@ -55,7 +56,9 @@ function Appliciation() {
 
   return (
     <>
-      <Navbar />
+      <SignInProvider>
+        <Navbar />
+      </SignInProvider >
       <ValidationProvider>
         <div className="info">
           <div className="page">
