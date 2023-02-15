@@ -1,0 +1,101 @@
+
+
+.str-chat__container {
+    background-color: white;
+}
+
+
+.str-chat.messaging.light.str-chat-channel-list.str-chat__channel-list.str-chat__channel-list-react {
+    background-color: white;
+    border-top: 1px solid lightgrey;
+}
+
+.str-chat__channel-list-messenger.str-chat__channel-list-messenger-react {
+    background-color: white;
+}
+
+
+.str-chat__input-flat.str-chat__message-input.str-chat__input-flat--send-button-active {
+    background-color: white;
+}
+
+.rta__textarea.str-chat__textarea__textarea.str-chat__message-textarea {
+    border: 1px solid lightgrey;
+    background-color: white;
+}
+
+.rta__textarea.str-chat__textarea__textarea.str-chat__message-textarea:focus {
+    border: 1px solid lightgrey;
+    box-shadow: 0px 0px 10px lightgrey;
+}
+
+.str-chat__main-panel {
+    border: 1px solid lightgrey;
+}
+
+.str-chat__channel-preview-messenger.str-chat__channel-preview.str-chat__channel-preview-messenger--active {
+    background-color: rgb(243, 243, 243);
+}
+
+.str-chat__channel-search{
+    background-color: white;
+    display: flex;
+    align-items: center;
+    padding: 20px;
+}
+
+.str-chat__channel-list-messenger__main.str-chat__channel-list-messenger-react__main{
+    padding-top: 0px;
+}
+
+.str-chat__channel-preview-messenger.str-chat__channel-preview.str-chat__channel-preview-messenger--active span {
+    color: black;
+}
+
+.str-chat__channel-preview-messenger.str-chat__channel-preview {
+    padding: 10px;
+    box-shadow: 0 1px 0 0 white;
+}
+
+
+.str-chat__channel-preview-messenger.str-chat__channel-preview span {
+    color: black;
+}
+
+.str-chat__header-livestream.str-chat__channel-header {
+    background-color: black;
+    box-shadow: 0 1px 0 0 white;
+}
+
+.str-chat__header-livestream-left--title.str-chat__channel-header-title {
+    font-size: 20px;
+}
+
+
+.str-chat__date-separator {
+    display: flex;
+    justify-content: center;
+}
+
+.str-chat__date-separator-date {
+    color: lightgrey;
+    font-size: 12px;
+}
+
+.str-chat__date-separator-line {
+    display: none;
+}
+
+.str-chat__header-livestream.str-chat__channel-header {
+    background-color: white;
+}
+
+
+.str-chat__avatar.str-chat__avatar--rounded.str-chat__message-sender-avatar {
+    display: none;
+}
+
+
+.str-chat__header-livestream.str-chat__channel-header {
+    box-shadow: 0 0px 0px 0, 0 0px 0 0
+}

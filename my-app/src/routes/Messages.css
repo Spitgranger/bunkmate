@@ -1,99 +1,98 @@
-.str-chat__container {
-    background-color: white;
+#root {
+    height: 1000px;
+}
+
+html,
+body,
+#root {
+    height: 100%;
 }
 
 
-.str-chat.messaging.light.str-chat-channel-list.str-chat__channel-list.str-chat__channel-list-react {
-    background-color: white;
-    border-top: 1px solid lightgrey;
+.str-chat__channel-list {
+    width: 30%;
 }
 
-.str-chat__channel-list-messenger.str-chat__channel-list-messenger-react {
-    background-color: white;
+.str-chat__channel {
+    width: 100%;
 }
 
-
-.str-chat__input-flat.str-chat__message-input.str-chat__input-flat--send-button-active {
-    background-color: white;
+.str-chat__thread {
+    width: 45%;
 }
 
-.rta__textarea.str-chat__textarea__textarea.str-chat__message-textarea {
-    border: 1px solid lightgrey;
-    background-color: white;
+.str-chat__channel-search-bar-button.str-chat__channel-search-bar-button--exit-search {
+    display: none;
 }
 
-.rta__textarea.str-chat__textarea__textarea.str-chat__message-textarea:focus {
-    border: 1px solid lightgrey;
-    box-shadow: 0px 0px 10px lightgrey;
+.str-chat__channel-search {
+    margin-bottom: 20px;
+    margin-top: 20px;
 }
 
-.str-chat__main-panel {
-    border: 1px solid lightgrey;
+.str-chat__channel-search-input--wrapper {
+    height: 50px;
+}
+
+.str-chat__channel-search-bar {
+    height: 50px;
 }
 
 .str-chat__channel-preview-messenger.str-chat__channel-preview.str-chat__channel-preview-messenger--active {
-    background-color: rgb(243, 243, 243);
-}
-
-.str-chat__channel-search{
-    background-color: white;
-    display: flex;
-    align-items: center;
-    padding: 20px;
-}
-
-.str-chat__channel-list-messenger__main.str-chat__channel-list-messenger-react__main{
-    padding-top: 0px;
-}
-
-.str-chat__channel-preview-messenger.str-chat__channel-preview.str-chat__channel-preview-messenger--active span {
+    background-color: rgba(226, 226, 226, 0.737);
     color: black;
+}
+
+.str-chat__channel-preview-messenger--last-message {
+    font-weight: bold;
+}
+
+.str-chat__message-text {
+    font-weight: bold;
+}
+
+.str-chat__header-livestream.str-chat__channel-header {
+    margin: 20px; 
+}
+
+.str-chat__channel-list-messenger__main.str-chat__channel-list-messenger-react__main {
+    padding: 10px;
+
+}
+
+
+.str-chat__channel-preview-messenger.str-chat__channel-preview {
+    border-top-right-radius: 15px;
+    border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+    margin-bottom: 10px;
+}
+
+
+.str-chat.str-chat__theme-light.str-chat-channel-list.str-chat__channel-list.str-chat__channel-list-react {
+    background-color: rgb(243, 243, 243);
+    border: 0px solid lightgrey;
+    box-shadow: 0px 0px 10px 0px lightgrey;
+    width: 30%;
+
+}
+
+.str-chat__main-panel {
+    border: 0px solid lightgrey;
+    box-shadow: -3px 0px 12px -5px lightgrey;
 }
 
 .str-chat__channel-preview-messenger.str-chat__channel-preview {
-    padding: 10px;
-    box-shadow: 0 1px 0 0 white;
+    background-color: rgb(243, 243, 243);
 }
 
 
-.str-chat__channel-preview-messenger.str-chat__channel-preview span {
-    color: black;
-}
-
-.str-chat__header-livestream.str-chat__channel-header {
-    background-color: black;
-    box-shadow: 0 1px 0 0 white;
-}
-
-.str-chat__header-livestream-left--title.str-chat__channel-header-title {
-    font-size: 20px;
-}
-
-
-.str-chat__date-separator {
-    display: flex;
-    justify-content: center;
-}
-
-.str-chat__date-separator-date {
-    color: lightgrey;
-    font-size: 11px;
-}
-
-.str-chat__date-separator-line {
-    display: none;
-}
-
-.str-chat__header-livestream.str-chat__channel-header {
+.str-chat__channel-preview-messenger.str-chat__channel-preview.str-chat__channel-preview-messenger--active {
     background-color: white;
 }
 
+.str-chat__channel-preview-messenger.str-chat__channel-preview:hover {
+    background-color: white;
 
-.str-chat__avatar.str-chat__avatar--rounded.str-chat__message-sender-avatar {
-    display: none;
-}
-
-
-.str-chat__header-livestream.str-chat__channel-header {
-    box-shadow: 0 0px 0px 0, 0 0px 0 0
 }

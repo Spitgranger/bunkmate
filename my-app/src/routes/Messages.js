@@ -1,66 +1,54 @@
-import Navbar from '../Components/Navbar';
 import React, { useEffect, useState } from 'react';
 import { StreamChat } from 'stream-chat';
 import {
+  VirtualizedMessageList,
+  useMessageContext,
   Chat,
   Channel,
   ChannelHeader,
   ChannelList,
-  MessageList,
+  LoadingIndicator,
   MessageInput,
+  MessageList,
   Thread,
   Window,
-  CustomDropdown,
-  useChannelStateContext,
   useChannelActionContext,
-  ThreadHeader,
-  Avatar,
-  channelRenderFilterFn
-
+  useChannelStateContext,
 } from 'stream-chat-react';
-import 'stream-chat-react/dist/css/index.css';
-import './Messages.css'
+import Navbar from '../Components/Navbar';
 import SignInProvider from '../Components/GlobalStateManagement/SignInContext';
-import ImageGallery, { ReactImageGalleryItem } from 'react-image-gallery';
-import 'react-image-gallery/styles/css/image-gallery.css';
-import { Attachment } from 'stream-chat-react';
+import { useClient } from './hooks/useClient';
+import './Messages.css'
+import 'stream-chat-react/dist/css/v2/index.css';
+import { experimentalStyled } from '@mui/material';
 
-// Define values.
-const api_key = 'asnpsp7e72h6'
-const api_secret = 'djzm2aq63636qg2mjeqx9x5422hb4qu78pqepyf7fx7j7fuu44zwdgathr24zeyu'
-const user_id = 'john'
-// Initialize a Server Client
 
-const filters = { type: 'messaging' };
-const options = { state: true, presence: true, limit: 10 };
+
+const profile = JSON.parse(localStorage.getItem('profile'))
+console.log(profile)
+const apiKey = 'asnpsp7e72h6'
+//streamToken
+const userToken = profile?.response?.streamToken;
+
+
+
+const user = {
+  id: profile?.response?.result?.email,
+  name: profile?.response?.result?.email,
+  image: 'https://getstream.io/random_png/?id=summer-rain-2&name=summer-rain-2',
+};
+
+
+
+const filters = { type: 'messaging', members: { $in: ['summer-rain-2'] } };
 const sort = { last_message_at: -1 };
-const user = JSON.parse(localStorage.getItem("profile"));
-const Messages = () => {
-  const [client, setClient] = useState(null);
+const options = { state: true, presence: true, limit: 10 };
 
-  useEffect(() => {
-    const newClient = new StreamChat('asnpsp7e72h6');
 
-    const handleConnectionChange = ({ online = false }) => {
-      if (!online) return console.log('connection lost');
-      setClient(newClient);
-    };
+const App = () => {
 
-    newClient.on('connection.changed', handleConnectionChange)
-    newClient.connectUser(
-      {
-        id: user?.response?.result?.email,
-        name: user?.response?.result?.email,
-        image: 'https://getstream.io/random_svg/?name=John',
-        user_details: "GJKDJGK",
-      },
-      user?.response?.streamToken,
-    );
-    return () => {
-      newClient.off('connection.changed', handleConnectionChange);
-      // newClient.disconnectUser().then(() => console.log('connection closed'));
-    };
-  }, []);
+  const chatClient = useClient({ apiKey: apiKey, userData: user, tokenOrProvider: userToken });
+
   if (!user) {
     return (
       <>
@@ -69,91 +57,11 @@ const Messages = () => {
       </>
     )
   }
-  if (!client) return null;
 
-  const CustomDropdown = (props) => {
-    const { results, focusedUser, selectResult, SearchResultItem } = props;
+  if (!chatClient) return (<div style={{ height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}><LoadingIndicator size={50} /></div>
+  );
 
-    let items = results.filter((x) => x.cid);
-    let users = results.filter((x) => !x.cid);
-
-    return (
-      <div>
-        <p>Channels</p>
-        {!items.length && <p>No Channels...</p>}
-        {items.map((result, index) => (
-          <SearchResultItem
-            focusedUser={focusedUser}
-            index={index}
-            key={index}
-            result={result}
-            selectResult={selectResult}
-          />
-        ))}
-        <p>Users</p>
-        {!users.length && <p>No Users...</p>}
-        {users.map((result, index) => (
-          <SearchResultItem
-            focusedUser={focusedUser}
-            index={index}
-            key={index}
-            result={result}
-            selectResult={selectResult}
-          />
-        ))}
-      </div>
-    );
-  };
-
-  const isChannel = (output) => (output.cid != null);
-
-  const CustomResultItem = (props) => {
-    const { focusedUser, index, result, selectResult } = props;
-
-    const focused = focusedUser === index;
-
-    if (isChannel(result)) {
-      const channel = result;
-      const members = channel?.data?.member_count;
-
-      return (
-        <div
-          className={`str-chat__channel-search-result ${focused ? 'focused' : ''}`}
-          onClick={() => selectResult(result)}
-        >
-          <div className='result-hashtag'>#</div>
-          <p className='channel-search__result-text'>{channel?.data?.name}, ({members} member{members === 1 ? '' : 's'})</p>
-        </div>
-      );
-    } else {
-      return (
-        <div
-          className={`str-chat__channel-search-result ${focused ? 'focused' : ''}`}
-          onClick={() => selectResult(result)}
-        >
-          <Avatar image={result?.image} />
-          {result.id}
-          {result.online && <p className='user-online'> Online Now!</p>}
-        </div>
-      );
-    }
-  };
-
-  const SearchResultsHeader = () => {
-    return <div className='channel-search-header'>So many search results!</div>;
-  };
-
-  const DropDown = (props) => <CustomDropdown {...props} />;
-  const SearchResult = (props) => <CustomResultItem {...props} />;
-
-  const additionalProps = {
-    DropdownContainer: DropDown,
-    popupResults: true,
-    searchForChannels: true,
-    SearchResultsHeader: SearchResultsHeader,
-    SearchResultItem: SearchResult
-  };
-
+  //displays message when user edits a message
   const ChannelInner = () => {
     const { addNotification } = useChannelActionContext();
     const { channel } = useChannelStateContext();
@@ -173,31 +81,30 @@ const Messages = () => {
   }
 
 
-
-
-
   return (
     <>
       <SignInProvider>
         <Navbar />
       </SignInProvider>
-      <Chat client={client}>
-        <ChannelList
-          filters={filters} sort={sort} options={options}
-          AdditionalChannelSearchProps={additionalProps}
-          showChannelSearch
-        />
-        <Channel >
-          <ChannelInner />
-          <Window>
-            <ChannelHeader />
-            <MessageList />
-            <MessageInput />
-          </Window>
-        </Channel>
+      <Chat client={chatClient} theme='str-chat__theme-light'>
+        <div style={{ height: '100%', display: 'flex', flexFLow: 'row nowrap' }}>
+          <ChannelList
+            filters={filters} sort={sort} options={options}
+            showChannelSearch
+          />
+          <Channel >
+            <ChannelInner />
+            <Window>
+              <ChannelHeader />
+              <MessageList />
+              <MessageInput />
+            </Window>
+          </Channel>
+        </div>
       </Chat>
     </>
   );
 };
 
-export default Messages;
+
+export default App;
