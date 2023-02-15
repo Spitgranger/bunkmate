@@ -180,7 +180,7 @@ function Navbar() {
                                 <ListItemIcon>
                                     <AssignmentIndIcon />
                                 </ListItemIcon>
-                                {`${user?.response?.result.email}'s Account`}
+                                {`${user?.response?.result?.email}'s Account`}
                             </MenuItem>
                             <Divider />
                             <MenuItem sx={MenuItemsStyles} onClick={handleClose}>
