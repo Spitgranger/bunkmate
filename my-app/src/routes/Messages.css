@@ -1,3 +1,4 @@
+/*styling for the core chat panel*/
 #root {
     height: 1000px;
 }
@@ -52,7 +53,7 @@ body,
 }
 
 .str-chat__header-livestream.str-chat__channel-header {
-    margin: 20px; 
+    margin: 20px;
 }
 
 .str-chat__channel-list-messenger__main.str-chat__channel-list-messenger-react__main {

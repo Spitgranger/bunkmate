@@ -14,22 +14,19 @@ import {
   Window,
   useChannelActionContext,
   useChannelStateContext,
+  Avatar,
 } from 'stream-chat-react';
 import Navbar from '../Components/Navbar';
 import SignInProvider from '../Components/GlobalStateManagement/SignInContext';
 import { useClient } from './hooks/useClient';
 import './Messages.css'
 import 'stream-chat-react/dist/css/v2/index.css';
-import { experimentalStyled } from '@mui/material';
-
-
+import support from '../Components/Assets/support.jpg'
 
 const profile = JSON.parse(localStorage.getItem('profile'))
-console.log(profile)
 const apiKey = 'asnpsp7e72h6'
 //streamToken
 const userToken = profile?.response?.streamToken;
-
 
 
 const user = {
@@ -39,29 +36,61 @@ const user = {
 };
 
 
-
-const filters = { type: 'messaging', members: { $in: ['summer-rain-2'] } };
+//this code filters for channels the user is a part of 
+const filters = { type: 'messaging', members: { $in: [profile ? profile.response.result.email : null] } };
 const sort = { last_message_at: -1 };
 const options = { state: true, presence: true, limit: 10 };
 
 
-const App = () => {
+const Messages = () => {
 
   const chatClient = useClient({ apiKey: apiKey, userData: user, tokenOrProvider: userToken });
+  const [supportChannel, setSupportChannel] = useState(null)
+  const [supportMessage, setSupportMessage] = useState(null)
+  /*
+    //Creating a custom support channel
+    useEffect(() => {
+  
+      if (chatClient) {
+  
+        const channel = chatClient.channel('messaging', 'support-channel', {
+          name: "Support Team",
+          image: 'https://t4.ftcdn.net/jpg/01/36/75/37/360_F_136753727_wNMYxIesFtm7ecMeMehDu5yYCtLOAxCx.jpg',
+          members: ["vegas", "apples"],
+          session: 8,
+        });
+  
+        setSupportChannel(channel);
+  
+  
+        const message = channel.sendMessage({
+          text: 'How can we help you today?'
+        });
+  
+        setSupportMessage(message);
+  
+      }
+  
+  
+    }, [chatClent])
+  
+    */
 
-  if (!user) {
+  if (!profile) {
     return (
       <>
-        <Navbar />
+        <SignInProvider>
+          <Navbar />
+        </SignInProvider>
         <h1>YOU NEED TO BE LOGGED IN TO MESSAGE</h1>
       </>
     )
   }
+  if (!chatClient) return (<div style={{ height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}><LoadingIndicator size={50} /></div>)
 
-  if (!chatClient) return (<div style={{ height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}><LoadingIndicator size={50} /></div>
-  );
 
   //displays message when user edits a message
+  //https://getstream.io/chat/docs/sdk/react/guides/customization/adding_messagelist_notification/
   const ChannelInner = () => {
     const { addNotification } = useChannelActionContext();
     const { channel } = useChannelStateContext();
@@ -81,6 +110,9 @@ const App = () => {
   }
 
 
+
+
+
   return (
     <>
       <SignInProvider>
@@ -92,14 +124,17 @@ const App = () => {
             filters={filters} sort={sort} options={options}
             showChannelSearch
           />
-          <Channel >
+          {/*<Channel channel={supportChannel} message={supportMessage}>*/}
+          <Channel>
             <ChannelInner />
             <Window>
               <ChannelHeader />
               <MessageList />
               <MessageInput />
             </Window>
+            <Thread />
           </Channel>
+          {/*</Channel>*/}
         </div>
       </Chat>
     </>
@@ -107,4 +142,4 @@ const App = () => {
 };
 
 
-export default App;
+export default Messages;

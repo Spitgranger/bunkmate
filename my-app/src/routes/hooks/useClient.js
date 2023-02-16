@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import { StreamChat } from 'stream-chat';
 
-
 export const useClient = ({ apiKey, userData, tokenOrProvider }) => {
   const [chatClient, setChatClient] = useState(null);
 
@@ -10,7 +9,7 @@ export const useClient = ({ apiKey, userData, tokenOrProvider }) => {
     // prevents application from setting stale client (user changed, for example)
     let didUserConnectInterrupt = false;
 
-    const connectionPromise = client.connectUser(userData, tokenOrProvider).then(() => {
+    const connectionPromise = client?.connectUser(userData, tokenOrProvider).then(() => {
       if (!didUserConnectInterrupt) setChatClient(client);
     });
 

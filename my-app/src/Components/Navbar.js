@@ -161,19 +161,21 @@ function Navbar() {
                 {user ? (
                     <>
                         <Tooltip title={`My Account`}>
-                            <a style={{ display: 'flex', alignItems: 'center', height: '21px' }}>
-                                <IconButton
-                                    onClick={handleClick}
-                                    id={`${id}-account`}
-                                    size="small"
-                                    sx={{ padding: '0px' }}
-                                    aria-controls={open ? 'account-menu' : undefined}
-                                    aria-haspopup="true"
-                                    aria-expanded={open ? 'true' : undefined}
-                                >
-                                    <Avatar alt={user?.response?.result?.email}>{user?.response?.result?.email?.charAt(0)}</Avatar>
-                                </IconButton>
-                            </a>
+                            <label>
+                                <a style={{ display: 'flex', alignItems: 'center', height: '21px' }}>
+                                    <IconButton
+                                        onClick={handleClick}
+                                        id={`${id}-account`}
+                                        size="small"
+                                        sx={{ padding: '0px' }}
+                                        aria-controls={open ? 'account-menu' : undefined}
+                                        aria-haspopup="true"
+                                        aria-expanded={open ? 'true' : undefined}
+                                    >
+                                        <Avatar alt={user?.response?.result?.email}>{user?.response?.result?.email?.charAt(0)}</Avatar>
+                                    </IconButton>
+                                </a>
+                            </label>
                         </Tooltip>
                         <DropDownMenu>
                             <MenuItem sx={MenuItemsStyles} onClick={handleClose}>
