@@ -141,22 +141,22 @@ function Navbar() {
                 {/*<CheckActive to="/create" page="Post a Listing"></CheckActive>*/}
                 <Tooltip className={"pageContainer"} title={"Find Roomates"}>
                     <div>
-                        <CheckActive className="navWebPage" to="/bunkmates" page="Bunkmates"></CheckActive>
+                        <CheckActive to="/bunkmates" page="Bunkmates"></CheckActive>
                     </div>
                 </Tooltip>
                 <Tooltip className={"pageContainer"} title={"Get Matched"}>
                     <div >
-                        <CheckActive className="navWebPage" to="/applications" page="Applications"></CheckActive>
+                        <CheckActive to="/applications" page="Applications"></CheckActive>
                     </div>
                 </Tooltip>
                 <Tooltip className={"pageContainer"} title={"Message Roomates"}>
                     <div>
-                        <CheckActive className="navWebPage" to="/messages" page="Messages"></CheckActive>
+                        <CheckActive to="/messages" page="Messages"></CheckActive>
                     </div>
                 </Tooltip>
                 <Tooltip className={"pageContainer"} title={"Message Roomates"}>
                     <div>
-                        <CheckActive className="navWebPage" to="/" page="Profile"></CheckActive>
+                        <CheckActive to="/" page="Profile"></CheckActive>
                     </div>
                 </Tooltip>
                 {/*hidden, used for Sign in pages*/}
