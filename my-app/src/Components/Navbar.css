@@ -59,7 +59,7 @@
   border-bottom: 5px solid aqua;
 }
 
-.navWebPage .currentPage {
+.currentPage {
   border-bottom: 5px solid aqua;
   background-color: rgb(246, 246, 246);
 }

@@ -21,7 +21,6 @@ import { useNavigate } from 'react-router-dom';
 function CheckActive({ to, page, ...props }) {
     const fullPath = useResolvedPath(to)
     const isActive = useMatch({ path: fullPath.pathname, end: true })
-    console.log(fullPath.pathname)
     return (
         <Link to={to} className={isActive ? "currentPage" : ""} {...props}>
             {page}
