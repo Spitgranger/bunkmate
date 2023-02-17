@@ -48,6 +48,7 @@ const options = { state: true, presence: true, limit: 10 };
 const Messages = () => {
 
   const chatClient = useClient({ apiKey: apiKey, userData: user, tokenOrProvider: userToken });
+  const [channels, setChannels] = useState("")
   const [supportChannel, setSupportChannel] = useState(null)
   const [supportMessage, setSupportMessage] = useState(null)
 
@@ -131,7 +132,10 @@ const Messages = () => {
     const daysDifference = Math.round(millisecondsDifference / 86400000); //days
     const timeValues = { millisecondsDifference, secondsDifference, minutesDifference, hoursDifference, daysDifference }
 
-    const timeDisplay = (timeValues) => {
+    const displayTime = (timeValues, lastMessage) => {
+      if (!lastMessage) {
+        return ("")
+      }
       switch (true) {
         case (timeValues.millisecondsDifference < 60000)://if less than 60 seconds passed display seconds
           return `${timeValues.secondsDifference}s`
@@ -145,6 +149,7 @@ const Messages = () => {
           return `${timeValues.minutesDifference}m`
       }
     }
+
 
     const displayNumberUnread = (unread) => {
       //if number of unread messages is 0 return nothing, 
@@ -165,10 +170,15 @@ const Messages = () => {
           </div>
       ));
     }
-
+    //TODO
     const displayLastMessageUser = (profile, lastMessage) => {
-      return (profile?.result?.name === lastMessage.user.name ? 'You: ' : "")
+      if (lastMessage === undefined) {
+        return ("")
+      } else {
+        return (profile?.response?.result?.name === lastMessage.user.name ? 'You: ' : "")
+      }
     }
+
 
     return (
       <>
@@ -182,11 +192,11 @@ const Messages = () => {
             </div>
             <div className="lastMessageAndTime" style={{ display: 'flex', flexFlow: 'row nowrap' }}>
               <div style={{ fontWeight: '350', paddingLeft: '5px', paddingRight: '5px', whiteSpace: 'nowrap' }}>
-                {/*displayLastMessageUser(profile, lastMessage)*/}
+                {displayLastMessageUser(profile, lastMessage)}
                 {lastMessage?.text}
               </div>
               <div style={{ paddindLeft: '5px' }} >
-                {`${timeDisplay(timeValues)}`}
+                {`${displayTime(timeValues, lastMessage)}`}
               </div>
             </div>
           </div>
