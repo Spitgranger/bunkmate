@@ -44,10 +44,10 @@ const Profile = () => {
 
     newClient.connectUser(
       {
-        id: profile?.response?.result?.email,
-        email: profile?.response?.result?.email,
+        id: profile?.result?.email,
+        email: profile?.result?.email,
       },
-      profile?.response?.streamToken,
+      profile?.streamToken,
     );
 
     return () => {

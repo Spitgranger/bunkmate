@@ -229,7 +229,7 @@ function Navbar() {
                                         aria-haspopup="true"
                                         aria-expanded={open ? 'true' : undefined}
                                     >
-                                        <Avatar alt={user?.response?.result?.email}>{user?.response?.result?.email?.charAt(0)}</Avatar>
+                                        <Avatar alt={user?.result?.email}>{user?.result?.email?.charAt(0)}</Avatar>
                                     </IconButton>
                                 </a>
                             </label>

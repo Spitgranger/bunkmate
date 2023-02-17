@@ -175,7 +175,7 @@ const Messages = () => {
       if (lastMessage === undefined) {
         return ("")
       } else {
-        return (profile?.response?.result?.name === lastMessage.user.name ? 'You: ' : "")
+        return (profile?.result?.name === lastMessage.user.name ? 'You: ' : "")
       }
     }
 
