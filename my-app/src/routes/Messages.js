@@ -33,8 +33,8 @@ const userToken = profile?.response?.streamToken;
 
 
 const user = {
-  id: profile?.response?.result?.email,
-  name: profile?.response?.result?.email,
+  id: profile?.response?.result?._id,
+  name: profile?.response?.result?.name,
   image: 'https://getstream.io/random_png/?id=summer-rain-2&name=summer-rain-2',
 };
 
