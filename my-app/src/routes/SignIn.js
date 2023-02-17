@@ -11,7 +11,7 @@ import { BsPhoneFill } from "react-icons/bs";
 import { SignInOpenContext } from "../Components/GlobalStateManagement/SignInContext";
 import { SignInModeContext } from "../Components/GlobalStateManagement/SignInContext";
 import { SignInModalMessage } from "../Components/GlobalStateManagement/SignInContext";
-
+import { useNavigate } from "react-router-dom";
 
 
 function SignInPartner({ company, logo, onClick }) {
@@ -27,8 +27,6 @@ function SignInPartner({ company, logo, onClick }) {
     </Button>)
 
 }
-
-
 
 export default function RenderWhich() {
   //choose which pages to render within modal Window
@@ -61,7 +59,7 @@ export default function RenderWhich() {
 
 
 export function SignInEmail() {
-
+  const navigate = useNavigate();
   const { setMode } = useContext(SignInModeContext)
   const { setIsOpen } = useContext(SignInOpenContext)
   const { setMessage } = useContext(SignInModalMessage)
@@ -72,15 +70,12 @@ export function SignInEmail() {
   const handleChange = (e) => {
     setData((prevData) => ({ ...prevData, [e.target.name]: e.target.value }))
   }
-  const handleResponse = e => {
-    const response = handleSignIn(e, data);
-    console.log(response);
-    setError(response);
-    console.log(error);
-    if (response) {
-      return;
-    }
-    //setIsOpen(false);
+  const handleResponse = async e => {
+    handleSignIn(e, data);
+    console.log(data);
+    //5 lines below are pretty much garbage need to figure out how to extract error message
+    setIsOpen(false);
+    navigate(0)
   }
 
   return (<>
@@ -301,6 +296,6 @@ function handleSignIn(e, data) {
     },
     body: JSON.stringify(data),
   }).then(response => response.json())
-    .then(response => { if (response.message !== "User doesn't exist") { localStorage.setItem('profile', JSON.stringify({ response })); return ""; } else { }; });
+    .then(response => { if (response.message !== "User doesn't exist") { localStorage.setItem('profile', JSON.stringify({ response })); return ""; } else { }; })
 
 }
