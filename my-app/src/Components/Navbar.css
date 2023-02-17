@@ -30,11 +30,10 @@ nav ul {
   align-items: center;
 }
 
-nav ul .pageContainer {
-  padding-left: 15px;
-  padding-right: 15px;
-
+.Account {
+  padding: 15px;
 }
+
 
 
 nav ul .pageContainer div {
@@ -42,7 +41,14 @@ nav ul .pageContainer div {
 }
 
 .page {
+  padding-left: 15px;
+  padding-right: 15px;
   text-decoration: none;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   color: black;
 }
 

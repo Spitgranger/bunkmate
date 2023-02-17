@@ -151,16 +151,16 @@ function Navbar() {
                         <CheckActive className="page" to="/messages" page="Messages"></CheckActive>
                     </div>
                 </Tooltip>
-                <Tooltip className={"pageContainer"} title={"Work on Profile"}>
+                <Tooltip className={"pageContainer"} title={"Message Roomates"}>
                     <div>
-                        <a>Profile</a>
+                        <CheckActive className="page" to="/" page="Profile"></CheckActive>
                     </div>
                 </Tooltip>
                 {/*hidden, used for Sign in pages*/}
                 <RenderWhich />
                 {user ? (
                     <>
-                        <Tooltip className="pageContainer" title={`My Account`}>
+                        <Tooltip className="Account" title={`My Account`}>
                             <label>
                                 <a style={{ display: 'flex', alignItems: 'center', height: '21px' }}>
                                     <IconButton
@@ -182,7 +182,7 @@ function Navbar() {
                                 <ListItemIcon>
                                     <AssignmentIndIcon />
                                 </ListItemIcon>
-                                {`${user?.response?.result?.email}'s Account`}
+                                {user?.response?.result?.email}
                             </MenuItem>
                             <Divider />
                             <MenuItem sx={MenuItemsStyles} onClick={handleClose}>
@@ -214,7 +214,7 @@ function Navbar() {
                     </>
                 ) :
                     <>
-                        <Tooltip className="pageContainer" title={'Sign in or Sign up'}>
+                        <Tooltip className="Account" title={'Sign in or Sign up'}>
                             <label>
                                 <a style={{ display: 'flex', alignItems: 'center', height: '21px' }}>
                                     <IconButton
@@ -232,19 +232,18 @@ function Navbar() {
                             </label>
                         </Tooltip>
                         <DropDownMenu>
-                            <MenuItem sx={MenuItemsStyles} onClick={handleSignIn}>
-                                <ListItemIcon>
-                                    <LoginIcon />
-                                </ListItemIcon>
-                                Sign In
-                            </MenuItem >
-
                             <MenuItem sx={MenuItemsStyles} onClick={handleSignUp}>
                                 <ListItemIcon>
                                     <AssignmentIndIcon />
                                 </ListItemIcon>
                                 Sign Up
                             </MenuItem>
+                            <MenuItem sx={MenuItemsStyles} onClick={handleSignIn}>
+                                <ListItemIcon>
+                                    <LoginIcon />
+                                </ListItemIcon>
+                                Sign In
+                            </MenuItem >
                             <Divider />
                             <MenuItem sx={MenuItemsStyles} onClick={handleClose}>
                                 <ListItemIcon>
