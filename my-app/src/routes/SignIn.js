@@ -66,14 +66,27 @@ export function SignInEmail() {
   const { setIsOpen } = useContext(SignInOpenContext)
   const { setMessage } = useContext(SignInModalMessage)
   const [data, setData] = useState({ email: '', password: '' });
+  const [error, setError] = useState("");
 
 
   const handleChange = (e) => {
     setData((prevData) => ({ ...prevData, [e.target.name]: e.target.value }))
   }
+  const handleResponse = e => {
+    const response = handleSignIn(e, data);
+    console.log(response);
+    setError(response);
+    console.log(error);
+    if (response) {
+      return;
+    }
+    //setIsOpen(false);
+  }
 
   return (<>
     <div className="content">
+      {error ? <span>{error}</span> : null}
+      <span>{error}</span>
       <LineBox flex={false} CssTextField={[
         <FormSingleLineInput
           name="email"
@@ -102,7 +115,7 @@ export function SignInEmail() {
         </h6>
       </div>
       <div className="button" style={{ borderBottom: "1px solid lightgrey" }}>
-        <ActionButton width="100%" type="submit" title="Submit" onClick={(e) => { handleSignIn(e, data); setIsOpen(false); }} />
+        <ActionButton width="100%" type="submit" title="Submit" onClick={(e) => { handleResponse(e) }} />
       </div>
       <div className="socials" >
         <SignInPartner logo={<FcGoogle size="20px" />} company="Google" />
@@ -205,6 +218,7 @@ export function SignInPhone() {
   const { setMode } = useContext(SignInModeContext)
   const { setMessage } = useContext(SignInModalMessage)
 
+
   {/* Change default to the user's current location */ }
   const [field, setField] = useState('United States (+1)')
 
@@ -287,5 +301,6 @@ function handleSignIn(e, data) {
     },
     body: JSON.stringify(data),
   }).then(response => response.json())
-    .then(response => localStorage.setItem('profile', JSON.stringify({ response })))
+    .then(response => { if (response.message !== "User doesn't exist") { localStorage.setItem('profile', JSON.stringify({ response })); return ""; } else { }; });
+
 }

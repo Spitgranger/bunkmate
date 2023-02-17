@@ -33,14 +33,14 @@ const userToken = profile?.response?.streamToken;
 
 
 const user = {
-  id: profile?.response?.result?.email,
-  name: profile?.response?.result?.email,
+  id: profile?.response?.result?._id,
+  name: profile?.response?.result?.name,
   image: 'https://getstream.io/random_png/?id=summer-rain-2&name=summer-rain-2',
 };
 
 
 //this code filters for channels the user is a part of 
-const filters = { type: 'messaging', members: { $in: [profile ? profile.response.result.email : null] } };
+const filters = { type: 'messaging', members: { $in: [profile ? profile?.response?.result?.email : null] } };
 const sort = { last_message_at: -1 };
 const options = { state: true, presence: true, limit: 10 };
 
@@ -167,7 +167,6 @@ const Messages = () => {
           <ChannelList
             filters={filters} sort={sort} options={options}
             showChannelSearch={true}
-            Preview={(previewProps) => <CustomPreviewChannel {...previewProps} />}
             onChannelDeleted
 
           />
