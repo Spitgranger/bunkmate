@@ -61,7 +61,7 @@ function Appliciation() {
       </SignInProvider >
       <ValidationProvider>
         <div className="info">
-          <div className="page">
+          <div className="ApplicationPage">
             <FormProgressBar steps={totalSteps} currentStep={page}>
               <div className="progressBar" style={progressBarStyles['.progressBar']}>
                 <h5 className="1" style={progressBarStyles[`.${page + 1}`]}>(1) Background</h5>
@@ -69,7 +69,7 @@ function Appliciation() {
                 <h5 className="1" style={progressBarStyles[`.${page - 1}`]}>(3) LifeStyle</h5>
               </div>
             </FormProgressBar>
-            <section className="subPage">
+            <section className="ApplicationSubPage">
               {pages[page]}
             </section>
           </div>

@@ -41,7 +41,7 @@ const user = {
 
 
 //this code filters for channels the user is a part of 
-const filters = { type: 'messaging', members: { $in: [profile ? profile?.response?.result?.email : null] } };
+const filters = { type: 'messaging', members: { $in: [profile ? profile.response.result._id : null] } };
 const sort = { last_message_at: -1 };
 const options = { state: true, presence: true, limit: 10 };
 
@@ -167,9 +167,9 @@ const Messages = () => {
         <div style={{ height: '100%', display: 'flex', flexFLow: 'row nowrap' }}>
           <ChannelList
             filters={filters} sort={sort} options={options}
-            showChannelSearch={true}
+            Preview={(previewProps) => CustomPreviewChannel({ ...previewProps })}
+            showChannelSearch
             onChannelDeleted
-
           />
           {/*<Channel channel={supportChannel} message={supportMessage}>*/}
           <Channel>

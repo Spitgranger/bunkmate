@@ -21,9 +21,9 @@ import { useNavigate } from 'react-router-dom';
 function CheckActive({ to, page, ...props }) {
     const fullPath = useResolvedPath(to)
     const isActive = useMatch({ path: fullPath.pathname, end: true })
-
+    console.log(fullPath.pathname)
     return (
-        <Link to={to} className={isActive ? "current" : ""} {...props}>
+        <Link to={to} className={isActive ? "currentPage" : ""} {...props}>
             {page}
         </Link>
     )
@@ -129,7 +129,7 @@ function Navbar() {
 
 
     return (
-        <nav>
+        <nav className="navBar">
             <Tooltip title={"Return Home"}>
                 <div>
                     <CheckActive to="/" page={
@@ -137,34 +137,34 @@ function Navbar() {
                     </CheckActive>
                 </div>
             </Tooltip>
-            <ul>
+            <ul className="webPages">
                 {/*<CheckActive to="/" page="Listings"></CheckActive> */}
                 {/*<CheckActive to="/create" page="Post a Listing"></CheckActive>*/}
                 <Tooltip className={"pageContainer"} title={"Find Roomates"}>
                     <div>
-                        <CheckActive className="page" to="/bunkmates" page="Bunkmates"></CheckActive>
+                        <CheckActive className="navWebPage" to="/bunkmates" page="Bunkmates"></CheckActive>
                     </div>
                 </Tooltip>
                 <Tooltip className={"pageContainer"} title={"Get Matched"}>
                     <div >
-                        <CheckActive className="page" to="/applications" page="Applications"></CheckActive>
+                        <CheckActive className="navWebPage" to="/applications" page="Applications"></CheckActive>
                     </div>
                 </Tooltip>
                 <Tooltip className={"pageContainer"} title={"Message Roomates"}>
                     <div>
-                        <CheckActive className="page" to="/messages" page="Messages"></CheckActive>
+                        <CheckActive className="navWebPage" to="/messages" page="Messages"></CheckActive>
                     </div>
                 </Tooltip>
                 <Tooltip className={"pageContainer"} title={"Message Roomates"}>
                     <div>
-                        <CheckActive className="page" to="/" page="Profile"></CheckActive>
+                        <CheckActive className="navWebPage" to="/" page="Profile"></CheckActive>
                     </div>
                 </Tooltip>
                 {/*hidden, used for Sign in pages*/}
                 <RenderWhich />
                 {user ? (
                     <>
-                        <Tooltip className="Account" title={`My Account`}>
+                        <Tooltip className="userAccount" title={`My Account`}>
                             <label>
                                 <a style={{ display: 'flex', alignItems: 'center', height: '21px' }}>
                                     <IconButton
@@ -186,7 +186,7 @@ function Navbar() {
                                 <ListItemIcon>
                                     <AssignmentIndIcon />
                                 </ListItemIcon>
-                                {user?.response?.result?.email}
+                                {`${user?.response?.result?.name}'s account`}
                             </MenuItem>
                             <Divider />
                             <MenuItem sx={MenuItemsStyles} onClick={handleClose}>
@@ -218,7 +218,7 @@ function Navbar() {
                     </>
                 ) :
                     <>
-                        <Tooltip className="Account" title={'Sign in or Sign up'}>
+                        <Tooltip className="userAccount" title={'Sign in or Sign up'}>
                             <label>
                                 <a style={{ display: 'flex', alignItems: 'center', height: '21px' }}>
                                     <IconButton
