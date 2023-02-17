@@ -71,7 +71,7 @@ export function SignInEmail() {
     setData((prevData) => ({ ...prevData, [e.target.name]: e.target.value }))
   }
   const handleResponse = async e => {
-    handleSignIn(e, data);
+    await handleSignIn(e, data);
     console.log(data);
     //5 lines below are pretty much garbage need to figure out how to extract error message
     setIsOpen(false);
@@ -288,7 +288,7 @@ function handleSubmit(e, data) {
 function handleSignIn(e, data) {
   console.log(data);
   e.preventDefault();
-  fetch('/api/users/signin', {
+  return fetch('/api/users/signin', {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
