@@ -138,17 +138,17 @@ function Navbar() {
                 {/*<CheckActive to="/create" page="Post a Listing"></CheckActive>*/}
                 <Tooltip className={"pageContainer"} title={"Find Roomates"}>
                     <div>
-                        <CheckActive to="/bunkmates" page="Bunkmates"></CheckActive>
+                        <CheckActive className="page" to="/bunkmates" page="Bunkmates"></CheckActive>
                     </div>
                 </Tooltip>
                 <Tooltip className={"pageContainer"} title={"Get Matched"}>
                     <div >
-                        <CheckActive to="/applications" page="Applications"></CheckActive>
+                        <CheckActive className="page" to="/applications" page="Applications"></CheckActive>
                     </div>
                 </Tooltip>
                 <Tooltip className={"pageContainer"} title={"Message Roomates"}>
                     <div>
-                        <CheckActive to="/messages" page="Messages"></CheckActive>
+                        <CheckActive className="page" to="/messages" page="Messages"></CheckActive>
                     </div>
                 </Tooltip>
                 <Tooltip className={"pageContainer"} title={"Work on Profile"}>
@@ -214,7 +214,7 @@ function Navbar() {
                     </>
                 ) :
                     <>
-                        <Tooltip title={'Sign in or Sign up'}>
+                        <Tooltip className="pageContainer" title={'Sign in or Sign up'}>
                             <label>
                                 <a style={{ display: 'flex', alignItems: 'center', height: '21px' }}>
                                     <IconButton
