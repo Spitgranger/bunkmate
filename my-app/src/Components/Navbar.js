@@ -136,22 +136,22 @@ function Navbar() {
             <ul>
                 {/*<CheckActive to="/" page="Listings"></CheckActive> */}
                 {/*<CheckActive to="/create" page="Post a Listing"></CheckActive>*/}
-                <Tooltip title={"Find Roomates"}>
+                <Tooltip className={"pageContainer"} title={"Find Roomates"}>
                     <div>
                         <CheckActive to="/bunkmates" page="Bunkmates"></CheckActive>
                     </div>
                 </Tooltip>
-                <Tooltip title={"Get Matched"}>
-                    <div>
+                <Tooltip className={"pageContainer"} title={"Get Matched"}>
+                    <div >
                         <CheckActive to="/applications" page="Applications"></CheckActive>
                     </div>
                 </Tooltip>
-                <Tooltip title={"Message Roomates"}>
+                <Tooltip className={"pageContainer"} title={"Message Roomates"}>
                     <div>
                         <CheckActive to="/messages" page="Messages"></CheckActive>
                     </div>
                 </Tooltip>
-                <Tooltip title={"Work on Profile"}>
+                <Tooltip className={"pageContainer"} title={"Work on Profile"}>
                     <div>
                         <a>Profile</a>
                     </div>

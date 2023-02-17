@@ -14,7 +14,10 @@ import {
   Window,
   useChannelActionContext,
   useChannelStateContext,
+  useChannelDeletedListener,
+  ChannelPreviewMessenger,
   Avatar,
+  DateSeparator
 } from 'stream-chat-react';
 import Navbar from '../Components/Navbar';
 import SignInProvider from '../Components/GlobalStateManagement/SignInContext';
@@ -47,34 +50,33 @@ const Messages = () => {
   const chatClient = useClient({ apiKey: apiKey, userData: user, tokenOrProvider: userToken });
   const [supportChannel, setSupportChannel] = useState(null)
   const [supportMessage, setSupportMessage] = useState(null)
-  /*
-    //Creating a custom support channel
-    useEffect(() => {
-  
-      if (chatClient) {
-  
-        const channel = chatClient.channel('messaging', 'support-channel', {
-          name: "Support Team",
-          image: 'https://t4.ftcdn.net/jpg/01/36/75/37/360_F_136753727_wNMYxIesFtm7ecMeMehDu5yYCtLOAxCx.jpg',
-          members: ["vegas", "apples"],
-          session: 8,
-        });
-  
-        setSupportChannel(channel);
-  
-  
-        const message = channel.sendMessage({
-          text: 'How can we help you today?'
-        });
-  
-        setSupportMessage(message);
-  
-      }
-  
-  
-    }, [chatClent])
-  
-    */
+
+  //Creating a custom support channel
+  useEffect(() => {
+
+    if (chatClient) {
+
+      const channel = chatClient.channel('messaging', 'support-channel', {
+        name: "Support Team",
+        image: 'https://t4.ftcdn.net/jpg/01/36/75/37/360_F_136753727_wNMYxIesFtm7ecMeMehDu5yYCtLOAxCx.jpg',
+        members: ["vegas", "apples"],
+        session: 8,
+      });
+
+      setSupportChannel(channel);
+
+
+      const message = channel.sendMessage({
+        text: 'How can we help you today?'
+      });
+
+      setSupportMessage(message);
+
+    }
+
+
+  }, [chatClient])
+
 
   if (!profile) {
     return (
@@ -86,7 +88,7 @@ const Messages = () => {
       </>
     )
   }
-  if (!chatClient) return (<div style={{ height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}><LoadingIndicator size={50} /></div>)
+  if (!chatClient) return (<div style={{ height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }} > <LoadingIndicator size={50} /></div >)
 
 
   //displays message when user edits a message
@@ -109,12 +111,54 @@ const Messages = () => {
 
   }
 
+  console.log(useChannelDeletedListener)
 
+  const CustomPreviewChannel = (props) => {
 
+    const { channel, displayTitle } = props
 
+    /*console.log('print avatar', props.Avatar(props).props.className)*/
+    console.log(channel)
+    //calculates the last time the message was sent
+    const dateString = channel.data.last_message_at
+    const date = new Date(dateString);
+    const now = new Date();
+
+    const millisecondsDifference = now.getTime() - date.getTime(); //milliseconds
+    const secondsDifference = Math.round(millisecondsDifference / 1000); //seconds
+    const minutesDifference = Math.round(millisecondsDifference / 60000); //minutes
+    const hoursDifference = Math.round(millisecondsDifference / 3600000); //hours
+    const daysDifference = Math.round(millisecondsDifference / 86400000); //days
+    const timeValues = { millisecondsDifference, secondsDifference, minutesDifference, hoursDifference, daysDifference }
+
+    const timeDisplay = (timeValues) => {
+      switch (true) {
+        case (timeValues.millisecondsDifference < 60000)://if less than 60 seconds passed display seconds
+          return `${timeValues.secondsDifference}s`
+        case (timeValues.millisecondsDifference >= 60000 && timeValues.millisecondsDifference <= 3600000)://if more than a minute passed and less than an hour display minutes
+          return `${timeValues.minutesDifference}m`
+        case (timeValues.millisecondsDifference > 3600000 && timeValues.millisecondsDifference <= 86400000)://if more than an hour passed and less 24 hours display hours
+          return `${timeValues.hoursDifference}h`
+        case (timeValues.millisecondsDifference > 86400000)://if more than 24 hours passed then display days
+          return `${timeValues.daysDifference}d`
+        default:
+          return `${timeValues.minutesDifference}m`
+      }
+    }
+
+    return (
+      <>
+        <button className="channelPreview">
+          <Avatar name={displayTitle} />
+          {displayTitle}
+          {timeDisplay(timeValues)}
+        </button>
+      </>
+    )
+  }
 
   return (
-    <>
+    <div className="messages">
       <SignInProvider>
         <Navbar />
       </SignInProvider>
@@ -122,7 +166,10 @@ const Messages = () => {
         <div style={{ height: '100%', display: 'flex', flexFLow: 'row nowrap' }}>
           <ChannelList
             filters={filters} sort={sort} options={options}
-            showChannelSearch
+            showChannelSearch={true}
+            Preview={(previewProps) => <CustomPreviewChannel {...previewProps} />}
+            onChannelDeleted
+
           />
           {/*<Channel channel={supportChannel} message={supportMessage}>*/}
           <Channel>
@@ -137,7 +184,7 @@ const Messages = () => {
           {/*</Channel>*/}
         </div>
       </Chat>
-    </>
+    </div>
   );
 };
 
