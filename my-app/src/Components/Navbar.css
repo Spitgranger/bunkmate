@@ -46,6 +46,10 @@ nav ul .pageContainer div {
   color: black;
 }
 
+.Avatar {
+  margin: 5px;
+}
+
 
 nav ul .pageContainer:hover {
   background-color: rgb(246, 246, 246);

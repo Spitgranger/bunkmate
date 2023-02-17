@@ -160,7 +160,7 @@ function Navbar() {
                 <RenderWhich />
                 {user ? (
                     <>
-                        <Tooltip title={`My Account`}>
+                        <Tooltip className="pageContainer" title={`My Account`}>
                             <label>
                                 <a style={{ display: 'flex', alignItems: 'center', height: '21px' }}>
                                     <IconButton
@@ -172,7 +172,7 @@ function Navbar() {
                                         aria-haspopup="true"
                                         aria-expanded={open ? 'true' : undefined}
                                     >
-                                        <Avatar alt={user?.response?.result?.email}>{user?.response?.result?.email?.charAt(0)}</Avatar>
+                                        <Avatar className="Avatar" alt={user?.response?.result?.email}>{user?.response?.result?.email?.charAt(0)}</Avatar>
                                     </IconButton>
                                 </a>
                             </label>
