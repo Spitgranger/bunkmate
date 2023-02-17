@@ -15,6 +15,7 @@ import ConnectWithoutContactIcon from '@mui/icons-material/ConnectWithoutContact
 import SettingsApplicationsIcon from '@mui/icons-material/SettingsApplications';
 import SettingsApplications from '@mui/icons-material/SettingsApplications';
 import Logout from '@mui/icons-material/Logout';
+import { useNavigate } from 'react-router-dom';
 
 
 function CheckActive({ to, page, ...props }) {
@@ -31,12 +32,15 @@ function CheckActive({ to, page, ...props }) {
 
 
 function Navbar() {
-
+    const navigate = useNavigate()
     const id = useId()
 
     const handleLogout = () => {
         localStorage.clear();
         setUser(null);
+        navigate("/");
+        document.location.reload();
+
     }
     //used to manage user state
     const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile')))
