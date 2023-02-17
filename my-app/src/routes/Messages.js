@@ -115,7 +115,7 @@ const Messages = () => {
 
   const CustomPreviewChannel = (props) => {
 
-    const { channel, displayTitle, unread } = props
+    const { user, channel, displayTitle, unread, lastMessage } = props
 
     /*console.log('print avatar', props.Avatar(props).props.className)*/
     console.log(props)
@@ -146,13 +146,54 @@ const Messages = () => {
       }
     }
 
+    const displayNumberUnread = (unread) => {
+      //if number of unread messages is 0 return nothing, 
+      //else if urnead messages is greater than 0 and less than/equal to 99 return unread
+      //else unread messages greater than 99 return '99+'
+      return (unread === 0 ? null : (
+        unread > 99 ?
+          <div style={{ borderRadius: '50%', backgroundColor: 'red', color: 'white', minWidth: '15px', }}>
+            <h5 style={{ padding: '1px', margin: '2px', fontWeight: '800' }} >
+              {'99+'}
+            </h5>
+          </div >
+          :
+          <div style={{ borderRadius: '50%', backgroundColor: 'red', color: 'white', minWidth: '15px' }}>
+            <h5 style={{ margin: '2px', fontWeight: '800' }} >
+              {unread}
+            </h5>
+          </div>
+      ));
+    }
+
+    const displayLastMessageUser = (profile, lastMessage) => {
+      return (profile?.response?.result?.name === lastMessage.user.name ? 'You: ' : "")
+
+    }
+
     return (
       <>
-        <button className="channelPreview">
-          <Avatar name={displayTitle} />
-          {displayTitle}
-          {timeDisplay(timeValues)}
-          {unread}
+        <button className="channelPreview" >
+          <div style={{ padding: '5px' }}>
+            <Avatar name={displayTitle} />
+          </div>
+          <div>
+            <div style={{ fontWeight: 'bold', padding: '5px', width: '100%', whiteSpace: 'nowrap', display: 'flex', justifyContent: 'flex-start' }}>
+              {displayTitle}
+            </div>
+            <div className="lastMessageAndTime" style={{ display: 'flex', flexFlow: 'row nowrap' }}>
+              <div style={{ fontWeight: '350', paddingLeft: '5px', paddingRight: '5px', whiteSpace: 'nowrap' }}>
+                {displayLastMessageUser(profile, lastMessage)}
+                {lastMessage.text}
+              </div>
+              <div style={{ paddindLeft: '5px' }} >
+                {`${timeDisplay(timeValues)}`}
+              </div>
+            </div>
+          </div>
+          <div style={{ padding: '5px', width: '100%', display: 'flex', justifyContent: 'flex-end' }}>
+            {displayNumberUnread(unread)}
+          </div>
         </button>
       </>
     )

@@ -13,6 +13,7 @@ body,
 }
 
 
+
 .str-chat__channel-list {
     width: 30%;
 }
@@ -65,14 +66,23 @@ body,
     flex-flow: column nowrap
 }
 
+/* Rest of styles for channelPreview found in Messages.js*/
 .channelPreview {
     border: none;
     border-radius: 10px;
     padding: 10px;
-    margin: 10px;
+    margin: 5px;
     display: flex;
     align-items: center;
 
+}
+
+.channelPreview {
+    background-color: rgb(243, 243, 243);
+}
+
+.channelPreview:hover {
+    background-color: white;
 }
 
 
@@ -92,6 +102,7 @@ body,
     width: 30%;
 
 }
+
 
 .str-chat__main-panel {
     border: 0px solid lightgrey;
