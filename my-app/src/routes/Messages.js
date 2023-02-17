@@ -39,11 +39,11 @@ const user = {
 };
 
 
+
 //this code filters for channels the user is a part of 
-const filters = { type: 'messaging', members: { $in: [profile ? profile.response.result.email : null] } };
+const filters = { type: 'messaging', members: { $in: [profile ? profile?.response?.result?.email : null] } };
 const sort = { last_message_at: -1 };
 const options = { state: true, presence: true, limit: 10 };
-
 
 const Messages = () => {
 
@@ -115,10 +115,10 @@ const Messages = () => {
 
   const CustomPreviewChannel = (props) => {
 
-    const { channel, displayTitle } = props
+    const { channel, displayTitle, unread } = props
 
     /*console.log('print avatar', props.Avatar(props).props.className)*/
-    console.log(channel)
+    console.log(props)
     //calculates the last time the message was sent
     const dateString = channel.data.last_message_at
     const date = new Date(dateString);
@@ -152,6 +152,7 @@ const Messages = () => {
           <Avatar name={displayTitle} />
           {displayTitle}
           {timeDisplay(timeValues)}
+          {unread}
         </button>
       </>
     )
@@ -167,7 +168,6 @@ const Messages = () => {
           <ChannelList
             filters={filters} sort={sort} options={options}
             showChannelSearch={true}
-            Preview={(previewProps) => <CustomPreviewChannel {...previewProps} />}
             onChannelDeleted
 
           />

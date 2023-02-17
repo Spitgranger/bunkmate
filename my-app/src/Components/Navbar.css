@@ -9,6 +9,7 @@ nav {
   background-color: white;
   align-items: center;
   justify-content: space-between;
+  box-sizing: border-box;
   /* use for box shadow insetting */
 
   /*box-shadow: 11px 14px 5px 0px grey,
@@ -19,7 +20,6 @@ nav ul {
   display: flex;
   align-items: center;
   white-space: nowrap;
-  margin: 0px;
   height: 100%;
 }
 
@@ -31,26 +31,28 @@ nav ul {
 }
 
 nav ul .pageContainer {
-  text-decoration: none;
+  padding-left: 15px;
+  padding-right: 15px;
+
+}
+
+
+nav ul .pageContainer div {
   float: right;
+}
+
+.page {
+  text-decoration: none;
   color: black;
-  height: 100%;
-
-
 }
 
-a .accountAnchor {
-  display: flex;
-  align-items: center;
 
-}
-
-nav ul a:hover {
+nav ul .pageContainer:hover {
   background-color: rgb(246, 246, 246);
   border-bottom: 5px solid aqua;
 }
 
-nav ul a.current {
+nav ul .pageContainer.current {
   border-bottom: 5px solid aqua;
   background-color: rgb(246, 246, 246);
 }
