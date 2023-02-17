@@ -175,7 +175,7 @@ function Navbar() {
                                         aria-haspopup="true"
                                         aria-expanded={open ? 'true' : undefined}
                                     >
-                                        <Avatar className="Avatar" alt={user?.response?.result?.email}>{user?.response?.result?.email?.charAt(0)}</Avatar>
+                                        <Avatar className="Avatar" alt={user?.result?.email}>{user?.result?.email?.charAt(0)}</Avatar>
                                     </IconButton>
                                 </a>
                             </label>
@@ -185,7 +185,7 @@ function Navbar() {
                                 <ListItemIcon>
                                     <AssignmentIndIcon />
                                 </ListItemIcon>
-                                {`${user?.response?.result?.name}'s account`}
+                                {`${user?.result?.name}'s account`}
                             </MenuItem>
                             <Divider />
                             <MenuItem sx={MenuItemsStyles} onClick={handleClose}>
@@ -229,7 +229,7 @@ function Navbar() {
                                         aria-haspopup="true"
                                         aria-expanded={open ? 'true' : undefined}
                                     >
-                                        <Avatar alt={user?.response?.result?.email}>{user?.response?.result?.email?.charAt(0)}</Avatar>
+                                        <Avatar alt={user?.result?.email}>{user?.result?.email?.charAt(0)}</Avatar>
                                     </IconButton>
                                 </a>
                             </label>

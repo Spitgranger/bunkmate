@@ -1,4 +1,4 @@
-import { useState, useContext } from "react"
+import { useState, useContext, useEffect, useRef } from "react"
 import "./SignIn.css"
 import Modal from "../Components/SubComponents/Modal";
 import { LineBox, DropDownMenu, FormSingleLineInput, ActionButton } from '../Components/SubComponents/Form';
@@ -64,24 +64,28 @@ export function SignInEmail() {
   const { setIsOpen } = useContext(SignInOpenContext)
   const { setMessage } = useContext(SignInModalMessage)
   const [data, setData] = useState({ email: '', password: '' });
-  const [error, setError] = useState("");
+  const [error, setError] = useState("default");
 
 
   const handleChange = (e) => {
     setData((prevData) => ({ ...prevData, [e.target.name]: e.target.value }))
   }
   const handleResponse = async e => {
-    await handleSignIn(e, data);
-    console.log(data);
+    const response = await handleSignIn(e, data);
     //5 lines below are pretty much garbage need to figure out how to extract error message
-    setIsOpen(false);
-    navigate(0)
+    setError(response);
   }
-
+  useEffect(() => {
+    if (error == "correct") {
+      setIsOpen(false);
+      navigate(0);
+    } else {
+      return
+    }
+  }, [error]);
   return (<>
     <div className="content">
-      {error ? <span>{error}</span> : null}
-      <span>{error}</span>
+      {error != "default" ? <h4>{error}</h4> : null}
       <LineBox flex={false} CssTextField={[
         <FormSingleLineInput
           name="email"
@@ -285,17 +289,26 @@ function handleSubmit(e, data) {
     .then(response => console.log(JSON.stringify(response)))
 }
 
-function handleSignIn(e, data) {
+async function handleSignIn(e, data) {
   console.log(data);
   e.preventDefault();
-  return fetch('/api/users/signin', {
+  const response = await fetch('/api/users/signin', {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
     },
     body: JSON.stringify(data),
-  }).then(response => response.json())
-    .then(response => { if (response.message !== "User doesn't exist") { localStorage.setItem('profile', JSON.stringify({ response })); return ""; } else { }; })
-
+  })
+  const jsonResponse = await response.json();
+  console.log(jsonResponse)
+  switch (jsonResponse.message) {
+    case "User doesn't exist":
+      return "User doesn't exist";
+    case "Invalid Credentials":
+      return "Invalid Credentials";
+    default:
+      localStorage.setItem('profile', JSON.stringify(jsonResponse));
+      return "correct";
+  }
 }

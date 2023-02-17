@@ -29,19 +29,19 @@ import support from '../Components/Assets/support.jpg'
 const profile = JSON.parse(localStorage.getItem('profile'))
 const apiKey = 'asnpsp7e72h6'
 //streamToken
-const userToken = profile?.response?.streamToken;
+const userToken = profile?.streamToken;
 
 
 const user = {
-  id: profile?.response?.result?._id,
-  name: profile?.response?.result?.name,
+  id: profile?.result?._id,
+  name: profile?.result?.name,
   image: 'https://getstream.io/random_png/?id=summer-rain-2&name=summer-rain-2',
 };
 
 
 
 //this code filters for channels the user is a part of 
-const filters = { type: 'messaging', members: { $in: [profile ? profile.response.result._id : null] } };
+const filters = { type: 'messaging', members: { $in: [profile ? profile.result._id : null] } };
 const sort = { last_message_at: -1 };
 const options = { state: true, presence: true, limit: 10 };
 
@@ -115,8 +115,8 @@ const Messages = () => {
   console.log(useChannelDeletedListener)
 
   const CustomPreviewChannel = (props) => {
-    const { activeChannel, channel, displayTitle, unread, lastMessage } = props
-    setChannels(activeChannel)
+
+    const { user, channel, displayTitle, unread, lastMessage, setActiveChannel, watchers } = props
 
     /*console.log('print avatar', props.Avatar(props).props.className)*/
     console.log(props)
@@ -175,14 +175,14 @@ const Messages = () => {
       if (lastMessage === undefined) {
         return ("")
       } else {
-        return (profile?.response?.result?.name === lastMessage.user.name ? 'You: ' : "")
+        return (profile?.result?.name === lastMessage.user.name ? 'You: ' : "")
       }
     }
 
 
     return (
       <>
-        <button className="channelPreview" >
+        <button className="channelPreview" onClick={() => (setActiveChannel(channel, watchers))} >
           <div style={{ padding: '5px' }}>
             <Avatar name={displayTitle} />
           </div>
