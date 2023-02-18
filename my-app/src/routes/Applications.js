@@ -5,7 +5,8 @@ import Uploads from '../Components/UploadsForm'
 import Lifestyle from '../Components/LifestyleForm'
 import { FormProgressBar } from '../Components/SubComponents/Form'
 import { useState, createContext } from 'react'
-import ValidationProvider from '../Components/SubComponents/ValidationContext'
+import ValidationProvider from '../Components/GlobalStateManagement/ValidationContext'
+import SignInProvider from '../Components/GlobalStateManagement/SignInContext';
 
 function Appliciation() {
 
@@ -55,10 +56,12 @@ function Appliciation() {
 
   return (
     <>
-      <Navbar />
+      <SignInProvider>
+        <Navbar />
+      </SignInProvider >
       <ValidationProvider>
         <div className="info">
-          <div className="page">
+          <div className="ApplicationPage">
             <FormProgressBar steps={totalSteps} currentStep={page}>
               <div className="progressBar" style={progressBarStyles['.progressBar']}>
                 <h5 className="1" style={progressBarStyles[`.${page + 1}`]}>(1) Background</h5>
@@ -66,7 +69,7 @@ function Appliciation() {
                 <h5 className="1" style={progressBarStyles[`.${page - 1}`]}>(3) LifeStyle</h5>
               </div>
             </FormProgressBar>
-            <section className="subPage">
+            <section className="ApplicationSubPage">
               {pages[page]}
             </section>
           </div>

@@ -94,10 +94,10 @@ export default function ValidationProvider({ children }) {
   const [phoneHelperText, setPhoneHelperText] = useState('');
 
   const handlePhoneValidation = (values) => {
-    const checkLength = values.phone.length !== 10;
-    const checkIsEmpty = !values.phone;
-    const checkIsNumber = isNaN(parseInt(values.phone));
-    const validFormat = !/^\d+$/.test(values.phone);
+    const checkLength = values?.phone?.length !== 10;
+    const checkIsEmpty = !values?.phone;
+    const checkIsNumber = isNaN(parseInt(values?.phone));
+    const validFormat = !/^\d+$/.test(values?.phone);
     return [checkLength, checkIsEmpty, checkIsNumber, validFormat];
   };
 
@@ -130,11 +130,11 @@ export default function ValidationProvider({ children }) {
   const [creditHelperText, setCreditHelperText] = useState('');
 
   const handleCreditValidation = (values) => {
-    const checkGreaterThan = parseInt(values.credit) > 999;
-    const checkLessThan = parseInt(values.credit) <= 0;
-    const checkIsNumber = isNaN(parseInt(values.credit));
-    const checkIsEmpty = (!values.credit);
-    const validFormat = !/^\d+$/.test(values.credit);
+    const checkGreaterThan = parseInt(values?.credit) > 999;
+    const checkLessThan = parseInt(values?.credit) <= 0;
+    const checkIsNumber = isNaN(parseInt(values?.credit));
+    const checkIsEmpty = (!values?.credit);
+    const validFormat = !/^\d+$/.test(values?.credit);
     return [checkGreaterThan, checkLessThan, checkIsNumber, checkIsEmpty, validFormat];
   };
 
@@ -165,7 +165,7 @@ export default function ValidationProvider({ children }) {
   const [emailHelperText, setEmailHelperText] = useState('');
 
   const handleEmailValidation = (values) => {
-    const email = values.email
+    const email = values?.email
     const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
     if (!emailRegex.test(email)) {
@@ -188,7 +188,7 @@ export default function ValidationProvider({ children }) {
     }));
   }
   const checkValidity = (values) => {
-    const length = values.about.split("").length
+    const length = values?.about?.split("").length
     if (length > 500) {
       setAboutError(true);
       setAboutHelperText(`Character limit reached. Delete ${length - 500} Characters`)

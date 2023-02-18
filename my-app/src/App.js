@@ -9,6 +9,7 @@ import Apartment2 from "./Components/Assets/apartment.jpg"
 import Apartment from "./Components/Assets/apartment2.jpg"
 import Room from "./Components/Assets/living_space.jpg"
 import Room2 from "./Components/Assets/living_space2.jpg"
+import SignInProvider from './Components/GlobalStateManagement/SignInContext';
 
 function App() {
   const keyinfo = [
@@ -292,7 +293,9 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <Navbar />
+        <SignInProvider>
+          <Navbar />
+        </SignInProvider>
       </header>
       <body>
         <section className="Listings">

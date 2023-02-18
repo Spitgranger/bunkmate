@@ -1,0 +1,134 @@
+/*styling for the core chat panel*/
+/* Use inspect element to find the classNames*/
+@import 'stream-chat-react/dist/css/v2/index.css';
+
+.messages {
+    height: 91vh;
+}
+
+
+html,
+body,
+#root {
+    height: 100%;
+}
+
+
+
+.str-chat__channel-list {
+    width: 30%;
+}
+
+.str-chat__channel {
+    width: 100%;
+}
+
+.str-chat__thread {
+    width: 45%;
+}
+
+.str-chat__channel-search-bar-button.str-chat__channel-search-bar-button--exit-search {
+    display: none;
+}
+
+.str-chat__channel-search {
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+
+.str-chat__channel-search-input--wrapper {
+    height: 50px;
+}
+
+.str-chat__channel-search-bar {
+    height: 50px;
+}
+
+.str-chat__channel-preview-messenger.str-chat__channel-preview.str-chat__channel-preview-messenger--active {
+    background-color: rgba(226, 226, 226, 0.737);
+    color: black;
+}
+
+.str-chat__channel-preview-messenger--last-message {
+    font-weight: bold;
+}
+
+.str-chat__message-text {
+    font-weight: bold;
+}
+
+.str-chat__header-livestream.str-chat__channel-header {
+    margin: 20px;
+}
+
+.str-chat__channel-list-messenger__main.str-chat__channel-list-messenger-react__main {
+    padding: 10px;
+    display: flex;
+    flex-flow: column nowrap
+}
+
+/* Rest of styles for channelPreview found in Messages.js*/
+.channelPreview {
+    border: none;
+    border-radius: 10px;
+    padding: 10px;
+    margin: 5px;
+    display: flex;
+    align-items: center;
+
+}
+
+.channelPreview {
+    background-color: rgb(243, 243, 243);
+}
+
+.channelPreview:hover {
+    background-color: white;
+}
+
+
+.str-chat__channel-preview-messenger.str-chat__channel-preview {
+    border-top-right-radius: 15px;
+    border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+    margin-bottom: 10px;
+}
+
+
+.str-chat.str-chat__theme-light.str-chat-channel-list.str-chat__channel-list.str-chat__channel-list-react {
+    background-color: rgb(243, 243, 243);
+    border: 0px solid lightgrey;
+    box-shadow: 0px 0px 10px 0px lightgrey;
+    width: 30%;
+
+}
+
+
+.str-chat__main-panel {
+    border: 0px solid lightgrey;
+    box-shadow: -3px 0px 12px -5px lightgrey;
+}
+
+.str-chat__channel-preview-messenger.str-chat__channel-preview {
+    background-color: rgb(243, 243, 243);
+}
+
+
+.str-chat__channel-preview-messenger.str-chat__channel-preview.str-chat__channel-preview-messenger--active {
+    background-color: white;
+}
+
+.str-chat__channel-preview-messenger.str-chat__channel-preview:hover {
+    background-color: white;
+
+}
+
+.str-chat__date-separator-line {
+    display: none;
+}
+
+.str-chat__date-separator {
+    display: flex;
+    justify-content: center;
+}

@@ -5,7 +5,7 @@ import { IoIosArrowDroprightCircle } from 'react-icons/io'
 import { IoIosArrowDropleftCircle } from 'react-icons/io'
 import { BsFillCircleFill } from 'react-icons/bs'
 import { useState } from 'react'
-import Modal from "./Modal";
+import Modal from "./SubComponents/Modal";
 
 export function Bookmark() {
 

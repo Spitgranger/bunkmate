@@ -71,26 +71,29 @@ const PlacesAutocomplete = (props) => {
                     margin: "none",
                     backgroundColor: 'black',
                     borderRadius: '10px 10px 0px 0px',
+                    opacity: 0.8,
+                    color: 'white'
                 }}
 
                 InputProps={{
                     style: {
-                    paddingBottom: '15px',
-                    paddingLeft: '10px',
+                        paddingBottom: '15px',
+                        paddingLeft: '10px',
                         color: 'white',
                     }
                 }}
 
             />
             {/* We can use the "status" to decide whether we should display the dropdown or not */}
-            {status === "OK" && <Paper sx={{ 
+            {status === "OK" && <Paper sx={{
                 padding: '0px',
                 minWidth: "100%",
-                backgroundColor: 'black', 
+                backgroundColor: 'black',
                 color: 'white',
                 boxSizing: 'border-box',
+                opacity: 0.8,
 
-                 }}><ul>{renderSuggestions()}</ul></Paper>}
+            }}><ul>{renderSuggestions()}</ul></Paper>}
         </div>
     );
 };
