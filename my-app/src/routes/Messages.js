@@ -113,28 +113,39 @@ const Messages = () => {
   console.log(useChannelDeletedListener)
 
   const CustomPreviewChannel = (props) => {
-    const [state, setState] = useState("");
+    //manages state for time since last message
+    const [timeLastMessage, setTimeLastMessage] = useState("");
 
     const { channel, displayTitle, unread, lastMessage, setActiveChannel } = props
 
     /*console.log('print avatar', props.Avatar(props).props.className)*/
     console.log(props)
     //calculates the last time the message was sent
-
     useEffect(() => {
-      const dateString = lastMessage?.updated_at;
-      const date = new Date(dateString);
-      const now = new Date();
+      const updateMessageTime = () => {
+        const dateString = lastMessage?.updated_at;
+        const now = new Date();
+        const date = new Date(dateString);
 
-      const millisecondsDifference = now.getTime() - date.getTime(); //milliseconds
-      const secondsDifference = Math.round(millisecondsDifference / 1000); //seconds
-      const minutesDifference = Math.round(millisecondsDifference / 60000); //minutes
-      const hoursDifference = Math.round(millisecondsDifference / 3600000); //hours
-      const daysDifference = Math.round(millisecondsDifference / 86400000); //days
-      const timeValues = { millisecondsDifference, secondsDifference, minutesDifference, hoursDifference, daysDifference }
-      console.log("message received");
-      setState(displayTime(timeValues, lastMessage));
-    }, [lastMessage]);
+        const millisecondsDifference = now.getTime() - date.getTime(); //milliseconds
+        const secondsDifference = Math.round(millisecondsDifference / 1000); //seconds
+        const minutesDifference = Math.round(millisecondsDifference / 60000); //minutes
+        const hoursDifference = Math.round(millisecondsDifference / 3600000); //hours
+        const daysDifference = Math.round(millisecondsDifference / 86400000); //days
+        const timeValues = { millisecondsDifference, secondsDifference, minutesDifference, hoursDifference, daysDifference }
+        setTimeLastMessage(displayTime(timeValues, lastMessage));
+      };
+
+      //run the update immediately when the effect is defined
+      updateMessageTime();
+
+      //set up the interval to update every 60 seconds
+      const intervalId = setInterval(updateMessageTime, 60000);
+
+      //clear the interval when the component unmounts
+      return () => clearInterval(intervalId);
+    }, [lastMessage])
+
 
     const displayTime = (timeValues, lastMessage) => {
       if (!lastMessage) {
@@ -200,7 +211,7 @@ const Messages = () => {
                 {lastMessage?.text}
               </div>
               <div style={{ marginLeft: '5px' }} >
-                {`${state}`}
+                {`${timeLastMessage}`}
               </div>
             </div>
           </div>
