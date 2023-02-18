@@ -42,7 +42,8 @@ const user = {
 //this code filters for channels the user is a part of 
 const filters = { type: 'messaging', members: { $in: [profile ? profile.result._id : null] } };
 const sort = { last_message_at: -1 };
-const options = { state: true, presence: true, limit: 10 };
+//message limit controls for much history is stored (not sure if it will increase costs)
+const options = { state: true, presence: true, limit: 10, message_limit: 100 };
 
 const Messages = () => {
 
@@ -235,9 +236,11 @@ const Messages = () => {
             Preview={(previewProps) => CustomPreviewChannel({ ...previewProps })}
             showChannelSearch
             onChannelDeleted
+            onSelect={(channel) => console.log(channel)}
           />
           {/*<Channel channel={supportChannel} message={supportMessage}>*/}
           <Channel
+            //decide what these values should be later
             maxNumberOfFiles={10}
             multipleUploads={true}
           >
