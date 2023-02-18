@@ -22,8 +22,7 @@ import {
 import Navbar from '../Components/Navbar';
 import SignInProvider from '../Components/GlobalStateManagement/SignInContext';
 import { useClient } from './hooks/useClient';
-import './Messages.css'
-import 'stream-chat-react/dist/css/v2/index.css';
+import './Messages.css';
 import support from '../Components/Assets/support.jpg'
 
 const profile = JSON.parse(localStorage.getItem('profile'))
@@ -114,22 +113,28 @@ const Messages = () => {
   console.log(useChannelDeletedListener)
 
   const CustomPreviewChannel = (props) => {
+    const [state, setState] = useState("");
 
     const { channel, displayTitle, unread, lastMessage, setActiveChannel } = props
 
     /*console.log('print avatar', props.Avatar(props).props.className)*/
     console.log(props)
     //calculates the last time the message was sent
-    const dateString = channel.data.last_message_at
-    const date = new Date(dateString);
-    const now = new Date();
 
-    const millisecondsDifference = now.getTime() - date.getTime(); //milliseconds
-    const secondsDifference = Math.round(millisecondsDifference / 1000); //seconds
-    const minutesDifference = Math.round(millisecondsDifference / 60000); //minutes
-    const hoursDifference = Math.round(millisecondsDifference / 3600000); //hours
-    const daysDifference = Math.round(millisecondsDifference / 86400000); //days
-    const timeValues = { millisecondsDifference, secondsDifference, minutesDifference, hoursDifference, daysDifference }
+    useEffect(() => {
+      const dateString = lastMessage?.updated_at;
+      const date = new Date(dateString);
+      const now = new Date();
+
+      const millisecondsDifference = now.getTime() - date.getTime(); //milliseconds
+      const secondsDifference = Math.round(millisecondsDifference / 1000); //seconds
+      const minutesDifference = Math.round(millisecondsDifference / 60000); //minutes
+      const hoursDifference = Math.round(millisecondsDifference / 3600000); //hours
+      const daysDifference = Math.round(millisecondsDifference / 86400000); //days
+      const timeValues = { millisecondsDifference, secondsDifference, minutesDifference, hoursDifference, daysDifference }
+      console.log("message received");
+      setState(displayTime(timeValues, lastMessage));
+    }, [lastMessage]);
 
     const displayTime = (timeValues, lastMessage) => {
       if (!lastMessage) {
@@ -195,7 +200,7 @@ const Messages = () => {
                 {lastMessage?.text}
               </div>
               <div style={{ marginLeft: '5px' }} >
-                {`${displayTime(timeValues, lastMessage)}`}
+                {`${state}`}
               </div>
             </div>
           </div>
