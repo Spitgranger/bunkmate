@@ -1,5 +1,6 @@
 /*styling for the core chat panel*/
 /* Use inspect element to find the classNames*/
+@import 'stream-chat-react/dist/css/v2/index.css';
 
 .messages {
     height: 91vh;
