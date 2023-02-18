@@ -172,6 +172,7 @@ const Messages = () => {
       //else if urnead messages is greater than 0 and less than/equal to 99 return unread
       //else unread messages greater than 99 return '99+'
       return (unread === 0 ? null : (
+        //max number of unread messages on the backend side is 255
         unread > 99 ?
           <div style={{ borderRadius: '50%', backgroundColor: 'red', color: 'white', minWidth: '15px', }}>
             <h5 style={{ padding: '1px', margin: '2px', fontWeight: '800' }} >
@@ -234,9 +235,7 @@ const Messages = () => {
           <ChannelList
             filters={filters} sort={sort} options={options}
             Preview={(previewProps) => CustomPreviewChannel({ ...previewProps })}
-            showChannelSearch
             onChannelDeleted
-            onSelect={(channel) => console.log(channel)}
           />
           {/*<Channel channel={supportChannel} message={supportMessage}>*/}
           <Channel
