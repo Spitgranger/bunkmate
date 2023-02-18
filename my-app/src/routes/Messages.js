@@ -48,7 +48,6 @@ const options = { state: true, presence: true, limit: 10 };
 const Messages = () => {
 
   const chatClient = useClient({ apiKey: apiKey, userData: user, tokenOrProvider: userToken });
-  const [channels, setChannels] = useState("")
   const [supportChannel, setSupportChannel] = useState(null)
   const [supportMessage, setSupportMessage] = useState(null)
 
@@ -116,7 +115,7 @@ const Messages = () => {
 
   const CustomPreviewChannel = (props) => {
 
-    const { user, channel, displayTitle, unread, lastMessage, setActiveChannel, watchers } = props
+    const { channel, displayTitle, unread, lastMessage, setActiveChannel } = props
 
     /*console.log('print avatar', props.Avatar(props).props.className)*/
     console.log(props)
@@ -182,20 +181,20 @@ const Messages = () => {
 
     return (
       <>
-        <button className="channelPreview" onClick={() => (setActiveChannel(channel, watchers))} >
+        <button className="channelPreview" onClick={() => (setActiveChannel(channel))} >
           <div style={{ padding: '5px' }}>
             <Avatar name={displayTitle} />
           </div>
-          <div>
+          <div style={{ width: '70%' }}>
             <div style={{ fontWeight: 'bold', padding: '5px', width: '100%', whiteSpace: 'nowrap', display: 'flex', justifyContent: 'flex-start' }}>
               {displayTitle}
             </div>
             <div className="lastMessageAndTime" style={{ display: 'flex', flexFlow: 'row nowrap' }}>
-              <div style={{ fontWeight: '350', paddingLeft: '5px', paddingRight: '5px', whiteSpace: 'nowrap' }}>
+              <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', fontWeight: '350', paddingLeft: '5px', whiteSpace: 'nowrap' }}>
                 {displayLastMessageUser(profile, lastMessage)}
                 {lastMessage?.text}
               </div>
-              <div style={{ paddindLeft: '5px' }} >
+              <div style={{ marginLeft: '5px' }} >
                 {`${displayTime(timeValues, lastMessage)}`}
               </div>
             </div>
