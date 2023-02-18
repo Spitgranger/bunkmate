@@ -235,6 +235,7 @@ const Messages = () => {
           <ChannelList
             filters={filters} sort={sort} options={options}
             Preview={(previewProps) => CustomPreviewChannel({ ...previewProps })}
+            showChannelSearch
             onChannelDeleted
           />
           {/*<Channel channel={supportChannel} message={supportMessage}>*/}
