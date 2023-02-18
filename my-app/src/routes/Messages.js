@@ -139,8 +139,8 @@ const Messages = () => {
       //run the update immediately when the effect is defined
       updateMessageTime();
 
-      //set up the interval to update every 60 seconds
-      const intervalId = setInterval(updateMessageTime, 60000);
+      //set up the interval to update every 30 seconds
+      const intervalId = setInterval(updateMessageTime, 30000);
 
       //clear the interval when the component unmounts
       return () => clearInterval(intervalId);
@@ -237,7 +237,10 @@ const Messages = () => {
             onChannelDeleted
           />
           {/*<Channel channel={supportChannel} message={supportMessage}>*/}
-          <Channel>
+          <Channel
+            maxNumberOfFiles={10}
+            multipleUploads={true}
+          >
             <ChannelInner />
             <Window>
               <ChannelHeader />
