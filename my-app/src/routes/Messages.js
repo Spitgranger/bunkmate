@@ -117,7 +117,7 @@ const Messages = () => {
     //manages state for time since last message
     const [timeLastMessage, setTimeLastMessage] = useState("");
 
-    const { channel, displayTitle, unread, lastMessage, setActiveChannel } = props
+    const { active, channel, displayTitle, unread, lastMessage, setActiveChannel } = props
 
     /*console.log('print avatar', props.Avatar(props).props.className)*/
     console.log(props)
@@ -199,7 +199,7 @@ const Messages = () => {
 
     return (
       <>
-        <button className="channelPreview" onClick={() => (setActiveChannel(channel))} >
+        <button style={active ? { backgroundColor: 'white' } : null} className="channelPreview" onClick={() => (setActiveChannel(channel))} >
           <div style={{ padding: '5px' }}>
             <Avatar name={displayTitle} />
           </div>
@@ -238,11 +238,8 @@ const Messages = () => {
             onChannelDeleted
           />
           {/*<Channel channel={supportChannel} message={supportMessage}>*/}
-          <Channel
-            //decide what these values should be later
-            maxNumberOfFiles={10}
-            multipleUploads={true}
-          >
+          {/*decide on the exact values later */}
+          <Channel maxNumberOfFiles={10} multipleUploads={true}>
             <ChannelInner />
             <Window>
               <ChannelHeader />
