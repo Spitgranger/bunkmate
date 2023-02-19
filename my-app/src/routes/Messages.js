@@ -176,12 +176,17 @@ const Messages = () => {
 
     //handle deletion of users
     async function handleDelete() {
-      await channel.removeMembers([profile.result._id])
-      document.location.reload()
+
+      await channel.removeMembers([profile.result._id], { text: `${profile.result.name} has left the group` })
+      document.location.reload();
     }
 
     async function handleUpdate() {
+      console.log(channel)
       await channel.update(
+        {
+          name: `${channel.state.member.user.name}`
+        },
         {
           text: `${profile.result.name} has left the group`
         },);
