@@ -24,6 +24,15 @@ import SignInProvider from '../Components/GlobalStateManagement/SignInContext';
 import { useClient } from './hooks/useClient';
 import './Messages.css';
 import support from '../Components/Assets/support.jpg'
+import { IoMdMore } from 'react-icons/io'
+import { styled, alpha } from '@mui/material/styles';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import Divider from '@mui/material/Divider';
+import ArchiveIcon from '@mui/icons-material/Archive';
+import IconButton from '@mui/material/IconButton';
+import { IoIosExit } from 'react-icons/io'
+import { Navigate } from 'react-router';
 
 const profile = JSON.parse(localStorage.getItem('profile'))
 const apiKey = 'asnpsp7e72h6'
@@ -39,17 +48,19 @@ const user = {
 
 
 
-//this code filters for channels the user is a part of 
-const filters = { type: 'messaging', members: { $in: [profile ? profile.result._id : null] } };
-const sort = { last_message_at: -1 };
-//message limit controls for much history is stored (not sure if it will increase costs)
-const options = { state: true, presence: true, limit: 10, message_limit: 100 };
 
 const Messages = () => {
 
   const chatClient = useClient({ apiKey: apiKey, userData: user, tokenOrProvider: userToken });
   const [supportChannel, setSupportChannel] = useState(null)
   const [supportMessage, setSupportMessage] = useState(null)
+
+  const sort = { last_message_at: -1 };
+  //message limit controls for much history is stored (not sure if it will increase costs)
+  const options = { state: true, presence: true, limit: 10, message_limit: 100 };
+  //this code filters for channels the user is a part of
+  const filters = { type: 'messaging', members: { $in: [profile ? profile.result._id : null] } };
+
 
   //Creating a custom support channel
   useEffect(() => {
@@ -65,13 +76,11 @@ const Messages = () => {
 
       setSupportChannel(channel);
 
-
       const message = channel.sendMessage({
         text: 'How can we help you today?'
       });
 
       setSupportMessage(message);
-
     }
 
 
@@ -111,16 +120,14 @@ const Messages = () => {
 
   }
 
-  console.log(useChannelDeletedListener)
 
   const CustomPreviewChannel = (props) => {
     //manages state for time since last message
     const [timeLastMessage, setTimeLastMessage] = useState("");
 
-    const { active, channel, displayTitle, unread, lastMessage, setActiveChannel } = props
+    const { watchers, active, channel, displayTitle, unread, lastMessage, setActiveChannel } = props
 
     /*console.log('print avatar', props.Avatar(props).props.className)*/
-    console.log(props)
     //calculates the last time the message was sent
     useEffect(() => {
       const updateMessageTime = () => {
@@ -147,8 +154,9 @@ const Messages = () => {
       return () => clearInterval(intervalId);
     }, [lastMessage])
 
-
+    //decides whether to show seconds, minutes hours or days 
     const displayTime = (timeValues, lastMessage) => {
+      //If there is no message history return empty string
       if (!lastMessage) {
         return ("")
       }
@@ -165,6 +173,24 @@ const Messages = () => {
           return `${timeValues.minutesDifference}m`
       }
     }
+
+    //handle deletion of users
+    async function handleDelete() {
+      await channel.removeMembers([profile.result._id])
+      document.location.reload()
+    }
+
+    async function handleUpdate() {
+      await channel.update(
+        {
+          text: `${profile.result.name} has left the group`
+        },);
+    }
+
+    function handleClose() {
+      setAnchorEl(null);
+    };
+
 
 
     const displayNumberUnread = (unread) => {
@@ -187,7 +213,7 @@ const Messages = () => {
           </div>
       ));
     }
-    //TODO
+
     const displayLastMessageUser = (profile, lastMessage) => {
       if (lastMessage === undefined) {
         return ("")
@@ -197,13 +223,23 @@ const Messages = () => {
     }
 
 
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const open = Boolean(anchorEl);
+    const handleClick = (event) => {
+      setAnchorEl(event.currentTarget);
+    };
+
+
+
+
     return (
       <>
-        <button style={active ? { backgroundColor: 'white' } : null} className="channelPreview" onClick={() => (setActiveChannel(channel))} >
+        <button style={active ? { backgroundColor: 'white' } : null} className="channelPreview" onClick={() => (setActiveChannel(channel, watchers))} >
           <div style={{ padding: '5px' }}>
             <Avatar name={displayTitle} />
           </div>
-          <div style={{ width: '70%' }}>
+          {/* Mainly controls for the size of the last message prevew*/}
+          <div style={{ width: '50%' }}>
             <div style={{ fontWeight: 'bold', padding: '5px', width: '100%', whiteSpace: 'nowrap', display: 'flex', justifyContent: 'flex-start' }}>
               {displayTitle}
             </div>
@@ -218,22 +254,59 @@ const Messages = () => {
             </div>
           </div>
           <div style={{ padding: '5px', width: '100%', display: 'flex', justifyContent: 'flex-end' }}>
+            <IconButton
+              onClick={handleClick}
+              size="small"
+              sx={{ ml: 2 }}
+              aria-controls={open ? 'account-menu' : undefined}
+              aria-haspopup="true"
+              aria-expanded={open ? 'true' : undefined}
+            >
+              <IoMdMore size={20} />
+            </IconButton>
+            <Menu
+              id="demo-customized-menu"
+              MenuListProps={{
+                'aria-labelledby': 'demo-customized-button',
+              }}
+              anchorEl={anchorEl}
+              open={open}
+              onClose={handleClose}
+            >
+              <MenuItem onClick={() => { handleDelete(); handleUpdate(); }} >
+                <IoIosExit size={25} />
+                Leave Group
+              </MenuItem>
+              <Divider sx={{ my: 0.5 }} />
+              <MenuItem onClick={handleClose} >
+                <ArchiveIcon size={20} />
+                Join Group
+              </MenuItem>
+            </Menu >
             {displayNumberUnread(unread)}
           </div>
-        </button>
+        </button >
       </>
     )
   }
 
   return (
-    <div className="messages">
+    <div
+      className="messages"
+    >
       <SignInProvider>
         <Navbar />
       </SignInProvider>
-      <Chat client={chatClient} theme='str-chat__theme-light'>
-        <div style={{ height: '100%', display: 'flex', flexFLow: 'row nowrap' }}>
+      <Chat
+        client={chatClient}
+        theme='str-chat__theme-light'
+      >
+        <div
+          style={{ height: '100%', display: 'flex', flexFLow: 'row nowrap' }}>
           <ChannelList
-            filters={filters} sort={sort} options={options}
+            filters={filters}
+            sort={sort}
+            options={options}
             Preview={(previewProps) => CustomPreviewChannel({ ...previewProps })}
             showChannelSearch
             onChannelDeleted
