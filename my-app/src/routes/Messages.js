@@ -17,7 +17,6 @@ import {
   useChannelDeletedListener,
   ChannelPreviewMessenger,
   Avatar,
-  InfiniteScroll,
   DateSeparator
 } from 'stream-chat-react';
 import Navbar from '../Components/Navbar';
@@ -48,12 +47,7 @@ const user = {
 
 
 const Messages = () => {
-  const sort = { last_message_at: -1 };
-  //message limit controls for much history is stored (not sure if it will increase costs)
-  //message_limit: 100
-  const options = { state: true, presence: true, limit: 10 };
-  //this code filters for channels the user is a part of
-  const filters = { type: 'messaging', members: { $in: [profile ? profile.result._id : null] } };
+
   const chatClient = useClient({ apiKey: apiKey, userData: user, tokenOrProvider: userToken });
   const [supportChannel, setSupportChannel] = useState(null);
   const [supportMessage, setSupportMessage] = useState(null);
@@ -82,7 +76,7 @@ const Messages = () => {
 
   }, [chatClient])
 
-  
+
 
   if (!profile) {
     return (
@@ -96,6 +90,12 @@ const Messages = () => {
   }
   if (!chatClient) return (<div style={{ height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }} > <LoadingIndicator size={50} /></div >)
 
+  const sort = { last_message_at: -1 };
+  //message limit controls for much history is stored (not sure if it will increase costs)
+  //message_limit: 100
+  const options = { state: true, presence: true, limit: 10 };
+  //this code filters for channels the user is a part of
+  const filters = { type: 'messaging', members: { $in: [profile ? profile.result._id : null] } };
 
   //displays message when user edits a message
   //https://getstream.io/chat/docs/sdk/react/guides/customization/adding_messagelist_notification/
@@ -173,21 +173,18 @@ const Messages = () => {
 
     //handle deletion of users
     async function handleDelete() {
-      await channel.hide(null, true);
-    }
-       
-    //backup
-    /*
-    async function handleUpdate() {
+      console.log(displayTitle)
       await channel.update(
         {
-          name: `${channel.state.member.user.name}`
+          name: displayTitle
         },
         {
           text: `${profile.result.name} has left the group`
         },);
+      await channel.hide(null, true);
     }
-    */
+
+    //function to handle closing of dropdown menu
     function handleClose() {
       setAnchorEl(null);
     };
@@ -274,14 +271,18 @@ const Messages = () => {
               open={open}
               onClose={handleClose}
             >
+              <MenuItem onClick={handleClose} >
+                <ArchiveIcon size={20} />
+                Invite to Group
+              </MenuItem>
+              <Divider sx={{ my: 0.5 }} />
               <MenuItem onClick={() => { handleDelete(); }} >
                 <IoIosExit size={25} />
                 Leave Group
               </MenuItem>
-              <Divider sx={{ my: 0.5 }} />
-              <MenuItem onClick={handleClose} >
-                <ArchiveIcon size={20} />
-                Join Group
+              <MenuItem onClick={() => { handleDelete(); }} >
+                <IoIosExit size={25} />
+                Mute Group
               </MenuItem>
             </Menu >
             {displayNumberUnread(unread)}
@@ -305,13 +306,12 @@ const Messages = () => {
         <div
           style={{ height: '100%', display: 'flex', flexFLow: 'row nowrap' }}>
           <ChannelList
-            Paginator={InfiniteScroll}
             filters={filters}
             sort={sort}
             options={options}
             Preview={(previewProps) => CustomPreviewChannel({ ...previewProps })}
             showChannelSearch
-            onChannelUpdated={()=> {}}
+            onChannelUpdated={() => { }}
           />
           {/*<Channel channel={supportChannel} message={supportMessage}>*/}
           {/*decide on the exact values later */}
