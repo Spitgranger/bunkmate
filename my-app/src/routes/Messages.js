@@ -40,7 +40,6 @@ const apiKey = 'asnpsp7e72h6'
 //streamToken
 const userToken = profile?.streamToken;
 
-
 const user = {
   id: profile?.result?._id,
   name: profile?.result?.name,
@@ -48,21 +47,16 @@ const user = {
 };
 
 
-
-
 const Messages = () => {
-
-  const chatClient = useClient({ apiKey: apiKey, userData: user, tokenOrProvider: userToken });
-  const [supportChannel, setSupportChannel] = useState(null)
-  const [supportMessage, setSupportMessage] = useState(null)
-
   const sort = { last_message_at: -1 };
   //message limit controls for much history is stored (not sure if it will increase costs)
   //message_limit: 100
   const options = { state: true, presence: true, limit: 10 };
   //this code filters for channels the user is a part of
   const filters = { type: 'messaging', members: { $in: [profile ? profile.result._id : null] } };
-
+  const chatClient = useClient({ apiKey: apiKey, userData: user, tokenOrProvider: userToken });
+  const [supportChannel, setSupportChannel] = useState(null);
+  const [supportMessage, setSupportMessage] = useState(null);
 
   //Creating a custom support channel
   useEffect(() => {
@@ -88,6 +82,7 @@ const Messages = () => {
 
   }, [chatClient])
 
+  
 
   if (!profile) {
     return (
@@ -178,11 +173,11 @@ const Messages = () => {
 
     //handle deletion of users
     async function handleDelete() {
-      console.log(channel)
-      await channel.inviteMembers(['63f07146473be7f73e7d4487'])
-      /*await channel.removeMembers([profile.result._id], { text: `${profile.result.name} has left group` })*/
+      await channel.hide(null, true);
     }
+       
     //backup
+    /*
     async function handleUpdate() {
       await channel.update(
         {
@@ -192,7 +187,7 @@ const Messages = () => {
           text: `${profile.result.name} has left the group`
         },);
     }
-
+    */
     function handleClose() {
       setAnchorEl(null);
     };
@@ -279,7 +274,7 @@ const Messages = () => {
               open={open}
               onClose={handleClose}
             >
-              <MenuItem onClick={() => { handleDelete(); handleUpdate(); }} >
+              <MenuItem onClick={() => { handleDelete(); }} >
                 <IoIosExit size={25} />
                 Leave Group
               </MenuItem>
@@ -316,13 +311,13 @@ const Messages = () => {
             options={options}
             Preview={(previewProps) => CustomPreviewChannel({ ...previewProps })}
             showChannelSearch
-            onChannelDeleted
+            onChannelUpdated={()=> {}}
           />
           {/*<Channel channel={supportChannel} message={supportMessage}>*/}
           {/*decide on the exact values later */}
           <Channel maxNumberOfFiles={10} multipleUploads={true}>
             <ChannelInner />
-            <Window>
+            <Window >
               <ChannelHeader />
               <MessageList />
               <MessageInput />
