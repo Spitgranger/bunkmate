@@ -17,6 +17,7 @@ import {
   useChannelDeletedListener,
   ChannelPreviewMessenger,
   Avatar,
+  InfiniteScroll,
   DateSeparator
 } from 'stream-chat-react';
 import Navbar from '../Components/Navbar';
@@ -57,7 +58,8 @@ const Messages = () => {
 
   const sort = { last_message_at: -1 };
   //message limit controls for much history is stored (not sure if it will increase costs)
-  const options = { state: true, presence: true, limit: 10, message_limit: 100 };
+  //message_limit: 100
+  const options = { state: true, presence: true, limit: 10 };
   //this code filters for channels the user is a part of
   const filters = { type: 'messaging', members: { $in: [profile ? profile.result._id : null] } };
 
@@ -176,13 +178,12 @@ const Messages = () => {
 
     //handle deletion of users
     async function handleDelete() {
-
-      await channel.removeMembers([profile.result._id], { text: `${profile.result.name} has left the group` })
-      document.location.reload();
-    }
-
-    async function handleUpdate() {
       console.log(channel)
+      await channel.inviteMembers(['63f07146473be7f73e7d4487'])
+      /*await channel.removeMembers([profile.result._id], { text: `${profile.result.name} has left group` })*/
+    }
+    //backup
+    async function handleUpdate() {
       await channel.update(
         {
           name: `${channel.state.member.user.name}`
@@ -309,6 +310,7 @@ const Messages = () => {
         <div
           style={{ height: '100%', display: 'flex', flexFLow: 'row nowrap' }}>
           <ChannelList
+            Paginator={InfiniteScroll}
             filters={filters}
             sort={sort}
             options={options}
