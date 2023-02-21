@@ -12,6 +12,7 @@ import { SignInOpenContext } from "../Components/GlobalStateManagement/SignInCon
 import { SignInModeContext } from "../Components/GlobalStateManagement/SignInContext";
 import { SignInModalMessage } from "../Components/GlobalStateManagement/SignInContext";
 import { useNavigate } from "react-router-dom";
+import { signIn, signUp } from "../api";
 
 
 function SignInPartner({ company, logo, onClick }) {
@@ -275,40 +276,26 @@ export function SignInPhone() {
   )
 }
 
-function handleSubmit(e, data) {
+async function handleSubmit(e, data) {
   console.log(data);
   e.preventDefault();
-  fetch('/api/users/signup', {
-    method: 'POST',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(data),
-  }).then(response => response.json())
-    .then(response => console.log(JSON.stringify(response)))
+  const response = await signUp(data);
+  console.log(JSON.stringify(response));
+
 }
 
 async function handleSignIn(e, data) {
   console.log(data);
   e.preventDefault();
-  const response = await fetch('/api/users/signin', {
-    method: 'POST',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(data),
-  })
-  const jsonResponse = await response.json();
-  console.log(jsonResponse)
+  const jsonResponse = await signIn(data);
+  console.log(jsonResponse);
   switch (jsonResponse.message) {
     case "User doesn't exist":
       return "User doesn't exist";
     case "Invalid Credentials":
       return "Invalid Credentials";
     default:
-      localStorage.setItem('profile', JSON.stringify(jsonResponse));
+      localStorage.setItem('profile', JSON.stringify(jsonResponse.data));
       return "correct";
   }
 }

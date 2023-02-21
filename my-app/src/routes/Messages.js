@@ -50,7 +50,7 @@ const Messages = () => {
   const supportUser = {
     id: "63f3d67b61c9a3d254621140",
     name: "Support Team",
-    image: 'https://picsum.photos/200',
+    image: 'https://picsum.photos/200'
   };
   const supportClient = useClient({ apiKey: apiKey, userData: supportUser, tokenOrProvider: supportToken });
 

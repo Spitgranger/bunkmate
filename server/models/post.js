@@ -1,16 +1,24 @@
 import mongoose from 'mongoose';
 
 const postSchema = mongoose.Schema({
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: "User",
+    },
     address: {
         type: String,
         required: true,
     },
-    price: Number,
-    tags: [String],
+    budget: Number,
     number_of_roomates: Number,
-    number_of_bedrooms: Number,
-    number_of_bathrooms: Number,
-    date_available: String,
+    start_date: Date,
+    term: String,
+    range: Number,
+    createdAt: {
+        type: Date,
+        default: new Date(),
+    }
 });
 
 const Post = mongoose.model('Post', postSchema);
