@@ -298,5 +298,4 @@ async function handleSignIn(e, data) {
         return "Invalid Credentials";
     }
   }
-
 }

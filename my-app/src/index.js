@@ -9,6 +9,7 @@ import Applications from './routes/Applications';
 import Error from './Error';
 import Social from './routes/Social';
 import Messages from './routes/Messages'
+import Profile from './routes/Profile';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 const router = createBrowserRouter([
@@ -18,8 +19,8 @@ const router = createBrowserRouter([
     errorElement: <Error />,
   },
   {
-    path: "/create",
-    element: <CreatePost />,
+    path: "/profile",
+    element: <Profile />,
     errorElement: <Error />,
   },
   {
