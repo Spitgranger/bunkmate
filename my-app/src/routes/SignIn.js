@@ -281,21 +281,22 @@ async function handleSubmit(e, data) {
   e.preventDefault();
   const response = await signUp(data);
   console.log(JSON.stringify(response));
-
 }
 
 async function handleSignIn(e, data) {
   console.log(data);
   e.preventDefault();
-  const jsonResponse = await signIn(data);
-  console.log(jsonResponse);
-  switch (jsonResponse.message) {
-    case "User doesn't exist":
-      return "User doesn't exist";
-    case "Invalid Credentials":
-      return "Invalid Credentials";
-    default:
-      localStorage.setItem('profile', JSON.stringify(jsonResponse.data));
-      return "correct";
+  try {
+    const jsonResponse = await signIn(data);
+    localStorage.setItem('profile', JSON.stringify(jsonResponse.data));
+    return "correct";
+  } catch (error) {
+    switch (error.response.data.message) {
+      case "User doesn't exist":
+        return "User doesn't exist";
+      case "Invalid Credentials":
+        return "Invalid Credentials";
+    }
   }
+
 }
