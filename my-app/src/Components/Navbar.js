@@ -185,7 +185,7 @@ function Navbar() {
                                 <ListItemIcon>
                                     <AssignmentIndIcon />
                                 </ListItemIcon>
-                                {`${user?.result?.name}'s account`}
+                                {`${user?.result?.name}'s Account`}
                             </MenuItem>
                             <Divider />
                             <MenuItem sx={MenuItemsStyles} onClick={handleClose}>

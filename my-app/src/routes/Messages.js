@@ -36,50 +36,51 @@ import { IoIosExit } from 'react-icons/io'
 import { Navigate } from 'react-router';
 import 'stream-chat-react/dist/css/v2/index.css';
 
-const profile = JSON.parse(localStorage.getItem('profile'))
-const apiKey = process.env.REACT_APP_STREAM_API_KEY
-console.log(apiKey)
-//streamToken
-const userToken = profile?.streamToken;
 
 
 
-const user = {
-  id: profile?.result?._id,
-  name: profile?.result?.name,
-  image: 'https://getstream.io/random_png/?id=summer-rain-2&name=summer-rain-2',
-};
 const Messages = () => {
 
+  const profile = JSON.parse(localStorage.getItem('profile'));
+  const apiKey = process.env.REACT_APP_STREAM_API_KEY;
+  const hasShownMessage = localStorage.getItem('hasShownMessage')
+
+  //Initialize a new support user
+  const supportToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjNmM2Q2N2I2MWM5YTNkMjU0NjIxMTQwIn0._hwRRwzLK4OvwgJxptajqQQMYoFmYjvhtg5Z_vtK6Wo'
+  const supportUser = {
+    id: "63f3d67b61c9a3d254621140",
+    name: "Support Team",
+    image: 'https://picsum.photos/200',
+  };
+  const supportClient = useClient({ apiKey: apiKey, userData: supportUser, tokenOrProvider: supportToken });
+
+  //Initialize a regular user 
+  const userToken = profile?.streamToken;
+  const user = {
+    id: profile?.result?._id,
+    name: profile?.result?.name,
+    image: 'https://picsum.photos/200',
+  };
   const chatClient = useClient({ apiKey: apiKey, userData: user, tokenOrProvider: userToken });
-  const [supportChannel, setSupportChannel] = useState(null);
-  const [supportMessage, setSupportMessage] = useState(null);
+
 
   //Creating a custom support channel
-  /* 
-   useEffect(() => {
- 
-     if (chatClient) {
- 
-       const channel = chatClient.channel('messaging', 'support-channel', {
-         name: "Support Team",
-         image: 'https://t4.ftcdn.net/jpg/01/36/75/37/360_F_136753727_wNMYxIesFtm7ecMeMehDu5yYCtLOAxCx.jpg',
-         members: ["vegas", "apples"],
-         session: 8,
-       });
- 
-       setSupportChannel(channel);
- 
-       const message = channel.sendMessage({
-         text: 'How can we help you today?'
-       });
- 
-       setSupportMessage(message);
-     }
- 
- 
-   }, [chatClient])
- */
+  if (supportClient) {
+
+    const supportChannel = supportClient.channel('messaging', {
+      name: "Bunkmate Support",
+      image: 'https://t4.ftcdn.net/jpg/01/36/75/37/360_F_136753727_wNMYxIesFtm7ecMeMehDu5yYCtLOAxCx.jpg',
+      members: [profile?.result?._id, '63f3d67b61c9a3d254621140'],
+    });
+
+    supportChannel.sendMessage({
+      text: 'Hi! How can we help you today?',
+    });
+
+    supportChannel.watch()
+    localStorage.setItem('hasShownMessage', true);
+
+  }
 
 
   if (!profile) {
@@ -128,6 +129,7 @@ const Messages = () => {
     }, [addNotification, channel]);
 
   }
+
 
 
   const CustomPreviewChannel = (props) => {
@@ -223,7 +225,7 @@ const Messages = () => {
           </div>
       ));
     }
-
+    //display the last message sent in the preview
     const displayLastMessageUser = (profile, lastMessage) => {
       if (lastMessage === undefined) {
         return ("")
@@ -238,7 +240,6 @@ const Messages = () => {
     const handleClick = (event) => {
       setAnchorEl(event.currentTarget);
     };
-
 
 
 
