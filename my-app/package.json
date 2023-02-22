@@ -9,6 +9,8 @@
     "@mui/material": "^5.11.5",
     "@mui/x-date-pickers": "^5.0.15",
     "@react-google-maps/api": "^2.18.1",
+    "@sendbird/chat": "^4.3.1",
+    "@sendbird/uikit-react": "^3.3.6",
     "@stream-io/stream-chat-css": "^3.9.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
