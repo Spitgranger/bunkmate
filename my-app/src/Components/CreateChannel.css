@@ -106,7 +106,7 @@
     background: none;
     border: none;
     outline: none;
-    min-width: 215px;
+    width: 100%;
 }
 
 .str-chat.dark .messaging-create-channel__input {
@@ -125,8 +125,8 @@
 
 .messaging-create-channel__user-results {
     display: flex;
-    flex-direction: column;
-    max-width: 330px;
+    flex-flow: column wrap;
+    max-width: 100%;
     background: #f1f1f1;
     opacity: 0.9;
     box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.07);
@@ -138,10 +138,13 @@
     margin-top: 4px;
 }
 
+
+
 .str-chat.dark .messaging-create-channel__user-results {
     background: #282a2d;
     box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.3);
 }
+
 
 .messaging-create-channel__user-result {
     height: 56px;

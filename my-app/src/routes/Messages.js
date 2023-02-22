@@ -37,13 +37,14 @@ import { IoIosExit } from 'react-icons/io'
 import { Navigate } from 'react-router';
 import 'stream-chat-react/dist/css/v2/index.css';
 import CreateChannel from '../Components/CreateChannel'
-
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import CancelIcon from '@mui/icons-material/Cancel';
+import Tooltip from '@mui/material/Tooltip'
 
 const Messages = () => {
   //controls whether to show the message list page or create group page
   const [isCreating, setIsCreating] = useState("")
   //controls the state of the button that controls the open and close state of the create group page
-  const [createGroupButton, setCreateGroupButton] = useState(false)
   const profile = JSON.parse(localStorage.getItem('profile'));
   const apiKey = process.env.REACT_APP_STREAM_API_KEY;
   const hasShownMessage = localStorage.getItem('hasShownMessage')
@@ -263,8 +264,10 @@ const Messages = () => {
           </div>
           {/* Mainly controls for the size of the last message prevew*/}
           <div style={{ width: '50%' }}>
-            <div style={{ fontWeight: 'bold', padding: '5px', width: '100%', whiteSpace: 'nowrap', display: 'flex', justifyContent: 'flex-start' }}>
-              {displayTitle}
+            <div style={{ display: 'flex', justifyContent: 'flex-start', fontWeight: 'bold', padding: '5px', width: '100%', whiteSpace: 'nowrap', }}>
+              <div style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                {displayTitle}
+              </div>
             </div>
             <div className="lastMessageAndTime" style={{ display: 'flex', flexFlow: 'row nowrap' }}>
               <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', fontWeight: '350', paddingLeft: '5px', whiteSpace: 'nowrap' }}>
@@ -325,33 +328,22 @@ const Messages = () => {
     }
   */
 
-  const handleFindGroup = () => {
-    console.log(isCreating)
-    if (isCreating) {
-      <CreateChannel onClose={() => setIsCreating(false)} />
-    } else if (!isCreating) {
-      return (
-        <>
-          <ChannelInner />
-          <ChannelHeader />
-          <MessageList />
-          <MessageInput />
-        </>
-      )
-    }
-  }
-
-  const handleButtonPress = () => {
+  //handle create group button press
+  const handleCreateGroup = () => {
     setIsCreating(!isCreating)
   }
 
   return (
-    <div
-      className="messages"
-    >
+    <div className="messages">
       <SignInProvider>
         <Navbar />
       </SignInProvider>
+
+      <Tooltip title={isCreating ? "Cancel Creating Group" : "Create Group"}>
+        <IconButton onClick={handleCreateGroup}>
+          {isCreating ? <CancelIcon /> : <AddCircleIcon />}
+        </IconButton>
+      </Tooltip>
       <Chat client={chatClient} theme='str-chat__theme-light'>
         <div style={{ height: '100%', display: 'flex', flexFLow: 'row nowrap' }}>
           <ChannelList
@@ -365,13 +357,8 @@ const Messages = () => {
           {/*decide on the exact values later */}
           <Channel maxNumberOfFiles={10} multipleUploads={true}>
             <Window>
-              <label>
-                <button onClick={handleButtonPress}>
-                  {isCreating ? "X" : "Create Group"}
-                </button>
-              </label>
               {isCreating ?
-                <CreateChannel toggleMobile={false} onClose={() => setIsCreating(false)} /> :
+                <CreateChannel toggleMobile={false} /> :
                 <>
                   <ChannelInner />
                   <ChannelHeader />

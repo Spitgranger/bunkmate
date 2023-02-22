@@ -1,14 +1,12 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Avatar, useChatContext } from 'stream-chat-react';
 import _debounce from 'lodash.debounce';
-import IconButton from '@mui/material/IconButton'
-import PhotoCamera from '@mui/icons-material/PhotoCamera'
+import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 
 import './CreateChannel.css';
 
 //each user profile that shows up after a query
 const UserResult = ({ user }) => {
-  console.log(user.name, user.id)
   return (
     <li className='messaging-create-channel__user-result'>
       <Avatar image={user.image} name={user.name || user.id} size={40} />
@@ -25,7 +23,7 @@ const UserResult = ({ user }) => {
 
 };
 
-const CreateChannel = ({ onClose, toggleMobile }) => {
+const CreateChannel = ({ toggleMobile }) => {
   const { client, setActiveChannel } = useChatContext();
 
   const [focusedUser, setFocusedUser] = useState(undefined);
@@ -96,10 +94,14 @@ const CreateChannel = ({ onClose, toggleMobile }) => {
 
   const createChannel = async () => {
     const selectedUsersIds = selectedUsers.map((u) => u.id);
+    const selectedUsersNames = selectedUsers.map((u) => `${u.name}, `);
 
     if (!selectedUsersIds.length) return;
 
+
     const conversation = await client.channel('messaging', {
+
+      name: [...selectedUsersNames, client.user.name],
       members: [...selectedUsersIds, client.userID],
     });
 
@@ -108,7 +110,6 @@ const CreateChannel = ({ onClose, toggleMobile }) => {
     setActiveChannel(conversation);
     setSelectedUsers([]);
     setUsers([]);
-    onClose();
   };
 
   const addUser = (u) => {
@@ -160,9 +161,8 @@ const CreateChannel = ({ onClose, toggleMobile }) => {
 
   return (
     <div className='messaging-create-channel'>
-      <header>
+      <header style={{ padding: '10px' }}>
         <div className='messaging-create-channel__left'>
-          <div className='messaging-create-channel__left-text'>To: </div>
           <div className='users-input-container'>
             {!!selectedUsers?.length && (
               <div className='messaging-create-channel__users'>
@@ -173,10 +173,7 @@ const CreateChannel = ({ onClose, toggleMobile }) => {
                     key={user.id}
                   >
                     <div className='messaging-create-channel__user-text'>{user.name}</div>
-                    <IconButton arai-label="Create Group" component="label">
-                      <input hidden accept="image/*" type="file" />
-                      <PhotoCamera />
-                    </IconButton>
+                    <RemoveCircleIcon />
                   </div>
                 ))}
               </div>
@@ -187,9 +184,10 @@ const CreateChannel = ({ onClose, toggleMobile }) => {
                 ref={inputRef}
                 value={inputText}
                 onChange={(e) => setInputText(e.target.value)}
-                placeholder={!selectedUsers.length ? 'Start typing for suggestions' : ''}
+                placeholder={!selectedUsers.length ? 'Start typing to find bunkmates :' : ''}
                 type='text'
                 className='messaging-create-channel__input'
+                style={{ fontSize: '15px' }}
               />
             </form>
           </div>
@@ -206,7 +204,7 @@ const CreateChannel = ({ onClose, toggleMobile }) => {
         <main>
           <ul className='messaging-create-channel__user-results'>
             {!!users?.length && !searchEmpty && (
-              <div>
+              <div className='messaging-create-channel__user-results__container'>
                 {users.map((user, i) => (
                   <div
                     className={`messaging-create-channel__user-result ${focusedUser === i && 'focused'
