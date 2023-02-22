@@ -1,79 +1,22 @@
-import React, { useEffect, useState } from 'react';
-import { StreamChat } from 'stream-chat';
-import Navbar from '../Components/Navbar';
-import SignInProvider from '../Components/GlobalStateManagement/SignInContext';
-import {
-  Chat,
-  Channel,
-  ChannelHeader,
-  ChannelList,
-  MessageList,
-  MessageInput,
-  Thread,
-  Window,
-  LoadingIndicator,
-} from 'stream-chat-react';
-import '@stream-io/stream-chat-css/dist/css/index.css';
-import './Profile.css'
+import SendbirdApp from '@sendbird/uikit-react/App';
+import '@sendbird/uikit-react/dist/index.css';
 
 
-
-//USING AS BACKUP IN CASE I FUCK UP THE MESSAGES PAGE
-const filters = {
-  type: 'messaging', members: {
-    $in: ['apples']
-  }
-};
-const options = { state: true, presence: true, limit: 10 };
-const sort = { last_message_at: -1 };
-const apiKey = 'asnpsp7e72h6'
-const profile = JSON.parse(localStorage.getItem('profile'))
-
-const Profile = () => {
-  const [client, setClient] = useState(null);
-
-  useEffect(() => {
-    const newClient = new StreamChat(apiKey);
-
-    const handleConnectionChange = ({ online = false }) => {
-      if (!online) return console.log('connection lost');
-      setClient(newClient);
-    };
-
-    newClient.on('connection.changed', handleConnectionChange);
-
-    newClient.connectUser(
-      {
-        id: profile?.result?.email,
-        email: profile?.result?.email,
-      },
-      profile?.streamToken,
-    );
-
-    return () => {
-      newClient.off('connection.changed', handleConnectionChange);
-      //newClient.disconnectUser().then(() => console.log('connection closed'));
-    };
-  }, []);
-
-  if (!client) return <LoadingIndicator />;
-
+const App = () => {
+  const profile = JSON.parse(localStorage.getItem('profile'));
   return (
-    <Chat client={client} >
-      <SignInProvider>
-        <Navbar />
-      </SignInProvider>
-      <ChannelList filters={filters} sort={sort} options={options} />
-      <Channel>
-        <Window>
-          <ChannelHeader />
-          <MessageList />
-          <MessageInput />
-        </Window>
-        <Thread />
-      </Channel>
-    </Chat>
+    <div className="Messages" style={{ height: '100vh', width: '100vw' }}>
+      <SendbirdApp
+        appId={'9CA2D0D1-C824-406D-9911-D8ED0AEA95DC'}
+        userId={profile.result.name}
+        theme="dark"
+        nickname="Sam"
+        showSearchIcon
+        allowProfileEdit
+      />
+    </div>
   );
 };
 
-export default Profile;
+export default App;
+

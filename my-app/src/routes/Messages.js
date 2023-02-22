@@ -19,6 +19,7 @@ import {
   Avatar,
   DateSeparator,
 } from 'stream-chat-react';
+
 import Navbar from '../Components/Navbar';
 import SignInProvider from '../Components/GlobalStateManagement/SignInContext';
 import { useClient } from './hooks/useClient';
@@ -29,14 +30,13 @@ import { IoMdMore } from 'react-icons/io'
 import { styled, alpha } from '@mui/material/styles';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import Divider from '@mui/material/Divider';
+import Divider, { dividerClasses } from '@mui/material/Divider';
 import ArchiveIcon from '@mui/icons-material/Archive';
 import IconButton from '@mui/material/IconButton';
 import { IoIosExit } from 'react-icons/io'
 import { Navigate } from 'react-router';
 import 'stream-chat-react/dist/css/v2/index.css';
-
-
+import App from './social-messenger/src/'
 
 
 const Messages = () => {
@@ -65,6 +65,7 @@ const Messages = () => {
 
 
   //Creating a custom support channel
+  /*
   if (supportClient) {
 
     const supportChannel = supportClient.channel('messaging', {
@@ -81,6 +82,7 @@ const Messages = () => {
     localStorage.setItem('hasShownMessage', true);
 
   }
+  */
 
 
   if (!profile) {
@@ -131,12 +133,11 @@ const Messages = () => {
   }
 
 
-
   const CustomPreviewChannel = (props) => {
     //manages state for time since last message
     const [timeLastMessage, setTimeLastMessage] = useState("");
 
-    const { watchers, active, channel, displayTitle, unread, lastMessage, setActiveChannel } = props
+    const { activeChannel, watchers, active, channel, displayTitle, unread, lastMessage, setActiveChannel } = props
 
     /*console.log('print avatar', props.Avatar(props).props.className)*/
     //calculates the last time the message was sent
@@ -155,6 +156,7 @@ const Messages = () => {
         setTimeLastMessage(displayTime(timeValues, lastMessage));
       };
 
+      console.log(channel)
       //run the update immediately when the effect is defined
       updateMessageTime();
 
@@ -187,7 +189,6 @@ const Messages = () => {
 
     //handle deletion of users
     async function handleDelete() {
-      console.log(displayTitle)
       await channel.update(
         {
           name: displayTitle
@@ -228,9 +229,9 @@ const Messages = () => {
     //display the last message sent in the preview
     const displayLastMessageUser = (profile, lastMessage) => {
       if (lastMessage === undefined) {
-        return ("")
+        return ("Send a message")
       } else {
-        return (profile?.result?.name === lastMessage.user.name ? 'You: ' : "")
+        return (profile?.result?.name === lastMessage.user.name ? "You: " : "")
       }
     }
 
@@ -240,6 +241,15 @@ const Messages = () => {
     const handleClick = (event) => {
       setAnchorEl(event.currentTarget);
     };
+
+    const handleInvite = () => {
+      console.log("activeChannel", activeChannel)
+      const channel = chatClient.channel('messaging', 'Group', { name: `${profile?.result?.name}'s Group` })
+      channel.addMembers(
+        [activeChannel.state.membership.user.id],
+        { text: `${activeChannel.state.membership.user.name} has joined the group` },
+        { hide_history: true })
+    }
 
 
 
@@ -284,7 +294,7 @@ const Messages = () => {
               open={open}
               onClose={handleClose}
             >
-              <MenuItem onClick={handleClose} >
+              <MenuItem onClick={handleInvite} >
                 <ArchiveIcon size={20} />
                 Invite to Group
               </MenuItem>
@@ -305,6 +315,12 @@ const Messages = () => {
     )
   }
 
+  const DropDown = (props) => console.log(props)
+  const additionalProps = {
+    DropDownContainer: DropDown,
+    searchForChannels: true,
+  }
+
   return (
     <div
       className="messages"
@@ -320,12 +336,12 @@ const Messages = () => {
             options={options}
             Preview={(previewProps) => CustomPreviewChannel({ ...previewProps })}
             showChannelSearch
-          /*onChannelUpdated={() => { }}*/
+            additionalChannelSearchProps={additionalProps}
           />
           {/*<Channel channel={supportChannel} message={supportMessage}>*/}
           {/*decide on the exact values later */}
           <Channel maxNumberOfFiles={10} multipleUploads={true}>
-            <Window >
+            <Window>
               <ChannelInner />
               <ChannelHeader />
               <MessageList />
