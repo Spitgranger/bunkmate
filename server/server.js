@@ -4,13 +4,15 @@ import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import postRoutes from './routes/posts.js'
 import userRoutes from './routes/users.js'
+import profileRoutes from './routes/profile.js'
 const app = express();
 dotenv.config();
 
 app.use(bodyParser.json({ limit: "30mb", extended: true }));
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 app.use('/api/posts', postRoutes);
-app.use('/api/users', userRoutes)
+app.use('/api/users', userRoutes);
+app.use('/api/profile', profileRoutes);
 
 
 const PORT = process.env.PORT || 5000;

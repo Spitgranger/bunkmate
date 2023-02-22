@@ -19,6 +19,7 @@ import {
   Avatar,
   DateSeparator,
 } from 'stream-chat-react';
+
 import Navbar from '../Components/Navbar';
 import SignInProvider from '../Components/GlobalStateManagement/SignInContext';
 import { useClient } from './hooks/useClient';
@@ -29,58 +30,58 @@ import { IoMdMore } from 'react-icons/io'
 import { styled, alpha } from '@mui/material/styles';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import Divider from '@mui/material/Divider';
+import Divider, { dividerClasses } from '@mui/material/Divider';
 import ArchiveIcon from '@mui/icons-material/Archive';
 import IconButton from '@mui/material/IconButton';
 import { IoIosExit } from 'react-icons/io'
 import { Navigate } from 'react-router';
 import 'stream-chat-react/dist/css/v2/index.css';
 
-const profile = JSON.parse(localStorage.getItem('profile'))
-const apiKey = process.env.REACT_APP_STREAM_API_KEY
-console.log(apiKey)
-//streamToken
-const userToken = profile?.streamToken;
 
-
-
-const user = {
-  id: profile?.result?._id,
-  name: profile?.result?.name,
-  image: 'https://getstream.io/random_png/?id=summer-rain-2&name=summer-rain-2',
-};
 const Messages = () => {
 
+  const profile = JSON.parse(localStorage.getItem('profile'));
+  const apiKey = process.env.REACT_APP_STREAM_API_KEY;
+  const hasShownMessage = localStorage.getItem('hasShownMessage')
+  /*
+  //Initialize a new support user
+  const supportToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjNmM2Q2N2I2MWM5YTNkMjU0NjIxMTQwIn0._hwRRwzLK4OvwgJxptajqQQMYoFmYjvhtg5Z_vtK6Wo'
+  const supportUser = {
+    id: "63f3d67b61c9a3d254621140",
+    name: "Support Team",
+    image: 'https://picsum.photos/200'
+  };
+  const supportClient = useClient({ apiKey: apiKey, userData: supportUser, tokenOrProvider: supportToken });
+  */
+  //Initialize a regular user 
+  const userToken = profile?.streamToken;
+  const user = {
+    id: profile?.result?._id,
+    name: profile?.result?.name,
+    image: 'https://picsum.photos/200',
+  };
   const chatClient = useClient({ apiKey: apiKey, userData: user, tokenOrProvider: userToken });
-  const [supportChannel, setSupportChannel] = useState(null);
-  const [supportMessage, setSupportMessage] = useState(null);
 
+  /*
   //Creating a custom support channel
-  /* 
-   useEffect(() => {
- 
-     if (chatClient) {
- 
-       const channel = chatClient.channel('messaging', 'support-channel', {
-         name: "Support Team",
-         image: 'https://t4.ftcdn.net/jpg/01/36/75/37/360_F_136753727_wNMYxIesFtm7ecMeMehDu5yYCtLOAxCx.jpg',
-         members: ["vegas", "apples"],
-         session: 8,
-       });
- 
-       setSupportChannel(channel);
- 
-       const message = channel.sendMessage({
-         text: 'How can we help you today?'
-       });
- 
-       setSupportMessage(message);
-     }
- 
- 
-   }, [chatClient])
- */
+  /*
+  if (supportClient) {
 
+    const supportChannel = supportClient.channel('messaging', {
+      name: "Bunkmate Support",
+      image: 'https://t4.ftcdn.net/jpg/01/36/75/37/360_F_136753727_wNMYxIesFtm7ecMeMehDu5yYCtLOAxCx.jpg',
+      members: [profile?.result?._id, '63f3d67b61c9a3d254621140'],
+    });
+
+    supportChannel.sendMessage({
+      text: 'Hi! How can we help you today?',
+    });
+
+    supportChannel.watch()
+    localStorage.setItem('hasShownMessage', true);
+
+  }
+*/
 
   if (!profile) {
     return (
@@ -134,7 +135,7 @@ const Messages = () => {
     //manages state for time since last message
     const [timeLastMessage, setTimeLastMessage] = useState("");
 
-    const { watchers, active, channel, displayTitle, unread, lastMessage, setActiveChannel } = props
+    const { activeChannel, watchers, active, channel, displayTitle, unread, lastMessage, setActiveChannel } = props
 
     /*console.log('print avatar', props.Avatar(props).props.className)*/
     //calculates the last time the message was sent
@@ -153,6 +154,7 @@ const Messages = () => {
         setTimeLastMessage(displayTime(timeValues, lastMessage));
       };
 
+      console.log(channel)
       //run the update immediately when the effect is defined
       updateMessageTime();
 
@@ -185,7 +187,6 @@ const Messages = () => {
 
     //handle deletion of users
     async function handleDelete() {
-      console.log(displayTitle)
       await channel.update(
         {
           name: displayTitle
@@ -223,12 +224,12 @@ const Messages = () => {
           </div>
       ));
     }
-
+    //display the last message sent in the preview
     const displayLastMessageUser = (profile, lastMessage) => {
       if (lastMessage === undefined) {
-        return ("")
+        return ("Send a message")
       } else {
-        return (profile?.result?.name === lastMessage.user.name ? 'You: ' : "")
+        return (profile?.result?.name === lastMessage.user.name ? "You: " : "")
       }
     }
 
@@ -239,6 +240,14 @@ const Messages = () => {
       setAnchorEl(event.currentTarget);
     };
 
+    const handleInvite = () => {
+      console.log("activeChannel", activeChannel)
+      const channel = chatClient.channel('messaging', 'Group', { name: `${profile?.result?.name}'s Group` })
+      channel.addMembers(
+        [activeChannel.state.membership.user.id],
+        { text: `${activeChannel.state.membership.user.name} has joined the group` },
+        { hide_history: true })
+    }
 
 
 
@@ -283,7 +292,7 @@ const Messages = () => {
               open={open}
               onClose={handleClose}
             >
-              <MenuItem onClick={handleClose} >
+              <MenuItem onClick={handleInvite} >
                 <ArchiveIcon size={20} />
                 Invite to Group
               </MenuItem>
@@ -304,6 +313,12 @@ const Messages = () => {
     )
   }
 
+  const DropDown = (props) => console.log(props)
+  const additionalProps = {
+    DropDownContainer: DropDown,
+    searchForChannels: true,
+  }
+
   return (
     <div
       className="messages"
@@ -319,12 +334,11 @@ const Messages = () => {
             options={options}
             Preview={(previewProps) => CustomPreviewChannel({ ...previewProps })}
             showChannelSearch
-          /*onChannelUpdated={() => { }}*/
           />
           {/*<Channel channel={supportChannel} message={supportMessage}>*/}
           {/*decide on the exact values later */}
           <Channel maxNumberOfFiles={10} multipleUploads={true}>
-            <Window >
+            <Window>
               <ChannelInner />
               <ChannelHeader />
               <MessageList />

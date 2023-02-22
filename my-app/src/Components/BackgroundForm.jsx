@@ -26,6 +26,17 @@ import {
 
 } from './GlobalStateManagement/ValidationContext';
 
+import { createProfile } from '../api';
+
+const handleSubmit = async (data) => {
+  try {
+    const response = await createProfile(data);
+    console.log(response);
+  } catch (error) {
+    console.log(error);
+  }
+
+}
 
 function Background({ forwardButton }) {
 
@@ -143,7 +154,7 @@ function Background({ forwardButton }) {
     ]
     } />
 
-    <ActionButton disabled={globalError} fontSize="15px" width="100%" onClick={() => { forwardButton(); localStorage.setItem("page1", JSON.stringify(values)); }} type="submit" title="Continue" endIcon={<IoChevronForward color="aqua" />} />
+    <ActionButton disabled={globalError} fontSize="15px" width="100%" onClick={() => { handleSubmit(values); forwardButton(); localStorage.setItem("page1", JSON.stringify(values)); }} type="submit" title="Continue" endIcon={<IoChevronForward color="aqua" />} />
   </>)
 }
 
