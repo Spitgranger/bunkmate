@@ -23,6 +23,7 @@ export const signIn = (formData) => API.post('/users/signin', formData)
 export const signUp = (formData) => API.post('/users/signup', formData)
 
 export const createProfile = (formData) => API.post('/profile', formData);
+export const getProfile = () => API.get('/profile');
 
 
 

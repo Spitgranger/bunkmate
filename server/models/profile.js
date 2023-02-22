@@ -60,6 +60,10 @@ const profileSchema = mongoose.Schema({
     picture: {
         type: String,
         required: true,
+    },
+    about: {
+        type: String,
+        required: true,
     }
 });
 

@@ -44,7 +44,7 @@ const Messages = () => {
   const profile = JSON.parse(localStorage.getItem('profile'));
   const apiKey = process.env.REACT_APP_STREAM_API_KEY;
   const hasShownMessage = localStorage.getItem('hasShownMessage')
-
+  /*
   //Initialize a new support user
   const supportToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjNmM2Q2N2I2MWM5YTNkMjU0NjIxMTQwIn0._hwRRwzLK4OvwgJxptajqQQMYoFmYjvhtg5Z_vtK6Wo'
   const supportUser = {
@@ -53,7 +53,7 @@ const Messages = () => {
     image: 'https://picsum.photos/200'
   };
   const supportClient = useClient({ apiKey: apiKey, userData: supportUser, tokenOrProvider: supportToken });
-
+  */
   //Initialize a regular user 
   const userToken = profile?.streamToken;
   const user = {
@@ -63,7 +63,7 @@ const Messages = () => {
   };
   const chatClient = useClient({ apiKey: apiKey, userData: user, tokenOrProvider: userToken });
 
-
+  /*
   //Creating a custom support channel
   if (supportClient) {
 
@@ -81,7 +81,7 @@ const Messages = () => {
     localStorage.setItem('hasShownMessage', true);
 
   }
-
+*/
 
   if (!profile) {
     return (
