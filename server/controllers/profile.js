@@ -4,7 +4,8 @@ export const createProfile = async (req, res) => {
     const profileData = req.body;
     console.log(profileData);
     try {
-        const existingProfile = Profile.findOne({ user: req.userId });
+        const existingProfile = await Profile.findOne({ user: req.userId });
+        console.log(existingProfile);
         if (existingProfile) {
             res.status(409).json("profile already exists");
             return;
