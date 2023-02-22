@@ -334,7 +334,6 @@ const Messages = () => {
             options={options}
             Preview={(previewProps) => CustomPreviewChannel({ ...previewProps })}
             showChannelSearch
-            additionalChannelSearchProps={additionalProps}
           />
           {/*<Channel channel={supportChannel} message={supportMessage}>*/}
           {/*decide on the exact values later */}
