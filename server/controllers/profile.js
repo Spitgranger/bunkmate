@@ -22,9 +22,13 @@ export const createProfile = async (req, res) => {
 export const getProfile = async (req, res) => {
     try {
         const profile = await Profile.findOne({ user: req.userId }).select("about address city credit education email employment firstName gender income lastName links phone picture province");
-        res.status(200).json(profile);
+        if(profile){
+            res.status(200).json(profile);
+        } else {
+            res.status(404).json({ message: "no profile associated with this account" });
+        }
     } catch (error) {
         console.log(error);
-        res.status(404).json({ message: "no profile associated with this account" });
+        res.status(500).json({ message: "Something Went Wrong" });
     }
 }
