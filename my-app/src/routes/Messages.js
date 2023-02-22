@@ -36,10 +36,14 @@ import IconButton from '@mui/material/IconButton';
 import { IoIosExit } from 'react-icons/io'
 import { Navigate } from 'react-router';
 import 'stream-chat-react/dist/css/v2/index.css';
+import CreateChannel from '../Components/CreateChannel'
 
 
 const Messages = () => {
-
+  //controls whether to show the message list page or create group page
+  const [isCreating, setIsCreating] = useState("")
+  //controls the state of the button that controls the open and close state of the create group page
+  const [createGroupButton, setCreateGroupButton] = useState(false)
   const profile = JSON.parse(localStorage.getItem('profile'));
   const apiKey = process.env.REACT_APP_STREAM_API_KEY;
   const hasShownMessage = localStorage.getItem('hasShownMessage')
@@ -241,7 +245,6 @@ const Messages = () => {
     };
 
     const handleInvite = () => {
-      console.log("activeChannel", activeChannel)
       const channel = chatClient.channel('messaging', 'Group', { name: `${profile?.result?.name}'s Group` })
       channel.addMembers(
         [activeChannel.state.membership.user.id],
@@ -251,11 +254,12 @@ const Messages = () => {
 
 
 
+
     return (
       <>
         <button style={active ? { backgroundColor: 'white' } : null} className="channelPreview" onClick={() => (setActiveChannel(channel, watchers))} >
           <div style={{ padding: '5px' }}>
-            <Avatar name={displayTitle} />
+            <Avatar name={displayTitle} image={'https://picsum.photos/200'} />
           </div>
           {/* Mainly controls for the size of the last message prevew*/}
           <div style={{ width: '50%' }}>
@@ -313,10 +317,32 @@ const Messages = () => {
     )
   }
 
-  const DropDown = (props) => console.log(props)
-  const additionalProps = {
-    DropDownContainer: DropDown,
-    searchForChannels: true,
+  /*
+    const DropDown = (props) => console.log(props)
+    const additionalProps = {
+      DropDownContainer: DropDown,
+      searchForChannels: true,
+    }
+  */
+
+  const handleFindGroup = () => {
+    console.log(isCreating)
+    if (isCreating) {
+      <CreateChannel onClose={() => setIsCreating(false)} />
+    } else if (!isCreating) {
+      return (
+        <>
+          <ChannelInner />
+          <ChannelHeader />
+          <MessageList />
+          <MessageInput />
+        </>
+      )
+    }
+  }
+
+  const handleButtonPress = () => {
+    setIsCreating(!isCreating)
   }
 
   return (
@@ -339,10 +365,20 @@ const Messages = () => {
           {/*decide on the exact values later */}
           <Channel maxNumberOfFiles={10} multipleUploads={true}>
             <Window>
-              <ChannelInner />
-              <ChannelHeader />
-              <MessageList />
-              <MessageInput />
+              <label>
+                <button onClick={handleButtonPress}>
+                  {isCreating ? "X" : "Create Group"}
+                </button>
+              </label>
+              {isCreating ?
+                <CreateChannel toggleMobile={false} onClose={() => setIsCreating(false)} /> :
+                <>
+                  <ChannelInner />
+                  <ChannelHeader />
+                  <MessageList />
+                  <MessageInput />
+                </>
+              }
             </Window>
             <Thread />
           </Channel>
