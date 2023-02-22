@@ -15,11 +15,10 @@ const Profile = () => {
     console.log(profile);
     return profile;
   }
-  //get data from backend when the component first loads
+  //get data from backend when the component first loads works
   useEffect(() => {
     handleLoad().then((profile) => setProfile(profile.data)).catch(error => console.log(error))
   }, []);
-
   return (
     <div className='page-container'>
       <SignInProvider>
