@@ -36,7 +36,6 @@ import IconButton from '@mui/material/IconButton';
 import { IoIosExit } from 'react-icons/io'
 import { Navigate } from 'react-router';
 import 'stream-chat-react/dist/css/v2/index.css';
-import App from './social-messenger/src/'
 
 
 const Messages = () => {
