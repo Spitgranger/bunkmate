@@ -154,9 +154,9 @@ function Navbar() {
                         <CheckActive to="/messages" page="Messages"></CheckActive>
                     </div>
                 </Tooltip>
-                <Tooltip className={"pageContainer"} title={"Message Roomates"}>
+                <Tooltip className={"pageContainer"} title={"Profile"}>
                     <div>
-                        <CheckActive to="/" page="Profile"></CheckActive>
+                        <CheckActive to="/profile" page="Profile"></CheckActive>
                     </div>
                 </Tooltip>
                 {/*hidden, used for Sign in pages*/}
@@ -185,7 +185,7 @@ function Navbar() {
                                 <ListItemIcon>
                                     <AssignmentIndIcon />
                                 </ListItemIcon>
-                                {`${user?.result?.name}'s account`}
+                                {`${user?.result?.name}'s Account`}
                             </MenuItem>
                             <Divider />
                             <MenuItem sx={MenuItemsStyles} onClick={handleClose}>

@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import User from '../models/user.js';
 import { StreamChat } from "stream-chat";
 import dotenv from 'dotenv'
+import multer from "multer";
 dotenv.config();
 const streamChat = StreamChat.getInstance("asnpsp7e72h6", "djzm2aq63636qg2mjeqx9x5422hb4qu78pqepyf7fx7j7fuu44zwdgathr24zeyu"
 );
