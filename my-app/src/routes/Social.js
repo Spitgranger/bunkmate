@@ -117,7 +117,7 @@ const Social = () => {
         googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
         libraries: libraries,
     })
-
+    /*
     const handleLoad = async () => {
         const profile = await getProfile();
         return profile;
@@ -126,12 +126,12 @@ const Social = () => {
     useEffect(() => {
         handleLoad().then((profile) => setProfile(profile.data)).catch(error => console.log(error))
     }, []);
-
+    */
     if (!isLoaded) {
         return <h1>ERROR HAS OCCURED</h1>
     }
     const handleProfileClick = (e, index) => {
-        console.log(profiles[index]);
+       // console.log(profiles[index]);
         setProfile(<Profile profile={profiles[index]} />)
     }
     return (
