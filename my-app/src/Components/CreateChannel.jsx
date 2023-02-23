@@ -12,8 +12,8 @@ const UserResult = ({ user }) => {
       <Avatar image={user.image} name={user.name || user.id} size={40} />
       <div className="messaging-create-channel__user-result__name">
         {user.name}
+        {user.online && <div className='messaging-create-channel__user-result-online' />}
       </div>
-      {user.online && <div className='messaging-create-channel__user-result-online' />}
       <div className='messaging-create-channel__user-result__details'>
         <span>{user.name}</span>
         {/* <span className='messaging-create-channel__user-result__details__last-seen'>{user.online}</span> */}

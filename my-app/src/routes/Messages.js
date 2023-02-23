@@ -192,13 +192,6 @@ const Messages = () => {
 
     //handle deletion of users
     async function handleDelete() {
-      await channel.update(
-        {
-          name: displayTitle
-        },
-        {
-          text: `${profile.result.name} has left the group`
-        },);
       await channel.hide(null, true);
 
     }
@@ -216,14 +209,14 @@ const Messages = () => {
       return (unread === 0 ? null : (
         //max number of unread messages on the backend side is 255
         unread > 99 ?
-          <div style={{ borderRadius: '50%', backgroundColor: 'red', color: 'white', minWidth: '15px', }}>
-            <h5 style={{ padding: '1px', margin: '2px', fontWeight: '800' }} >
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: '50%', backgroundColor: 'red', color: 'white', height: '15px', minWidth: '15px' }}>
+            <h5 style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0px', fontWeight: '800' }} >
               {'99+'}
             </h5>
           </div >
           :
-          <div style={{ borderRadius: '50%', backgroundColor: 'red', color: 'white', minWidth: '15px' }}>
-            <h5 style={{ margin: '2px', fontWeight: '800' }} >
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: '50%', backgroundColor: 'red', color: 'white', height: '15px', minWidth: '15px' }}>
+            <h5 style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0px', fontWeight: '800' }} >
               {unread}
             </h5>
           </div>
@@ -257,12 +250,12 @@ const Messages = () => {
 
     return (
       <>
-        <button style={active ? { backgroundColor: 'white' } : null} className="channelPreview" onClick={() => { setActiveChannel(channel, watchers); setIsCreating(false); }}>
+        <button style={active ? { display: 'flex', backgroundColor: 'white' } : null} className="channelPreview" onClick={() => { setActiveChannel(channel, watchers); setIsCreating(false); }}>
           <div style={{ padding: '5px' }}>
-            <Avatar name={displayTitle} image={'https://picsum.photos/200'} />
+            <Avatar name={displayTitle} size={40} image={'https://picsum.photos/200'} />
           </div>
           {/* Mainly controls for the size of the last message prevew*/}
-          <div style={{ width: '50%' }}>
+          <div style={{ width: '60%' }}>
             <div style={{ display: 'flex', justifyContent: 'flex-start', fontWeight: 'bold', padding: '5px', width: '100%', whiteSpace: 'nowrap', }}>
               <div style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>
                 {displayTitle}
@@ -278,7 +271,7 @@ const Messages = () => {
               </div>
             </div>
           </div>
-          <div style={{ padding: '5px', width: '100%', display: 'flex', justifyContent: 'flex-end' }}>
+          <div style={{ width: '20%', display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
             <IconButton
               onClick={handleClick}
               size="small"
