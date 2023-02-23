@@ -1,4 +1,4 @@
-import react, { useRef, useState } from "react";
+import react, { useEffect, useRef, useState } from "react";
 import Navbar from "../Components/Navbar";
 import { GoogleMap, useJsApiLoader, MarkerF, OverlayView, OVERLAY_MOUSE_TARGET, OVERLAY_LAYER } from "@react-google-maps/api";
 import mapStyles from './mapStyles.json'
@@ -7,9 +7,11 @@ import "./Social.css"
 import PlacesAutocomplete from "../Components/SubComponents/PlacesAutocomplete";
 import profiles from "../testing_data/testingData"
 import SignInProvider from '../Components/GlobalStateManagement/SignInContext';
+import { getProfile } from '../api'
 
 const libraries = ["places"];
 const Profile = ({ profile }) => {
+    console.log(profile)
     return (
         <OverlayView mapPaneName={OVERLAY_MOUSE_TARGET} position={profile.location}>
             <Card sx={{ width: 300, position: "absolute", zIndex: "2" }}>
@@ -37,13 +39,26 @@ const Profile = ({ profile }) => {
 
 const Social = () => {
 
+
     const [selected, setSelected] = useState(null);
     const center = selected || { lat: 43.642075, lng: -79.385981 };
     const [profile, setProfile] = useState(null);
+    const [profiles, setProfiles] = useState("");
     const { isLoaded, loadError } = useJsApiLoader({
         googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
         libraries: libraries,
     })
+
+    const handleLoad = async () => {
+        const profile = await getProfile();
+        return profile;
+    }
+
+    useEffect(() => {
+        handleLoad().then((profile) => setProfiles(profile.data)).catch(error => console.log(error))
+    }, []);
+    console.log(profiles)
+
     if (!isLoaded) {
         return <h1>ERROR HAS OCCURED</h1>
     }

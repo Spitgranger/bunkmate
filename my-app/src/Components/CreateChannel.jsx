@@ -23,9 +23,9 @@ const UserResult = ({ user }) => {
 
 };
 
-const CreateChannel = ({ toggleMobile }) => {
-  const { client, setActiveChannel } = useChatContext();
+const CreateChannel = ({ toggleMobile, client }) => {
 
+  const { setActiveChannel } = useChatContext();
   const [focusedUser, setFocusedUser] = useState(undefined);
   const [inputText, setInputText] = useState('');
   const [resultsOpen, setResultsOpen] = useState(false);
@@ -90,24 +90,41 @@ const CreateChannel = ({ toggleMobile }) => {
     if (inputText) {
       findUsersDebounce();
     }
+
   }, [inputText]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const createChannel = async () => {
     const selectedUsersIds = selectedUsers.map((u) => u.id);
-    const selectedUsersNames = selectedUsers.map((u) => `${u.name}, `);
+    const formattedSelectedUsersNames = selectedUsers.map((u) => `${u.name}, `);
+    //used in the special case where there is only one roomate you've selected
+    const selectedUsersNames = selectedUsers.map((u) => u.name);
 
+
+    //if no roomates selected return nothing
     if (!selectedUsersIds.length) return;
 
+    //if 1 other roomate return that other person's name
+    else if (selectedUsersIds.length === 1) {
+      const conversation = client.channel('messaging', {
+        name: [...selectedUsersNames],
+        members: [...selectedUsersIds, client.userID]
+      })
 
-    const conversation = await client.channel('messaging', {
+      await conversation.watch();
+      setActiveChannel(conversation);
+    }
 
-      name: [...selectedUsersNames, client.user.name],
-      members: [...selectedUsersIds, client.userID],
-    });
+    else {
+      const conversation = client.channel('messaging', {
 
-    await conversation.watch();
+        name: [...formattedSelectedUsersNames, client.user.name],
+        members: [...selectedUsersIds, client.userID],
+      });
 
-    setActiveChannel(conversation);
+      await conversation.watch();
+      setActiveChannel(conversation);
+    }
+
     setSelectedUsers([]);
     setUsers([]);
   };

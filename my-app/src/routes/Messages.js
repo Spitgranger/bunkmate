@@ -44,6 +44,7 @@ import Tooltip from '@mui/material/Tooltip'
 const Messages = () => {
   //controls whether to show the message list page or create group page
   const [isCreating, setIsCreating] = useState("")
+
   //controls the state of the button that controls the open and close state of the create group page
   const profile = JSON.parse(localStorage.getItem('profile'));
   const apiKey = process.env.REACT_APP_STREAM_API_KEY;
@@ -139,7 +140,6 @@ const Messages = () => {
   const CustomPreviewChannel = (props) => {
     //manages state for time since last message
     const [timeLastMessage, setTimeLastMessage] = useState("");
-
     const { activeChannel, watchers, active, channel, displayTitle, unread, lastMessage, setActiveChannel } = props
 
     /*console.log('print avatar', props.Avatar(props).props.className)*/
@@ -200,13 +200,13 @@ const Messages = () => {
           text: `${profile.result.name} has left the group`
         },);
       await channel.hide(null, true);
+
     }
 
     //function to handle closing of dropdown menu
     function handleClose() {
       setAnchorEl(null);
     };
-
 
 
     const displayNumberUnread = (unread) => {
@@ -245,6 +245,7 @@ const Messages = () => {
       setAnchorEl(event.currentTarget);
     };
 
+    //might be using wrong client
     const handleInvite = () => {
       const channel = chatClient.channel('messaging', 'Group', { name: `${profile?.result?.name}'s Group` })
       channel.addMembers(
@@ -254,11 +255,9 @@ const Messages = () => {
     }
 
 
-
-
     return (
       <>
-        <button style={active ? { backgroundColor: 'white' } : null} className="channelPreview" onClick={() => (setActiveChannel(channel, watchers))} >
+        <button style={active ? { backgroundColor: 'white' } : null} className="channelPreview" onClick={() => { setActiveChannel(channel, watchers); setIsCreating(false); }}>
           <div style={{ padding: '5px' }}>
             <Avatar name={displayTitle} image={'https://picsum.photos/200'} />
           </div>
@@ -358,7 +357,7 @@ const Messages = () => {
           <Channel maxNumberOfFiles={10} multipleUploads={true}>
             <Window>
               {isCreating ?
-                <CreateChannel toggleMobile={false} /> :
+                <CreateChannel toggleMobile={false} client={chatClient} /> :
                 <>
                   <ChannelInner />
                   <ChannelHeader />
