@@ -3,7 +3,7 @@ import './Navbar.css';
 import { Link, useResolvedPath, useMatch } from 'react-router-dom';
 import RenderWhich from '../routes/SignIn'
 import { Avatar, Typography, Button, Menu, MenuItem, Divider, Tooltip, IconButton, ListItemIcon } from '@mui/material';
-import { useState, useId, useContext } from 'react';
+import { useState, useId, useContext, useEffect } from 'react';
 import { SignInOpenContext } from './GlobalStateManagement/SignInContext';
 import { SignInModeContext } from './GlobalStateManagement/SignInContext';
 import { SignInModalMessage } from './GlobalStateManagement/SignInContext';
@@ -16,7 +16,7 @@ import SettingsApplicationsIcon from '@mui/icons-material/SettingsApplications';
 import SettingsApplications from '@mui/icons-material/SettingsApplications';
 import Logout from '@mui/icons-material/Logout';
 import { useNavigate } from 'react-router-dom';
-
+import decode from 'jwt-decode';
 
 function CheckActive({ to, page, ...props }) {
     const fullPath = useResolvedPath(to)
@@ -27,8 +27,6 @@ function CheckActive({ to, page, ...props }) {
         </Link>
     )
 }
-
-
 
 function Navbar() {
     const navigate = useNavigate()
@@ -79,7 +77,16 @@ function Navbar() {
         color: 'black'
     }
 
-
+    //useEffect to check if user's JWT is expired, if it is logout.
+    useEffect(() => {
+        const token = user?.token;
+        if(token){
+            const decodedToken = decode(token);
+            if(decodedToken.exp * 1000 < new Date().getTime()){
+                handleLogout();
+            }
+        }
+    })
 
     function DropDownMenu({ children }) {
         return (
