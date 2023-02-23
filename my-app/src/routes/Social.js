@@ -43,7 +43,6 @@ const Social = () => {
     const [selected, setSelected] = useState(null);
     const center = selected || { lat: 43.642075, lng: -79.385981 };
     const [profile, setProfile] = useState(null);
-    const [profiles, setProfiles] = useState("");
     const { isLoaded, loadError } = useJsApiLoader({
         googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
         libraries: libraries,
@@ -55,9 +54,8 @@ const Social = () => {
     }
 
     useEffect(() => {
-        handleLoad().then((profile) => setProfiles(profile.data)).catch(error => console.log(error))
+        handleLoad().then((profile) => setProfile(profile.data)).catch(error => console.log(error))
     }, []);
-    console.log(profiles)
 
     if (!isLoaded) {
         return <h1>ERROR HAS OCCURED</h1>
