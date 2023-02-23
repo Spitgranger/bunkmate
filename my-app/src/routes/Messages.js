@@ -140,7 +140,7 @@ const Messages = () => {
   const CustomPreviewChannel = (props) => {
     //manages state for time since last message
     const [timeLastMessage, setTimeLastMessage] = useState("");
-    const { activeChannel, watchers, active, channel, displayTitle, unread, lastMessage, setActiveChannel } = props
+    const { online, activeChannel, watchers, active, channel, displayTitle, unread, lastMessage, setActiveChannel } = props
 
     /*console.log('print avatar', props.Avatar(props).props.className)*/
     //calculates the last time the message was sent
@@ -247,7 +247,7 @@ const Messages = () => {
         { hide_history: true })
     }
 
-
+    console.log(props)
     return (
       <>
         <button style={active ? { display: 'flex', backgroundColor: 'white' } : null} className="channelPreview" onClick={() => { setActiveChannel(channel, watchers); setIsCreating(false); }}>

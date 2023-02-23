@@ -13,6 +13,74 @@ const libraries = ["places"];
 const Profile = ({ profile }) => {
     console.log(profile)
     return (
+        <div className="card">
+            <div className="ds-top"></div>
+            <div className="avatar-holder">
+                <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1820405/profile/profile-512.jpg?1533058950" alt="Vendrick" />
+            </div>
+            <div className="name">
+                <a href="https://codepen.io/AlbertFeynman/" target="_blank">Vendrick Feynman</a>
+                <h6 title="Profile" className="keyInfo"><i className="fas fa-users"></i> <span className="followers">90</span></h6>
+                <h6 style={{ width: '100%', justifyContent: 'center', display: 'flex', whiteSpace: 'nowrap' }}>26 year old Male - Student</h6>
+            </div>
+            <div className="button">
+                <a href="#" className="btn" onmousedown="follow();">Message <i className="fas fa-user-plus"></i></a>
+                <h6 style={{ color: 'white' }}>Some call me a pest because i'm the best,s ssssssssssssssssssss</h6>
+            </div>
+            <div className="ds-info">
+                <div className="ds pens">
+                    <h6 title="Number of pens created by the user">Budget:<i className="fas fa-edit"></i></h6>
+                    <p>$640/month</p>
+                </div>
+                <div className="ds projects">
+                    <h6 title="Number of projects created by the user">Move In <i className="fas fa-project-diagram"></i></h6>
+                    <p>2/2/2023</p>
+                </div>
+                <div className="ds posts">
+                    <h6 title="Number of posts">Duration <i className="fas fa-comments"></i></h6>
+                    <p>8-12 months</p>
+                </div>
+                <div className="ds bunkmates">
+                    <h6 title="Number of Roomates">Bunkmates <i className="fas fa-edit"></i></h6>
+                    <p>1</p>
+                </div>
+                <div className="ds location">
+                    <h6 title="Ideal Location">Location <i className="fas fa-comments"></i></h6>
+                    <p>Toronto</p>
+                </div>
+                <div className="ds flexibility">
+                    <h6 title="Range Flexibility">Flexibility<i className="fas fa-comments"></i></h6>
+                    <p>Within 10 km</p>
+                </div>
+            </div>
+            {/*
+            <div className="ds-skill">
+                <h6> Looking For <i className="fa fa-code" aria-hidden="true"></i></h6>
+                <div className="skill html">
+                    <h6><i className="fab fa-html5"></i> HTML5 </h6>
+                    <div className="bar bar-html">
+                        <p>95%</p>
+                    </div>
+                </div>
+                <div className="skill css">
+                    <h6><i className="fab fa-css3-alt"></i> CSS3 </h6>
+                    <div className="bar bar-css">
+                        <p>25%</p>
+                    </div>
+                </div>
+                <div className="skill javascript">
+                    <h6><i className="fab fa-js"></i> JavaScript </h6>
+                    <div className="bar bar-js">
+                        <p>75%</p>
+                    </div>
+                </div>
+            </div>
+    */}
+        </div>
+
+
+
+        /*
         <OverlayView mapPaneName={OVERLAY_MOUSE_TARGET} position={profile.location}>
             <Card sx={{ width: 300, position: "absolute", zIndex: "2" }}>
                 <CardActionArea>
@@ -22,6 +90,7 @@ const Profile = ({ profile }) => {
                         image={profile.image}
                         alt="profile picture"
                     />
+                    <div>kevin</div>
                     <CardContent>
                         <Typography gutterBottom variant="h5" component="div">
                             {profile.name}
@@ -33,6 +102,7 @@ const Profile = ({ profile }) => {
                 </CardActionArea>
             </Card>
         </OverlayView>
+        */
 
     )
 }
