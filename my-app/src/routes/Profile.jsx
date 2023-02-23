@@ -19,6 +19,7 @@ const Profile = () => {
   useEffect(() => {
     handleLoad().then((profile) => setProfile(profile.data)).catch(error => console.log(error))
   }, []);
+  if(profile){
   return (
     <div className='page-container'>
       <SignInProvider>
@@ -53,6 +54,20 @@ const Profile = () => {
       </div>
     </div>
   );
+            }
+  else {
+    return (
+      <div className='page-container'>
+         <SignInProvider>
+            <Navbar />
+          </SignInProvider>
+          <div className="error-content">
+            <h1>No profile associated with this account</h1>
+            <h3>Navigate to applications to create</h3>
+          </div>
+      </div>
+    )
+  }
 };
 
 export default Profile;
