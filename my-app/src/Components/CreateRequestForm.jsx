@@ -19,7 +19,7 @@ const backButtonStyles = {
 
 //jsx code
 
-function Lifestyle({ backwardButton }) {
+function CreateRequestForm({ backwardButton }) {
   const actions = {
     checkGlobalError: "check_global_error",
     checkLocalError: "check_local_error", //TODO
@@ -167,4 +167,4 @@ function Lifestyle({ backwardButton }) {
   </>)
 }
 
-export default Lifestyle;
+export default CreateRequestForm;

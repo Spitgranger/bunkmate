@@ -29,8 +29,6 @@ export default function ValidationProvider({ children }) {
     phone: "",
     education: "",
     email: "",
-    income: "",
-    credit: "",
     birthday: "",
   });
 
@@ -48,8 +46,6 @@ export default function ValidationProvider({ children }) {
     address: true,
     employment: true,
     education: true,
-    credit: true,
-    income: true,
   });
 
   //checks to see if all fields are empty
@@ -269,3 +265,22 @@ export default function ValidationProvider({ children }) {
   );
 }
 
+/*
+      <ValidationProvider>
+        <div className="info">
+          <div className="ApplicationPage">
+            <FormProgressBar steps={totalSteps} currentStep={page}>
+              <div className="progressBar" style={progressBarStyles['.progressBar']}>
+                <h5 className="1" style={progressBarStyles[`.${page + 1}`]}>(1) Background</h5>
+                <h5 className="1" style={progressBarStyles[`.${page}`]}>(2) Uploads</h5>
+                <h5 className="1" style={progressBarStyles[`.${page - 1}`]}>(3) LifeStyle</h5>
+              </div>
+            </FormProgressBar>
+            <section className="ApplicationSubPage">
+              {pages[page]}
+            </section>
+          </div>
+        </div>
+      </ValidationProvider>
+
+*/

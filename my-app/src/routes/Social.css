@@ -40,25 +40,25 @@ span .followers {
 @import url('https://fonts.googleapis.com/css?family=Krub:400,700');
 
 * {
-    margin: 0;
-    padding: 0;
     box-sizing: border-box;
 }
 
-html,
-body {
-    width: 100%;
-    height: 100%;
+
+.card .ds>* {
+    padding: 0px;
+    margin: 0px;
 }
 
-body {
-    background: #202020;
-    font-family: 'Krub', sans-serif;
+h6 {
+    padding: 0px;
+    margin: 0px;
 }
 
 
 /* card */
 .card {
+    background: #202020;
+    font-family: 'Krub', sans-serif;
     position: absolute;
     margin: auto;
     top: 0;

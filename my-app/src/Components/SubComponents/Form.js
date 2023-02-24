@@ -383,43 +383,108 @@ export function FormProgressBar({ steps, currentStep, children }) {
 };
 
 
+//FOR FUTURE REFERENCE DO NOT DELETE
+//FORM PROGRESS BAR CODE
 
-const marks = [
-  {
-    value: 0,
-    label: '0°C',
-  },
-  {
-    value: 20,
-    label: '20°C',
-  },
-  {
-    value: 37,
-    label: '37°C',
-  },
-  {
-    value: 100,
-    label: '100°C',
-  },
-];
 
-function valuetext(value) {
-  return `${value}°C`;
+/* sets the subpage of the form that you're on
+also controls progress bar*/
+
+/*
+const [page, setpage] = useState(0);
+
+const totalSteps = 2
+
+function handleContinueClick() {
+  setpage(() => page + 1)
+}
+function handleBackClick() {
+  setpage(() => page - 1)
 }
 
-export function DiscreteSliderMarks() {
-  return (
-    <Box sx={{ width: 300 }}>
-      <br></br>
-      <br></br>
-      <Slider
-        aria-label="Custom marks"
-        defaultValue={20}
-        getAriaValueText={valuetext}
-        step={null}
-        valueLabelDisplay="auto"
-        marks={marks}
-      />
-    </Box>
-  );
+const pages = [
+  <Background forwardButton={handleContinueClick} />,
+  <Uploads
+    backwardButton={handleBackClick}
+    forwardButton={handleContinueClick}
+  />,
+  <Lifestyle
+    backwardButton={handleBackClick}
+    forwardButton={handleContinueClick}
+  />,
+  <div>you're done</div>
+]
+
+const progressBarStyles = {
+  '.progressBar': {
+    display: 'flex',
+    justifyContent: 'space-between',
+    flexFlow: 'row nowrap',
+  },
+
+  '.progressBar >*': {
+    flex: 1,
+    display: 'flex',
+    justifyContent: 'center',
+  },
+  '.1': {
+    color: '#0eb8be',
+  },
+
 }
+
+
+<ValidationProvider>
+  <div className="info">
+    <div className="ApplicationPage">
+      <FormProgressBar steps={totalSteps} currentStep={page}>
+        <div className="progressBar" style={progressBarStyles['.progressBar']}>
+          <h5 className="1" style={progressBarStyles[`.${page + 1}`]}>(1) Background</h5>
+          <h5 className="1" style={progressBarStyles[`.${page}`]}>(2) Uploads</h5>
+          <h5 className="1" style={progressBarStyles[`.${page - 1}`]}>(3) LifeStyle</h5>
+        </div>
+      </FormProgressBar>
+      <section className="ApplicationSubPage">
+        {pages[page]}
+      </section>
+    </div>
+  </div>
+</ValidationProvider>
+*/
+
+
+//CSS
+/*
+h2,
+h5 {
+    margin: 12px;
+}
+
+
+p {
+    font-weight: lighter;
+    font-size: small;
+}
+
+.info {
+    margin-top: 3%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    flex-flow: column wrap;
+    justify-content: center;
+}
+
+.ApplicationPage {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+}
+
+.ApplicationSubPage {
+    padding: 30px 35px 5px 35px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px lightgrey;
+    max-width: 600px;
+}
+*/
