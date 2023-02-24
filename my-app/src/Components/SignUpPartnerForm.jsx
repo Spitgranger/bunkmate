@@ -37,7 +37,7 @@ const handleSubmit = async (data) => {
 
 }
 
-function SignUpForm({ forwardButton }) {
+function SignUpPartnerForm({ forwardButton }) {
 
   const { link, LinkHelperText, handleLinkValidation } = useContext(LinkValidationContext)
   const { values, setValues } = useContext(ValuesObjectContext)
@@ -146,4 +146,4 @@ function SignUpForm({ forwardButton }) {
   </>)
 }
 
-export default SignUpForm;
+export default SignUpPartnerForm;
