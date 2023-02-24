@@ -37,7 +37,6 @@ span .followers {
     height: unset !important;
 }
 
-@import url('https://fonts.googleapis.com/css?family=Krub:400,700');
 
 * {
     box-sizing: border-box;
@@ -50,9 +49,10 @@ span .followers {
 }
 
 h6 {
-    padding: 0px;
+    padding: 2px;
     margin: 0px;
 }
+
 
 
 /* card */
@@ -65,6 +65,7 @@ h6 {
     right: 0;
     bottom: 0;
     left: 0;
+    display: flex;
     width: 250px;
     height: 400px;
     border-radius: 10px;
@@ -146,7 +147,7 @@ h6 {
 .card .button {
     position: absolute;
     margin: auto;
-    padding: 8px;
+    padding: 10px;
     top: 20px;
     right: 0;
     bottom: 0;
@@ -156,6 +157,7 @@ h6 {
     text-align: center;
     animation: fadeIn 2s ease-in;
     outline: none;
+
 }
 
 .card .button a {
@@ -173,49 +175,32 @@ h6 {
     background: aqua;
 }
 
-.card .ds-info {
-    position: absolute;
-    margin: auto;
-    top: 150px;
-    bottom: 0;
-    right: 0;
-    left: 0;
-    width: inherit;
-    height: 40px;
+.card .ds-info-parent {
     display: flex;
+    align-items: flex-end;
+    height: 100%;
+}
+
+.card .ds-info-parent .ds-info {
+    display: flex;
+}
+
+.card .ds-info-parent .ds-info .ds-info-child {
+    display: flex;
+    align-items: center;
+    width: inherit;
     flex-flow: row wrap;
+    height: 105px;
+    align-items: flex-start;
 }
 
-.card .ds-info .pens,
-.card .ds-info .projects,
-.card .ds-info .posts {
-    position: relative;
-    left: -300px;
-    width: calc(250px / 3);
-    text-align: center;
-    color: white;
-    animation: fadeInMove 0.7s;
-    animation-fill-mode: forwards;
-}
-
-.card .ds-info .pens h6,
-.card .ds-info .projects h6,
-.card .ds-info .posts h6 {
-    text-transform: uppercase;
-    color: aqua;
-}
-
-.card .ds-info .pens p,
-.card .ds-info .projects p,
-.card .ds-info .posts p {
-    font-size: 12px;
-}
-
+.card .ds-info .budget,
+.card .ds-info .moveIn,
+.card .ds-info .duration,
 .card .ds-info .bunkmates,
 .card .ds-info .location,
 .card .ds-info .flexibility {
     position: relative;
-    padding: 5px;
     left: -300px;
     width: calc(250px / 3);
     text-align: center;
@@ -224,6 +209,9 @@ h6 {
     animation-fill-mode: forwards;
 }
 
+.card .ds-info .budget h6,
+.card .ds-info .moveIn h6,
+.card .ds-info .duration h6,
 .card .ds-info .bunkmates h6,
 .card .ds-info .location h6,
 .card .ds-info .flexibility h6 {
@@ -231,19 +219,29 @@ h6 {
     color: aqua;
 }
 
-.card .ds-info .bunkmatesp p,
+.card .ds-info .pens p,
+.card .ds-info .projects p,
+.card .ds-info .posts p,
+.card .ds-info .bunkmates p,
 .card .ds-info .location p,
 .card .ds-info .flexibility p {
     font-size: 12px;
 }
 
-.card .ds-info .ds:nth-of-type(2) {
-    animation-delay: 0.5s;
+/* timing of the fade in */
+.card .ds-info .ds:nth-of-type(2),
+.card .ds-info .ds:nth-of-type(5) {
+
+    animation-delay: 0.3s;
 }
 
-.card .ds-info .ds:nth-of-type(1) {
-    animation-delay: 1s;
+.card .ds-info .ds:nth-of-type(1),
+.card .ds-info .ds:nth-of-type(4) {
+    animation-delay: 0.6s;
 }
+
+
+
 
 .card .ds-skill {
     position: absolute;
@@ -312,6 +310,18 @@ h6 {
 }
 
 @keyframes fadeInMove {
+    0% {
+        opacity: 0;
+        left: -300px;
+    }
+
+    100% {
+        opacity: 1;
+        left: 0;
+    }
+}
+
+@keyframes fadeInMore {
     0% {
         opacity: 0;
         left: -300px;

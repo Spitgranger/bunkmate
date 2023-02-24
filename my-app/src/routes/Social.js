@@ -8,16 +8,23 @@ import PlacesAutocomplete from "../Components/SubComponents/PlacesAutocomplete";
 import profiles from "../testing_data/testingData"
 import SignInProvider from '../Components/GlobalStateManagement/SignInContext';
 import { getProfile } from '../api'
+import { BsBrightnessAltHigh } from "react-icons/bs";
 
 
 const libraries = ["places"];
 const Profile = ({ profile }) => {
+    const [sideCard, setSideCard] = useState(null)
     console.log(profile)
+    const handleEnter = () => {
+        setSideCard(<div></div>)
+    }
     return (
         <div className="card">
-            <div className="ds-top"></div>
-            <div className="avatar-holder">
-                <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1820405/profile/profile-512.jpg?1533058950" alt="Vendrick" />
+            <div style={{ filter: 'brightness(0.2) invert(0)', width: '300px' }} className="ds-top">
+                <img style={{ border: '2px solid aqua', width: 'inherit' }} src="https://picsum.photos/200/80" alt="Vendrick" />
+            </div>
+            <div style={{ border: '3px solid aqua' }} className="avatar-holder">
+                <img onMouseEnter={handleEnter} src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1820405/profile/profile-512.jpg?1533058950" alt="Vendrick" />
             </div>
             <div className="name">
                 <a href="https://codepen.io/AlbertFeynman/" target="_blank">Vendrick Feynman</a>
@@ -26,32 +33,37 @@ const Profile = ({ profile }) => {
             </div>
             <div className="button">
                 <a href="#" className="btn" onmousedown="follow();">Message <i className="fas fa-user-plus"></i></a>
-                <h6 style={{ color: 'white' }}>Some call me a pest because i'm the best,s ssssssssssssssssssss</h6>
+                <h6 style={{ color: 'white' }}>Some call me a best because i'm the pest </h6>
             </div>
-            <div className="ds-info">
-                <div className="ds pens">
-                    <h6 title="Number of pens created by the user">Budget:<i className="fas fa-edit"></i></h6>
-                    <p>$640/month</p>
-                </div>
-                <div className="ds projects">
-                    <h6 title="Number of projects created by the user">Move In <i className="fas fa-project-diagram"></i></h6>
-                    <p>2/2/2023</p>
-                </div>
-                <div className="ds posts">
-                    <h6 title="Number of posts">Duration <i className="fas fa-comments"></i></h6>
-                    <p>8-12 months</p>
-                </div>
-                <div className="ds bunkmates">
-                    <h6 title="Number of Roomates">Bunkmates <i className="fas fa-edit"></i></h6>
-                    <p>1</p>
-                </div>
-                <div className="ds location">
-                    <h6 title="Ideal Location">Location <i className="fas fa-comments"></i></h6>
-                    <p>Toronto</p>
-                </div>
-                <div className="ds flexibility">
-                    <h6 title="Range Flexibility">Flexibility<i className="fas fa-comments"></i></h6>
-                    <p>Within 10 km</p>
+            <div className="ds-info-parent">
+                <div className="ds-info">
+                    <div className="ds-info-child">
+
+                        <div className="ds budget">
+                            <h6 title="Number of pens created by the user">Budget<i className="fas fa-edit"></i></h6>
+                            <p>$640/month</p>
+                        </div>
+                        <div className="ds moveIn">
+                            <h6 title="Number of projects created by the user">Move In <i className="fas fa-project-diagram"></i></h6>
+                            <p>2/2/2023</p>
+                        </div>
+                        <div className="ds duration">
+                            <h6 title="Number of posts">Duration <i className="fas fa-comments"></i></h6>
+                            <p>8-12 months</p>
+                        </div>
+                        <div className="ds bunkmates">
+                            <h6 title="Number of Roomates">Bunkmates <i className="fas fa-edit"></i></h6>
+                            <p>1</p>
+                        </div>
+                        <div className="ds location">
+                            <h6 title="Ideal Location">Location <i className="fas fa-comments"></i></h6>
+                            <p>Toronto</p>
+                        </div>
+                        <div className="ds flexibility">
+                            <h6 title="Range Flexibility">Flexibility<i className="fas fa-comments"></i></h6>
+                            <p>Within 10 km</p>
+                        </div>
+                    </div>
                 </div>
             </div>
             {/*
@@ -109,7 +121,7 @@ const Profile = ({ profile }) => {
 }
 
 const MakeRequest = () => {
-    
+
 }
 
 const Social = () => {
@@ -136,7 +148,7 @@ const Social = () => {
         return <h1>ERROR HAS OCCURED</h1>
     }
     const handleProfileClick = (e, index) => {
-       // console.log(profiles[index]);
+        // console.log(profiles[index]);
         setProfile(<Profile profile={profiles[index]} />)
     }
     return (
