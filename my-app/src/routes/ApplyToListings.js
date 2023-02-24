@@ -1,6 +1,8 @@
 import './ApplyToListings.css';
 import Navbar from '../Components/Navbar';
 import Uploads from '../Components/UploadsForm'
+import SignUpPartnerForm from '../Components/SignUpPartnerForm'
+import CreateRequestForm from '../Components/CreateRequestForm'
 import { useState, createContext } from 'react'
 import ValidationProvider from '../Components/GlobalStateManagement/ValidationContext'
 import SignInProvider from '../Components/GlobalStateManagement/SignInContext';
@@ -25,9 +27,8 @@ function ApplyToListings() {
       <ValidationProvider>
         <div className="info">
           <section className="ApplicationSubPage">
-            <Uploads
-              forwardButton={handleContinueClick}
-            />,
+            <SignUpPartnerForm />
+            <CreateRequestForm />
           </section>
         </div>
       </ValidationProvider>
