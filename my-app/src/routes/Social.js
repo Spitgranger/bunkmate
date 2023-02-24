@@ -9,6 +9,7 @@ import profiles from "../testing_data/testingData"
 import SignInProvider from '../Components/GlobalStateManagement/SignInContext';
 import { getProfile } from '../api'
 
+
 const libraries = ["places"];
 const Profile = ({ profile }) => {
     console.log(profile)
@@ -105,6 +106,10 @@ const Profile = ({ profile }) => {
         */
 
     )
+}
+
+const MakeRequest = () => {
+    
 }
 
 const Social = () => {

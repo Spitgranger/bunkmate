@@ -1,5 +1,6 @@
-import { useState, useReducer, useEffect } from 'react'
+import { useState, useReducer, useEffect, useRef } from 'react'
 import { IoChevronBack } from 'react-icons/io5';
+import { createRequest } from '../api';
 import {
   FormSection,
   ActionButton,
@@ -92,7 +93,33 @@ function Lifestyle({ backwardButton }) {
     dispatch({ type: actions.checkGlobalError })
   }, [state.globalError, state.values.dateValue])
 
+  const autoCompleteRef = useRef();
+  const inputRef = useRef();
+  const options = {
+    componentRestrictions: { country: "ca" },
+    fields: ["address_components", "geometry", "formatted_address"],
+    types: []
+  };
+  useEffect(() => {
+    autoCompleteRef.current = new window.google.maps.places.Autocomplete(
+      inputRef.current,
+      options
+    );
+    autoCompleteRef.current.addListener("place_changed", async function () {
+      const place = await autoCompleteRef.current.getPlace();
+      //set coordinates of the location
+      const coordinates = [place.geometry.location.lat(), place.geometry.location.lng()];
+      dispatch({ type: actions.checkValues, payload: coordinates, name: "idealLocation" }); 
+      //set the address of the location
+      dispatch({ type: actions.checkValues, payload: place.formatted_address, name: "address" });
+      //setValues({ ...values, city: place.address_components[3].long_name, country: place.address_components[6].long_name, province: place.address_components[5].long_name })
+    });
+  }, []);
 
+  const handleSubmit = async (formData) => {
+    const response = await createRequest(formData);
+    console.log(response);
+  }
 
   return (<>
     <label style={{ cursor: 'pointer' }}>
@@ -112,7 +139,7 @@ function Lifestyle({ backwardButton }) {
     } />
 
     <LineBox flex={true} CssTextField={[
-      <FormSingleLineInput value={state?.values?.idealLocation} onChange={(e) => handleEmptyStringValidation(e, 'idealLocation')} size="small" type="text" field="Ideal Location" placeHolder="ex. Toronto" />,
+      <FormSingleLineInput value={state?.values?.address} onChange={(e) => handleEmptyStringValidation(e, 'address')} size="small" type="text" field="Ideal Location" placeHolder="ex. Toronto" inputRef={inputRef}/>,
       <DropDownMenu defaultValue={""} value={state?.values?.idealLengthStay} onChange={(e) => handleEmptyStringValidation(e, 'idealLengthStay')} label="Ideal length of stay" menuItem={["1-3 months", "4-6 months", "7-12 months", "1 year plus"]} />,
     ]
     } />
@@ -163,7 +190,7 @@ function Lifestyle({ backwardButton }) {
     }
     />
     {/* disable cotinue button if the user has not filled out all mandatory fields and / or still has errors*/}
-    <ActionButton disabled={state.globalError} onClick={() => { localStorage.setItem('page3', JSON.stringify(state.values)); }} fontSize="15px" width="100%" type="submit" title="Submit" />
+    <ActionButton disabled={state.globalError} onClick={() => { localStorage.setItem('page3', JSON.stringify(state.values)); handleSubmit(state.values); }} fontSize="15px" width="100%" type="submit" title="Submit" />
   </>)
 }
 

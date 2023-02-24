@@ -47,6 +47,7 @@ const Profile = () => {
                     <a>Edit</a>
                   </div>
                 }
+                return null;
               })}
             </div>
           </Paper>
