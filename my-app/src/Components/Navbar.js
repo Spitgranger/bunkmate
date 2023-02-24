@@ -153,7 +153,7 @@ function Navbar() {
                 </Tooltip>
                 <Tooltip className={"pageContainer"} title={"Apply For Rental Units"}>
                     <div >
-                        <CheckActive to="/apply to listings" page="Apply to Listings"></CheckActive>
+                        <CheckActive to="/apply_to_listings" page="Apply to Listings"></CheckActive>
                     </div>
                 </Tooltip>
                 <Tooltip className={"pageContainer"} title={"Message Roomates"}>
