@@ -5,7 +5,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import CreatePost from './routes/CreatePost';
-import Applications from './routes/ApplyToListings';
+import ApplyToListings from './routes/ApplyToListings';
 import Error from './Error';
 import Social from './routes/Social';
 import Messages from './routes/Messages'
@@ -24,8 +24,8 @@ const router = createBrowserRouter([
     errorElement: <Error />,
   },
   {
-    path: "/apply to listings",
-    element: <Applications />,
+    path: "/apply_to_listings",
+    element: <ApplyToListings />,
     errorElement: <Error />,
   },
   {

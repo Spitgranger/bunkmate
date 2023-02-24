@@ -296,6 +296,8 @@ async function handleSignIn(e, data) {
         return "User doesn't exist";
       case "Invalid Credentials":
         return "Invalid Credentials";
+      default:
+        return;
     }
   }
 }

@@ -5,7 +5,7 @@ import { useState, createContext } from 'react'
 import ValidationProvider from '../Components/GlobalStateManagement/ValidationContext'
 import SignInProvider from '../Components/GlobalStateManagement/SignInContext';
 
-function Appliciation() {
+function ApplyToListings() {
 
   /* sets the subpage of the form that you're on 
   also controls progress bar*/
@@ -34,4 +34,4 @@ function Appliciation() {
     </>
   )
 }
-export default Appliciation;
+export default ApplyToListings;

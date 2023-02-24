@@ -24,6 +24,7 @@ export const signUp = (formData) => API.post('/users/signup', formData)
 
 export const createProfile = (formData) => API.post('/profile', formData);
 export const getProfile = () => API.get('/profile');
+export const createRequest = (formData) => API.post('/request', formData);
 
 
 
