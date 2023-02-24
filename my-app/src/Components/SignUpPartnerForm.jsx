@@ -20,7 +20,6 @@ import {
   BirthdayValidationContext,
   GlobalValidationContext,
   PhoneValidationContext,
-  CreditValidationContext,
   AboutValidationContext,
   EmailValidationContext,
 
@@ -38,7 +37,7 @@ const handleSubmit = async (data) => {
 
 }
 
-function Background({ forwardButton }) {
+function SignUpPartnerForm({ forwardButton }) {
 
   const { link, LinkHelperText, handleLinkValidation } = useContext(LinkValidationContext)
   const { values, setValues } = useContext(ValuesObjectContext)
@@ -46,7 +45,6 @@ function Background({ forwardButton }) {
   const { birthday, handleBirthdayChange } = useContext(BirthdayValidationContext)
   const globalError = useContext(GlobalValidationContext)
   const { phoneError, phoneHelperText } = useContext(PhoneValidationContext)
-  const { creditError, creditHelperText } = useContext(CreditValidationContext)
   const { emailError, emailHelperText } = useContext(EmailValidationContext)
   const { aboutError, aboutHelperText, handleAboutValidation } = useContext(AboutValidationContext)
 
@@ -109,17 +107,14 @@ function Background({ forwardButton }) {
     <UploadFile helperText="Supported Files: jpg, png" helperTextPos="45%" width="50%" type="file" message="Upload Profile Picture" accept={["image/jpg", "image/jpeg", "image/png"]} endIcon={<CameraAltIcon sx={{ color: "aqua" }} />} handleFileUpload={handleFileUpload} />
     <LineBox flex={true} CssTextField={[
       <FormSingleLineInput size='small' type="text" field="Legal First Name" placeHolder="Sam" onChange={(e) => { handleFieldChange(e, 'firstName'); }} value={values?.firstName} />,
-      <FormSingleLineInput size="small" type="text" field="Legal Last Name" placeHolder="Jenkins" onChange={(e) => { handleFieldChange(e, 'lastName'); }} value={values?.lastName} />,]
+      <FormSingleLineInput size="small" type="text" field="Legal Last Name" placeHolder="Jenkins" onChange={(e) => { handleFieldChange(e, 'lastName'); }} value={values?.lastName} />,
+      <DropDownMenu label="Gender" menuItem={["Male", "Female", "Other"]} value={values?.gender} onChange={(e) => { handleFieldChange(e, 'gender'); }} />,
+    ]
     } />
     <div id="multiline">
       <FormMultiLineInput placeHolder="Tell us a bit about yourself" type="text" field="About Me" helperText={aboutHelperText} onChange={(e) => { handleAboutValidation(e); }} error={aboutError} value={values?.about} />
     </div>
 
-    <LineBox flex={true} CssTextField={[
-      <DropDownMenu label="Gender" menuItem={["Male", "Female", "Other"]} value={values?.gender} onChange={(e) => { handleFieldChange(e, 'gender'); }} />,
-      <FormSingleLineInput error={link} helperText={LinkHelperText} onChange={(e) => { handleFieldChange(e, 'links'); handleLinkValidation(e); }} size="small" type="text" field="Social Media Profile" placeHolder="ex. https://www.linktr.ee/john_smith" value={values?.links} />
-    ]
-    } />
     <br></br>
 
     <FormSection title="Personal Info" message="*We collect this data for our algorithms, we won't share it with anyone else. We'll ask you for proof on the next page" />
@@ -146,16 +141,9 @@ function Background({ forwardButton }) {
     ]
     } />
     <br></br>
-    <FormSection title="Finances and Verification" message="*You can provide us proof later" />
-    {/* ranges from 10000 - 100000*/}
-    <LineBox flex={true} CssTextField={[
-      <FormSingleLineInput size="small" helperText={creditHelperText} error={creditError} field="Credit Score" placeHolder="ex. 740" value={values?.credit} onChange={(e) => { handleFieldChange(e, 'credit'); }} />,
-      <DropDownMenu default={""} label="Annual Income" menuItem={["< $10000", "$10000 - $50000", "$50001 - $100000", "$100001 - $200000", "> $200001"]} value={values?.income} onChange={(e) => { handleFieldChange(e, 'income'); }} />,
-    ]
-    } />
 
     <ActionButton disabled={globalError} fontSize="15px" width="100%" onClick={() => { handleSubmit(values); forwardButton(); localStorage.setItem("page1", JSON.stringify(values)); }} type="submit" title="Continue" endIcon={<IoChevronForward color="aqua" />} />
   </>)
 }
 
-export default Background;
+export default SignUpPartnerForm;

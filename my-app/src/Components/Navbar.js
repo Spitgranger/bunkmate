@@ -80,13 +80,13 @@ function Navbar() {
     //useEffect to check if user's JWT is expired, if it is logout.
     useEffect(() => {
         const token = user?.token;
-        if(token){
+        if (token) {
             const decodedToken = decode(token);
-            if(decodedToken.exp * 1000 < new Date().getTime()){
+            if (decodedToken.exp * 1000 < new Date().getTime()) {
                 handleLogout();
             }
         }
-    })
+    }, [user])
 
     function DropDownMenu({ children }) {
         return (
@@ -151,9 +151,9 @@ function Navbar() {
                         <CheckActive to="/bunkmates" page="Bunkmates"></CheckActive>
                     </div>
                 </Tooltip>
-                <Tooltip className={"pageContainer"} title={"Get Matched"}>
+                <Tooltip className={"pageContainer"} title={"Apply For Rental Units"}>
                     <div >
-                        <CheckActive to="/applications" page="Applications"></CheckActive>
+                        <CheckActive to="/apply to listings" page="Apply to Listings"></CheckActive>
                     </div>
                 </Tooltip>
                 <Tooltip className={"pageContainer"} title={"Message Roomates"}>
@@ -161,7 +161,7 @@ function Navbar() {
                         <CheckActive to="/messages" page="Messages"></CheckActive>
                     </div>
                 </Tooltip>
-                <Tooltip className={"pageContainer"} title={"Profile"}>
+                <Tooltip className={"pageContainer"} title={"Create Or Edit Profile"}>
                     <div>
                         <CheckActive to="/profile" page="Profile"></CheckActive>
                     </div>
