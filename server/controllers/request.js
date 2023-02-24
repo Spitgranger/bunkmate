@@ -1,4 +1,5 @@
 import Request from "../models/request.js";
+import Profile from "../models/profile.js";
 
 export const createRequest = async (req, res) => {
     const requestData = req.body;
@@ -19,5 +20,7 @@ export const createRequest = async (req, res) => {
 }
 
 export const getRequests = async (req, res) => {
-    console.log("Hello");
+    const requestingUser = req.userId;
+    const existingRequests = await Request.find();
+    console.log(existingRequests);
 }
