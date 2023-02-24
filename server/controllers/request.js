@@ -22,5 +22,6 @@ export const createRequest = async (req, res) => {
 export const getRequests = async (req, res) => {
     const requestingUser = req.userId;
     const existingRequests = await Request.find();
-    console.log(existingRequests);
+    console.log(existingRequests)
+    
 }

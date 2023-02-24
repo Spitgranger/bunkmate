@@ -17,10 +17,6 @@ const profileSchema = mongoose.Schema({
         type: String,
         required: true,
     },
-    links: {
-        type: String,
-        required: true,
-    },
     email: {
         type: String,
         required: true,
@@ -48,15 +44,7 @@ const profileSchema = mongoose.Schema({
     education: {
         type: String,
         required: true,
-    },
-    credit: {
-        type: Number,
-        required: true,
-    },
-    income: {
-        type: String,
-        required: true,
-    },
+    }, 
     picture: {
         type: String,
         required: true,
