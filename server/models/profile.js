@@ -44,15 +44,7 @@ const profileSchema = mongoose.Schema({
     education: {
         type: String,
         required: true,
-    },
-    credit: {
-        type: Number,
-        required: true,
-    },
-    income: {
-        type: String,
-        required: true,
-    },
+    }, 
     picture: {
         type: String,
         required: true,
