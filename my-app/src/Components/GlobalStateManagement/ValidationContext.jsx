@@ -24,12 +24,21 @@ export default function ValidationProvider({ children }) {
     country: "",
     address: "",
     province: "",
-    links: "",
     employment: "",
     phone: "",
     education: "",
     email: "",
     birthday: "",
+    cannabis: "",
+    havePets: "",
+    sleepSchedule: "",
+    cleanliness: "",
+    drinking: "",
+    smoking: "",
+    occupation: "",
+    tolerateGuests: "",
+    toleratePets: "",
+    idealLocation: "",
   });
 
 
@@ -46,10 +55,19 @@ export default function ValidationProvider({ children }) {
     address: true,
     employment: true,
     education: true,
+    cannabis: true,
+    havePets: true,
+    sleepSchedule: true,
+    cleanliness: true,
+    drinking: true,
+    smoking: true,
+    occupation: true,
+    tolerateGuests: true,
+    toleratePets: true,
   });
 
   //checks to see if all fields are empty
-  const handleEmptyStringValidation = (field) => {
+  const handleLocalError = (field) => {
     if (values[field]) {
       setFieldError(prevValue => ({ ...prevValue, [field]: false }))
     } else if (!values[field]) {
@@ -60,6 +78,7 @@ export default function ValidationProvider({ children }) {
   const [globalError, setGlobalError] = useState(true)
 
   const handleGlobalError = (fieldError) => {
+    console.log(fieldError)
     //checks to see if all items within the object are false
     if (Object.values(fieldError).every(val => val === false)) {
       setGlobalError(false)
@@ -224,12 +243,10 @@ export default function ValidationProvider({ children }) {
   }
 
   //handle file uploads
-  const handleFileUpload = e => {
+  const handleFileUpload = (e) => {
     const file = e.target.files[0];
     handleConversion(file, (result) => {
-      setValues((prevValue) => (
-        { ...prevValue, picture: result }
-      ));
+      return result;
     });
   }
 
@@ -239,19 +256,19 @@ export default function ValidationProvider({ children }) {
     handlePhoneLogic(handlePhoneValidation(values));
     handleEmailValidation(values);
     checkValidity(values);
-    Object.keys(fieldError).forEach((value) => handleEmptyStringValidation(value));
+    Object.keys(fieldError).forEach((value) => handleLocalError(value));
   }, [values]);
 
   return (
     <ValuesObjectContext.Provider value={{ values, setValues }}>
       <LinkValidationContext.Provider value={{ link, LinkHelperText, handleLinkValidation }}>
-        <ImageValidationContext.Provider value={handleFileUpload}>
+        <ImageValidationContext.Provider value={{ handleFileUpload }}>
           <BirthdayValidationContext.Provider value={{ birthday, handleBirthdayChange }}>
             <PhoneValidationContext.Provider value={{ phoneError, phoneHelperText }}>
               <CreditValidationContext.Provider value={{ creditError, creditHelperText }}>
                 <EmailValidationContext.Provider value={{ emailError, emailHelperText }}>
                   <AboutValidationContext.Provider value={{ aboutHelperText, aboutError, handleAboutValidation }}>
-                    <GlobalValidationContext.Provider value={globalError}>
+                    <GlobalValidationContext.Provider value={{ globalError, fieldError, handleLocalError }}>
                       {children}
                     </GlobalValidationContext.Provider>
                   </AboutValidationContext.Provider>

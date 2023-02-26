@@ -1,5 +1,4 @@
-import { useState, useReducer, useEffect, useRef } from 'react'
-import { IoChevronBack } from 'react-icons/io5';
+import { useState, useReducer, useEffect, useRef, useId } from 'react'
 import { createRequest } from '../api';
 import {
   FormSection,
@@ -10,42 +9,35 @@ import {
   DropDownMenu,
 
 } from './SubComponents/Form';
+import { Typography } from '@mui/material'
+import Slider from '@mui/material/Slider'
+import Box from '@mui/material/Box';
 
-//styles
-const backButtonStyles = {
-  display: 'flex',
-  alignItems: 'center',
-  padding: '8px'
-}
 
-//jsx code
+//Within a modal window
+function CreateRequestForm() {
 
-function CreateRequestForm({ backwardButton }) {
+  const id = useId();
+  //state management of listing array index
+  const [index, setIndex] = useState(0)
   const actions = {
     checkGlobalError: "check_global_error",
     checkLocalError: "check_local_error", //TODO
     checkValues: "check_values",
-    checkDate: "check_dates"
+    checkDate: "check_dates",
   }
 
   const page3 = JSON.parse(localStorage.getItem("page3"))
+
   const values = page3 || {
-    cannabis: "",
-    rentBudget: "",
+    listingObject: "None",
     idealLocation: "",
-    idealLengthStay: "",
-    havePets: "",
-    sleepSchedule: "",
-    cleanliness: "",
-    drinking: "",
-    smoking: "",
-    occupation: "",
-    tolerateGuests: "",
-    toleratePets: "",
-    numRoommates: "",
-    roommateAge: "",
-    roommateGender: "",
     dateValue: "",
+    rentBudget: "",
+    idealLengthStay: "",
+    rangeSliderValue: "",
+    roommateGender: "",
+    numRoommates: "",
   }
 
   const initialState = {
@@ -54,16 +46,17 @@ function CreateRequestForm({ backwardButton }) {
   }
   const [state, dispatch] = useReducer(reducer, initialState)
 
-  const handleEmptyStringValidation = (e, name) => {
-    dispatch({ type: actions.checkValues, payload: e.target.value, name: name })
+  const handleEmptyStringValidation = (newValue, name, date = false) => {
+    if (date === true) {
+      dispatch({ type: actions.checkDate, payload: newValue })
+    }
+    dispatch({ type: actions.checkValues, payload: newValue, name: name })
     dispatch({ type: actions.checkGlobalError })
   }
-  const handleDateChange = (newValue) => {
-    dispatch({ type: actions.checkDate, payload: newValue })
-  }
+
+
   /* calling reducer function again gets the next state*/
   reducer(state, { type: actions.checkValues })
-  console.log(state?.values)
 
   function reducer(state, action) {
     switch (action.type) {
@@ -93,6 +86,7 @@ function CreateRequestForm({ backwardButton }) {
     dispatch({ type: actions.checkGlobalError })
   }, [state.globalError, state.values.dateValue])
 
+
   const autoCompleteRef = useRef();
   const inputRef = useRef();
   const options = {
@@ -100,95 +94,218 @@ function CreateRequestForm({ backwardButton }) {
     fields: ["address_components", "geometry", "formatted_address"],
     types: []
   };
+
+  //useEffect runs when user selects from Autocomplete dropdown menu
   useEffect(() => {
     autoCompleteRef.current = new window.google.maps.places.Autocomplete(
-      inputRef.current,
+      inputRef?.current,
       options
     );
     autoCompleteRef.current.addListener("place_changed", async function () {
       const place = await autoCompleteRef.current.getPlace();
       //set coordinates of the location
-      const coordinates = [place.geometry.location.lat(), place.geometry.location.lng()];
-      dispatch({ type: actions.checkValues, payload: coordinates, name: "idealLocation" }); 
+      const coordinates = [place?.geometry?.location?.lat(), place?.geometry?.location?.lng()];
+      dispatch({ type: actions.checkValues, payload: coordinates, name: "idealLocation" });
       //set the address of the location
-      dispatch({ type: actions.checkValues, payload: place.formatted_address, name: "address" });
+      dispatch({ type: actions.checkValues, payload: place?.formatted_address, name: "address" });
       //setValues({ ...values, city: place.address_components[3].long_name, country: place.address_components[6].long_name, province: place.address_components[5].long_name })
+
     });
+
+    const handleKeyDown = (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+      }
+    }
+    inputRef?.current?.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      inputRef?.current?.removeEventListener('keydown', handleKeyDown);
+    }
+
+
   }, []);
+
+  //useEffect in sync with listingObject
+  useEffect(() => {
+    if (state.values.listingObject && state?.values?.listingObject?.props?.index > 0) {
+      const address = state?.values?.listingObject?.props?.address;
+      const geocoder = new window.google.maps.Geocoder();
+      geocoder.geocode({ address }, (results, status) => {
+        if (status === "OK" && results[0].geometry) {
+          const lat = results[0].geometry.location.lat();
+          const lng = results[0].geometry.location.lng();
+          const coordinates = [lat, lng]
+          console.log(`Latitude: ${lat}, Longitude: ${lng}`);
+          dispatch({ type: actions.checkValues, payload: coordinates, name: "idealLocation" })
+          dispatch({ type: actions.checkValues, payload: address, name: "address" })
+        } else {
+          console.log(`Geocode Failed: ${status}`);
+        }
+      });
+
+    }
+  }, [state?.values?.listingObject])
 
   const handleSubmit = async (formData) => {
     const response = await createRequest(formData);
     console.log(response);
   }
+  console.log(state?.values)
 
+  function SavedListingItem(props) {
+    //map these values from the user's "saved listings" into "listings in mind" drop down menu
+    return (
+      <div style={{ display: 'flex', flexFlow: 'row nowrap' }}>
+        {/*replace hard coded values */}
+        <img style={{ width: "70px", height: "60px", padding: '5px', borderRadius: '10px' }} src="https://picsum.photos/300/300"></img>
+        <div style={{ display: 'flex', flexFlow: 'column nowrap', padding: '5px' }}>
+          <Typography variant="body2" color="text.secondary">
+            {/*replace hard coded values */}
+            {props.address}
+          </Typography>
+          <Typography component="div" fontWeight="bold">
+            {/*replace hard coded values */}
+            {`${props.price}/month`}
+          </Typography>
+          <Typography component="div" fontWeight="normal" fontSize="small">
+            {/*replace hard coded values */}
+            {props.bedBath}
+          </Typography>
+
+        </div>
+      </div>
+    )
+  }
+
+  //an array containing the user's stored saved listings
+  const listingMenuItems =
+    [<div index={0}>None</div>,
+    <SavedListingItem
+      index={1}
+      id={`saved-listing-${id}`}
+      image="https://www.contemporist.com/wp-content/uploads/2015/09/student-housing_050915_01.jpg"
+      address="345 Horner Avenue, Etobicoke, ON, Canada"
+      price="2800"
+      bedBath="3 Beds | 2 Baths"
+    />,
+    <SavedListingItem
+      index={2}
+      id={`saved-listing-${id}`}
+      image="https://hbrdnhlsprod.blob.core.windows.net/nhlsprod/uploads/ckeditor/pictures/344/content_Calgary_Condos_NHLS.jpg"
+      address="Square One Shopping Centre, City Centre Drive, Mississauga, ON, Canada"
+      price="2300"
+      bedBath="4 Beds | 4 Baths"
+    />,
+    <SavedListingItem
+      index={3}
+      id={`saved-listing-${id}`}
+      image="https://hbrdnhlsprod.blob.core.windows.net/nhlsprod/uploads/posting/logo/222352/large_square_1.jpg"
+      address="2597 Cartwright Crescent, Mississauga, ON L5M, Canada"
+      price="1200"
+      bedBath="1 Beds | 1 Baths"
+    />,
+    <SavedListingItem
+      index={4}
+      id={`saved-listing-${id}`}
+      image="https://www.contemporist.com/wp-content/uploads/2015/09/student-housing_050915_01.jpg"
+      address="81 Bay Street, Toronto, ON, Canada"
+      price="1200"
+      bedBath="1 Beds | 1 Baths"
+    />]
+
+
+
+  function ariaValuetext(value) {
+    return `${value}`;
+  }
+
+  const [sliderArray, setSliderArray] = useState([18, 40]);
+
+  useEffect(() => {
+    dispatch({ type: actions.checkValues, payload: sliderArray, name: "rangeSliderValue" });
+  }, [sliderArray])
+
+  function RangeSlider(props) {
+
+    const handleRangeChange = (e, newValue) => {
+      setSliderArray(newValue)
+      dispatch({ type: actions.checkValues, payload: sliderArray, name: "rangeSliderValue" });
+    }
+
+    return (
+      <Box sx={{ width: 300 }}>
+        <Typography>
+          {props.label}
+        </Typography>
+        <Slider
+          getAriaLabel={() => 'Temperature range'}
+          slots
+          onChange={handleRangeChange}
+          valueLabelDisplay="auto"
+          value={sliderArray}
+          getAriaValueText={ariaValuetext}
+          min={props.min}
+          max={props.max}
+        />
+      </Box>
+    );
+  }
+
+
+
+  //TODO
+  //Convert from hard coded array index to directly storing address in values
+  //incorporate useRef
+  //Change condition index === 1 || index === 0 
+  //Change remove setIndex and index
+  //Remove listing menu items
+  //fetching stored data from api for saved listing
+
+
+
+
+  console.log(state?.values)
   return (<>
-    <label style={{ cursor: 'pointer' }}>
-      <input style={{ display: 'none' }} onClick={backwardButton} type="button" />
-      <h3 style={backButtonStyles}>
-        <IoChevronBack />Back</h3>
-    </label>
 
-    <FormSection message="*Some of the information here will be used to match you with roomates and some of it will be used to build your profile" />
-    <FormSection title="Living Preferences" />
+    <br />
+    <FormSection title="Create Bunkmate Request" />
 
     <LineBox flex={true} CssTextField={[
-      <DatePicker onChange={(newValue) => { handleDateChange(newValue); }} value={state.values.dateValue} label="Move in date" />,
-      //$ input adornmnet start
-      <FormSingleLineInput inputAdornment={true} inputAdornmentText={"$"} position={"start"} value={state?.values?.rentBudget} onChange={(e) => handleEmptyStringValidation(e, 'rentBudget')} size="small" field="Monthly Rent Budget" placeHolder="ex. 900" />,
-    ]
-    } />
-
-    <LineBox flex={true} CssTextField={[
-      <FormSingleLineInput value={state?.values?.address} onChange={(e) => handleEmptyStringValidation(e, 'address')} size="small" type="text" field="Ideal Location" placeHolder="ex. Toronto" inputRef={inputRef}/>,
-      <DropDownMenu defaultValue={""} value={state?.values?.idealLengthStay} onChange={(e) => handleEmptyStringValidation(e, 'idealLengthStay')} label="Ideal length of stay" menuItem={["1-3 months", "4-6 months", "7-12 months", "1 year plus"]} />,
-    ]
-    } />
-
-    <br></br>
-    <FormSection title="Habits and LifeStyle" />
-    <LineBox flex={true} CssTextField={[
-      <DropDownMenu defaultValue={""} value={state?.values?.havePets} onChange={(e) => handleEmptyStringValidation(e, 'havePets')} label="Do you have pets" menuItem={["Yes", "No"]} />,
-      <DropDownMenu defaultValue={""} value={state?.values?.sleepSchedule} onChange={(e) => handleEmptyStringValidation(e, 'sleepSchedule')} label="Sleep Schedule" menuItem={["Early Bird", "Normal", "Night Owl"]} />,
-      <DropDownMenu defaultValue={""} value={state?.values?.cleanliness} onChange={(e) => handleEmptyStringValidation(e, 'cleanliness')} label="Cleanliness" menuItem={["Not clean", "Clean", "Very Clean"]} />,
-    ]
-    } />
-
-    <LineBox flex={true} CssTextField={[
-      <DropDownMenu defaultvalue={""} value={state?.values?.drinking} onChange={(e) => handleEmptyStringValidation(e, 'drinking')} label="Drinking" menuItem={["Don't Drink", "Light Drinker", "Moderate Drinker", "Heavy Drinker"]} />,
-      <DropDownMenu dfeaultValue={""} value={state?.values?.smoking} onChange={(e) => handleEmptyStringValidation(e, 'smoking')} label="Smoking" menuItem={["Don't Smoke", "Light Smoker", "Moderate Smoker", "Heavy Smoker"]} />,
-    ]
-    } />
-
-    <LineBox flex={true} CssTextField={[
-      <DropDownMenu dfeaultValue={""} value={state?.values?.cannabis} onChange={(e) => handleEmptyStringValidation(e, 'cannabis')} label="Cannabis" menuItem={["No Cannabis Use", "Light Cannabis Use", "Moderate Cannabis Use", "Heavy Cannabis User"]} />,
-      <FormSingleLineInput defaultValue={""} value={state?.values?.occupation} onChange={(e) => handleEmptyStringValidation(e, 'occupation')} size="small" type="text" field="Occupation" placeHolder="ex. Student/Pharmacist" />,
-    ]
-    } />
-
-    <br></br>
-    <FormSection title="Roomate Preferences" />
-
-    <LineBox flex={true} CssTextField={[
-      <DropDownMenu defaultValue={""} value={state?.values?.tolerateGuests} onChange={(e) => handleEmptyStringValidation(e, 'tolerateGuests')} label="Ok with guests?" menuItem={["Yes", "No"]} />,
-      <DropDownMenu defaultValue={""} value={state?.values?.toleratePets} onChange={(e) => handleEmptyStringValidation(e, 'toleratePets')} label="Ok with pets?" menuItem={["Yes", "No"]} />,
-    ]
-    } />
-
-    <LineBox flex={true} CssTextField={[
-      <DropDownMenu defaultValue={""} value={state?.values?.roommateAge} onChange={(e) => handleEmptyStringValidation(e, 'roommateAge')} label="Preferred roomate age" menuItem={['18 - 25', '26 - 30', '31-35', '36-40', '40+']} />,
+      <DropDownMenu maxHeight={250} value={listingMenuItems[index]} onChange={(e) => { handleEmptyStringValidation(e.target.value, 'listingObject'); setIndex(e.target.value.props.index) }} label="Listing in Mind"
+        menuItem={listingMenuItems} />,
     ]} />
-    <LineBox flex={true} CssTextField={[
-      //slider
-      <DropDownMenu defaultvalue={""} value={state?.values?.numRoommates} onChange={(e) => handleEmptyStringValidation(e, 'numRoommates')} label="Number of roomates" menuItem={["No Roomates", "1 Roomate", "2 Roomates", "3+ Roomates"]} />,
-      <DropDownMenu defaultValue={""} value={state?.values?.roommateGender} onChange={(e) => handleEmptyStringValidation(e, 'roommateGender')} label="Preferred roomate gender" menuItem={["Male", "Female", "Other", "Any"]} />,
-    ]
+
+    {/* if the user has a listing in mind then we use the listing's coordinates else use their own coordinates*/}
+    { /* TODO: find a more robust solution than hard coding the index use useRef*/}
+    {index === 1 || index === 0 ?
+      <LineBox flex={true} CssTextField={[
+        <FormSingleLineInput disabled={false} value={state?.values?.listingObject?.props?.address} onChange={(e) => handleEmptyStringValidation(e.target.value, 'idealLocation')} size="small" type="text" field="Ideal Location" placeHolder="ex. Toronto" inputRef={inputRef} />,
+      ]} />
+      :
+      <LineBox flex={true} CssTextField={[
+        <FormSingleLineInput helperText={"Coordinates have been set to your selected listing"} disabled={true} value={state?.values?.listingObject?.props?.address} onChange={(e) => { handleEmptyStringValidation(e.target.value, state?.values?.listingObject?.props?.address); console.log('hi') }} size="small" type="text" field="Ideal Location" placeHolder="ex. Toronto" inputRef={inputRef} />,
+      ]} />
     }
-    />
+
     <LineBox flex={true} CssTextField={[
-      //slider
-    ]
-    }
-    />
+      <DatePicker onChange={(e) => { handleEmptyStringValidation(e, 'dateValue', true); }} value={state.values.dateValue} label="Move in date" />,
+      <FormSingleLineInput inputAdornment={true} inputAdornmentText={"$"} position={"start"} value={state?.values?.rentBudget} onChange={(e) => handleEmptyStringValidation(e.target.value, 'rentBudget')} size="small" field="Monthly Rent Budget" placeHolder="ex. 900" />,
+    ]} />
+
+    <LineBox flex={true} CssTextField={[
+      <DropDownMenu defaultValue={""} value={state?.values?.idealLengthStay} onChange={(e) => handleEmptyStringValidation(e.target.value, 'idealLengthStay')} label="Ideal length of stay" menuItem={["1-3 months", "4-6 months", "7-12 months", "1+ years"]} />,
+      <RangeSlider min={16} max={100} label={"Preferred age range"} />,
+    ]} />
+
+    <LineBox flex={true} CssTextField={[
+      <DropDownMenu defaultValue={""} value={state?.values?.roommateGender} onChange={(e) => handleEmptyStringValidation(e.target.value, 'roommateGender')} label="Preferred Gender" menuItem={["Any", "Male", "Female", "Other"]} />,
+      <DropDownMenu defaultvalue={""} value={state?.values?.numRoommates} onChange={(e) => handleEmptyStringValidation(e.target.value, 'numRoommates')} label="Seeking" menuItem={["No Bunkmates", "1 Bunkmate", "2 Bunkmates", "3 Bunkmates", "4 Bunkmates", '5+ Bunkmates']} />,
+    ]} />
+
+
+
+
     {/* disable cotinue button if the user has not filled out all mandatory fields and / or still has errors*/}
     <ActionButton disabled={state.globalError} onClick={() => { localStorage.setItem('page3', JSON.stringify(state.values)); handleSubmit(state.values); }} fontSize="15px" width="100%" type="submit" title="Submit" />
   </>)

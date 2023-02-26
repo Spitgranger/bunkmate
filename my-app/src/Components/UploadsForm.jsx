@@ -66,6 +66,7 @@ function Uploads({ forwardButton }) {
 
   return (<>
 
+    <br />
     <FormSection title="Finances and Verification" message="If you have good finances you'll get a 'Strong Financials' badge that'll be visible to othe users" />
     {/* ranges from 10000 - 100000*/}
     <LineBox flex={true} CssTextField={[
@@ -91,7 +92,7 @@ function Uploads({ forwardButton }) {
 
     <br></br>
     <FormSection title="Background Check"
-      message={"*Please upload at least two of the four. We'll use this data to perform a FREE background check. Should you pass you'll receive a 'No Criminal History' and 'ID verified' badge."}
+      message={"*Please upload at least two of the three. We'll use this data to perform a FREE background check. Should you pass you'll receive a 'No Criminal History' and 'ID verified' badge."}
     />
 
     <LineBox flex={true} CssTextField={[

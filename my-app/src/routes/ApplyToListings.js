@@ -1,6 +1,6 @@
 import './ApplyToListings.css';
 import Navbar from '../Components/Navbar';
-import Uploads from '../Components/UploadsForm'
+import UploadsForm from '../Components/UploadsForm'
 import SignUpPartnerForm from '../Components/SignUpPartnerForm'
 import CreateRequestForm from '../Components/CreateRequestForm'
 import { useState, createContext } from 'react'
@@ -27,6 +27,7 @@ function ApplyToListings() {
       <ValidationProvider>
         <div className="info">
           <section className="ApplicationSubPage">
+            <UploadsForm />
             <SignUpPartnerForm />
             <CreateRequestForm />
           </section>

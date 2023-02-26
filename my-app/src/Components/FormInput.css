@@ -2,17 +2,18 @@ input {
     padding: 5px;
     margin: 10px 0px;
 }
-span {
+
+.errorMessageSpan {
     color: hsl(0, 100%, 50%);
     font-size: 12px;
     padding: 2px;
     display: none;
 }
 
-input:invalid[focused='true'] {
+.inputField:invalid[focused='true'] {
     border: 1px solid red;
 }
 
-input:invalid[focused='true'] ~ span {
+.inputField:invalid[focused='true']~span {
     display: block;
 }

@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useContext, useMemo, useCallback } from 'react'
+import { useState, useRef, useEffect, useContext, useMemo, useCallback, useReducer } from 'react'
 import {
   DatePicker,
   FormSection,
@@ -11,6 +11,7 @@ import {
   LineBox,
 } from './SubComponents/Form';
 import { IoChevronForward } from 'react-icons/io5';
+import { IoChevronBack } from 'react-icons/io5';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import {
 
@@ -27,9 +28,24 @@ import {
 
 import { createProfile } from '../api';
 
+
+
+
+//styles
+const backButtonStyles = {
+  display: 'flex',
+  alignItems: 'center',
+  padding: '8px'
+}
+
+
+
+//everything below will be displayed within a modal window, this page is shown after signing up for an account
+
 const handleSubmit = async (data) => {
   try {
     const response = await createProfile(data);
+    console.log('hiiiiiiiiiii')
     console.log(response);
   } catch (error) {
     console.log(error);
@@ -37,23 +53,101 @@ const handleSubmit = async (data) => {
 
 }
 
-function SignUpPartnerForm({ forwardButton }) {
+function SignUpPartnerForm({ forwardButton, backwardButton }) {
 
-  const { link, LinkHelperText, handleLinkValidation } = useContext(LinkValidationContext)
   const { values, setValues } = useContext(ValuesObjectContext)
-  const handleFileUpload = useContext(ImageValidationContext)
-  const { birthday, handleBirthdayChange } = useContext(BirthdayValidationContext)
-  const globalError = useContext(GlobalValidationContext)
   const { phoneError, phoneHelperText } = useContext(PhoneValidationContext)
   const { emailError, emailHelperText } = useContext(EmailValidationContext)
   const { aboutError, aboutHelperText, handleAboutValidation } = useContext(AboutValidationContext)
 
+  const actions = {
+    checkGlobalError: "check_global_error",
+    checkLocalError: "check_local_error", //TODO
+    checkValues: "check_values",
+    checkDate: "check_dates",
+  }
+  const initialState = {
+    values: values,
+    globalError: true,
+  }
+
+  const [state, dispatch] = useReducer(reducer, initialState)
+
+
+
+  function reducer(state, action) {
+    switch (action.type) {
+
+      case actions.checkGlobalError: {
+        if (Object.values(state.values).some(val => val === "")) {
+          return { ...state, globalError: true }
+        } else if (Object.values(state.values).every(val => val !== "")) {
+          return { ...state, globalError: false };
+        }
+        break;
+      }
+
+      case actions.checkDate: {
+        try {
+          action.payload.toISOString();
+          return { ...state, values: { ...state.values, birthday: action.payload.toISOString().split('T')[0] } }
+        } catch (error) {
+          return { ...state, values: { ...state.values, birthday: "" } }
+        }
+      }
+      case actions.checkValues: {
+        return { ...state, values: { ...state.values, [action.name]: action.payload } };
+      }
+    }
+    throw Error('unknown action: ' + action.type)
+  }
+
+  //handle event function to record values of most fields
+  const handleEmptyStringValidation = (e, name, date = false) => {
+    if (date === true) {
+      return dispatch({ type: actions.checkDate, payload: e })
+    }
+    dispatch({ type: actions.checkValues, payload: e.target.value, name: name })
+    dispatch({ type: actions.checkGlobalError })
+    //a special case just for date fields
+  }
+
+  //special handle event function just to file uploads
+  const handleFileUpload = (e) => {
+    const file = e.target.files[0];
+    handleConversion(file, (result) => {
+      dispatch({ type: actions.checkValues, payload: result, name: "picture" });
+
+    });
+  }
+
+  //converts image to base64-encoded string
+  const handleConversion = (file, callback) => {
+    let reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = function () {
+      callback(reader.result);
+    };
+    reader.onerror = function (error) {
+    };
+  }
+
+  /* calling reducer function again gets the next state
+  reducer(state, { type: actions.checkValues })
+  reducer(state, { type: actions.checkGlobalError})
+  */
+
+  useEffect(() => {
+    dispatch({ type: actions.checkGlobalError });
+    dispatch({ type: actions.checkValues });
+
+  }, [, state.globalError, state.values.birthday, state.values.picture, state.values.address])
 
   const autoCompleteRef = useRef();
   const inputRef = useRef();
   const options = {
     componentRestrictions: { country: "ca" },
-    fields: ["address_components"],
+    fields: ["address_components", "formatted_address"],
     types: []
   };
   useEffect(() => {
@@ -68,81 +162,114 @@ function SignUpPartnerForm({ forwardButton }) {
       addressComponents.forEach((component) => {
         //each case, setting the form values accordingly.
         switch (component.types[0]) {
-          case "street_number":
-            setValues(prevValue => ({ ...prevValue, address: component.long_name }))
-            break;
-          case "route":
-            setValues(prevValue => ({ ...prevValue, address: prevValue.address + " " + component.long_name }))
-            break;
           case "locality":
-            setValues(prevValue => ({ ...prevValue, city: component.long_name }))
+            // setValues(prevValue => ({ ...prevValue, city: component.long_name }))
+            dispatch({ type: actions.checkValues, payload: component.long_name, name: "city" });
             break;
           case "administrative_area_level_1":
             setValues(prevValue => ({ ...prevValue, province: component.long_name }))
+            dispatch({ type: actions.checkValues, payload: component.long_name, name: "province" });
             break;
           case "country":
-            setValues(prevValue => ({ ...prevValue, country: component.long_name }))
+            //setValues(prevValue => ({ ...prevValue, country: component.long_name }))
+            dispatch({ type: actions.checkValues, payload: component.long_name, name: "country" });
             break;
           default:
             break;
         }
       })
       //setValues({ ...values, city: place.address_components[3].long_name, country: place.address_components[6].long_name, province: place.address_components[5].long_name })
+      dispatch({ type: actions.checkValues, payload: place.formatted_address, name: "address" });
     });
   }, []);
 
-  const handleFieldChange = (e, field) => {
-    setValues(prevValue => ({ ...prevValue, [field]: e.target.value }));
-  };
+  const BackButton = () => {
+    return (
+      <label style={{ cursor: 'pointer' }}>
+        <input style={{ display: 'none' }} onClick={backwardButton} type="button" />
+        <h3 style={backButtonStyles}>
+          <IoChevronBack />Back
+        </h3>
+      </label>)
+  }
 
   return (<>
-
 
     <FormSection title="Profile"
       message="*Everything in this section will be visible to other people"
     />
     <div style={{ display: 'flex', justifyContent: 'center', borderRadius: "90px" }}>
-      {values?.picture ? <img src={values.picture} style={{ width: "100px", height: "100px", borderRadius: "50px" }}></img> : null}
+      {state?.values?.picture ? <img src={state?.values?.picture} style={{ width: "100px", height: "100px", borderRadius: "50px" }}></img> : null}
     </div>
     <UploadFile helperText="Supported Files: jpg, png" helperTextPos="45%" width="50%" type="file" message="Upload Profile Picture" accept={["image/jpg", "image/jpeg", "image/png"]} endIcon={<CameraAltIcon sx={{ color: "aqua" }} />} handleFileUpload={handleFileUpload} />
     <LineBox flex={true} CssTextField={[
-      <FormSingleLineInput size='small' type="text" field="Legal First Name" placeHolder="Sam" onChange={(e) => { handleFieldChange(e, 'firstName'); }} value={values?.firstName} />,
-      <FormSingleLineInput size="small" type="text" field="Legal Last Name" placeHolder="Jenkins" onChange={(e) => { handleFieldChange(e, 'lastName'); }} value={values?.lastName} />,
-      <DropDownMenu label="Gender" menuItem={["Male", "Female", "Other"]} value={values?.gender} onChange={(e) => { handleFieldChange(e, 'gender'); }} />,
+      <FormSingleLineInput size='small' type="text" field="Legal First Name" placeHolder="Sam" onChange={(e) => { handleEmptyStringValidation(e, 'firstName') }} value={state?.values?.firstName} />,
+      <FormSingleLineInput size="small" type="text" field="Legal Last Name" placeHolder="Jenkins" onChange={(e) => { handleEmptyStringValidation(e, 'lastName') }} value={state?.values?.lastName} />,
+      <DropDownMenu label="Gender" menuItem={["Male", "Female", "Other"]} value={state?.values?.gender} onChange={(e) => { handleEmptyStringValidation(e, 'gender') }} />,
     ]
     } />
     <div id="multiline">
-      <FormMultiLineInput placeHolder="Tell us a bit about yourself" type="text" field="About Me" helperText={aboutHelperText} onChange={(e) => { handleAboutValidation(e); }} error={aboutError} value={values?.about} />
+      <FormMultiLineInput placeHolder="Tell us a bit about yourself" type="text" field="About Me" helperText={aboutHelperText} onChange={(e) => { handleAboutValidation(e); handleEmptyStringValidation(e, 'about') }} error={aboutError} value={state?.values?.about} />
     </div>
 
-    <br></br>
+    <ActionButton disabled={state.globalError} fontSize="15px" width="100%" onClick={() => { handleSubmit(values); localStorage.setItem("page1", JSON.stringify(values)); }} type="submit" title="Continue" endIcon={<IoChevronForward color="aqua" />} />
+
+    <BackButton />
 
     <FormSection title="Personal Info" message="*We collect this data for our algorithms, we won't share it with anyone else. We'll ask you for proof on the next page" />
     <LineBox flex={true} CssTextField={[
-      <FormSingleLineInput size="small" type="text" field="Email" placeHolder="ex. bunkmates@gmail.com" error={emailError} helperText={emailHelperText} value={values?.email} onChange={(e) => { handleFieldChange(e, 'email'); }} />,
-      <DatePicker label="Birthday" value={birthday} onChange={handleBirthdayChange} />
+      <FormSingleLineInput size="small" type="text" field="Email" placeHolder="ex. bunkmates@gmail.com" error={emailError} helperText={emailHelperText} value={state?.values?.email} onChange={(e) => { handleEmptyStringValidation(e, 'email'); }} />,
+      <DatePicker label="Birthday" value={state?.values?.birthday} onChange={(e) => handleEmptyStringValidation(e, 'birthday', true)} />
     ]
     } />
+
+
     <LineBox flex={true} CssTextField={[
-      <FormSingleLineInput type="text" size="small" helperText={phoneHelperText} field="Phone Number" placeHolder="6472345124" error={phoneError} onChange={(e) => { handleFieldChange(e, 'phone'); }} value={values?.phone} />,
-      <FormSingleLineAddressInput type="text" field="Address" placeHolder="31 West Street" inputRef={inputRef} value={values?.address} onChange={(e) => { handleFieldChange(e, 'address'); }} />
+      <FormSingleLineInput type="text" size="small" helperText={phoneHelperText} field="Phone Number" placeHolder="6472345124" error={phoneError} onChange={(e) => { handleEmptyStringValidation(e, 'phone'); }} value={state?.values?.phone} />,
+      <FormSingleLineAddressInput type="text" field="Address" placeHolder="31 West Street" inputRef={inputRef} value={state?.values?.address} onChange={(e) => { handleEmptyStringValidation(e, 'address'); }} />
     ]
     } />
-    {values.city && values.country && values.province ?
+    {state?.values.city && state?.values.country && state?.values.province ?
       <LineBox flex={true} CssTextField={[
-        <FormSingleLineInput size="small" type="text" field="City" placeHolder="New York" value={values?.city} />,
-        <FormSingleLineInput size="small" type="text" field="Country" placeHolder="United States" value={values?.country} />,
-        <FormSingleLineInput size="small" type="text" field="Province/State" placeHolder="Ontario" value={values?.province} />
+        <FormSingleLineInput disabled={true} size="small" type="text" field="City" placeHolder="New York" value={state?.values?.city} />,
+        <FormSingleLineInput disabled={true} size="small" type="text" field="Country" placeHolder="United States" value={state?.values?.country} />,
+        <FormSingleLineInput disabled={true} size="small" type="text" field="Province/State" placeHolder="Ontario" value={state?.values?.province} />
       ]
       } /> : null}
     <LineBox flex={true} CssTextField={[
-      <DropDownMenu label="Employment Status" menuItem={["Currently Employed", "Currently Unemployed", "Currently Self Employed"]} value={values?.employment} onChange={(e) => { handleFieldChange(e, "employment"); }} />,
-      <DropDownMenu label="Current Education" menuItem={["Not in School", "High School", "Undergraduate Studies", "Graduate Studies"]} value={values?.education} onChange={(e) => { handleFieldChange(e, 'education'); }} />,
-    ]
-    } />
-    <br></br>
+      <DropDownMenu label="Employment Status" menuItem={["Currently Employed", "Currently Unemployed", "Currently Self Employed"]} value={state?.values?.employment} onChange={(e) => { handleEmptyStringValidation(e, "employment"); }} />,
+      <DropDownMenu label="Current Education" menuItem={["Not in School", "High School", "Undergraduate Studies", "Graduate Studies"]} value={state?.values?.education} onChange={(e) => { handleEmptyStringValidation(e, 'education'); }} />,
+    ]} />
 
-    <ActionButton disabled={globalError} fontSize="15px" width="100%" onClick={() => { handleSubmit(values); forwardButton(); localStorage.setItem("page1", JSON.stringify(values)); }} type="submit" title="Continue" endIcon={<IoChevronForward color="aqua" />} />
+    <ActionButton disabled={state.globalError} fontSize="15px" width="100%" onClick={() => { handleSubmit(values); localStorage.setItem("page1", JSON.stringify(values)); }} type="submit" title="Continue" endIcon={<IoChevronForward color="aqua" />} />
+
+    <BackButton />
+
+    <FormSection title="Habits and LifeStyle" message="*Some of the information here will be used to match you with roomates and some of it will be used to build your profile" />
+    <LineBox flex={true} CssTextField={[
+      <DropDownMenu defaultValue={""} value={state?.values?.havePets} onChange={(e) => handleEmptyStringValidation(e, 'havePets')} label="Do you have pets" menuItem={["Yes", "No"]} />,
+      <DropDownMenu defaultValue={""} value={state?.values?.sleepSchedule} onChange={(e) => handleEmptyStringValidation(e, 'sleepSchedule')} label="Sleep Schedule" menuItem={["Early Bird", "Normal", "Night Owl"]} />,
+      <DropDownMenu defaultValue={""} value={state?.values?.cleanliness} onChange={(e) => handleEmptyStringValidation(e, 'cleanliness')} label="Cleanliness" menuItem={["Not clean", "Clean", "Very Clean"]} />,
+    ]} />
+
+    <LineBox flex={true} CssTextField={[
+      <DropDownMenu defaultvalue={""} value={state?.values?.drinking} onChange={(e) => handleEmptyStringValidation(e, 'drinking')} label="Drinking" menuItem={["Don't Drink", "Light Drinker", "Moderate Drinker", "Heavy Drinker"]} />,
+      <DropDownMenu dfeaultValue={""} value={state?.values?.smoking} onChange={(e) => handleEmptyStringValidation(e, 'smoking')} label="Smoking" menuItem={["Don't Smoke", "Light Smoker", "Moderate Smoker", "Heavy Smoker"]} />,
+    ]} />
+
+    <LineBox flex={true} CssTextField={[
+      <DropDownMenu dfeaultValue={""} value={state?.values?.cannabis} onChange={(e) => handleEmptyStringValidation(e, 'cannabis')} label="Cannabis" menuItem={["No Cannabis Use", "Light Cannabis Use", "Moderate Cannabis Use", "Heavy Cannabis User"]} />,
+      <FormSingleLineInput defaultValue={""} value={state?.values?.occupation} onChange={(e) => handleEmptyStringValidation(e, 'occupation')} size="small" type="text" field="Occupation" placeHolder="ex. Student/Pharmacist" />,
+    ]} />
+
+    <LineBox flex={true} CssTextField={[
+      <DropDownMenu defaultValue={""} value={state?.values?.tolerateGuests} onChange={(e) => handleEmptyStringValidation(e, 'tolerateGuests')} label="Ok with guests?" menuItem={["Yes", "No"]} />,
+      <DropDownMenu defaultValue={""} value={state?.values?.toleratePets} onChange={(e) => handleEmptyStringValidation(e, 'toleratePets')} label="Ok with pets?" menuItem={["Yes", "No"]} />,
+    ]} />
+
+
+
+    <ActionButton disabled={state.globalError} fontSize="15px" width="100%" onClick={() => { handleSubmit(values); localStorage.setItem("page1", JSON.stringify(values)); }} type="submit" title="SUBMIT" endIcon={<IoChevronForward color="aqua" />} />
   </>)
 }
 

@@ -10,7 +10,6 @@ import Select from '@mui/material/Select';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
-
 import Stack from '@mui/material/Stack';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import ListItemText from '@mui/material/ListItemText';
@@ -19,7 +18,6 @@ import { InputAdornment } from "@mui/material";
 import { useState, memo, useCallback } from 'react'
 import { BsFillCheckCircleFill } from "react-icons/bs";
 import { MdOutlineError } from "react-icons/md";
-import Slider from '@mui/material/Slider'
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -130,9 +128,19 @@ const CssTextField = styled(TextField)({
 
 */
 
-export function DropDownMenu({ defaultValue, value, onChange, label, menuItem }) {
+export function DropDownMenu({ inputRef, defaultValue, value, onChange, label, menuItem, maxHeight, menuItemWidth }) {
+
+  const MenuProps = {
+    PaperProps: {
+      style: {
+        maxHeight: maxHeight,
+        width: menuItemWidth,
+      },
+    },
+  };
   return (
-    <FormControl placeholder="wow" sx={{ m: 1, width: '100%', flex: 1 }} size="small" fullWidth>
+    <FormControl
+      placeholder="wow" sx={{ m: 1, width: '100%', flex: 1 }} size="small" fullWidth>
       <InputLabel
         id="demo-select-small">{label}</InputLabel>
       <Select
@@ -142,7 +150,10 @@ export function DropDownMenu({ defaultValue, value, onChange, label, menuItem })
         onChange={onChange}
         defaultValue={defaultValue}
         label={label}
+        MenuProps={MenuProps}
+        inputRef={inputRef}
       >
+
         {menuItem.map((item, i) => {
           return (<MenuItem key={i} value={item} >{item}</MenuItem>);
         })}
@@ -152,7 +163,7 @@ export function DropDownMenu({ defaultValue, value, onChange, label, menuItem })
 }
 
 
-function NormalFormSingleLineInput({ onError, onBlur, onChange, error, type, field, placeHolder, helperText, inputAdornment, inputAdornmentText, size, inputRef, value, name }) {
+function NormalFormSingleLineInput({ disabled, onError, onBlur, onChange, error, type, field, placeHolder, helperText, inputAdornment, inputAdornmentText, size, inputRef, value, name }) {
   return (
     <>
       <TextField
@@ -171,6 +182,7 @@ function NormalFormSingleLineInput({ onError, onBlur, onChange, error, type, fie
         type={type}
         inputRef={inputRef}
         value={value}
+        disabled={disabled}
       />
     </>
   )

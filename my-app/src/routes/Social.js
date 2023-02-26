@@ -32,7 +32,7 @@ const Profile = ({ profile }) => {
                 <h6 style={{ width: '100%', justifyContent: 'center', display: 'flex', whiteSpace: 'nowrap' }}>26 year old Male - Student</h6>
             </div>
             <div className="button">
-                <a href="#" className="btn" onmousedown="follow();">Message <i className="fas fa-user-plus"></i></a>
+                <a href="#" className="btn" onMouseDown="follow();">Message <i className="fas fa-user-plus"></i></a>
                 <h6 style={{ color: 'white' }}>Some call me a best because i'm the pest </h6>
             </div>
             <div className="ds-info-parent">
