@@ -278,7 +278,7 @@ function CreateRequestForm() {
 
     {/* if the user has a listing in mind then we use the listing's coordinates else use their own coordinates*/}
     { /* TODO: find a more robust solution than hard coding the index use useRef*/}
-    {index === 1 || index === 0 ?
+    {index === 0 ?
       <LineBox flex={true} CssTextField={[
         <FormSingleLineInput disabled={false} value={state?.values?.listingObject?.props?.address} onChange={(e) => handleEmptyStringValidation(e.target.value, 'idealLocation')} size="small" type="text" field="Ideal Location" placeHolder="ex. Toronto" inputRef={inputRef} />,
       ]} />
