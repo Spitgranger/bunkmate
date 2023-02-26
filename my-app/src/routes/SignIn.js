@@ -13,7 +13,7 @@ import { SignInModeContext } from "../Components/GlobalStateManagement/SignInCon
 import { SignInModalMessage } from "../Components/GlobalStateManagement/SignInContext";
 import { useNavigate } from "react-router-dom";
 import { signIn, signUp } from "../api";
-
+import SignUpPartnerForm from "../Components/SignUpPartnerForm";
 
 function SignInPartner({ company, logo, onClick }) {
 
@@ -44,6 +44,8 @@ export default function RenderWhich() {
         return <SignUpEmail />
       case "signInPhone":
         return <SignInPhone />
+      case "signUpForm":
+        return <SignUpPartnerForm />
       default:
         return <SignInEmail />
     }
@@ -127,6 +129,7 @@ export function SignInEmail() {
   </>)
 }
 
+
 export function SignUpEmail() {
   {/* Change default to the user's current location */ }
   const [data, setData] = useState({ phoneNumber: '', name: '', email: '', password: '', confirmPassword: '' });
@@ -136,6 +139,14 @@ export function SignUpEmail() {
   const handleChange = (e) => {
     setData((prevData) => ({ ...prevData, [e.target.name]: e.target.value }))
   }
+
+  const handleRegularSignUpEmail = (e, data) => {
+    //Changes to sign in mode once sign up is complete
+    handleSubmit(e, data)
+    setMessage("Sign In With Email")
+    setMode("signInEmail")
+  }
+
   return (
     <>
       <div className="content">
@@ -200,7 +211,7 @@ export function SignUpEmail() {
           </h6>
         </div>
         <div className="button" style={{ borderBottom: "1px solid lightgrey" }}>
-          <ActionButton width="100%" type="submit" title="Submit" onClick={(e) => { handleSubmit(e, data); setIsOpen(false) }} />
+          <ActionButton width="100%" type="submit" title="Submit" onClick={(e) => handleRegularSignUpEmail(e, data)} />
         </div>
         <div className="socialsFlex" >
           <SignInPartner logo={<FcGoogle size="20px" />} company="Google" />
@@ -266,7 +277,7 @@ export function SignInPhone() {
           <ActionButton width="100%" type="submit" title="Submit" onClick={() => { setMode("signInEmail"); setMessage("Sign In With Email") }} />
         </div>
         <div className="socials" >
-          <SignInPartner logo={<FcGoogle size="20px" />} company="Google" />
+          <SignInPartner logo={<FcGoogle size="20px" />} company="Google" onClick={() => { setMode("signUpForm"); setMessage("Sign Up Form") }} />
           <SignInPartner logo={<IoLogoFacebook size="20px" color="blue" />} company="Facebook" />
           <SignInPartner logo={<BsApple size="20px" color="black" />} company="Apple" />
           <SignInPartner logo={<MdEmail size="20px" />} company="Email" onClick={() => { setMode("signInEmail"); setMessage("Sign In With Email") }} />
@@ -291,6 +302,7 @@ async function handleSignIn(e, data) {
     localStorage.setItem('profile', JSON.stringify(jsonResponse.data));
     return "correct";
   } catch (error) {
+    console.log(error.response.data.message)
     switch (error.response.data.message) {
       case "User doesn't exist":
         return "User doesn't exist";

@@ -95,7 +95,10 @@ const Messages = () => {
         <SignInProvider>
           <Navbar />
         </SignInProvider>
-        <h1>YOU NEED TO BE LOGGED IN TO MESSAGE</h1>
+
+        <div style={{ height: '100%', display: 'flex', justifyContent: 'center', margin: '100px' }}>
+          <h1>You need to be logged in to message</h1>
+        </div>
       </>
     )
   }

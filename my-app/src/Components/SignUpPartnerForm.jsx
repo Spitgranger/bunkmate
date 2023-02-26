@@ -196,7 +196,7 @@ function SignUpPartnerForm({ forwardButton, backwardButton }) {
   return (<>
 
     <FormSection title="Profile"
-      message="*Everything in this section will be visible to other people"
+      message="*Everything in this section will be visible to other people. Don't worry you can always change it later"
     />
     <div style={{ display: 'flex', justifyContent: 'center', borderRadius: "90px" }}>
       {state?.values?.picture ? <img src={state?.values?.picture} style={{ width: "100px", height: "100px", borderRadius: "50px" }}></img> : null}
