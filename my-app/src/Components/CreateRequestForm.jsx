@@ -1,4 +1,4 @@
-import { useState, useReducer, useEffect, useRef, useId } from 'react'
+import { useState, useReducer, useContext, useEffect, useRef, useId } from 'react'
 import { createRequest } from '../api';
 import {
   FormSection,
@@ -13,10 +13,14 @@ import { Typography } from '@mui/material'
 import Slider from '@mui/material/Slider'
 import Box from '@mui/material/Box';
 
+import { ValuesObjectContext } from './GlobalStateManagement/ValidationContext';
+
+
 
 //Within a modal window
 function CreateRequestForm() {
 
+  /*const { values, setValue } = useContext(ValuesObjectContext)*/
   const id = useId();
   //state management of listing array index
   const [index, setIndex] = useState(0)
@@ -29,7 +33,7 @@ function CreateRequestForm() {
 
   const page3 = JSON.parse(localStorage.getItem("page3"))
 
-  const values = page3 || {
+  const [values, setValues] = useState(page3 || {
     listingObject: "None",
     idealLocation: "",
     dateValue: "",
@@ -38,12 +42,14 @@ function CreateRequestForm() {
     rangeSliderValue: "",
     roommateGender: "",
     numRoommates: "",
-  }
+  });
 
   const initialState = {
     values: values,
     globalError: true,
   }
+
+  console.log(values)
   const [state, dispatch] = useReducer(reducer, initialState)
 
   const handleEmptyStringValidation = (newValue, name, date = false) => {
@@ -148,10 +154,18 @@ function CreateRequestForm() {
   }, [state?.values?.listingObject])
 
   const handleSubmit = async (formData) => {
-    const response = await createRequest(formData);
-    console.log(response);
+    try {
+      const response = await createRequest(formData);
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
   }
-  console.log(state?.values)
+
+  /*
+    console.log(state?.values)
+    console.log(state)
+  */
 
   function SavedListingItem(props) {
     //map these values from the user's "saved listings" into "listings in mind" drop down menu
@@ -307,7 +321,7 @@ function CreateRequestForm() {
 
 
     {/* disable cotinue button if the user has not filled out all mandatory fields and / or still has errors*/}
-    <ActionButton disabled={state.globalError} onClick={() => { localStorage.setItem('page3', JSON.stringify(state.values)); handleSubmit(state.values); }} fontSize="15px" width="100%" type="submit" title="Submit" />
+    <ActionButton disabled={state?.globalError} onClick={() => { /*localStorage.setItem('page3', JSON.stringify(values));*/ handleSubmit(values); }} fontSize="15px" width="100%" type="submit" title="Submit" />
   </>)
 }
 

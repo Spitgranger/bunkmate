@@ -38,7 +38,6 @@ export default function ValidationProvider({ children }) {
     occupation: "",
     tolerateGuests: "",
     toleratePets: "",
-    idealLocation: "",
   });
 
 

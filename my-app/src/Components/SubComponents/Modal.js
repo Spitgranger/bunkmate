@@ -29,7 +29,7 @@ export default function Modal({ open, children, onClose, modalMessage, content }
           </label>
         </div>
 
-        <div className="body">
+        <div className="ModalBody">
           <h3>{modalMessage}</h3>
           {children}
           {content}

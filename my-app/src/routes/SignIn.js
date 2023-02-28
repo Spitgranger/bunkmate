@@ -8,12 +8,14 @@ import { IoLogoFacebook } from 'react-icons/io'
 import { BsApple } from 'react-icons/bs'
 import { MdEmail } from 'react-icons/md'
 import { BsPhoneFill } from "react-icons/bs";
-import { SignInOpenContext } from "../Components/GlobalStateManagement/SignInContext";
+import { SignInOpenContext, SignInUserData } from "../Components/GlobalStateManagement/SignInContext";
 import { SignInModeContext } from "../Components/GlobalStateManagement/SignInContext";
-import { SignInModalMessage } from "../Components/GlobalStateManagement/SignInContext";
+import { SignInModalMessageContext } from "../Components/GlobalStateManagement/SignInContext";
 import { useNavigate } from "react-router-dom";
 import { signIn, signUp } from "../api";
-import SignUpPartnerForm from "../Components/SignUpPartnerForm";
+import ProfileMakerForm from "../Components/ProfileMakerForm";
+import { getProfile } from '../api'
+
 
 function SignInPartner({ company, logo, onClick }) {
 
@@ -33,7 +35,7 @@ export default function RenderWhich() {
   //choose which pages to render within modal Window
   const { isOpen, setIsOpen } = useContext(SignInOpenContext)
   const { mode } = useContext(SignInModeContext)
-  const { message } = useContext(SignInModalMessage)
+  const { message } = useContext(SignInModalMessageContext)
 
   const displayInModalWindow = (mode) => {
     switch (mode) {
@@ -44,8 +46,8 @@ export default function RenderWhich() {
         return <SignUpEmail />
       case "signInPhone":
         return <SignInPhone />
-      case "signUpForm":
-        return <SignUpPartnerForm />
+      case "profileMakerForm":
+        return <ProfileMakerForm />
       default:
         return <SignInEmail />
     }
@@ -60,32 +62,66 @@ export default function RenderWhich() {
   )
 }
 
-
+async function validateLogin(e, data) {
+  //validate login credentials
+  console.log(data);
+  e.preventDefault();
+  try {
+    const jsonResponse = await signIn(data);
+    localStorage.setItem('profile', JSON.stringify(jsonResponse.data));
+    return "Success!";
+  } catch (error) {
+    console.log(error.response.data.message)
+    switch (error.response.data.message) {
+      case "User doesn't exist":
+        return "User doesn't exist";
+      case "Invalid Credentials":
+        return "Invalid Credentials";
+      default:
+        return;
+    }
+  }
+}
 export function SignInEmail() {
   const navigate = useNavigate();
-  const { setMode } = useContext(SignInModeContext)
-  const { setIsOpen } = useContext(SignInOpenContext)
-  const { setMessage } = useContext(SignInModalMessage)
+  const { setMode } = useContext(SignInModeContext);
+  const { setIsOpen } = useContext(SignInOpenContext);
+  const { setMessage } = useContext(SignInModalMessageContext);
   const [data, setData] = useState({ email: '', password: '' });
   const [error, setError] = useState("default");
 
 
-  const handleChange = (e) => {
+  const handleFieldChange = (e) => {
+    //records data
     setData((prevData) => ({ ...prevData, [e.target.name]: e.target.value }))
   }
-  const handleResponse = async e => {
-    const response = await handleSignIn(e, data);
+  const handleSignIn = async e => {
+    //Verify login details 
+    const response = await validateLogin(e, data);
     //5 lines below are pretty much garbage need to figure out how to extract error message
     setError(response);
   }
+
+
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile')))
+
+
+  //if no errors and user doesn't already have a profile then display profilemaker
   useEffect(() => {
-    if (error == "correct") {
-      setIsOpen(false);
-      navigate(0);
+    if (error === "Success!") {
+      navigate(0)
+      //broke need to fix
+      /*
+      setMessage("Complete your profile!")
+      setMode('signInEmail')
+      setIsOpen(true)
+      */
     } else {
       return
     }
   }, [error]);
+
+
   return (<>
     <div className="content">
       {error != "default" ? <h4>{error}</h4> : null}
@@ -96,7 +132,7 @@ export function SignInEmail() {
           placeHolder="example@example.com"
           size="small"
           value={data.email}
-          onChange={handleChange}
+          onChange={handleFieldChange}
         />,
         <FormSingleLineInput
           name="password"
@@ -104,7 +140,7 @@ export function SignInEmail() {
           size="small"
           type="password"
           value={data.password}
-          onChange={handleChange}
+          onChange={handleFieldChange}
         />
       ]
       } />
@@ -117,7 +153,7 @@ export function SignInEmail() {
         </h6>
       </div>
       <div className="button" style={{ borderBottom: "1px solid lightgrey" }}>
-        <ActionButton width="100%" type="submit" title="Submit" onClick={(e) => { handleResponse(e) }} />
+        <ActionButton width="100%" type="submit" title="Submit" onClick={(e) => { handleSignIn(e) }} />
       </div>
       <div className="socials" >
         <SignInPartner logo={<FcGoogle size="20px" />} company="Google" />
@@ -130,19 +166,29 @@ export function SignInEmail() {
 }
 
 
+async function handleSignUp(e, data) {
+  //Record user data after signing up
+  console.log(data);
+  e.preventDefault();
+  const response = await signUp(data);
+  console.log(JSON.stringify(response));
+}
+
+
 export function SignUpEmail() {
   {/* Change default to the user's current location */ }
   const [data, setData] = useState({ phoneNumber: '', name: '', email: '', password: '', confirmPassword: '' });
   const { setMode } = useContext(SignInModeContext)
-  const { setMessage } = useContext(SignInModalMessage)
+  const { setMessage } = useContext(SignInModalMessageContext)
   const { setIsOpen } = useContext(SignInOpenContext)
-  const handleChange = (e) => {
+
+  const handleFieldChange = (e) => {
     setData((prevData) => ({ ...prevData, [e.target.name]: e.target.value }))
   }
 
   const handleRegularSignUpEmail = (e, data) => {
     //Changes to sign in mode once sign up is complete
-    handleSubmit(e, data)
+    handleSignUp(e, data)
     setMessage("Sign In With Email")
     setMode("signInEmail")
   }
@@ -157,7 +203,7 @@ export function SignUpEmail() {
             placeHolder="6471234567"
             size="small"
             value={data.phone}
-            onChange={handleChange}
+            onChange={handleFieldChange}
           />,
           <FormSingleLineInput
             name="name"
@@ -165,7 +211,7 @@ export function SignUpEmail() {
             placeHolder="Samuel Thompson"
             size="small"
             value={data.name}
-            onChange={handleChange}
+            onChange={handleFieldChange}
           />,
         ]
         }
@@ -177,7 +223,7 @@ export function SignUpEmail() {
             placeHolder="example@example.com"
             size="small"
             value={data.email}
-            onChange={handleChange}
+            onChange={handleFieldChange}
           />,
         ]
         }
@@ -189,7 +235,7 @@ export function SignUpEmail() {
             size="small"
             type="password"
             value={data.password}
-            onChange={handleChange}
+            onChange={handleFieldChange}
           />,
           <FormSingleLineInput
             name="confirmPassword"
@@ -197,7 +243,7 @@ export function SignUpEmail() {
             size="small"
             type="password"
             value={data.confirmPassword}
-            onChange={handleChange}
+            onChange={handleFieldChange}
           />
         ]
         }
@@ -227,13 +273,13 @@ export function SignUpEmail() {
 export function SignInPhone() {
 
   const { setMode } = useContext(SignInModeContext)
-  const { setMessage } = useContext(SignInModalMessage)
+  const { setMessage } = useContext(SignInModalMessageContext)
 
 
   {/* Change default to the user's current location */ }
   const [field, setField] = useState('United States (+1)')
 
-  const handleChange = (event) => {
+  const handleFieldChange = (event) => {
     setField(event.target.value);
   }
 
@@ -251,7 +297,7 @@ export function SignInPhone() {
       <div className="content">
         <LineBox flex={false} CssTextField={[
           <DropDownMenu
-            onChange={handleChange}
+            onChange={handleFieldChange}
             value={field}
             label='Country Code'
             menuItem={keys}
@@ -287,29 +333,3 @@ export function SignInPhone() {
   )
 }
 
-async function handleSubmit(e, data) {
-  console.log(data);
-  e.preventDefault();
-  const response = await signUp(data);
-  console.log(JSON.stringify(response));
-}
-
-async function handleSignIn(e, data) {
-  console.log(data);
-  e.preventDefault();
-  try {
-    const jsonResponse = await signIn(data);
-    localStorage.setItem('profile', JSON.stringify(jsonResponse.data));
-    return "correct";
-  } catch (error) {
-    console.log(error.response.data.message)
-    switch (error.response.data.message) {
-      case "User doesn't exist":
-        return "User doesn't exist";
-      case "Invalid Credentials":
-        return "Invalid Credentials";
-      default:
-        return;
-    }
-  }
-}

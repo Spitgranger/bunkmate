@@ -6,7 +6,7 @@ import { Avatar, Typography, Button, Menu, MenuItem, Divider, Tooltip, IconButto
 import { useState, useId, useContext, useEffect } from 'react';
 import { SignInOpenContext } from './GlobalStateManagement/SignInContext';
 import { SignInModeContext } from './GlobalStateManagement/SignInContext';
-import { SignInModalMessage } from './GlobalStateManagement/SignInContext';
+import { SignInModalMessageContext } from './GlobalStateManagement/SignInContext';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import LoginIcon from '@mui/icons-material/Login';
 import LogoutIcon from '@mui/icons-material/Logout';
@@ -17,6 +17,8 @@ import SettingsApplications from '@mui/icons-material/SettingsApplications';
 import Logout from '@mui/icons-material/Logout';
 import { useNavigate } from 'react-router-dom';
 import decode from 'jwt-decode';
+import { getProfile } from '../api';
+import { SignInUserData } from './GlobalStateManagement/SignInContext';
 
 function CheckActive({ to, page, ...props }) {
     const fullPath = useResolvedPath(to)
@@ -46,7 +48,7 @@ function Navbar() {
     //used to manage content that is displayed in modal window
     const { setMode } = useContext(SignInModeContext)
     //used to manage the title within the modal window
-    const { setMessage } = useContext(SignInModalMessage)
+    const { setMessage } = useContext(SignInModalMessageContext)
     //used to manage focused element state
     const [currentTarget, setCurrentTarget] = useState(null)
 
@@ -87,6 +89,19 @@ function Navbar() {
             }
         }
     }, [user])
+
+
+    //Used to handle retrieving user data from api
+    const [userProfile, setUserProfile] = useState("")
+    const handleProfile = async () => {
+        const profile = await getProfile();
+        return profile
+    }
+    //get data from backend when the component first loads works
+    useEffect(() => {
+        handleProfile().then((profile) => setUserProfile(profile.data)).catch(error => console.log(error))
+    }, []);
+
 
     function DropDownMenu({ children }) {
         return (
@@ -182,7 +197,7 @@ function Navbar() {
                                         aria-haspopup="true"
                                         aria-expanded={open ? 'true' : undefined}
                                     >
-                                        <Avatar className="Avatar" alt={user?.result?.email}>{user?.result?.email?.charAt(0)}</Avatar>
+                                        <Avatar src={userProfile?.picture} className="Avatar" alt={user?.result?.email}>{user?.result?.email?.charAt(0)}</Avatar>
                                     </IconButton>
                                 </a>
                             </label>
@@ -236,7 +251,7 @@ function Navbar() {
                                         aria-haspopup="true"
                                         aria-expanded={open ? 'true' : undefined}
                                     >
-                                        <Avatar alt={user?.result?.email}>{user?.result?.email?.charAt(0)}</Avatar>
+                                        <Avatar src={userProfile?.picture} alt={user?.result?.email}>{user?.result?.email?.charAt(0)}</Avatar>
                                     </IconButton>
                                 </a>
                             </label>

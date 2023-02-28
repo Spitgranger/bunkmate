@@ -6,7 +6,6 @@ import { Button, Grid, Paper, TextField, Card, Typography, CardActionArea, CardM
 import "./Social.css"
 import PlacesAutocomplete from "../Components/SubComponents/PlacesAutocomplete";
 import profiles from "../testing_data/testingData"
-import SignInProvider from '../Components/GlobalStateManagement/SignInContext';
 import { getProfile } from '../api'
 import { BsBrightnessAltHigh } from "react-icons/bs";
 
@@ -153,9 +152,7 @@ const Social = () => {
     }
     return (
         <div>
-            <SignInProvider>
-                <Navbar />
-            </SignInProvider>
+            <Navbar />
             <div className="content-container">
                 <div className="search-bar-container" style={{ height: '200px', position: 'absolute', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                     <PlacesAutocomplete setSelected={setSelected} />

@@ -9,53 +9,17 @@ const requestSchema = mongoose.Schema({
         type: String,
         required: true,
     },
-    cannabis: {
-        type: String,
-        requried: true,
-    },
     rentBudget: {
         type: Number,
-        required: true,
-    },
-    idealLocation: {
-        type: [Number],
         required: true,
     },
     idealLengthStay: {
         type: String,
         required: true,
     },
-    havePets: {
-        type: String,
-        required: true,
-    },
-    sleepSchedule:{
-        type: String,
-        required:true,
-    },
-    cleanliness:{
-        type: String,
-        required: true,
-    },
-    drinking:{
-        type: String, 
-        required: true,
-    },
-    smoking: {
-        type: String,
-        required: true,
-    },
-    occupation:{
-        type: String,
-        required: true,
-    },
-    tolerateGuests: {
-        type: String,
-        required: true,
-    },
-    toleratePets: {
-        type: String,
-        required: true,
+    idealLocation: {
+        type: Array,
+        require: true,
     },
     numRoommates: {
         type: String,
@@ -66,8 +30,16 @@ const requestSchema = mongoose.Schema({
         required: true,
     },
     dateValue: {
-        type: String,
+        type: Object,
         required: true,
+    },
+    rangeSliderValue: {
+        type: Array,
+        require: true,
+    },
+    listingObject: {
+        type: Object,
+        require: true,
     }
 })
 

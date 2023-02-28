@@ -1,9 +1,9 @@
-import { useState, createContext } from 'react';
-
+import { useState, createContext, useEffect } from 'react';
 
 export const SignInOpenContext = createContext(null)
 export const SignInModeContext = createContext(null)
-export const SignInModalMessage = createContext(null)
+export const SignInModalMessageContext = createContext(null)
+export const SignInDataContext = createContext(null)
 
 export default function SignInProvider({ children }) {
 
@@ -13,13 +13,22 @@ export default function SignInProvider({ children }) {
   const [mode, setMode] = useState("signInEmail")
   //manages the modal message ie: "Sign in with email"
   const [message, setMessage] = useState("Sign In or Sign Up")
+  //Used to handle retrieving user data from api
+  const [userProfile, setUserProfile] = useState("")
+
+
+
+
+
 
   return (
     <SignInOpenContext.Provider value={{ isOpen, setIsOpen }}>
       <SignInModeContext.Provider value={{ mode, setMode }}>
-        <SignInModalMessage.Provider value={{ message, setMessage}}>
-          {children}
-        </SignInModalMessage.Provider>
+        <SignInModalMessageContext.Provider value={{ message, setMessage }}>
+          <SignInDataContext.Provider value={{ userProfile, setUserProfile }}>
+            {children}
+          </SignInDataContext.Provider>
+        </SignInModalMessageContext.Provider>
       </SignInModeContext.Provider>
     </SignInOpenContext.Provider>
   )

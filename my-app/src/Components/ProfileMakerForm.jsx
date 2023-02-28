@@ -27,7 +27,7 @@ import {
 } from './GlobalStateManagement/ValidationContext';
 
 import { createProfile } from '../api';
-
+import { SignInOpenContext } from './GlobalStateManagement/SignInContext';
 
 
 
@@ -45,7 +45,6 @@ const backButtonStyles = {
 const handleSubmit = async (data) => {
   try {
     const response = await createProfile(data);
-    console.log('hiiiiiiiiiii')
     console.log(response);
   } catch (error) {
     console.log(error);
@@ -53,12 +52,13 @@ const handleSubmit = async (data) => {
 
 }
 
-function SignUpPartnerForm({ forwardButton, backwardButton }) {
+function ProfileMakerForm({ forwardButton, backwardButton }) {
 
   const { values, setValues } = useContext(ValuesObjectContext)
   const { phoneError, phoneHelperText } = useContext(PhoneValidationContext)
   const { emailError, emailHelperText } = useContext(EmailValidationContext)
   const { aboutError, aboutHelperText, handleAboutValidation } = useContext(AboutValidationContext)
+  const { isOpen, setIsOpen } = useContext(SignInOpenContext)
 
   const actions = {
     checkGlobalError: "check_global_error",
@@ -72,6 +72,7 @@ function SignUpPartnerForm({ forwardButton, backwardButton }) {
   }
 
   const [state, dispatch] = useReducer(reducer, initialState)
+  console.log(state?.values)
 
 
 
@@ -167,7 +168,7 @@ function SignUpPartnerForm({ forwardButton, backwardButton }) {
             dispatch({ type: actions.checkValues, payload: component.long_name, name: "city" });
             break;
           case "administrative_area_level_1":
-            setValues(prevValue => ({ ...prevValue, province: component.long_name }))
+            //setValues(prevValue => ({ ...prevValue, province: component.long_name }))
             dispatch({ type: actions.checkValues, payload: component.long_name, name: "province" });
             break;
           case "country":
@@ -183,6 +184,7 @@ function SignUpPartnerForm({ forwardButton, backwardButton }) {
     });
   }, []);
 
+  //handle going back to the previous page
   const BackButton = () => {
     return (
       <label style={{ cursor: 'pointer' }}>
@@ -193,8 +195,13 @@ function SignUpPartnerForm({ forwardButton, backwardButton }) {
       </label>)
   }
 
-  return (<>
+  //handle closing the modal window
+  const handleClose = () => {
+    setIsOpen(false)
+  }
 
+
+  return (<>
     <FormSection title="Profile"
       message="*Everything in this section will be visible to other people. Don't worry you can always change it later"
     />
@@ -212,11 +219,13 @@ function SignUpPartnerForm({ forwardButton, backwardButton }) {
       <FormMultiLineInput placeHolder="Tell us a bit about yourself" type="text" field="About Me" helperText={aboutHelperText} onChange={(e) => { handleAboutValidation(e); handleEmptyStringValidation(e, 'about') }} error={aboutError} value={state?.values?.about} />
     </div>
 
+    {/*
     <ActionButton disabled={state.globalError} fontSize="15px" width="100%" onClick={() => { handleSubmit(values); localStorage.setItem("page1", JSON.stringify(values)); }} type="submit" title="Continue" endIcon={<IoChevronForward color="aqua" />} />
-
     <BackButton />
+  */}
+    <br />
 
-    <FormSection title="Personal Info" message="*We collect this data for our algorithms, we won't share it with anyone else. We'll ask you for proof on the next page" />
+    <FormSection title="Personal Info" message="*We mainly collect this data for our background checks." />
     <LineBox flex={true} CssTextField={[
       <FormSingleLineInput size="small" type="text" field="Email" placeHolder="ex. bunkmates@gmail.com" error={emailError} helperText={emailHelperText} value={state?.values?.email} onChange={(e) => { handleEmptyStringValidation(e, 'email'); }} />,
       <DatePicker label="Birthday" value={state?.values?.birthday} onChange={(e) => handleEmptyStringValidation(e, 'birthday', true)} />
@@ -241,9 +250,11 @@ function SignUpPartnerForm({ forwardButton, backwardButton }) {
       <DropDownMenu label="Current Education" menuItem={["Not in School", "High School", "Undergraduate Studies", "Graduate Studies"]} value={state?.values?.education} onChange={(e) => { handleEmptyStringValidation(e, 'education'); }} />,
     ]} />
 
+    <br />
+    {/*
     <ActionButton disabled={state.globalError} fontSize="15px" width="100%" onClick={() => { handleSubmit(values); localStorage.setItem("page1", JSON.stringify(values)); }} type="submit" title="Continue" endIcon={<IoChevronForward color="aqua" />} />
-
     <BackButton />
+    */}
 
     <FormSection title="Habits and LifeStyle" message="*Some of the information here will be used to match you with roomates and some of it will be used to build your profile" />
     <LineBox flex={true} CssTextField={[
@@ -269,8 +280,8 @@ function SignUpPartnerForm({ forwardButton, backwardButton }) {
 
 
 
-    <ActionButton disabled={state.globalError} fontSize="15px" width="100%" onClick={() => { handleSubmit(values); localStorage.setItem("page1", JSON.stringify(values)); }} type="submit" title="SUBMIT" endIcon={<IoChevronForward color="aqua" />} />
+    <ActionButton disabled={state.globalError} fontSize="15px" width="100%" onClick={() => { handleSubmit(state?.values); localStorage.setItem("page1", JSON.stringify(values)); }} type="submit" title="SUBMIT" endIcon={<IoChevronForward color="aqua" />} />
   </>)
 }
 
-export default SignUpPartnerForm;
+export default ProfileMakerForm;

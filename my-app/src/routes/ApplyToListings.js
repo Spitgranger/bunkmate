@@ -1,11 +1,9 @@
 import './ApplyToListings.css';
 import Navbar from '../Components/Navbar';
 import UploadsForm from '../Components/UploadsForm'
-import SignUpPartnerForm from '../Components/SignUpPartnerForm'
+import ProfileMakerForm from '../Components/ProfileMakerForm'
 import CreateRequestForm from '../Components/CreateRequestForm'
 import { useState, createContext } from 'react'
-import ValidationProvider from '../Components/GlobalStateManagement/ValidationContext'
-import SignInProvider from '../Components/GlobalStateManagement/SignInContext';
 
 function ApplyToListings() {
 
@@ -17,22 +15,15 @@ function ApplyToListings() {
     setpage(() => page + 1)
   }
 
-
-
   return (
     <>
-      <SignInProvider>
-        <Navbar />
-      </SignInProvider >
-      <ValidationProvider>
-        <div className="info">
-          <section className="ApplicationSubPage">
-            <UploadsForm />
-            <SignUpPartnerForm />
-            <CreateRequestForm />
-          </section>
-        </div>
-      </ValidationProvider>
+      <Navbar />
+      <div className="info">
+        <section className="ApplicationSubPage">
+          <UploadsForm />
+          <CreateRequestForm />
+        </section>
+      </div>
     </>
   )
 }

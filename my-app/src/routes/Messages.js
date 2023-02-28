@@ -40,6 +40,7 @@ import CreateChannel from '../Components/CreateChannel'
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
 import Tooltip from '@mui/material/Tooltip'
+import { getProfile } from '../api';
 
 const Messages = () => {
   //controls whether to show the message list page or create group page
@@ -61,11 +62,26 @@ const Messages = () => {
   */
   //Initialize a regular user 
   const userToken = profile?.streamToken;
+  const [userProfile, setUserProfile] = useState("");
+
+  //Used to handle retrieving user data from api
+  const handleProfile = async () => {
+    const profile = await getProfile();
+    return profile
+  }
+  //get data from backend when the component first loads works
+  useEffect(() => {
+    handleProfile().then((profile) => setUserProfile(profile.data)).catch(error => console.log(error))
+  }, []);
+
   const user = {
     id: profile?.result?._id,
-    name: profile?.result?.name,
-    image: 'https://picsum.photos/200',
+    name: userProfile?.firstName,
+    image: userProfile?.picture
   };
+
+  console.log(userProfile)
+
   const chatClient = useClient({ apiKey: apiKey, userData: user, tokenOrProvider: userToken });
 
   /*
@@ -255,7 +271,7 @@ const Messages = () => {
       <>
         <button style={active ? { display: 'flex', backgroundColor: 'white' } : null} className="channelPreview" onClick={() => { setActiveChannel(channel, watchers); setIsCreating(false); }}>
           <div style={{ padding: '5px' }}>
-            <Avatar name={displayTitle} size={40} image={'https://picsum.photos/200'} />
+            <Avatar name={displayTitle} size={40} image={user.image} />
           </div>
           {/* Mainly controls for the size of the last message prevew*/}
           <div style={{ width: '60%' }}>

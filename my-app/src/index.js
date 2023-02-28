@@ -10,32 +10,59 @@ import Error from './Error';
 import Social from './routes/Social';
 import Messages from './routes/Messages'
 import Profile from './routes/Profile';
+import SignInProvider from './Components/GlobalStateManagement/SignInContext';
+import ValidationProvider from './Components/GlobalStateManagement/ValidationContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App />,
+    element:
+      <SignInProvider>
+        <ValidationProvider>
+          <App />,
+        </ValidationProvider>
+      </SignInProvider>,
     errorElement: <Error />,
   },
   {
     path: "/profile",
-    element: <Profile />,
+    element:
+      <SignInProvider>
+        <ValidationProvider>
+          <Profile />,
+        </ValidationProvider>
+      </SignInProvider>,
     errorElement: <Error />,
   },
   {
     path: "/apply_to_listings",
-    element: <ApplyToListings />,
+    element:
+      <SignInProvider>
+        <ValidationProvider>
+          <ApplyToListings />,
+        </ValidationProvider>
+      </SignInProvider>,
     errorElement: <Error />,
   },
   {
     path: '/bunkmates',
-    element: <Social />,
+    element:
+      <SignInProvider>
+        <ValidationProvider>
+          <Social />,
+        </ValidationProvider>
+      </SignInProvider>,
     errorElement: <Error />
   },
   {
     path: '/messages',
-    element: <Messages />,
+    element:
+      <SignInProvider>
+        <ValidationProvider>
+          <Messages />,
+        </ValidationProvider>
+      </SignInProvider>,
     errorElement: <Error />
   },
 ]);
