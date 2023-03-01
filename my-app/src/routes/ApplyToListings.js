@@ -21,7 +21,6 @@ function ApplyToListings() {
       <div className="info">
         <section className="ApplicationSubPage">
           <UploadsForm />
-          <CreateRequestForm />
         </section>
       </div>
     </>

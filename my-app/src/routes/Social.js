@@ -8,6 +8,10 @@ import PlacesAutocomplete from "../Components/SubComponents/PlacesAutocomplete";
 import profiles from "../testing_data/testingData"
 import { getProfile } from '../api'
 import { BsBrightnessAltHigh } from "react-icons/bs";
+import CreateRequestForm from '../Components/CreateRequestForm'
+import { ActionButton } from "../Components/SubComponents/Form";
+import IconButton from '@mui/material/IconButton';
+import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 
 
 const libraries = ["places"];
@@ -119,13 +123,11 @@ const Profile = ({ profile }) => {
     )
 }
 
-const MakeRequest = () => {
-
-}
 
 const Social = () => {
 
 
+    const [showRequest, setShowRequest] = useState(false)
     const [selected, setSelected] = useState(null);
     const center = selected || { lat: 43.642075, lng: -79.385981 };
     const [profile, setProfile] = useState(null);
@@ -150,6 +152,15 @@ const Social = () => {
         // console.log(profiles[index]);
         setProfile(<Profile profile={profiles[index]} />)
     }
+
+    const handleRequestClick = () => {
+        setShowRequest(!showRequest)
+    }
+
+
+
+
+
     return (
         <div>
             <Navbar />
@@ -161,7 +172,7 @@ const Social = () => {
                     <GoogleMap
                         center={center}
                         zoom={15}
-                        mapContainerStyle={{ width: "100%", height: "95vh" }}
+                        mapContainerStyle={{ width: "100%", height: "89vh" }}
                         options={{ styles: mapStyles, streetViewControl: false }}
                         onClick={() => { setProfile(null) }}
                     >
@@ -171,7 +182,23 @@ const Social = () => {
 
                     </GoogleMap >
                 </div>
-            </div>
+                {showRequest ?
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', top: '50%', position: 'absolute' }}>
+                        <div className="create-request-container" style={{ display: 'flex', flexFlow: 'column wrap', borderRadius: '10px', padding: '20px', height: '50%', width: '100%', backgroundColor: 'white', opacity: '0.9' }}>
+                            <div className="close-button-container" style={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
+                                <IconButton onClick={handleRequestClick}>
+                                    <CloseRoundedIcon />
+                                </IconButton>
+                            </div>
+                            <CreateRequestForm onClick={handleRequestClick} />
+                        </div>
+                    </div>
+                    :
+                    <div onClick={handleRequestClick} style={{ display: 'flex', top: '1100px', justifyContent: 'center', position: 'absolute' }}>
+                        <ActionButton bgColor={"black"} title="Create Bunkmate Request" />
+                    </div>
+                }
+            </div >
         </div >
     )
 }

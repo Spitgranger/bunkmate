@@ -3,7 +3,6 @@ import usePlacesAutocomplete, {
     getLatLng,
 } from "use-places-autocomplete";
 import { Paper, TextField } from "@mui/material";
-import "./PlacesAutocomplete.css";
 
 const PlacesAutocomplete = (props) => {
     const {
@@ -93,7 +92,7 @@ const PlacesAutocomplete = (props) => {
                 boxSizing: 'border-box',
                 opacity: 0.8,
 
-            }}><ul>{renderSuggestions()}</ul></Paper>}
+            }}><ul style={{ cursor: 'pointer' }}>{renderSuggestions()}</ul></Paper>}
         </div>
     );
 };

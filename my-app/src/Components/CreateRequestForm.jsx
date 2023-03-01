@@ -18,7 +18,7 @@ import { ValuesObjectContext } from './GlobalStateManagement/ValidationContext';
 
 
 //Within a modal window
-function CreateRequestForm() {
+function CreateRequestForm({ onClick }) {
 
   /*const { values, setValue } = useContext(ValuesObjectContext)*/
   const id = useId();
@@ -154,11 +154,12 @@ function CreateRequestForm() {
   }, [state?.values?.listingObject])
 
   const handleSubmit = async (formData) => {
+    //record values to be stored in the backend
     try {
       const response = await createRequest(formData);
       console.log(response);
     } catch (error) {
-      console.log(error);
+      console.log("An error has occured: ", error)
     }
   }
 
@@ -170,25 +171,25 @@ function CreateRequestForm() {
   function SavedListingItem(props) {
     //map these values from the user's "saved listings" into "listings in mind" drop down menu
     return (
-      <div style={{ display: 'flex', flexFlow: 'row nowrap' }}>
+      <div className="saved-listing" style={{ display: 'flex', flexFlow: 'row nowrap' }}>
         {/*replace hard coded values */}
         <img style={{ width: "70px", height: "60px", padding: '5px', borderRadius: '10px' }} src="https://picsum.photos/300/300"></img>
-        <div style={{ display: 'flex', flexFlow: 'column nowrap', padding: '5px' }}>
-          <Typography variant="body2" color="text.secondary">
+        <div style={{ maxWidth: '350px', display: 'flex', justifyContent: 'center', flexDirection: 'column', padding: '5px', }}>
+          <Typography variant="body2" color="text.secondary" noWrap >
             {/*replace hard coded values */}
             {props.address}
           </Typography>
-          <Typography component="div" fontWeight="bold">
+          <Typography component="div" fontWeight="bold" noWrap >
             {/*replace hard coded values */}
             {`${props.price}/month`}
           </Typography>
-          <Typography component="div" fontWeight="normal" fontSize="small">
+          <Typography component="div" fontWeight="normal" fontSize="small" noWrap >
             {/*replace hard coded values */}
             {props.bedBath}
           </Typography>
 
         </div>
-      </div>
+      </div >
     )
   }
 
@@ -282,7 +283,6 @@ function CreateRequestForm() {
   console.log(state?.values)
   return (<>
 
-    <br />
     <FormSection title="Create Bunkmate Request" />
 
     <LineBox flex={true} CssTextField={[
@@ -298,7 +298,7 @@ function CreateRequestForm() {
       ]} />
       :
       <LineBox flex={true} CssTextField={[
-        <FormSingleLineInput helperText={"Coordinates have been set to your selected listing"} disabled={true} value={state?.values?.listingObject?.props?.address} onChange={(e) => { handleEmptyStringValidation(e.target.value, state?.values?.listingObject?.props?.address); console.log('hi') }} size="small" type="text" field="Ideal Location" placeHolder="ex. Toronto" inputRef={inputRef} />,
+        <FormSingleLineInput helperText={"Coordinates have been set to your selected listing"} disabled={true} value={state?.values?.listingObject?.props?.address} onChange={(e) => { handleEmptyStringValidation(e.target.value, state?.values?.listingObject?.props?.address); }} size="small" type="text" field="Ideal Location" placeHolder="ex. Toronto" inputRef={inputRef} />,
       ]} />
     }
 
@@ -317,11 +317,8 @@ function CreateRequestForm() {
       <DropDownMenu defaultvalue={""} value={state?.values?.numRoommates} onChange={(e) => handleEmptyStringValidation(e.target.value, 'numRoommates')} label="Seeking" menuItem={["No Bunkmates", "1 Bunkmate", "2 Bunkmates", "3 Bunkmates", "4 Bunkmates", '5+ Bunkmates']} />,
     ]} />
 
-
-
-
     {/* disable cotinue button if the user has not filled out all mandatory fields and / or still has errors*/}
-    <ActionButton disabled={state?.globalError} onClick={() => { /*localStorage.setItem('page3', JSON.stringify(values));*/ handleSubmit(values); }} fontSize="15px" width="100%" type="submit" title="Submit" />
+    <ActionButton disabled={state?.globalError} onClick={() => { onClick(); handleSubmit(values); }} fontSize="15px" width="100%" type="submit" title="Submit" />
   </>)
 }
 

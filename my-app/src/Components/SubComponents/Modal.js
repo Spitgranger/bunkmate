@@ -1,11 +1,10 @@
 import ReactDom from "react-dom";
 import "./Modal.css"
-import { IoIosCloseCircle } from 'react-icons/io';
 import { useState } from "react";
-
+import IconButton from "@mui/material/IconButton";
+import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 
 export default function Modal({ open, children, onClose, modalMessage, content }) {
-  const [hover, setHover] = useState(false);
 
   if (!open) return null
 
@@ -15,21 +14,11 @@ export default function Modal({ open, children, onClose, modalMessage, content }
       <div className='modalStyles'>
         <div className="topBar">
           <h5>Welcome To Bunkmate</h5>
-          <label>
-            <IoIosCloseCircle
-              onClick={onClose}
-              style={{ cursor: "pointer" }}
-              color={hover ? "grey" : "black"}
-              size={30}
-              className="closeButton"
-              onMouseEnter={() => setHover(true)}
-              onMouseLeave={() => setHover(false)}
-              onMouseDown={() => setHover(false)}
-            />
-          </label>
+          <IconButton onClick={onClose}>
+            <CloseRoundedIcon className="closeButton" />
+          </IconButton>
         </div>
-
-        <div className="ModalBody">
+        <div className="modalBody">
           <h3>{modalMessage}</h3>
           {children}
           {content}

@@ -5,6 +5,7 @@ import TextField from '@mui/material/TextField';
 import * as React from 'react';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
+import MenuList from "@mui/material/MenuList";
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -14,7 +15,7 @@ import Stack from '@mui/material/Stack';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import ListItemText from '@mui/material/ListItemText';
 import Checkbox from '@mui/material/Checkbox';
-import { InputAdornment } from "@mui/material";
+import { InputAdornment, Typography } from "@mui/material";
 import { useState, memo, useCallback } from 'react'
 import { BsFillCheckCircleFill } from "react-icons/bs";
 import { MdOutlineError } from "react-icons/md";
@@ -155,7 +156,11 @@ export function DropDownMenu({ inputRef, defaultValue, value, onChange, label, m
       >
 
         {menuItem.map((item, i) => {
-          return (<MenuItem key={i} value={item} >{item}</MenuItem>);
+          return (
+            <MenuItem key={i} value={item} >
+              {item}
+            </MenuItem>
+          );
         })}
       </Select>
     </FormControl>
@@ -333,11 +338,15 @@ export function UploadFile(props) {
     </div >
   );
 }
-
 export function ActionButton(props) {
 
+  /**
+   * Functional props: onClick, onSubmit, type, endIcon, startIcon, disabled, title
+   * Style props: bgColor, fontSize, 
+   */
+
   const buttonStyles = {
-    backgroundColor: "#383838",
+    backgroundColor: props.bgColor ?? "#383838",
     color: 'white',
     borderRadius: "10px",
     width: props.width,
