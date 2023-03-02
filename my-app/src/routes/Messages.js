@@ -41,6 +41,7 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
 import Tooltip from '@mui/material/Tooltip'
 import { getProfile } from '../api';
+import { Buffer } from 'buffer-es6'
 
 const Messages = () => {
   //controls whether to show the message list page or create group page
@@ -77,10 +78,11 @@ const Messages = () => {
   const user = {
     id: profile?.result?._id,
     name: userProfile?.firstName,
-    image: userProfile?.picture
-  };
+    //doesn't work
+    //image: userProfile?.picture
+    image: 'https://picsum.photos/200/300'
 
-  console.log(userProfile)
+  };
 
   const chatClient = useClient({ apiKey: apiKey, userData: user, tokenOrProvider: userToken });
 
@@ -127,6 +129,7 @@ const Messages = () => {
     }} ><LoadingIndicator size={50} />
   </div >)
 
+  console.log(chatClient)
   //Channel with the most recent message will appear at the top of the message list
   const sort = { last_message_at: -1 };
   //message limit controls for much history is stored (not sure if it will increase costs)
@@ -156,10 +159,11 @@ const Messages = () => {
   }
 
 
-  const CustomPreviewChannel = (props) => {
+  const CustomPreviewChannel = ({ Avatar, ...props }) => {
     //manages state for time since last message
+    console.log(props)
     const [timeLastMessage, setTimeLastMessage] = useState("");
-    const { online, activeChannel, watchers, active, channel, displayTitle, unread, lastMessage, setActiveChannel } = props
+    const { displayImage, online, activeChannel, watchers, active, channel, displayTitle, unread, lastMessage, setActiveChannel } = props
 
     /*console.log('print avatar', props.Avatar(props).props.className)*/
     //calculates the last time the message was sent
@@ -177,6 +181,8 @@ const Messages = () => {
         const timeValues = { millisecondsDifference, secondsDifference, minutesDifference, hoursDifference, daysDifference }
         setTimeLastMessage(displayTime(timeValues, lastMessage));
       };
+      //retrieve membres within a channel
+      const members = activeChannel.data.name
 
       console.log(channel)
       //run the update immediately when the effect is defined
@@ -272,7 +278,9 @@ const Messages = () => {
         <button style={active ? { display: 'flex', backgroundColor: 'white' } : null} className="channelPreview" onClick={() => { setActiveChannel(channel, watchers); setIsCreating(false); }}>
           <div style={{ padding: '5px' }}>
             {/*add ability to add user profile image*/}
-            <Avatar name={displayTitle} size={40} />
+            {/*<Avatar name={displayTitle} size={40} />*/}
+            <Avatar image={displayImage} />
+
           </div>
           {/* Mainly controls for the size of the last message prevew*/}
           <div style={{ width: '60%' }}>
@@ -303,9 +311,9 @@ const Messages = () => {
               <IoMdMore size={20} />
             </IconButton>
             <Menu
-              id="demo-customized-menu"
+              id="customized-menu"
               MenuListProps={{
-                'aria-labelledby': 'demo-customized-button',
+                'aria-labelledby': 'customized-button',
               }}
               anchorEl={anchorEl}
               open={open}
@@ -345,6 +353,11 @@ const Messages = () => {
     setIsCreating(!isCreating)
   }
 
+  const CustomAvatar = (props) => {
+    console.log(props)
+    return <Avatar image={props.image} shape='square' size={40} />;
+  };
+
   return (
     <div className="messages">
       <SignInProvider>
@@ -362,7 +375,7 @@ const Messages = () => {
             filters={filters}
             sort={sort}
             options={options}
-            Preview={(previewProps) => CustomPreviewChannel({ ...previewProps })}
+            Preview={(previewProps) => <CustomPreviewChannel {...previewProps} Avatar={CustomAvatar} />}
             showChannelSearch
           />
           {/*<Channel channel={supportChannel} message={supportMessage}>*/}

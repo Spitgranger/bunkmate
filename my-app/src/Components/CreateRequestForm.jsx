@@ -16,9 +16,9 @@ import { listingMenuItems, identityMenuItems } from '../testing_data/listingMenu
 import { FormMultiLineInput } from './SubComponents/Form';
 import { AboutValidationContext } from './GlobalStateManagement/ValidationContext';
 import { MultipleSelectCheckmarks } from './SubComponents/Form';
-import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import IconButton from '@mui/material/IconButton';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
+import { IoIosArrowBack } from 'react-icons/io'
 import FavoriteIcon from '@mui/icons-material/Favorite';
 
 //Within a modal window
@@ -119,15 +119,17 @@ function CreateRequestForm(props) {
 
   //useEffect runs when user selects from Autocomplete dropdown menu
   useEffect(() => {
-    console.log('hi')
     autoCompleteRef.current = new window.google.maps.places.Autocomplete(
       inputRef?.current,
       options
     );
     autoCompleteRef.current.addListener("place_changed", async function () {
+      console.log('sfdsdfsfsdfdsfdsf')
       const place = await autoCompleteRef.current.getPlace();
+      console.log(place)
       //set coordinates of the location
       const coordinates = [place?.geometry?.location?.lat(), place?.geometry?.location?.lng()];
+      console.log(coordinates)
       //ideal location stores the coordinates
       dispatch({ type: actions.checkValues, payload: coordinates, name: "idealLocation" });
       //set the address of the location
@@ -148,7 +150,7 @@ function CreateRequestForm(props) {
       inputRef?.current?.removeEventListener('keydown', handleKeyDown);
     }
 
-  }, [state?.values?.idealLocation]);
+  }, [inputRef.current]);
 
   //useEffect in sync with listingObject
   useEffect(() => {
@@ -239,7 +241,7 @@ function CreateRequestForm(props) {
 
         setShowButton(
           <IconButton onClick={handleBack}>
-            <ArrowBackIosNewIcon />
+            <IoIosArrowBack />
           </IconButton>
         )
         break

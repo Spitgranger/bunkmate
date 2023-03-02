@@ -16,6 +16,7 @@ export const useClient = ({ apiKey, userData, tokenOrProvider }) => {
         if (!didUserConnectInterrupt) setChatClient(client);
       });
 
+
       return () => {
         didUserConnectInterrupt = true;
         setChatClient(null);
