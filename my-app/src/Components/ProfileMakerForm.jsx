@@ -210,13 +210,13 @@ function ProfileMakerForm({ forwardButton, backwardButton }) {
     </div>
     <UploadFile helperText="Supported Files: jpg, png" helperTextPos="45%" width="50%" type="file" message="Upload Profile Picture" accept={["image/jpg", "image/jpeg", "image/png"]} endIcon={<CameraAltIcon sx={{ color: "aqua" }} />} handleFileUpload={handleFileUpload} />
     <LineBox flex={true} CssTextField={[
-      <FormSingleLineInput size='small' type="text" field="Legal First Name" placeHolder="Sam" onChange={(e) => { handleEmptyStringValidation(e, 'firstName') }} value={state?.values?.firstName} />,
-      <FormSingleLineInput size="small" type="text" field="Legal Last Name" placeHolder="Jenkins" onChange={(e) => { handleEmptyStringValidation(e, 'lastName') }} value={state?.values?.lastName} />,
-      <DropDownMenu label="Gender" menuItem={["Male", "Female", "Other"]} value={state?.values?.gender} onChange={(e) => { handleEmptyStringValidation(e, 'gender') }} />,
+      <FormSingleLineInput required="true" size='small' type="text" field="Legal First Name" placeHolder="Sam" onChange={(e) => { handleEmptyStringValidation(e, 'firstName') }} value={state?.values?.firstName} />,
+      <FormSingleLineInput required="true" size="small" type="text" field="Legal Last Name" placeHolder="Jenkins" onChange={(e) => { handleEmptyStringValidation(e, 'lastName') }} value={state?.values?.lastName} />,
+      <DropDownMenu required="true" label="Gender" menuItem={["Male", "Female", "Other"]} value={state?.values?.gender} onChange={(e) => { handleEmptyStringValidation(e, 'gender') }} />,
     ]
     } />
     <div id="multiline">
-      <FormMultiLineInput placeHolder="Tell us a bit about yourself" type="text" field="About Me" helperText={aboutHelperText} onChange={(e) => { handleAboutValidation(e); handleEmptyStringValidation(e, 'about') }} error={aboutError} value={state?.values?.about} />
+      <FormMultiLineInput required="true" placeHolder="Tell us a bit about yourself" type="text" field="About Me" helperText={aboutHelperText} onChange={(e) => { handleAboutValidation(e); handleEmptyStringValidation(e, 'about') }} error={aboutError} value={state?.values?.about} />
     </div>
 
     {/*
@@ -227,27 +227,27 @@ function ProfileMakerForm({ forwardButton, backwardButton }) {
 
     <FormSection title="Personal Info" message="*We mainly collect this data for our background checks." />
     <LineBox flex={true} CssTextField={[
-      <FormSingleLineInput size="small" type="text" field="Email" placeHolder="ex. bunkmates@gmail.com" error={emailError} helperText={emailHelperText} value={state?.values?.email} onChange={(e) => { handleEmptyStringValidation(e, 'email'); }} />,
-      <DatePicker label="Birthday" value={state?.values?.birthday} onChange={(e) => handleEmptyStringValidation(e, 'birthday', true)} />
+      <FormSingleLineInput required="true" size="small" type="text" field="Email" placeHolder="ex. bunkmates@gmail.com" error={emailError} helperText={emailHelperText} value={state?.values?.email} onChange={(e) => { handleEmptyStringValidation(e, 'email'); }} />,
+      <DatePicker required="true" label="Birthday" value={state?.values?.birthday} onChange={(e) => handleEmptyStringValidation(e, 'birthday', true)} />
     ]
     } />
 
 
     <LineBox flex={true} CssTextField={[
-      <FormSingleLineInput type="text" size="small" helperText={phoneHelperText} field="Phone Number" placeHolder="6472345124" error={phoneError} onChange={(e) => { handleEmptyStringValidation(e, 'phone'); }} value={state?.values?.phone} />,
-      <FormSingleLineAddressInput type="text" field="Address" placeHolder="31 West Street" inputRef={inputRef} value={state?.values?.address} onChange={(e) => { handleEmptyStringValidation(e, 'address'); }} />
+      <FormSingleLineInput required="true" type="text" size="small" helperText={phoneHelperText} field="Phone Number" placeHolder="6472345124" error={phoneError} onChange={(e) => { handleEmptyStringValidation(e, 'phone'); }} value={state?.values?.phone} />,
+      <FormSingleLineAddressInput required="true" type="text" field="Address" placeHolder="31 West Street" inputRef={inputRef} value={state?.values?.address} onChange={(e) => { handleEmptyStringValidation(e, 'address'); }} />
     ]
     } />
     {state?.values.city && state?.values.country && state?.values.province ?
       <LineBox flex={true} CssTextField={[
-        <FormSingleLineInput disabled={true} size="small" type="text" field="City" placeHolder="New York" value={state?.values?.city} />,
-        <FormSingleLineInput disabled={true} size="small" type="text" field="Country" placeHolder="United States" value={state?.values?.country} />,
-        <FormSingleLineInput disabled={true} size="small" type="text" field="Province/State" placeHolder="Ontario" value={state?.values?.province} />
+        <FormSingleLineInput required="true" disabled={true} size="small" type="text" field="City" placeHolder="New York" value={state?.values?.city} />,
+        <FormSingleLineInput required="true" disabled={true} size="small" type="text" field="Country" placeHolder="United States" value={state?.values?.country} />,
+        <FormSingleLineInput required="true" disabled={true} size="small" type="text" field="Province/State" placeHolder="Ontario" value={state?.values?.province} />
       ]
       } /> : null}
     <LineBox flex={true} CssTextField={[
-      <DropDownMenu label="Employment Status" menuItem={["Currently Employed", "Currently Unemployed", "Currently Self Employed"]} value={state?.values?.employment} onChange={(e) => { handleEmptyStringValidation(e, "employment"); }} />,
-      <DropDownMenu label="Current Education" menuItem={["Not in School", "High School", "Undergraduate Studies", "Graduate Studies"]} value={state?.values?.education} onChange={(e) => { handleEmptyStringValidation(e, 'education'); }} />,
+      <DropDownMenu required="true" label="Employment Status" menuItem={["Currently Employed", "Currently Unemployed", "Currently Self Employed"]} value={state?.values?.employment} onChange={(e) => { handleEmptyStringValidation(e, "employment"); }} />,
+      <DropDownMenu required="true" label="Current Education" menuItem={["Not in School", "High School", "Undergraduate Studies", "Graduate Studies"]} value={state?.values?.education} onChange={(e) => { handleEmptyStringValidation(e, 'education'); }} />,
     ]} />
 
     <br />
@@ -258,24 +258,24 @@ function ProfileMakerForm({ forwardButton, backwardButton }) {
 
     <FormSection title="Habits and LifeStyle" message="*Some of the information here will be used to match you with roomates and some of it will be used to build your profile" />
     <LineBox flex={true} CssTextField={[
-      <DropDownMenu defaultValue={""} value={state?.values?.havePets} onChange={(e) => handleEmptyStringValidation(e, 'havePets')} label="Do you have pets" menuItem={["Yes", "No"]} />,
-      <DropDownMenu defaultValue={""} value={state?.values?.sleepSchedule} onChange={(e) => handleEmptyStringValidation(e, 'sleepSchedule')} label="Sleep Schedule" menuItem={["Early Bird", "Normal", "Night Owl"]} />,
-      <DropDownMenu defaultValue={""} value={state?.values?.cleanliness} onChange={(e) => handleEmptyStringValidation(e, 'cleanliness')} label="Cleanliness" menuItem={["Not clean", "Clean", "Very Clean"]} />,
+      <DropDownMenu required="true" value={state?.values?.havePets} onChange={(e) => handleEmptyStringValidation(e, 'havePets')} label="Do you have pets" menuItem={["Yes", "No"]} />,
+      <DropDownMenu required="true" value={state?.values?.sleepSchedule} onChange={(e) => handleEmptyStringValidation(e, 'sleepSchedule')} label="Sleep Schedule" menuItem={["Early Bird", "Normal", "Night Owl"]} />,
+      <DropDownMenu required="true" value={state?.values?.cleanliness} onChange={(e) => handleEmptyStringValidation(e, 'cleanliness')} label="Cleanliness" menuItem={["Not clean", "Clean", "Very Clean"]} />,
     ]} />
 
     <LineBox flex={true} CssTextField={[
-      <DropDownMenu defaultvalue={""} value={state?.values?.drinking} onChange={(e) => handleEmptyStringValidation(e, 'drinking')} label="Drinking" menuItem={["Don't Drink", "Light Drinker", "Moderate Drinker", "Heavy Drinker"]} />,
-      <DropDownMenu dfeaultValue={""} value={state?.values?.smoking} onChange={(e) => handleEmptyStringValidation(e, 'smoking')} label="Smoking" menuItem={["Don't Smoke", "Light Smoker", "Moderate Smoker", "Heavy Smoker"]} />,
+      <DropDownMenu required="true" value={state?.values?.drinking} onChange={(e) => handleEmptyStringValidation(e, 'drinking')} label="Drinking" menuItem={["Don't Drink", "Light Drinker", "Moderate Drinker", "Heavy Drinker"]} />,
+      <DropDownMenu required="true" value={state?.values?.smoking} onChange={(e) => handleEmptyStringValidation(e, 'smoking')} label="Smoking" menuItem={["Don't Smoke", "Light Smoker", "Moderate Smoker", "Heavy Smoker"]} />,
     ]} />
 
     <LineBox flex={true} CssTextField={[
-      <DropDownMenu dfeaultValue={""} value={state?.values?.cannabis} onChange={(e) => handleEmptyStringValidation(e, 'cannabis')} label="Cannabis" menuItem={["No Cannabis Use", "Light Cannabis Use", "Moderate Cannabis Use", "Heavy Cannabis User"]} />,
-      <FormSingleLineInput defaultValue={""} value={state?.values?.occupation} onChange={(e) => handleEmptyStringValidation(e, 'occupation')} size="small" type="text" field="Occupation" placeHolder="ex. Student/Pharmacist" />,
+      <DropDownMenu required="true" value={state?.values?.cannabis} onChange={(e) => handleEmptyStringValidation(e, 'cannabis')} label="Cannabis" menuItem={["No Cannabis Use", "Light Cannabis Use", "Moderate Cannabis Use", "Heavy Cannabis User"]} />,
+      <FormSingleLineInput required="true" value={state?.values?.occupation} onChange={(e) => handleEmptyStringValidation(e, 'occupation')} size="small" type="text" field="Occupation" placeHolder="ex. Student/Pharmacist" />,
     ]} />
 
     <LineBox flex={true} CssTextField={[
-      <DropDownMenu defaultValue={""} value={state?.values?.tolerateGuests} onChange={(e) => handleEmptyStringValidation(e, 'tolerateGuests')} label="Ok with guests?" menuItem={["Yes", "No"]} />,
-      <DropDownMenu defaultValue={""} value={state?.values?.toleratePets} onChange={(e) => handleEmptyStringValidation(e, 'toleratePets')} label="Ok with pets?" menuItem={["Yes", "No"]} />,
+      <DropDownMenu required="true" value={state?.values?.tolerateGuests} onChange={(e) => handleEmptyStringValidation(e, 'tolerateGuests')} label="Ok with guests?" menuItem={["Yes", "No"]} />,
+      <DropDownMenu required="true" value={state?.values?.toleratePets} onChange={(e) => handleEmptyStringValidation(e, 'toleratePets')} label="Ok with pets?" menuItem={["Yes", "No"]} />,
     ]} />
 
 

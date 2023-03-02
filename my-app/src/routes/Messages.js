@@ -271,7 +271,8 @@ const Messages = () => {
       <>
         <button style={active ? { display: 'flex', backgroundColor: 'white' } : null} className="channelPreview" onClick={() => { setActiveChannel(channel, watchers); setIsCreating(false); }}>
           <div style={{ padding: '5px' }}>
-            <Avatar name={displayTitle} size={40} image={user.image} />
+            {/*add ability to add user profile image*/}
+            <Avatar name={displayTitle} size={40} />
           </div>
           {/* Mainly controls for the size of the last message prevew*/}
           <div style={{ width: '60%' }}>

@@ -2,16 +2,14 @@ import react, { useEffect, useRef, useState } from "react";
 import Navbar from "../Components/Navbar";
 import { GoogleMap, useJsApiLoader, MarkerF, OverlayView, OVERLAY_MOUSE_TARGET, OVERLAY_LAYER } from "@react-google-maps/api";
 import mapStyles from './mapStyles.json'
-import { Button, Grid, Paper, TextField, Card, Typography, CardActionArea, CardMedia, CardContent } from "@mui/material/"
+import { Button, Grid, Paper, TextField, Card, Typography, CardActionArea, CardMedia, CardContent, CardActions } from "@mui/material/"
 import "./Social.css"
 import PlacesAutocomplete from "../Components/SubComponents/PlacesAutocomplete";
-import profiles from "../testing_data/testingData"
+import profiles from "../testing_data/mapCardData"
 import { getProfile } from '../api'
 import { BsBrightnessAltHigh } from "react-icons/bs";
 import CreateRequestForm from '../Components/CreateRequestForm'
 import { ActionButton } from "../Components/SubComponents/Form";
-import IconButton from '@mui/material/IconButton';
-import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 
 
 const libraries = ["places"];
@@ -22,6 +20,7 @@ const Profile = ({ profile }) => {
         setSideCard(<div></div>)
     }
     return (
+        /*
         <div className="card">
             <div style={{ filter: 'brightness(0.2) invert(0)', width: '300px' }} className="ds-top">
                 <img style={{ border: '2px solid aqua', width: 'inherit' }} src="https://picsum.photos/200/80" alt="Vendrick" />
@@ -91,12 +90,12 @@ const Profile = ({ profile }) => {
                     </div>
                 </div>
             </div>
-    */}
-        </div>
+    }
+        </div >
+        */
 
 
 
-        /*
         <OverlayView mapPaneName={OVERLAY_MOUSE_TARGET} position={profile.location}>
             <Card sx={{ width: 300, position: "absolute", zIndex: "2" }}>
                 <CardActionArea>
@@ -106,7 +105,6 @@ const Profile = ({ profile }) => {
                         image={profile.image}
                         alt="profile picture"
                     />
-                    <div>kevin</div>
                     <CardContent>
                         <Typography gutterBottom variant="h5" component="div">
                             {profile.name}
@@ -118,7 +116,6 @@ const Profile = ({ profile }) => {
                 </CardActionArea>
             </Card>
         </OverlayView>
-        */
 
     )
 }
@@ -158,8 +155,22 @@ const Social = () => {
     }
 
 
+    function BunkmateRequestPage() {
+        return (
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', top: '50%', position: 'absolute' }}>
+                <Card variant="outlined" className="create-request-container" sx={{ padding: '20px', borderRadius: '10px', opacity: '0.9' }}>
+                    <CreateRequestForm onClick={handleRequestClick} />
+                </Card>
+            </div>)
+    }
 
-
+    function CreateRequestButton() {
+        return (
+            <div onClick={handleRequestClick} style={{ display: 'flex', top: '1100px', justifyContent: 'center', position: 'absolute' }}>
+                <ActionButton bgColor={"black"} title="Create Bunkmate Request" />
+            </div>
+        )
+    }
 
     return (
         <div>
@@ -183,20 +194,9 @@ const Social = () => {
                     </GoogleMap >
                 </div>
                 {showRequest ?
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', top: '50%', position: 'absolute' }}>
-                        <div className="create-request-container" style={{ display: 'flex', flexFlow: 'column wrap', borderRadius: '10px', padding: '20px', height: '50%', width: '100%', backgroundColor: 'white', opacity: '0.9' }}>
-                            <div className="close-button-container" style={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
-                                <IconButton onClick={handleRequestClick}>
-                                    <CloseRoundedIcon />
-                                </IconButton>
-                            </div>
-                            <CreateRequestForm onClick={handleRequestClick} />
-                        </div>
-                    </div>
+                    <BunkmateRequestPage />
                     :
-                    <div onClick={handleRequestClick} style={{ display: 'flex', top: '1100px', justifyContent: 'center', position: 'absolute' }}>
-                        <ActionButton bgColor={"black"} title="Create Bunkmate Request" />
-                    </div>
+                    <CreateRequestButton />
                 }
             </div >
         </div >

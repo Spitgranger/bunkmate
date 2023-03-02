@@ -15,10 +15,11 @@ import Stack from '@mui/material/Stack';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import ListItemText from '@mui/material/ListItemText';
 import Checkbox from '@mui/material/Checkbox';
-import { InputAdornment, Typography } from "@mui/material";
+import { FormHelperText, InputAdornment, Typography } from "@mui/material";
 import { useState, memo, useCallback } from 'react'
 import { BsFillCheckCircleFill } from "react-icons/bs";
 import { MdOutlineError } from "react-icons/md";
+import dayjs from 'dayjs';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -31,7 +32,7 @@ const MenuProps = {
   },
 };
 
-export function MultipleSelectCheckmarks({ title, menuItems }) {
+export function MultipleSelectCheckmarks({ title, menuItems, required }) {
   const [personName, setPersonName] = React.useState([]);
 
   const handleChange = (event) => {
@@ -44,20 +45,20 @@ export function MultipleSelectCheckmarks({ title, menuItems }) {
     );
   };
   return (
-    <FormControl sx={{ m: 1, width: '100%', flex: 1, color: "black" }} size="small">
-      <InputLabel id="demo-multiple-checkbox-label">{title}</InputLabel>
+    <FormControl size="small" >
+      <InputLabel id="multiple-checkbox-label">{title}</InputLabel>
       <Select
-        labelId="demo-multiple-checkbox-label"
-        id="demo-multiple-checkbox"
+        labelId="multiple-checkbox-label"
+        id="multiple-checkbox"
         multiple
         value={personName}
         onChange={handleChange}
-        input={<OutlinedInput label={title} />}
+        input={<OutlinedInput sx={{ width: '100%', maxWidth: 400 }} label={title} required={required} />}
         renderValue={(selected) => selected.join(', ')}
         MenuProps={MenuProps}
-        autoWidth
+        required={required}
       >
-        {menuItems.map((name) => (
+        {menuItems?.map((name) => (
           <MenuItem key={name} value={name}>
             <Checkbox checked={personName.indexOf(name) > -1} />
             <ListItemText primary={name} />
@@ -68,12 +69,14 @@ export function MultipleSelectCheckmarks({ title, menuItems }) {
   );
 }
 
-export function DatePicker({ label, onChange, value }) {
-  // const [value, setValue] = React.useState(dayjs('2022-09-15T21:11:54'));
+export function DatePicker({ label, onChange, value, required, disabled }) {
+  /*
+  const [initialDate, setInitialDate] = React.useState(dayjs('2022-09-15T21:11:54'));
 
-  // const handleChange = (newValue) => {
-  //   setValue(newValue);
-  // };
+  const handleChange = (newValue) => {
+    setInitialDate(newValue);
+  };
+  */
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -83,7 +86,8 @@ export function DatePicker({ label, onChange, value }) {
           inputFormat="MM/DD/YYYY"
           value={value}
           onChange={onChange}
-          renderInput={(params) => <TextField {...params} size="small" />}
+          disabled={disabled}
+          renderInput={(params) => <TextField {...params} size="small" required={required} />}
         />
       </Stack>
     </LocalizationProvider>
@@ -129,7 +133,7 @@ const CssTextField = styled(TextField)({
 
 */
 
-export function DropDownMenu({ inputRef, defaultValue, value, onChange, label, menuItem, maxHeight, menuItemWidth }) {
+export function DropDownMenu({ disabled, helperText, required, autoFocus, inputRef, defaultValue, value, onChange, label, menuItem, maxHeight, menuItemWidth }) {
 
   const MenuProps = {
     PaperProps: {
@@ -141,18 +145,21 @@ export function DropDownMenu({ inputRef, defaultValue, value, onChange, label, m
   };
   return (
     <FormControl
-      placeholder="wow" sx={{ m: 1, width: '100%', flex: 1 }} size="small" fullWidth>
+      sx={{ m: 1, width: '100%', flex: 1 }} size="small" fullWidth>
       <InputLabel
-        id="demo-select-small">{label}</InputLabel>
+        id="select-small" required={required}>{label}</InputLabel>
       <Select
-        labelId="demo-simple-select-label"
-        id="demo-simple-select"
+        labelId="simple-select-label"
+        id="simple-select"
         value={value}
         onChange={onChange}
         defaultValue={defaultValue}
         label={label}
         MenuProps={MenuProps}
         inputRef={inputRef}
+        autoFocus={autoFocus}
+        required={required}
+        disabled={disabled}
       >
 
         {menuItem.map((item, i) => {
@@ -163,12 +170,13 @@ export function DropDownMenu({ inputRef, defaultValue, value, onChange, label, m
           );
         })}
       </Select>
+      <FormHelperText>{helperText}</FormHelperText>
     </FormControl>
   );
 }
 
 
-function NormalFormSingleLineInput({ disabled, onError, onBlur, onChange, error, type, field, placeHolder, helperText, inputAdornment, inputAdornmentText, size, inputRef, value, name }) {
+function NormalFormSingleLineInput({ required, autoFocus, disabled, onError, onBlur, onChange, error, type, field, placeHolder, helperText, inputAdornment, inputStartAdornment, inputEndAdornment, size, inputRef, value, name }) {
   return (
     <>
       <TextField
@@ -183,17 +191,29 @@ function NormalFormSingleLineInput({ disabled, onError, onBlur, onChange, error,
         error={error}
         onError={onError}
         helperText={helperText}
-        InputProps={inputAdornment ? { startAdornment: <InputAdornment position="start">{inputAdornmentText}</InputAdornment> } : null}
+        InputProps={inputAdornment ? {
+          startAdornment: (
+            <InputAdornment position="start">
+              {inputStartAdornment}
+            </InputAdornment>
+          ),
+          endAdornment: (
+            <InputAdornment position="end">
+              {inputEndAdornment}
+            </InputAdornment>)
+        } : null}
         type={type}
         inputRef={inputRef}
         value={value}
         disabled={disabled}
+        autoFocus={autoFocus}
+        required={required}
       />
     </>
   )
 }
 
-export function FormSingleLineAddressInput({ onBlur, onChange, error, type, field, placeHolder, helperText, inputAdornment, inputAdornmentText, inputRef, value, position }) {
+export function FormSingleLineAddressInput({ required, onBlur, onChange, error, type, field, placeHolder, helperText, inputAdornment, inputStartAdornment, inputEndAdornment, inputRef, value }) {
   return (
     <>
       <TextField
@@ -206,16 +226,32 @@ export function FormSingleLineAddressInput({ onBlur, onChange, error, type, fiel
         onBlur={onBlur}
         error={error}
         helperText={helperText}
-        InputProps={inputAdornment ? { startAdornment: <InputAdornment position={position}>{inputAdornmentText}</InputAdornment> } : null}
+        InputProps={inputAdornment ? {
+          startAdornment: (
+            <InputAdornment position="start">
+              {inputStartAdornment}
+            </InputAdornment>
+          ),
+          endAdornment: (
+            <InputAdornment position="end">
+              {inputEndAdornment}
+            </InputAdornment>)
+        } : null}
         type={type}
         inputRef={inputRef}
         value={value}
+        required={required}
       />
     </>
   )
 }
 const arePropsEqual = (newProps, oldProps) => {
-  let result = newProps.value === oldProps.value && newProps.error === oldProps.error && oldProps.helperText === newProps.helperText && oldProps.inputAdornmentText === newProps.inputAdornmentText;
+  let result =
+    newProps.value === oldProps.value &&
+    newProps.error === oldProps.error &&
+    oldProps.helperText === newProps.helperText &&
+    oldProps.inputAdornmentText === newProps.inputAdornmentText &&
+    oldProps.disabled === newProps.disabled;
   return result;
 }
 
@@ -241,12 +277,13 @@ function NormalFormMultiLineInput(props) {
             label={props.field}
             multiline
             rows={4}
-            variant="outlined"
+            ariant="outlined"
             error={props.error}
             helperText={props.helperText}
             onBlur={props.onBlur}
             onChange={props.onChange}
             value={props.value}
+            required={props.required}
           />
         </div>
       </Box>
@@ -331,9 +368,11 @@ export function UploadFile(props) {
         </h4>
         <input aria-label="upload picture" className="uploadButton" hidden accept={props.accept} id="icon-button-file" multiple type={props.type} />
       </Button>
-      <div style={{ width: props.helperTextPos, position: 'relative', left: '1px' }}>
+      <div style={{ width: props.helperTextPos, position: 'relative', }}>
         {/* set the margin to 1px to remove default margin and position helper text properly*/}
-        <h5 style={{ color: helperTextColor, margin: '1px' }}>{helperText}</h5>
+        <FormHelperText sx={{ color: helperTextColor }}>
+          {props.helperText}
+        </FormHelperText>
       </div>
     </div >
   );
@@ -356,9 +395,13 @@ export function ActionButton(props) {
     ':hover': { bgcolor: 'black', color: "aqua" },
   }
 
+  const helperTextStyles = {
+    paddingLeft: '15px'
+  }
+
 
   return (
-    <div className="Button">
+    <div className="Button" style={{ display: 'flex', alignItems: 'flex-start', flexDirection: 'column' }}>
       <Button
         variant="contained"
         onClick={props.onClick}
@@ -374,6 +417,9 @@ export function ActionButton(props) {
           {props.title}
         </h3>
       </Button>
+      <div className="helper-text" style={helperTextStyles}>
+        <FormHelperText>{props.helperText}</FormHelperText>
+      </div>
     </div >
   );
 }

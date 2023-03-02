@@ -34,7 +34,7 @@ const requestSchema = mongoose.Schema({
         required: true,
     },
     rangeSliderValue: {
-        type: Array,
+        type: Number,
         require: true,
     },
     listingObject: {

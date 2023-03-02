@@ -258,6 +258,11 @@ export default function ValidationProvider({ children }) {
     Object.keys(fieldError).forEach((value) => handleLocalError(value));
   }, [values]);
 
+
+  //provides the default date for mui picker
+  const [initialDate, setInitialDate] = useState(dayjs('2023-09-15T21:11:54'));
+
+
   return (
     <ValuesObjectContext.Provider value={{ values, setValues }}>
       <LinkValidationContext.Provider value={{ link, LinkHelperText, handleLinkValidation }}>
