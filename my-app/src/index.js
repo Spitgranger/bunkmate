@@ -12,57 +12,69 @@ import Messages from './routes/Messages'
 import Profile from './routes/Profile';
 import SignInProvider from './Components/GlobalStateManagement/SignInContext';
 import ValidationProvider from './Components/GlobalStateManagement/ValidationContext';
+import MessageProvider from './Components/GlobalStateManagement/MessageContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 const router = createBrowserRouter([
   {
     path: "/",
     element:
-      <SignInProvider>
-        <ValidationProvider>
-          <App />,
-        </ValidationProvider>
-      </SignInProvider>,
+      <MessageProvider>
+        <SignInProvider>
+          <ValidationProvider>
+            <App />,
+          </ValidationProvider>
+        </SignInProvider>,
+      </MessageProvider>,
     errorElement: <Error />,
   },
   {
     path: "/profile",
     element:
-      <SignInProvider>
-        <ValidationProvider>
-          <Profile />,
-        </ValidationProvider>
-      </SignInProvider>,
+      <MessageProvider>
+        <SignInProvider>
+          <ValidationProvider>
+            <Profile />,
+          </ValidationProvider>
+        </SignInProvider>,
+      </MessageProvider>,
     errorElement: <Error />,
   },
   {
     path: "/apply_to_listings",
     element:
-      <SignInProvider>
-        <ValidationProvider>
-          <ApplyToListings />,
-        </ValidationProvider>
-      </SignInProvider>,
+      <MessageProvider>
+        <SignInProvider>
+          <ValidationProvider>
+            <ApplyToListings />,
+          </ValidationProvider>
+        </SignInProvider>,
+      </MessageProvider>,
     errorElement: <Error />,
   },
   {
     path: '/bunkmates',
     element:
-      <SignInProvider>
-        <ValidationProvider>
-          <Social />,
-        </ValidationProvider>
-      </SignInProvider>,
+      <MessageProvider>
+        <SignInProvider>
+          <ValidationProvider>
+            <Social />,
+          </ValidationProvider>
+        </SignInProvider>,
+      </MessageProvider>,
     errorElement: <Error />
   },
   {
     path: '/messages',
     element:
-      <SignInProvider>
-        <ValidationProvider>
-          <Messages />,
-        </ValidationProvider>
-      </SignInProvider>,
+
+      <MessageProvider>
+        <SignInProvider>
+          <ValidationProvider>
+            <Messages />,
+          </ValidationProvider>
+        </SignInProvider>,
+      </MessageProvider>,
     errorElement: <Error />
   },
 ]);

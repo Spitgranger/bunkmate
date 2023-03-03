@@ -32,7 +32,7 @@ const MenuProps = {
   },
 };
 
-export function MultipleSelectCheckmarks({ title, menuItems, required }) {
+export function MultipleSelectCheckmarks({ title, menuItems, required, onChange }) {
   const [personName, setPersonName] = React.useState([]);
 
   const handleChange = (event) => {
@@ -52,7 +52,7 @@ export function MultipleSelectCheckmarks({ title, menuItems, required }) {
         id="multiple-checkbox"
         multiple
         value={personName}
-        onChange={handleChange}
+        onChange={(event) => { handleChange(event); onChange(event); }}
         input={<OutlinedInput sx={{ width: '100%', maxWidth: 400 }} label={title} required={required} />}
         renderValue={(selected) => selected.join(', ')}
         MenuProps={MenuProps}

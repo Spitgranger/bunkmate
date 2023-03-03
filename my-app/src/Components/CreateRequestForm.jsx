@@ -19,11 +19,12 @@ import { MultipleSelectCheckmarks } from './SubComponents/Form';
 import IconButton from '@mui/material/IconButton';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import { IoIosArrowBack } from 'react-icons/io'
-import FavoriteIcon from '@mui/icons-material/Favorite';
+import { chatClientContext } from './GlobalStateManagement/MessageContext';
 
 //Within a modal window
 function CreateRequestForm(props) {
   const { aboutError, aboutHelperText, handleAboutValidation } = useContext(AboutValidationContext);
+  const { GetClientInfo, localStorageData } = useContext(chatClientContext)
   /*const { values, setValue } = useContext(ValuesObjectContext)*/
   //state management of listing array index
   const [index, setIndex] = useState(0)
@@ -43,7 +44,7 @@ function CreateRequestForm(props) {
 
   const page3 = JSON.parse(localStorage.getItem("page3"))
 
-  const [values, setValues] = useState(page3 || {
+  const values = page3 || {
     listingObject: "None",
     idealLocation: "",
     dateValue: "",
@@ -53,9 +54,8 @@ function CreateRequestForm(props) {
     roommateGender: "",
     numRoommates: "",
     address: "",
-    request: "",
     idealLengthStay: "",
-  });
+  }
 
   const initialState = {
     values: values,
@@ -209,13 +209,70 @@ function CreateRequestForm(props) {
 
 
 
-
   //TODO
   //Convert from hard coded array index to directly storing address in values
   //incorporate useRef
   //Change remove setIndex and index
   //Remove listing menu items
   //fetching stored data from api for saved listing
+
+  const [groupChat, setGroupChat] = useState([])
+
+
+  const instantiateChatClient = async () => {
+    //to record channel names and id in state
+    const chatClient = await GetClientInfo();
+    console.log(chatClient)
+
+    const filter = { type: 'messaging', members: { $in: [localStorageData?.result?._id] } };
+    const sort = [{ last_message_at: -1 }];
+
+    const channels = await chatClient?.queryChannels(filter, sort, {
+      watch: true, // this is the default
+      state: true,
+    });
+
+    console.log(channels)
+
+    const channelNames = []
+    const channelId = []
+    console.log(channelId)
+
+    channels.map((channel) => {
+      if (channel.data.name !== undefined && channel.data.name !== "Bunkmate Support" && channel.data.name !== "Support Team") {
+        if (Array.isArray(channel.data.name)) {
+          channelNames.push((channel.data.name).join('  '))
+          channelId.push((channel.cid))
+        } else {
+          channelNames.push(channel.data.name)
+          channelId.push((channel.cid))
+        }
+      }
+    })
+
+
+    setGroupChat([channelNames, channelId])
+
+  }
+  instantiateChatClient();
+
+
+  const handleGroupChat = (e) => {
+    const channelIdStorage = []
+    const clientChannelNames = e.target.value
+    clientChannelNames.map((channelName) => {
+      //retrieve the index of the channelName within groupChat[0] and use that to match the channelId
+      const channelIndex = groupChat[0].indexOf(channelName)
+      channelIdStorage.push(groupChat[1][channelIndex])
+      console.log(groupChat[1][channelIndex])
+
+    },
+
+      dispatch({ type: actions.checkValues, payload: channelIdStorage, name: "linkGroupChats" })
+      //dispatch function that adds channelIdStorage as a payload
+    )
+
+  }
 
 
   useEffect(() => {
@@ -227,6 +284,8 @@ function CreateRequestForm(props) {
 
   const handleShow = (e) => {
     //change state depending on who you're requesting as
+
+
     const handleBack = () => {
       //handle back click so you can change who you want to request as
       setShowBody(false)
@@ -320,13 +379,13 @@ function CreateRequestForm(props) {
                 <DropDownMenu required={true} autoFocus={true} maxHeight={250} value={state?.values?.request} onChange={(e) => { handleEmptyStringValidation(e.target.value, 'request'); handleShow(e); }} label="Request" menuItem={identityMenuItems} />,
               ]} />
               < LineBox flex={true} CssTextField={[
-                <MultipleSelectCheckmarks title="Group tags" menuItems={['Non Smokers', 'Have Pets', "Have Jobs", 'Students', 'Have Children', 'LGBTQ Friendly', 'Cannabis Friendly']} />
+                <MultipleSelectCheckmarks title="Group tags" onChange={(e) => handleEmptyStringValidation(e.target.value, 'groupTags')} menuItems={['Non Smokers', 'Have Pets', "Have Jobs", 'Students', 'Have Children', 'LGBTQ Friendly', 'Cannabis Friendly']} />
               ]} />
               <div id="multiline">
-                <FormMultiLineInput required={true} placeHolder="Talk about your bunkmate(s)" type="text" field="About Us" helperText={aboutHelperText} onChange={(e) => { handleAboutValidation(e); handleEmptyStringValidation(e.target.value, 'about') }} error={aboutError} value={state?.values?.about} />
+                <FormMultiLineInput required={true} placeHolder="Talk about your bunkmate(s)" type="text" field="About Us" helperText={aboutHelperText} onChange={(e) => { handleAboutValidation(e); handleEmptyStringValidation(e.target.value, 'aboutUs') }} error={aboutError} value={state?.values?.about} />
               </div>
               <LineBox flex={true} CssTextField={[
-                <MultipleSelectCheckmarks required={true} title="Link Profile(s) *" menuItems={['Sam Muller', 'Jared Thompson', 'Linus Sebastian', 'Huzaifa Shahid', 'Danny Mei', 'Kevin Lu',]} />
+                <MultipleSelectCheckmarks onChange={(e) => handleGroupChat(e)} required={true} title="Link Group Chats" menuItems={groupChat[0]} />
               ]} />
               <ActionButton helperText="* Please fill out all required fields before continuiing" disabled={false} onClick={() => { handleSubmit(values); setShowBody(true) }} fontSize="15px" width="100%" type="submit" title="Continue" />
             </>

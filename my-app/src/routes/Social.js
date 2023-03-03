@@ -1,4 +1,4 @@
-import react, { useEffect, useRef, useState } from "react";
+import react, { useContext, useEffect, useRef, useState } from "react";
 import Navbar from "../Components/Navbar";
 import { GoogleMap, useJsApiLoader, MarkerF, OverlayView, OVERLAY_MOUSE_TARGET, OVERLAY_LAYER } from "@react-google-maps/api";
 import mapStyles from './mapStyles.json'
@@ -10,12 +10,16 @@ import { getProfile } from '../api'
 import { BsBrightnessAltHigh } from "react-icons/bs";
 import CreateRequestForm from '../Components/CreateRequestForm'
 import { ActionButton } from "../Components/SubComponents/Form";
-
+import { chatClientContext } from "../Components/GlobalStateManagement/MessageContext";
+import { SignInOpenContext } from "../Components/GlobalStateManagement/SignInContext";
 
 const libraries = ["places"];
 const Profile = ({ profile }) => {
+
     const [sideCard, setSideCard] = useState(null)
     console.log(profile)
+
+
     const handleEnter = () => {
         setSideCard(<div></div>)
     }
@@ -124,6 +128,8 @@ const Profile = ({ profile }) => {
 const Social = () => {
 
 
+    const { GetClientInfo, localStorageData } = useContext(chatClientContext)
+    const { isOpen, setIsOpen } = useContext(SignInOpenContext)
     const [showRequest, setShowRequest] = useState(false)
     const [selected, setSelected] = useState(null);
     const center = selected || { lat: 43.642075, lng: -79.385981 };
@@ -145,13 +151,26 @@ const Social = () => {
     if (!isLoaded) {
         return <h1>ERROR HAS OCCURED</h1>
     }
+
+
+
     const handleProfileClick = (e, index) => {
         // console.log(profiles[index]);
         setProfile(<Profile profile={profiles[index]} />)
     }
 
+    const instantiateChatClient = async () => {
+        return GetClientInfo();
+    }
+
+    const chatClient = instantiateChatClient();
+
     const handleRequestClick = () => {
-        setShowRequest(!showRequest)
+        if (localStorageData) {
+            setShowRequest(!showRequest)
+        } else if (!localStorageData) {
+            setIsOpen(true)
+        }
     }
 
 
@@ -166,8 +185,8 @@ const Social = () => {
 
     function CreateRequestButton() {
         return (
-            <div onClick={handleRequestClick} style={{ display: 'flex', top: '1100px', justifyContent: 'center', position: 'absolute' }}>
-                <ActionButton bgColor={"black"} title="Create Bunkmate Request" />
+            <div style={{ display: 'flex', top: '1100px', justifyContent: 'center', position: 'absolute' }}>
+                <ActionButton onClick={handleRequestClick} bgColor={"black"} title="Create Bunkmate Request" />
             </div>
         )
     }

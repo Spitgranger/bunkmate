@@ -42,6 +42,7 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import Tooltip from '@mui/material/Tooltip'
 import { getProfile } from '../api';
 import { Buffer } from 'buffer-es6'
+import { MessageProvider } from 'stream-chat-react';
 
 const Messages = () => {
   //controls whether to show the message list page or create group page
@@ -85,7 +86,7 @@ const Messages = () => {
   };
 
   const chatClient = useClient({ apiKey: apiKey, userData: user, tokenOrProvider: userToken });
-
+  
   /*
   //Creating a custom support channel
   /*
@@ -158,8 +159,9 @@ const Messages = () => {
 
   }
 
+  console.log(chatClient.activeChannels)
 
-  const CustomPreviewChannel = ({ Avatar, ...props }) => {
+  const CustomPreviewChannel = (props) => {
     //manages state for time since last message
     console.log(props)
     const [timeLastMessage, setTimeLastMessage] = useState("");
@@ -279,7 +281,7 @@ const Messages = () => {
           <div style={{ padding: '5px' }}>
             {/*add ability to add user profile image*/}
             {/*<Avatar name={displayTitle} size={40} />*/}
-            <Avatar image={displayImage} />
+            <Avatar name={displayTitle} image={displayImage} />
 
           </div>
           {/* Mainly controls for the size of the last message prevew*/}
@@ -353,10 +355,6 @@ const Messages = () => {
     setIsCreating(!isCreating)
   }
 
-  const CustomAvatar = (props) => {
-    console.log(props)
-    return <Avatar image={props.image} shape='square' size={40} />;
-  };
 
   return (
     <div className="messages">
@@ -375,7 +373,7 @@ const Messages = () => {
             filters={filters}
             sort={sort}
             options={options}
-            Preview={(previewProps) => <CustomPreviewChannel {...previewProps} Avatar={CustomAvatar} />}
+            Preview={(previewProps) => <CustomPreviewChannel {...previewProps} />}
             showChannelSearch
           />
           {/*<Channel channel={supportChannel} message={supportMessage}>*/}
