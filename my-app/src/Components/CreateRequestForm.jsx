@@ -49,7 +49,7 @@ function CreateRequestForm(props) {
     idealLocation: "",
     dateValue: "",
     rentBudget: "",
-    flexibility: "",
+    flexibility: " ",
     rangeSliderValue: "",
     roommateGender: "",
     numRoommates: "",
@@ -311,9 +311,6 @@ function CreateRequestForm(props) {
     }
   }
 
-
-
-  console.log(state?.values)
   return (
     <>
 

@@ -8,13 +8,11 @@ import { IoLogoFacebook } from 'react-icons/io'
 import { BsApple } from 'react-icons/bs'
 import { MdEmail } from 'react-icons/md'
 import { BsPhoneFill } from "react-icons/bs";
-import { SignInOpenContext, SignInUserData } from "../Components/GlobalStateManagement/SignInContext";
-import { SignInModeContext } from "../Components/GlobalStateManagement/SignInContext";
-import { SignInModalMessageContext } from "../Components/GlobalStateManagement/SignInContext";
 import { useNavigate } from "react-router-dom";
 import { signIn, signUp } from "../api";
 import ProfileMakerForm from "../Components/ProfileMakerForm";
 import { getProfile } from '../api'
+import { SignInContext } from "../Components/GlobalStateManagement/SignInContext";
 
 
 function SignInPartner({ company, logo, onClick }) {
@@ -33,9 +31,7 @@ function SignInPartner({ company, logo, onClick }) {
 
 export default function RenderWhich() {
   //choose which pages to render within modal Window
-  const { isOpen, setIsOpen } = useContext(SignInOpenContext)
-  const { mode } = useContext(SignInModeContext)
-  const { message } = useContext(SignInModalMessageContext)
+  const { isOpen, setIsOpen, mode, message } = useContext(SignInContext)
 
   const displayInModalWindow = (mode) => {
     switch (mode) {
@@ -83,10 +79,20 @@ async function validateLogin(e, data) {
   }
 }
 export function SignInEmail() {
+
+  const seperatorStyles = {
+    display: 'flex',
+    left: '176px',
+    bottom: '275px',
+    position: 'absolute',
+    fontSize: '10px',
+    backgroundColor: 'white',
+    width: '30px',
+    justifyContent: 'center'
+  }
+
   const navigate = useNavigate();
-  const { setMode } = useContext(SignInModeContext);
-  const { setIsOpen } = useContext(SignInOpenContext);
-  const { setMessage } = useContext(SignInModalMessageContext);
+  const { setMode, setIsOpen, setMessage } = useContext(SignInContext)
   const [data, setData] = useState({ email: '', password: '' });
   const [error, setError] = useState("default");
 
@@ -153,9 +159,17 @@ export function SignInEmail() {
         </h6>
       </div>
       <div className="button" style={{ borderBottom: "1px solid lightgrey" }}>
+        <div style={{ display: 'flex', justifyContent: 'center', fontSize: "10px" }} >
+          <div style={{ borderBottom: '1px solid black', cursor: 'pointer' }} onClick={() => { setMessage("Sign Up Now!"); setMode("signUpEmail") }}>
+            Don't have an account? Sign Up!
+          </div>
+        </div>
         <ActionButton width="100%" type="submit" title="Submit" onClick={(e) => { handleSignIn(e) }} />
       </div>
       <div className="socials" >
+        <div style={seperatorStyles}>
+          or
+        </div>
         <SignInPartner logo={<FcGoogle size="20px" />} company="Google" />
         <SignInPartner logo={<IoLogoFacebook size="20px" color="blue" />} company="Facebook" />
         <SignInPartner logo={<BsApple size="20px" color="black" />} company="Apple" />
@@ -176,11 +190,22 @@ async function handleSignUp(e, data) {
 
 
 export function SignUpEmail() {
+
+  const seperatorStyles = {
+    display: 'flex',
+    left: '176px',
+    bottom: '235px',
+    position: 'absolute',
+    fontSize: '10px',
+    backgroundColor: 'white',
+    width: '30px',
+    justifyContent: 'center'
+  }
+
+
   {/* Change default to the user's current location */ }
   const [data, setData] = useState({ phoneNumber: '', name: '', email: '', password: '', confirmPassword: '' });
-  const { setMode } = useContext(SignInModeContext)
-  const { setMessage } = useContext(SignInModalMessageContext)
-  const { setIsOpen } = useContext(SignInOpenContext)
+  const { setMode, setMessage, setIsOpen } = useContext(SignInContext)
 
   const handleFieldChange = (e) => {
     setData((prevData) => ({ ...prevData, [e.target.name]: e.target.value }))
@@ -257,9 +282,17 @@ export function SignUpEmail() {
           </h6>
         </div>
         <div className="button" style={{ borderBottom: "1px solid lightgrey" }}>
+          <div style={{ display: 'flex', justifyContent: 'center', fontSize: "10px" }} >
+            <div style={{ borderBottom: '1px solid black', cursor: 'pointer' }} onClick={() => { setMessage("Sign In With Email!"); setMode("signInWithEmail") }}>
+              Already have an account? Sign In!
+            </div>
+          </div>
           <ActionButton width="100%" type="submit" title="Submit" onClick={(e) => handleRegularSignUpEmail(e, data)} />
         </div>
         <div className="socialsFlex" >
+          <div style={seperatorStyles}>
+            or
+          </div>
           <SignInPartner logo={<FcGoogle size="20px" />} company="Google" />
           <SignInPartner logo={<IoLogoFacebook size="20px" color="blue" />} company="Facebook" />
           <SignInPartner logo={<BsApple size="20px" color="black" />} company="Apple" />
@@ -272,8 +305,17 @@ export function SignUpEmail() {
 
 export function SignInPhone() {
 
-  const { setMode } = useContext(SignInModeContext)
-  const { setMessage } = useContext(SignInModalMessageContext)
+  const seperatorStyles = {
+    display: 'flex',
+    left: '176px',
+    bottom: '275px',
+    position: 'absolute',
+    fontSize: '10px',
+    backgroundColor: 'white',
+    width: '30px',
+    justifyContent: 'center'
+  }
+  const { setMode, setMessage } = useContext(SignInContext)
 
 
   {/* Change default to the user's current location */ }
@@ -323,6 +365,9 @@ export function SignInPhone() {
           <ActionButton width="100%" type="submit" title="Submit" onClick={() => { setMode("signInEmail"); setMessage("Sign In With Email") }} />
         </div>
         <div className="socials" >
+          <div style={seperatorStyles}>
+            or
+          </div>
           <SignInPartner logo={<FcGoogle size="20px" />} company="Google" onClick={() => { setMode("signUpForm"); setMessage("Sign Up Form") }} />
           <SignInPartner logo={<IoLogoFacebook size="20px" color="blue" />} company="Facebook" />
           <SignInPartner logo={<BsApple size="20px" color="black" />} company="Apple" />

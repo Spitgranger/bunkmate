@@ -61,7 +61,9 @@ export function MultipleSelectCheckmarks({ title, menuItems, required, onChange 
         {menuItems?.map((name) => (
           <MenuItem key={name} value={name}>
             <Checkbox checked={personName.indexOf(name) > -1} />
-            <ListItemText primary={name} />
+            <Typography noWrap>
+              {name}
+            </Typography>
           </MenuItem>
         ))}
       </Select>

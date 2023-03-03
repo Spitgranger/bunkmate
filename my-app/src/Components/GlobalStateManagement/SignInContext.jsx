@@ -1,9 +1,6 @@
 import { useState, createContext, useEffect } from 'react';
 
-export const SignInOpenContext = createContext(null)
-export const SignInModeContext = createContext(null)
-export const SignInModalMessageContext = createContext(null)
-export const SignInDataContext = createContext(null)
+export const SignInContext = createContext(null)
 
 export default function SignInProvider({ children }) {
 
@@ -22,15 +19,15 @@ export default function SignInProvider({ children }) {
 
 
   return (
-    <SignInOpenContext.Provider value={{ isOpen, setIsOpen }}>
-      <SignInModeContext.Provider value={{ mode, setMode }}>
-        <SignInModalMessageContext.Provider value={{ message, setMessage }}>
-          <SignInDataContext.Provider value={{ userProfile, setUserProfile }}>
-            {children}
-          </SignInDataContext.Provider>
-        </SignInModalMessageContext.Provider>
-      </SignInModeContext.Provider>
-    </SignInOpenContext.Provider>
+    <SignInContext.Provider value={{ 
+      isOpen, setIsOpen, 
+      mode, setMode,
+      message, setMessage, 
+      userProfile, 
+      setUserProfile 
+    }}>
+      {children}
+    </SignInContext.Provider>
   )
 
 }

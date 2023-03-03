@@ -18,7 +18,7 @@ import Logout from '@mui/icons-material/Logout';
 import { useNavigate } from 'react-router-dom';
 import decode from 'jwt-decode';
 import { getProfile } from '../api';
-import { SignInUserData } from './GlobalStateManagement/SignInContext';
+import { SignInContext } from './GlobalStateManagement/SignInContext';
 
 function CheckActive({ to, page, ...props }) {
     const fullPath = useResolvedPath(to)
@@ -42,13 +42,9 @@ function Navbar() {
 
     }
     //used to manage user state
+
+    const { setIsOpen, setMode, setMessage } = useContext(SignInContext);
     const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile')))
-    //used to manage modal window open close state
-    const { setIsOpen } = useContext(SignInOpenContext)
-    //used to manage content that is displayed in modal window
-    const { setMode } = useContext(SignInModeContext)
-    //used to manage the title within the modal window
-    const { setMessage } = useContext(SignInModalMessageContext)
     //used to manage focused element state
     const [currentTarget, setCurrentTarget] = useState(null)
 

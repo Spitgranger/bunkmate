@@ -11,7 +11,7 @@ import { BsBrightnessAltHigh } from "react-icons/bs";
 import CreateRequestForm from '../Components/CreateRequestForm'
 import { ActionButton } from "../Components/SubComponents/Form";
 import { chatClientContext } from "../Components/GlobalStateManagement/MessageContext";
-import { SignInOpenContext } from "../Components/GlobalStateManagement/SignInContext";
+import { SignInContext } from "../Components/GlobalStateManagement/SignInContext";
 
 const libraries = ["places"];
 const Profile = ({ profile }) => {
@@ -129,7 +129,11 @@ const Social = () => {
 
 
     const { GetClientInfo, localStorageData } = useContext(chatClientContext)
-    const { isOpen, setIsOpen } = useContext(SignInOpenContext)
+    //sign in context for when the user tries to create a bunkmate request without an account
+
+    const { setIsOpen, setMessage, setMode } = useContext(SignInContext)
+
+
     const [showRequest, setShowRequest] = useState(false)
     const [selected, setSelected] = useState(null);
     const center = selected || { lat: 43.642075, lng: -79.385981 };
@@ -169,6 +173,8 @@ const Social = () => {
         if (localStorageData) {
             setShowRequest(!showRequest)
         } else if (!localStorageData) {
+            setMessage("Sign Up Now!")
+            setMode("signUpEmail")
             setIsOpen(true)
         }
     }

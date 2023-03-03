@@ -27,7 +27,7 @@ import {
 } from './GlobalStateManagement/ValidationContext';
 
 import { createProfile } from '../api';
-import { SignInOpenContext } from './GlobalStateManagement/SignInContext';
+import { SignInContext } from './GlobalStateManagement/SignInContext'
 
 
 
@@ -58,7 +58,7 @@ function ProfileMakerForm({ forwardButton, backwardButton }) {
   const { phoneError, phoneHelperText } = useContext(PhoneValidationContext)
   const { emailError, emailHelperText } = useContext(EmailValidationContext)
   const { aboutError, aboutHelperText, handleAboutValidation } = useContext(AboutValidationContext)
-  const { isOpen, setIsOpen } = useContext(SignInOpenContext)
+  const { isOpen, setIsOpen } = useContext(SignInContext)
 
   const actions = {
     checkGlobalError: "check_global_error",
