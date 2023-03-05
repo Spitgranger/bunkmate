@@ -289,6 +289,8 @@ function CreateRequestForm(props) {
 
 
   useEffect(() => {
+
+    dispatch({ type: actions.checkGlobalError, page: 'firstPageValues' })
     if (index === 0) {
       //if the user changes their mind and switches back to None, then address and idealLocation are set back to empty string
       dispatch({ type: actions.checkValues, payload: "", name: "address", page: 'secondPageValues' })
@@ -298,10 +300,17 @@ function CreateRequestForm(props) {
       dispatch({ type: actions.checkGlobalError, page: 'secondPageValues' })
 
     } else if (index !== 0) {
+      //when the user doesn't select index 0 then flexibility is set to 0
       dispatch({ type: actions.checkValues, payload: 0, name: "flexibility", page: 'secondPageValues' })
       dispatch({ type: actions.checkGlobalError, page: 'secondPageValues' })
     }
   }, [showGroup, index])
+
+  useEffect(() => {
+    //after completing the form and then switching back to firstpage will cause the globalerror to be set to false
+    dispatch({ type: actions.checkGlobalError, page: 'firstPageValues' })
+  }, [state?.firstPageValues?.request])
+
 
 
   const handleBack = () => {
@@ -406,7 +415,7 @@ function CreateRequestForm(props) {
               <LineBox flex={true} CssTextField={[
                 <MultipleSelectCheckmarks helperText="Optional" onChange={(e) => { handleEmptyStringValidation(e.target.value, 'linkGroupChats', 'firstPageValues'); handleGroupChat(e) }} required={true} title="Link Group Chats" menuItems={groupChat[0]} />
               ]} />
-              <ActionButton helperText="* Please fill out all required fields before continuing" disabled={state?.globalError} onClick={() => { handleSubmit(firstPageValues); setShowBody(true); setShowButton(<IconButton onClick={handleBack}><IoIosArrowBack /></IconButton>) }} fontSize="15px" width="100%" type="submit" title="Continue" />
+              <ActionButton helperText="* Please fill out all required fields before continuing" disabled={state?.globalError} onClick={() => { setShowBody(true); setShowButton(<IconButton onClick={handleBack}><IoIosArrowBack /></IconButton>) }} fontSize="15px" width="100%" type="submit" title="Continue" />
             </>
             :
             <LineBox flex={true} CssTextField={[

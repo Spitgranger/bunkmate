@@ -116,16 +116,11 @@ export function SignInEmail() {
   useEffect(() => {
     if (error === "Success!") {
       navigate(0)
-      //broke need to fix
-      /*
-      setMessage("Complete your profile!")
-      setMode('signInEmail')
-      setIsOpen(true)
-      */
     } else {
       return
     }
   }, [error]);
+
 
 
   return (<>

@@ -160,11 +160,11 @@ const Bunkmates = () => {
         setProfile(<Profile profile={profiles[index]} />)
     }
 
+    /*
     const instantiateChatClient = async () => {
         return GetClientInfo();
     }
-
-    const chatClient = instantiateChatClient();
+    */
 
     const handleRequestClick = () => {
         if (localStorageData) {
