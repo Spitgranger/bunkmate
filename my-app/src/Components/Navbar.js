@@ -86,16 +86,22 @@ function Navbar() {
         }
     }, [user])
 
-
     //Used to handle retrieving user data from api
     const [userProfile, setUserProfile] = useState("")
+
     const handleProfile = async () => {
         const profile = await getProfile();
         return profile
     }
     //get data from backend when the component first loads works
     useEffect(() => {
-        handleProfile().then((profile) => setUserProfile(profile.data)).catch(error => console.log(error))
+        if (user) {
+            handleProfile().then((profile) => setUserProfile(profile.data)).catch(() => {
+                setMessage("Complete your profile!");
+                setMode('profileMakerForm');
+                setIsOpen(true)
+            });
+        }
     }, []);
 
 
