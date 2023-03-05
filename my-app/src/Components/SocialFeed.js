@@ -1,3 +1,4 @@
+/*
 import React from 'react';
 import { StreamApp, NotificationDropdown, FlatFeed, Activity, LikeButton, StatusUpdateForm, CommentField, CommentList } from 'react-activity-feed';
 import 'react-activity-feed/dist/index.css';
@@ -51,3 +52,4 @@ function SocialFeed() {
   );
 }
 export default SocialFeed;
+*/

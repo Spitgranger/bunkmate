@@ -62,6 +62,11 @@ function CreateRequestForm(props) {
     idealLengthStay: "",
   }
 
+  const mergedValues = {
+    ...firstPageValues,
+    ...secondPageValues,
+  }
+
   const initialState = {
     firstPageValues: firstPageValues,
     secondPageValues: secondPageValues,
@@ -383,7 +388,7 @@ function CreateRequestForm(props) {
           ]} />
 
           {/* disable cotinue button if the user has not filled out all mandatory fields and / or still has errors*/}
-          <ActionButton helperText="* Please fill out all required fields before continuiing" disabled={state?.globalError} onClick={() => { props.onClick(); handleSubmit(secondPageValues); }} fontSize="15px" width="100%" type="submit" title="Submit" />
+          <ActionButton helperText="* Please fill out all required fields before continuiing" disabled={state?.globalError} onClick={() => { props.onClick(); handleSubmit(mergedValues); }} fontSize="15px" width="100%" type="submit" title="Submit" />
         </>
         :
         <>

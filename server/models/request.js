@@ -9,6 +9,14 @@ const requestSchema = mongoose.Schema({
         type: String,
         required: true,
     },
+    dateValue: {
+        type: String,
+        required: true,
+    },
+    flexibility: {
+        type: Number,
+        required: true,
+    },
     rentBudget: {
         type: Number,
         required: true,
@@ -18,7 +26,7 @@ const requestSchema = mongoose.Schema({
         required: true,
     },
     idealLocation: {
-        type: Array,
+        type: [Number],
         require: true,
     },
     numRoommates: {
@@ -38,9 +46,21 @@ const requestSchema = mongoose.Schema({
         require: true,
     },
     listingObject: {
-        type: Object,
+        type: String,
+        require: false,
+    },
+    rangeSliderValue: {
+        type: Number,
+        require: false,
+    },
+    aboutUs: {
+        type: Number,
+        require: false,
+    },
+    request: {
+        type: String,
         require: true,
-    }
+    },
 })
 
 const Request = mongoose.model('Request', requestSchema);

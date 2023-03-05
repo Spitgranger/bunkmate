@@ -147,7 +147,7 @@ const Bunkmates = () => {
     }
     
     useEffect(() => {
-                                                        handleLoad().then((profile) => setProfile(profile.data)).catch(error => console.log(error))
+                    handleLoad().then((profile) => setProfile(profile.data)).catch(error => console.log(error))
                                                     }, []);
                                                     */
     if (!isLoaded) {
@@ -179,7 +179,7 @@ const Bunkmates = () => {
 
     function BunkmateRequestPage() {
         return (
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', top: '50%', position: 'absolute' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', top: '30vh', position: 'absolute' }}>
                 <Card variant="outlined" className="create-request-container" sx={{ padding: '20px', borderRadius: '10px', opacity: '0.9' }}>
                     <CreateRequestForm onClick={handleRequestClick} />
                 </Card>
@@ -188,7 +188,7 @@ const Bunkmates = () => {
 
     function CreateRequestButton() {
         return (
-            <div style={{ display: 'flex', top: '55%', justifyContent: 'center', position: 'absolute' }}>
+            <div style={{ display: 'flex', bottom: '5vh', justifyContent: 'center', position: 'absolute' }}>
                 <ActionButton onClick={handleRequestClick} bgColor={"black"} title="Create Bunkmate Request" />
             </div>
         )
@@ -209,9 +209,11 @@ const Bunkmates = () => {
                         options={{ styles: mapStyles, streetViewControl: false }}
                         onClick={() => { setProfile(null) }}
                     >
+                        {/*
                         <div className="social-feed-container" style={socialFeedStyles.FeedContainer}>
                             <SocialFeed />
                         </div>
+                        */}
                         {profile ? profile : null}
                         {selected && <MarkerF position={selected} icon={"http://maps.google.com/mapfiles/ms/icons/blue.png"} />}
                         {profiles.map((profile, index) => { return <MarkerF onClick={(e) => handleProfileClick(e, index)} key={index} position={profile.location} />; })}
