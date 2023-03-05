@@ -119,7 +119,6 @@ function Profile({ profile }) {
 
 
 const Bunkmates = () => {
-
     const socialFeedStyles = {
         FeedContainer: {
             overflow: 'scroll', height: '77.5vh', position: 'absolute', right: '0.5%', top: '5%', maxWidth: '20%'
@@ -132,9 +131,9 @@ const Bunkmates = () => {
     const { setIsOpen, setMessage, setMode } = useContext(SignInContext)
 
 
-    const [showRequest, setShowRequest] = useState(false)
+    const [showRequest, setShowRequest] = useState(false);
     const [selected, setSelected] = useState(null);
-    const center = selected || { lat: 43.642075, lng: -79.385981 };
+    const [center, setCenter] = useState({ lat: 43.642075, lng: -79.385981 });
     const [profile, setProfile] = useState(null);
     const { isLoaded, loadError } = useJsApiLoader({
         googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
@@ -150,13 +149,11 @@ const Bunkmates = () => {
                     handleLoad().then((profile) => setProfile(profile.data)).catch(error => console.log(error))
                                                     }, []);
                                                     */
+
     if (!isLoaded) {
         return <h1>ERROR HAS OCCURED</h1>
     }
-
-
     const handleProfileClick = (e, index) => {
-        // console.log(profiles[index]);
         setProfile(<Profile profile={profiles[index]} />)
     }
 
@@ -199,7 +196,7 @@ const Bunkmates = () => {
             <Navbar />
             <div className="content-container">
                 <div className="search-bar-container" style={{ height: '200px', position: 'absolute', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                    <PlacesAutocomplete setSelected={setSelected} />
+                    <PlacesAutocomplete setSelected={setSelected} setCenter={setCenter} />
                 </div>
                 <div className="map-container">
                     <GoogleMap
@@ -215,8 +212,8 @@ const Bunkmates = () => {
                         </div>
                         */}
                         {profile ? profile : null}
-                        {selected && <MarkerF position={selected} icon={"http://maps.google.com/mapfiles/ms/icons/blue.png"} />}
-                        {profiles.map((profile, index) => { return <MarkerF onClick={(e) => handleProfileClick(e, index)} key={index} position={profile.location} />; })}
+                        {selected && <MarkerF position={center} icon={"http://maps.google.com/mapfiles/ms/icons/blue.png"} />}
+                        {profiles.map((profile, index) => { return <MarkerF onClick={e => handleProfileClick(e, index)} key={index} position={profile.location} />; })}
 
                     </GoogleMap >
                 </div>
