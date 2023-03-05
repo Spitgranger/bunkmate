@@ -36,6 +36,7 @@ const PlacesAutocomplete = (props) => {
                     const { lat, lng } = getLatLng(results[0]);
                     console.log("📍 Coordinates: ", { lat, lng });
                     props.setSelected({ lat, lng });
+                    props.setCenter({ lat, lng });
                 });
             };
 
