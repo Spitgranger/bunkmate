@@ -7,7 +7,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import CreatePost from './routes/CreatePost';
 import ApplyToListings from './routes/ApplyToListings';
 import Error from './Error';
-import Social from './routes/Social';
+import Bunkmates from './routes/Bunkmates';
 import Messages from './routes/Messages'
 import Profile from './routes/Profile';
 import SignInProvider from './Components/GlobalStateManagement/SignInContext';
@@ -22,9 +22,9 @@ const router = createBrowserRouter([
       <MessageProvider>
         <SignInProvider>
           <ValidationProvider>
-            <App />,
+            <App />
           </ValidationProvider>
-        </SignInProvider>,
+        </SignInProvider>
       </MessageProvider>,
     errorElement: <Error />,
   },
@@ -34,9 +34,9 @@ const router = createBrowserRouter([
       <MessageProvider>
         <SignInProvider>
           <ValidationProvider>
-            <Profile />,
+            <Profile />
           </ValidationProvider>
-        </SignInProvider>,
+        </SignInProvider>
       </MessageProvider>,
     errorElement: <Error />,
   },
@@ -46,9 +46,9 @@ const router = createBrowserRouter([
       <MessageProvider>
         <SignInProvider>
           <ValidationProvider>
-            <ApplyToListings />,
+            <ApplyToListings />
           </ValidationProvider>
-        </SignInProvider>,
+        </SignInProvider>
       </MessageProvider>,
     errorElement: <Error />,
   },
@@ -58,9 +58,9 @@ const router = createBrowserRouter([
       <MessageProvider>
         <SignInProvider>
           <ValidationProvider>
-            <Social />,
+            <Bunkmates />
           </ValidationProvider>
-        </SignInProvider>,
+        </SignInProvider>
       </MessageProvider>,
     errorElement: <Error />
   },
@@ -71,9 +71,9 @@ const router = createBrowserRouter([
       <MessageProvider>
         <SignInProvider>
           <ValidationProvider>
-            <Messages />,
+            <Messages />
           </ValidationProvider>
-        </SignInProvider>,
+        </SignInProvider>
       </MessageProvider>,
     errorElement: <Error />
   },

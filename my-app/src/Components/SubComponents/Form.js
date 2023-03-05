@@ -32,7 +32,7 @@ const MenuProps = {
   },
 };
 
-export function MultipleSelectCheckmarks({ title, menuItems, required, onChange }) {
+export function MultipleSelectCheckmarks({ helperText, title, menuItems, required, onChange }) {
   const [personName, setPersonName] = React.useState([]);
 
   const handleChange = (event) => {
@@ -67,6 +67,7 @@ export function MultipleSelectCheckmarks({ title, menuItems, required, onChange 
           </MenuItem>
         ))}
       </Select>
+      <FormHelperText>{helperText}</FormHelperText>
     </FormControl>
   );
 }

@@ -86,7 +86,7 @@ const Messages = () => {
   };
 
   const chatClient = useClient({ apiKey: apiKey, userData: user, tokenOrProvider: userToken });
-  
+
   /*
   //Creating a custom support channel
   /*
@@ -184,7 +184,7 @@ const Messages = () => {
         setTimeLastMessage(displayTime(timeValues, lastMessage));
       };
       //retrieve membres within a channel
-      const members = activeChannel.data.name
+      const members = activeChannel?.data?.name
 
       console.log(channel)
       //run the update immediately when the effect is defined
@@ -368,7 +368,7 @@ const Messages = () => {
         </IconButton>
       </Tooltip>
       <Chat client={chatClient} theme='str-chat__theme-light'>
-        <div style={{ height: '100%', display: 'flex', flexFLow: 'row nowrap' }}>
+        <div style={{ height: '88vh', display: 'flex', flexFLow: 'row nowrap' }}>
           <ChannelList
             filters={filters}
             sort={sort}

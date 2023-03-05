@@ -234,7 +234,7 @@ function ProfileMakerForm({ forwardButton, backwardButton }) {
 
 
     <LineBox flex={true} CssTextField={[
-      <FormSingleLineInput required="true" type="text" size="small" helperText={phoneHelperText} field="Phone Number" placeHolder="6472345124" error={phoneError} onChange={(e) => { handleEmptyStringValidation(e, 'phone'); }} value={state?.values?.phone} />,
+      <FormSingleLineInput required="true" size="small" helperText={phoneHelperText} field="Phone Number" placeHolder="6472345124" error={phoneError} onChange={(e) => { handleEmptyStringValidation(e, 'phone'); }} value={state?.values?.phone} />,
       <FormSingleLineAddressInput required="true" type="text" field="Address" placeHolder="31 West Street" inputRef={inputRef} value={state?.values?.address} onChange={(e) => { handleEmptyStringValidation(e, 'address'); }} />
     ]
     } />

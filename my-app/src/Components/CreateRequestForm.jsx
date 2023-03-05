@@ -35,6 +35,7 @@ function CreateRequestForm(props) {
   //show or hide the back button
   const [showButton, setShowButton] = useState(null)
 
+
   const actions = {
     checkGlobalError: "check_global_error",
     checkLocalError: "check_local_error", //TODO
@@ -44,12 +45,16 @@ function CreateRequestForm(props) {
 
   const page3 = JSON.parse(localStorage.getItem("page3"))
 
-  const values = page3 || {
-    listingObject: "None",
+  const firstPageValues = {
+    request: "",
+    aboutUs: "",
+  }
+  const secondPageValues = page3 || {
+    listingObject: "",
     idealLocation: "",
     dateValue: "",
     rentBudget: "",
-    flexibility: " ",
+    flexibility: "",
     rangeSliderValue: "",
     roommateGender: "",
     numRoommates: "",
@@ -58,34 +63,36 @@ function CreateRequestForm(props) {
   }
 
   const initialState = {
-    values: values,
+    firstPageValues: firstPageValues,
+    secondPageValues: secondPageValues,
     globalError: true,
   }
 
 
-  console.log(values)
   const [state, dispatch] = useReducer(reducer, initialState)
 
-  const handleEmptyStringValidation = (newValue, name, date = false) => {
+  const handleEmptyStringValidation = (newValue, name, page, date = false) => {
     if (date === true) {
-      return (dispatch({ type: actions.checkDate, payload: newValue })
-        , dispatch({ type: actions.checkGlobalError })
+      return (dispatch({ type: actions.checkDate, payload: newValue, page: page })
+        , dispatch({ type: actions.checkGlobalError, page: page })
       )
     }
-    dispatch({ type: actions.checkValues, payload: newValue, name: name })
-    dispatch({ type: actions.checkGlobalError })
+    dispatch({ type: actions.checkValues, payload: newValue, name: name, page: page })
+    dispatch({ type: actions.checkGlobalError, page: page })
   }
 
 
   /* calling reducer function again gets the next state*/
-  reducer(state, { type: actions.checkValues })
+  const newState = reducer(state, { type: actions.checkValues })
 
   function reducer(state, action) {
+    console.log('firstpage', state?.firstPageValues)
+    console.log('secondpage', state?.secondPageValues)
     switch (action.type) {
       case actions.checkGlobalError: {
-        if (Object.values(state?.values).some(val => (val === "" || val === null))) {
+        if (Object.values(state[action.page]).some(val => (val === "" || val === null))) {
           return { ...state, globalError: true }
-        } else if (Object.values(state?.values).every(val => val !== "")) {
+        } else if (Object.values(state[action.page]).every(val => val !== "")) {
           return { ...state, globalError: false };
         }
         break;
@@ -93,20 +100,23 @@ function CreateRequestForm(props) {
       case actions.checkDate: {
         try {
           action.payload.toISOString();
-          return { ...state, values: { ...state.values, dateValue: action.payload.toISOString().split('T')[0] } }
+          return { ...state, [action.page]: { ...state[action.page], dateValue: action.payload.toISOString().split('T')[0] } }
         } catch (error) {
-          return { ...state, values: { ...state.values, dateValue: "" } }
+          return { ...state, [action.page]: { ...state[action.page], dateValue: "" } }
         }
       }
       case actions.checkValues: {
-        return { ...state, values: { ...state.values, [action.name]: action.payload } };
+        return { ...state, [action.page]: { ...state[action.page], [action.name]: action.payload } };
       }
     }
     throw Error('unknown action: ' + action.type)
   }
+
+  /*
   useEffect(() => {
-    dispatch({ type: actions.checkGlobalError })
+    dispatch({ type: actions.checkGlobalError, page: 'secondPageValues' })
   }, [state?.globalError, index])
+  */
 
 
   const autoCompleteRef = useRef();
@@ -124,17 +134,16 @@ function CreateRequestForm(props) {
       options
     );
     autoCompleteRef.current.addListener("place_changed", async function () {
-      console.log('sfdsdfsfsdfdsfdsf')
       const place = await autoCompleteRef.current.getPlace();
       console.log(place)
       //set coordinates of the location
       const coordinates = [place?.geometry?.location?.lat(), place?.geometry?.location?.lng()];
       console.log(coordinates)
       //ideal location stores the coordinates
-      dispatch({ type: actions.checkValues, payload: coordinates, name: "idealLocation" });
+      dispatch({ type: actions.checkValues, payload: coordinates, name: "idealLocation", page: 'secondPageValues' });
       //set the address of the location
-      dispatch({ type: actions.checkValues, payload: place?.formatted_address, name: "address" });
-      dispatch({ type: actions.checkGlobalError })
+      dispatch({ type: actions.checkValues, payload: place?.formatted_address, name: "address", page: 'secondPageValues' });
+      dispatch({ type: actions.checkGlobalError, page: 'secondPageValues' })
       //setValues({ ...values, city: place.address_components[3].long_name, country: place.address_components[6].long_name, province: place.address_components[5].long_name })
 
     });
@@ -154,8 +163,8 @@ function CreateRequestForm(props) {
 
   //useEffect in sync with listingObject
   useEffect(() => {
-    if (state.values.listingObject && state?.values?.listingObject?.props?.index > 0) {
-      const address = state?.values?.listingObject?.props?.address;
+    if (state?.secondPageValues?.listingObject && state?.secondPageValues?.listingObject?.props?.index > 0) {
+      const address = state?.secondPageValues?.listingObject?.props?.address;
       const geocoder = new window.google.maps.Geocoder();
       geocoder.geocode({ address }, (results, status) => {
         if (status === "OK" && results[0].geometry) {
@@ -163,16 +172,16 @@ function CreateRequestForm(props) {
           const lng = results[0].geometry.location.lng();
           const coordinates = [lat, lng]
           console.log(`Latitude: ${lat}, Longitude: ${lng}`);
-          dispatch({ type: actions.checkValues, payload: coordinates, name: "idealLocation" })
-          dispatch({ type: actions.checkValues, payload: address, name: "address" })
-          dispatch({ type: actions.checkGlobalError })
+          dispatch({ type: actions.checkValues, payload: coordinates, name: "idealLocation", page: 'secondPageValues' })
+          dispatch({ type: actions.checkValues, payload: address, name: "address", page: 'secondPageValues' })
+          dispatch({ type: actions.checkGlobalError, page: 'secondPageValues' })
         } else {
           console.log(`Geocode Failed: ${status}`);
         }
       });
 
     }
-  }, [state?.values?.listingObject])
+  }, [state?.secondPageValues?.listingObject])
 
   const handleSubmit = async (formData) => {
     //record values to be stored in the backend
@@ -197,13 +206,13 @@ function CreateRequestForm(props) {
   const [sliderArray, setSliderArray] = useState([18, 40]);
 
   useEffect(() => {
-    dispatch({ type: actions.checkValues, payload: sliderArray, name: "rangeSliderValue" });
+    dispatch({ type: actions.checkValues, payload: sliderArray, name: "rangeSliderValue", page: 'secondPageValues' });
   }, [sliderArray])
 
 
   const handleRangeChange = (e, newValue) => {
     setSliderArray(newValue)
-    dispatch({ type: actions.checkValues, payload: sliderArray, name: "rangeSliderValue" });
+    dispatch({ type: actions.checkValues, payload: sliderArray, name: "rangeSliderValue", page: 'secondPageValues' });
   }
 
 
@@ -264,38 +273,45 @@ function CreateRequestForm(props) {
       //retrieve the index of the channelName within groupChat[0] and use that to match the channelId
       const channelIndex = groupChat[0].indexOf(channelName)
       channelIdStorage.push(groupChat[1][channelIndex])
-      console.log(groupChat[1][channelIndex])
-
     },
 
-      dispatch({ type: actions.checkValues, payload: channelIdStorage, name: "linkGroupChats" })
+      dispatch({ type: actions.checkValues, payload: channelIdStorage, name: "linkGroupChats", page: 'secondPageValues' })
       //dispatch function that adds channelIdStorage as a payload
     )
 
   }
 
 
-  useEffect(() => {
-    //if the user changes their mind and switches back to None, then address and idealLocation are set back to empty string
-    dispatch({ type: actions.checkValues, payload: "", name: "address" })
-    dispatch({ type: actions.checkValues, payload: "", name: "idealLocation" })
-    dispatch({ type: actions.checkGlobalError })
-  }, [index === 0])
 
+  useEffect(() => {
+    if (index === 0) {
+      //if the user changes their mind and switches back to None, then address and idealLocation are set back to empty string
+      dispatch({ type: actions.checkValues, payload: "", name: "address", page: 'secondPageValues' })
+      dispatch({ type: actions.checkValues, payload: "", name: "idealLocation", page: 'secondPageValues' })
+      //if user has selected a listing then the flexibility should be 0
+      dispatch({ type: actions.checkValues, payload: "", name: "flexibility", page: 'secondPageValues' })
+      dispatch({ type: actions.checkGlobalError, page: 'secondPageValues' })
+
+    } else if (index !== 0) {
+      dispatch({ type: actions.checkValues, payload: 0, name: "flexibility", page: 'secondPageValues' })
+      dispatch({ type: actions.checkGlobalError, page: 'secondPageValues' })
+    }
+  }, [showGroup, index])
+
+
+  const handleBack = () => {
+    //handle back click so you can change who you want to request as
+    setShowBody(false)
+    setShowButton(null)
+  }
   const handleShow = (e) => {
     //change state depending on who you're requesting as
 
-
-    const handleBack = () => {
-      //handle back click so you can change who you want to request as
-      setShowBody(false)
-      setShowButton(null)
-    }
     switch (e.target.value) {
       //request "as myself"
       case identityMenuItems[0]:
         setShowBody(true)
-        dispatch({ type: actions.checkValues, payload: "As Myself", name: "request" })
+        dispatch({ type: actions.checkValues, payload: "As Myself", name: "request", page: 'firstPageValues' })
         setShowGroup(false)
 
         setShowButton(
@@ -311,6 +327,7 @@ function CreateRequestForm(props) {
     }
   }
 
+  console.log(state?.globalError)
   return (
     <>
 
@@ -326,7 +343,7 @@ function CreateRequestForm(props) {
       {showBody ?
         <>
           <LineBox flex={true} CssTextField={[
-            <DropDownMenu required={true} maxHeight={250} value={state?.values?.listingObject} onChange={(e) => { handleEmptyStringValidation(e.target.value, 'listingObject'); setIndex(e.target.value.props.index); }} label="Listing in Mind" menuItem={listingMenuItems} />,
+            <DropDownMenu required={true} maxHeight={250} value={state?.secondPageValues?.listingObject} onChange={(e) => { handleEmptyStringValidation(e.target.value, 'listingObject', 'secondPageValues'); setIndex(e.target.value.props.index); }} label="Listing in Mind" menuItem={listingMenuItems} />,
           ]} />
 
           {/*if the user has a listing in mind then we use the listing's coordinates else use their own coordinates*/}
@@ -334,23 +351,23 @@ function CreateRequestForm(props) {
           {
             index === 0 ?
               <LineBox flex={true} CssTextField={[
-                <FormSingleLineInput required={true} helperText="Create a pin on the map" value={state?.values?.idealLocation} onChange={(e) => { handleEmptyStringValidation(e.target.value, 'idealLocation'); }} size="small" type="text" field="Ideal Location" placeHolder="ex. Toronto" inputRef={inputRef} />,
-                <FormSingleLineInput required={false} helperText="How far can you relocate if needed?" type="number" inputAdornment={true} inputStartAdornment={"~"} inputEndAdornment={"km"} value={state?.values?.flexibility} onChange={(e) => handleEmptyStringValidation(e.target.value, 'flexibility')} size="small" field="Range Flexibility" placeHolder="ex. 30" />,
+                <FormSingleLineInput required={true} helperText="Create a pin on the map" value={state?.secondPageValues?.idealLocation} onChange={(e) => { handleEmptyStringValidation(e.target.value, 'idealLocation', 'secondPageValues'); }} size="small" type="text" field="Ideal Location" placeHolder="ex. Toronto" inputRef={inputRef} />,
+                <FormSingleLineInput required={false} helperText="How far can you relocate if needed?" type="number" inputAdornment={true} inputStartAdornment={"~"} inputEndAdornment={"km"} value={state?.secondPageValues?.flexibility} onChange={(e) => handleEmptyStringValidation(e.target.value, 'flexibility', 'secondPageValues')} size="small" field="Range Flexibility" placeHolder="ex. 30" />,
               ]} />
               :
               <LineBox flex={true} CssTextField={[
-                <FormSingleLineInput required={true} helperText={"Coordinates have been set to the listing's location"} disabled={true} type="text" value={state?.values?.idealLocation} size="small" field="Pin Location" placeHolder="ex. Toronto" />,
+                <FormSingleLineInput required={true} helperText={"Coordinates have been set to the listing's location"} disabled={true} type="text" value={state?.secondPageValues?.idealLocation} size="small" field="Pin Location" placeHolder="ex. Toronto" />,
               ]} />
           }
 
           <LineBox flex={true} CssTextField={[
-            <DatePicker required={true} onChange={(e) => { handleEmptyStringValidation(e, 'dateValue', true); }} value={state?.values?.dateValue} label="Move In Date" />,
-            <FormSingleLineInput required={true} inputAdornment={true} inputStartAdornment={"$"} inputEndAdornment="/m" value={state?.values?.rentBudget} onChange={(e) => handleEmptyStringValidation(e.target.value, 'rentBudget')} size="small" field="My Rent Budget" type="number" placeHolder="ex. 900" />,
+            <DatePicker required={true} onChange={(e) => { handleEmptyStringValidation(e, 'dateValue', 'secondPageValues', true); }} value={state?.secondPageValues?.dateValue} label="Move In Date" />,
+            <FormSingleLineInput required={true} inputAdornment={true} inputStartAdornment={"$"} inputEndAdornment="/m" value={state?.secondPageValues?.rentBudget} onChange={(e) => handleEmptyStringValidation(e.target.value, 'rentBudget', 'secondPageValues')} size="small" field="Rent Budget" type="number" placeHolder="ex. 900" />,
 
           ]} />
 
           <LineBox flex={true} CssTextField={[
-            <DropDownMenu defaultValue="1-3 months" helperText="Optional" value={state?.values?.idealLengthStay} onChange={(e) => handleEmptyStringValidation(e.target.value, 'idealLengthStay')} label="Ideal length of stay" menuItem={["1-3 months", "4-6 months", "7-12 months", "1+ years"]} />,
+            <DropDownMenu defaultValue="1-3 months" helperText="Optional" value={state?.secondPageValues?.idealLengthStay} onChange={(e) => handleEmptyStringValidation(e.target.value, 'idealLengthStay', 'secondPageValues')} label="Ideal length of stay" menuItem={["1-3 months", "4-6 months", "7-12 months", "1+ years"]} />,
             <Box sx={{ height: '0px' }}>
               <Typography>
                 {"Preferred Age"}
@@ -361,34 +378,34 @@ function CreateRequestForm(props) {
 
 
           <LineBox flex={true} CssTextField={[
-            <DropDownMenu required={true} value={state?.values?.roommateGender} onChange={(e) => handleEmptyStringValidation(e.target.value, 'roommateGender')} label="Preferred Gender" menuItem={["Any", "Male", "Female", "Other"]} />,
-            <DropDownMenu required={true} value={state?.values?.numRoommates} onChange={(e) => handleEmptyStringValidation(e.target.value, 'numRoommates')} label="Seeking..." menuItem={["1 Bunkmate", "2 Bunkmates", "3 Bunkmates", "4 Bunkmates", '5+ Bunkmates']} />,
+            <DropDownMenu required={true} value={state?.secondPageValues?.roommateGender} onChange={(e) => handleEmptyStringValidation(e.target.value, 'roommateGender', 'secondPageValues')} label="Preferred Gender" menuItem={["Any", "Male", "Female", "Other"]} />,
+            <DropDownMenu required={true} value={state?.secondPageValues?.numRoommates} onChange={(e) => handleEmptyStringValidation(e.target.value, 'numRoommates', 'secondPageValues')} label="Seeking..." menuItem={["1 Bunkmate", "2 Bunkmates", "3 Bunkmates", "4 Bunkmates", '5+ Bunkmates']} />,
           ]} />
 
           {/* disable cotinue button if the user has not filled out all mandatory fields and / or still has errors*/}
-          <ActionButton helperText="* Please fill out all required fields before continuiing" disabled={state?.globalError} onClick={() => { props.onClick(); handleSubmit(values); }} fontSize="15px" width="100%" type="submit" title="Submit" />
+          <ActionButton helperText="* Please fill out all required fields before continuiing" disabled={state?.globalError} onClick={() => { props.onClick(); handleSubmit(secondPageValues); }} fontSize="15px" width="100%" type="submit" title="Submit" />
         </>
         :
         <>
           {showGroup ?
             <>
               <LineBox flex={true} CssTextField={[
-                <DropDownMenu required={true} autoFocus={true} maxHeight={250} value={state?.values?.request} onChange={(e) => { handleEmptyStringValidation(e.target.value, 'request'); handleShow(e); }} label="Request" menuItem={identityMenuItems} />,
+                <DropDownMenu required={true} autoFocus={true} maxHeight={250} value={state?.firstPageValues?.request} onChange={(e) => { handleEmptyStringValidation(e.target.value, 'request', 'firstPageValues'); handleShow(e); }} label="Request" menuItem={identityMenuItems} />,
               ]} />
               < LineBox flex={true} CssTextField={[
-                <MultipleSelectCheckmarks title="Group tags" onChange={(e) => handleEmptyStringValidation(e.target.value, 'groupTags')} menuItems={['Non Smokers', 'Have Pets', "Have Jobs", 'Students', 'Have Children', 'LGBTQ Friendly', 'Cannabis Friendly']} />
+                <MultipleSelectCheckmarks helperText="Optional" title="Group tags" onChange={(e) => handleEmptyStringValidation(e.target.value, 'groupTags', 'firstPageValues')} menuItems={['Non Smokers', 'Have Pets', "Have Jobs", 'Students', 'Have Children', 'LGBTQ Friendly', 'Cannabis Friendly']} />
               ]} />
               <div id="multiline">
-                <FormMultiLineInput required={true} placeHolder="Talk about your bunkmate(s)" type="text" field="About Us" helperText={aboutHelperText} onChange={(e) => { handleAboutValidation(e); handleEmptyStringValidation(e.target.value, 'aboutUs') }} error={aboutError} value={state?.values?.about} />
+                <FormMultiLineInput required={true} placeHolder="Talk about your bunkmate(s)" type="text" field="About Us" helperText={aboutHelperText} onChange={(e) => { handleAboutValidation(e); handleEmptyStringValidation(e.target.value, 'aboutUs', 'firstPageValues') }} error={aboutError} value={state?.firstPageValues?.about} />
               </div>
               <LineBox flex={true} CssTextField={[
-                <MultipleSelectCheckmarks onChange={(e) => handleGroupChat(e)} required={true} title="Link Group Chats" menuItems={groupChat[0]} />
+                <MultipleSelectCheckmarks helperText="Optional" onChange={(e) => { handleEmptyStringValidation(e.target.value, 'linkGroupChats', 'firstPageValues'); handleGroupChat(e) }} required={true} title="Link Group Chats" menuItems={groupChat[0]} />
               ]} />
-              <ActionButton helperText="* Please fill out all required fields before continuiing" disabled={false} onClick={() => { handleSubmit(values); setShowBody(true) }} fontSize="15px" width="100%" type="submit" title="Continue" />
+              <ActionButton helperText="* Please fill out all required fields before continuing" disabled={state?.globalError} onClick={() => { handleSubmit(firstPageValues); setShowBody(true); setShowButton(<IconButton onClick={handleBack}><IoIosArrowBack /></IconButton>) }} fontSize="15px" width="100%" type="submit" title="Continue" />
             </>
             :
             <LineBox flex={true} CssTextField={[
-              <DropDownMenu required={true} autoFocus={true} maxHeight={250} value={state?.values?.request} onChange={(e) => { handleEmptyStringValidation(e.target.value, 'request'); handleShow(e); }} label="Request" menuItem={identityMenuItems} />,
+              <DropDownMenu required={true} autoFocus={true} maxHeight={250} value={state?.firstPageValues?.request} onChange={(e) => { handleEmptyStringValidation(e.target.value, 'request', 'firstPageValues'); handleShow(e); }} label="Request" menuItem={identityMenuItems} />,
             ]} />
           }
         </>

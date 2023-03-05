@@ -8,10 +8,10 @@ export function SavedListingItem(props) {
     return (
         props.noListingSelected ? "None"
             :
-            <div className="saved-listing" style={{ display: 'flex', flexFlow: 'row nowrap' }}>
+            <div className="saved-listing" style={{ display: 'flex', flexFlow: 'row nowrap', }}>
                 {/*replace hard coded values */}
                 <img style={{ width: "70px", height: "60px", padding: '5px', borderRadius: '10px' }} src={props.image}></img>
-                <div style={{ maxWidth: '350px', display: 'flex', justifyContent: 'center', flexDirection: 'column', padding: '5px', }}>
+                <div style={{ maxWidth: props.addressWidth ?? '350px', display: 'flex', justifyContent: 'center', flexDirection: 'column', padding: '5px', }}>
                     <Typography variant="body2" color="text.secondary" noWrap>
                         {/*replace hard coded values */}
                         {props.address}
@@ -50,7 +50,7 @@ export const listingMenuItems = [
     <SavedListingItem
         index={2}
         image="https://hbrdnhlsprod.blob.core.windows.net/nhlsprod/uploads/ckeditor/pictures/344/content_Calgary_Condos_NHLS.jpg"
-        address="Square One Shopping Centre, City Centre Drive, Mississauga, ON, Canada"
+        address="Square One Shopping Centre, City Centre Drive, Mississauga, ON, Canadassssssssssssssssssssssssssssssssss"
         price={`$${2300}`}
         bedBath="4 Beds | 4 Baths | 2500 sqft"
     />,
