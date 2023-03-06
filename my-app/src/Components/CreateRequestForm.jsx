@@ -13,6 +13,7 @@ import { Typography } from '@mui/material'
 import Slider from '@mui/material/Slider'
 import Box from '@mui/material/Box';
 import { listingMenuItems, identityMenuItems } from '../testing_data/listingMenuItemData';
+import { SavedListingItem } from './SubComponents/SavedListingItem';
 import { FormMultiLineInput } from './SubComponents/Form';
 import { AboutValidationContext } from './GlobalStateManagement/ValidationContext';
 import { MultipleSelectCheckmarks } from './SubComponents/Form';
@@ -62,18 +63,15 @@ function CreateRequestForm(props) {
     idealLengthStay: "",
   }
 
-  const mergedValues = {
-    ...firstPageValues,
-    ...secondPageValues,
-  }
-
   const initialState = {
     firstPageValues: firstPageValues,
     secondPageValues: secondPageValues,
     globalError: true,
   }
 
-
+  const menuItem = listingMenuItems.map((element, index) => {
+    return index == 0 ? "None" : <SavedListingItem index={index} image={element.image} address={element.address} price={element.price} bedBath={element.bedBath} />
+  });
   const [state, dispatch] = useReducer(reducer, initialState)
 
   const handleEmptyStringValidation = (newValue, name, page, date = false) => {
@@ -168,8 +166,8 @@ function CreateRequestForm(props) {
 
   //useEffect in sync with listingObject
   useEffect(() => {
-    if (state?.secondPageValues?.listingObject && state?.secondPageValues?.listingObject?.props?.index > 0) {
-      const address = state?.secondPageValues?.listingObject?.props?.address;
+    if (state?.secondPageValues?.listingObject && state?.secondPageValues?.listingObject !== "None") {
+      const address = state?.secondPageValues?.listingObject?.address;
       const geocoder = new window.google.maps.Geocoder();
       geocoder.geocode({ address }, (results, status) => {
         if (status === "OK" && results[0].geometry) {
@@ -289,9 +287,10 @@ function CreateRequestForm(props) {
 
 
   useEffect(() => {
-
+    console.log(state.secondPageValues.listingObject)
     dispatch({ type: actions.checkGlobalError, page: 'firstPageValues' })
-    if (index === 0) {
+    if (state?.secondPageValues?.listingObject === "None") {
+      console.log("foo")
       //if the user changes their mind and switches back to None, then address and idealLocation are set back to empty string
       dispatch({ type: actions.checkValues, payload: "", name: "address", page: 'secondPageValues' })
       dispatch({ type: actions.checkValues, payload: "", name: "idealLocation", page: 'secondPageValues' })
@@ -299,12 +298,13 @@ function CreateRequestForm(props) {
       dispatch({ type: actions.checkValues, payload: "", name: "flexibility", page: 'secondPageValues' })
       dispatch({ type: actions.checkGlobalError, page: 'secondPageValues' })
 
-    } else if (index !== 0) {
+    } else {
+      console.log("bar")
       //when the user doesn't select index 0 then flexibility is set to 0
       dispatch({ type: actions.checkValues, payload: 0, name: "flexibility", page: 'secondPageValues' })
       dispatch({ type: actions.checkGlobalError, page: 'secondPageValues' })
     }
-  }, [showGroup, index])
+  }, [showGroup, state.secondPageValues.listingObject])
 
   useEffect(() => {
     //after completing the form and then switching back to firstpage will cause the globalerror to be set to false
@@ -357,13 +357,13 @@ function CreateRequestForm(props) {
       {showBody ?
         <>
           <LineBox flex={true} CssTextField={[
-            <DropDownMenu required={true} maxHeight={250} value={state?.secondPageValues?.listingObject} onChange={(e) => { handleEmptyStringValidation(e.target.value, 'listingObject', 'secondPageValues'); setIndex(e.target.value.props.index); }} label="Listing in Mind" menuItem={listingMenuItems} />,
+            <DropDownMenu required={true} maxHeight={250} value={menuItem[state?.secondPageValues?.listingObject?.index] ?? "None"} onChange={(e) => { handleEmptyStringValidation(e.target.value?.props || "None", 'listingObject', 'secondPageValues'); }} label="Listing in Mind" menuItem={menuItem} />,
           ]} />
 
           {/*if the user has a listing in mind then we use the listing's coordinates else use their own coordinates*/}
           { /* TODO: find a more robust solution than hard coding the index use useRef*/}
           {
-            index === 0 ?
+            state?.secondPageValues?.listingObject === "None" ?
               <LineBox flex={true} CssTextField={[
                 <FormSingleLineInput required={true} helperText="Create a pin on the map" value={state?.secondPageValues?.idealLocation} onChange={(e) => { handleEmptyStringValidation(e.target.value, 'idealLocation', 'secondPageValues'); }} size="small" type="text" field="Ideal Location" placeHolder="ex. Toronto" inputRef={inputRef} />,
                 <FormSingleLineInput required={false} helperText="How far can you relocate if needed?" type="number" inputAdornment={true} inputStartAdornment={"~"} inputEndAdornment={"km"} value={state?.secondPageValues?.flexibility} onChange={(e) => handleEmptyStringValidation(e.target.value, 'flexibility', 'secondPageValues')} size="small" field="Range Flexibility" placeHolder="ex. 30" />,
@@ -397,7 +397,7 @@ function CreateRequestForm(props) {
           ]} />
 
           {/* disable cotinue button if the user has not filled out all mandatory fields and / or still has errors*/}
-          <ActionButton helperText="* Please fill out all required fields before continuiing" disabled={state?.globalError} onClick={() => { props.onClick(); handleSubmit(mergedValues); }} fontSize="15px" width="100%" type="submit" title="Submit" />
+          <ActionButton helperText="* Please fill out all required fields before continuiing" disabled={state?.globalError} onClick={() => { props.onClick(); console.log({ ...state?.firstPageValues, ...state?.secondPageValues }); handleSubmit({ ...state?.firstPageValues, ...state?.secondPageValues }) }} fontSize="15px" width="100%" type="submit" title="Submit" />
         </>
         :
         <>
