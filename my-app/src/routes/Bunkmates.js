@@ -206,7 +206,8 @@ const Bunkmates = () => {
                         options={{ styles: mapStyles, streetViewControl: false }}
                         onClick={() => { setProfile(null) }}
                     >
-                        <Navbar chooseStyle={'glass'} />
+
+                        <Navbar chooseStyle={"glass"} />
                         {/*
                         <div className="social-feed-container" style={socialFeedStyles.FeedContainer}>
                             <SocialFeed />

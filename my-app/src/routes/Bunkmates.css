@@ -37,6 +37,51 @@ span .followers {
     height: unset !important;
 }
 
+div div.gmnoprint>div {
+    background-color: transparent !important;
+}
+
+/* Full screen button*/
+button.gm-control-active.gm-fullscreen-control {
+    background-color: black !important;
+    top: 10vh !important;
+    border-radius: 10px !important;
+}
+
+div.gmnoprint.gm-bundled-control.gm-bundled-control-on-bottom {
+    top: 5vh !important;
+}
+
+button.gm-control-active {
+    border-radius: 10px !important;
+    background-color: black !important;
+}
+
+.gm-tilt.gm-control-active {
+    top: 9vh !important;
+    background-color: black !important;
+    position: absolute !important;
+
+
+}
+
+
+div div.gmnoprint {
+    top: 10vh !important;
+}
+
+.gm-style-mtc button {
+    background-color: black !important;
+    color: white !important;
+}
+
+.ssQIHO-checkbox-menu-item {
+    border: 1px solid black !important;
+    background-color: black !important;
+    color: white !important;
+}
+
+
 
 * {
     box-sizing: border-box;
