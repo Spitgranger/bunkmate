@@ -15,7 +15,7 @@ import { SignInContext } from "../Components/GlobalStateManagement/SignInContext
 import Divider from '@mui/material/Divider'
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import Tooltip from "@mui/material/Tooltip";
-import { SavedListingItem } from "../testing_data/listingMenuItemData";
+import { SavedListingItem } from "../Components/SubComponents/SavedListingItem";
 import { HiMapPin } from 'react-icons/hi2'
 
 
