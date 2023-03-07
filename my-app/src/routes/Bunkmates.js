@@ -2,7 +2,7 @@ import react, { useContext, useEffect, useRef, useState } from "react";
 import Navbar from "../Components/Navbar";
 import { GoogleMap, useJsApiLoader, MarkerF, OverlayView, OVERLAY_MOUSE_TARGET, OVERLAY_LAYER } from "@react-google-maps/api";
 import mapStyles from './mapStyles.json'
-import { Button, Grid, Paper, TextField, Card, Typography, CardActionArea, CardMedia, CardContent, CardActions } from "@mui/material/"
+import { Button, Grid, Paper, TextField, Card, Typography, CardActionArea, CardMedia, CardContent, CardActions, IconButton } from "@mui/material/"
 import "./Bunkmates.css"
 import PlacesAutocomplete from "../Components/SubComponents/PlacesAutocomplete";
 import profiles from "../testing_data/mapCardData"
@@ -16,7 +16,7 @@ import Divider from '@mui/material/Divider'
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import Tooltip from "@mui/material/Tooltip";
 import { SavedListingItem } from "../testing_data/listingMenuItemData";
-
+import { HiMapPin } from 'react-icons/hi2'
 
 
 
@@ -50,7 +50,7 @@ function Profile({ profile }) {
             <Card sx={{ width: 350, position: "absolute", zIndex: "2", opacity: '0.9' }}>
                 <div style={{ flexDirection: 'column', padding: '15px', display: 'flex', justifyContent: 'flex-start' }}>
                     <div className="profile-info" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                        <CardActionArea style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                        <CardActionArea style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', }}>
 
                             <CardMedia
                                 component="img"
@@ -59,14 +59,21 @@ function Profile({ profile }) {
                                 sx={{ width: '100px', height: '200px', borderRadius: '5%' }}
                             />
                             <CardContent>
-                                <Typography variant="h5" component="div" noWrap style={{ display: 'flex', alignItems: 'center' }}>
-                                    {profile.name}
-                                    <div className="display-verified" style={{ padding: '5px' }}>
-                                        {profile.verified ?
-                                            <Tooltip title={`${profile.name} is verified`}><CheckCircleOutlineIcon sx={{ fontSize: "medium", backgroundColor: 'aqua', color: 'white', borderRadius: '50%' }} /></Tooltip>
-                                            : null}
+                                <div className="card-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                    <div className="first-last-name">
+                                        <Typography variant="h5" component="div" noWrap style={{ display: 'flex', alignItems: 'center' }}>
+                                            {profile.name}
+                                            <div className="display-verified" style={{ padding: '5px' }}>
+                                                {profile.verified ?
+                                                    <Tooltip title={`${profile.name} is verified`}><CheckCircleOutlineIcon sx={{ fontSize: "medium", backgroundColor: 'aqua', color: 'white', borderRadius: '50%' }} /></Tooltip>
+                                                    : null}
+                                            </div>
+                                        </Typography >
                                     </div>
-                                </Typography >
+                                    <IconButton style={{ padding: '2px' }}>
+                                        <HiMapPin />
+                                    </IconButton>
+                                </div>
                                 <Typography variant="body2" color="text.secondary">
                                     {`${profile.age} Year Old, ${profile.gender}`}
                                 </Typography>
@@ -83,6 +90,10 @@ function Profile({ profile }) {
                             </CardContent >
                         </CardActionArea>
                     </div >
+                    <div style={{ display: 'flex', flexFlow: "row nowrap", justifyContent: 'center' }}>
+                        <ActionButton borderRadius="15px" title="Message" width="140px" height="40px" />
+                        <ActionButton borderRadius="15px" title="Profile" width="140px" height="40px" />
+                    </div>
 
                     <Divider style={{ width: '100%' }} />
                     <CardActionArea >
@@ -139,16 +150,6 @@ const Bunkmates = () => {
         googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
         libraries: libraries,
     })
-    /*
-    const handleLoad = async () => {
-        const profile = await getProfile();
-                                                    return profile;
-    }
-    
-    useEffect(() => {
-                    handleLoad().then((profile) => setProfile(profile.data)).catch(error => console.log(error))
-                                                    }, []);
-                                                    */
 
     if (!isLoaded) {
         return <h1>ERROR HAS OCCURED</h1>
@@ -185,15 +186,14 @@ const Bunkmates = () => {
 
     function CreateRequestButton() {
         return (
-            <div style={{ display: 'flex', bottom: '5vh', justifyContent: 'center', position: 'absolute' }}>
-                <ActionButton onClick={handleRequestClick} bgColor={"black"} title="Create Bunkmate Request" />
+            <div style={{ display: 'flex', bottom: '10vh', justifyContent: 'center', position: 'absolute', }}>
+                <ActionButton onClick={handleRequestClick} bgColor={"black"} title="Create Bunkmate Request" opacity='0.8' />
             </div>
         )
     }
 
     return (
         <div>
-            <Navbar />
             <div className="content-container">
                 <div className="search-bar-container" style={{ height: '200px', position: 'absolute', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                     <PlacesAutocomplete setSelected={setSelected} setCenter={setCenter} />
@@ -202,10 +202,11 @@ const Bunkmates = () => {
                     <GoogleMap
                         center={center}
                         zoom={15}
-                        mapContainerStyle={{ width: "100%", height: "91vh" }}
+                        mapContainerStyle={{ width: "100%", height: "100vh" }}
                         options={{ styles: mapStyles, streetViewControl: false }}
                         onClick={() => { setProfile(null) }}
                     >
+                        <Navbar chooseStyle={'glass'} />
                         {/*
                         <div className="social-feed-container" style={socialFeedStyles.FeedContainer}>
                             <SocialFeed />

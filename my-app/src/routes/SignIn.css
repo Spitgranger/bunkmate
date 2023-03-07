@@ -57,3 +57,20 @@
   max-width: 90px;
   cursor: pointer;
 }
+
+.old-user {
+  cursor: pointer;
+}
+
+.old-user:hover {
+  border-bottom: 2px solid black;
+}
+
+
+.new-user {
+  cursor: pointer;
+}
+
+.new-user:hover {
+  border-bottom: 2px solid black;
+}

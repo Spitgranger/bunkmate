@@ -17,6 +17,7 @@ function ApplyToListings() {
 
   return (
     <>
+      <div style={{ height: '9vh' }} />
       <Navbar />
       <div className="info">
         <section className="ApplicationSubPage">

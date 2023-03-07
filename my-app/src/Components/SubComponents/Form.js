@@ -390,12 +390,19 @@ export function ActionButton(props) {
   const buttonStyles = {
     backgroundColor: props.bgColor ?? "#383838",
     color: 'white',
-    borderRadius: "10px",
-    width: props.width,
-    height: '60px',
+    borderRadius: props.borderRadius ?? "10px",
+    width: props.width ?? '100%',
+    height: props.height ?? '60px',
     paddingTop: '2px',
     fontSize: props.fontSize,
     ':hover': { bgcolor: 'black', color: "aqua" },
+  }
+  const containerStyles = {
+    display: 'flex',
+    alignItems: 'flex-start',
+    flexDirection: 'column',
+    opacity: props.opacity,
+    margin: '10px',
   }
 
   const helperTextStyles = {
@@ -404,7 +411,7 @@ export function ActionButton(props) {
 
 
   return (
-    <div className="Button" style={{ display: 'flex', alignItems: 'flex-start', flexDirection: 'column' }}>
+    <div className="Button" style={containerStyles}>
       <Button
         variant="contained"
         onClick={props.onClick}

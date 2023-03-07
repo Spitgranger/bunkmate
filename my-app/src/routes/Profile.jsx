@@ -26,6 +26,8 @@ const Profile = () => {
     return (
       <div className='page-container'>
         <SignInProvider>
+          <div style={{ height: '9vh' }} />
+
           <Navbar />
         </SignInProvider>
         <div className='profile-wrapper'>

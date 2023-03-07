@@ -340,7 +340,6 @@ function CreateRequestForm(props) {
         break
     }
   }
-
   console.log(state?.globalError)
   return (
     <>

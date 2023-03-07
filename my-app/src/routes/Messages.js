@@ -111,10 +111,7 @@ const Messages = () => {
   if (!profile) {
     return (
       <>
-        <SignInProvider>
-          <Navbar />
-        </SignInProvider>
-
+        <Navbar />
         <div style={{ height: '100%', display: 'flex', justifyContent: 'center', margin: '100px' }}>
           <h1>You need to be logged in to message</h1>
         </div>
@@ -358,10 +355,8 @@ const Messages = () => {
 
   return (
     <div className="messages">
-      <SignInProvider>
-        <Navbar />
-      </SignInProvider>
-
+      <div style={{ height: '9vh' }} />
+      <Navbar />
       <Tooltip title={isCreating ? "Cancel Creating Group" : "Create Group"}>
         <IconButton onClick={handleCreateGroup}>
           {isCreating ? <CancelIcon /> : <AddCircleIcon />}

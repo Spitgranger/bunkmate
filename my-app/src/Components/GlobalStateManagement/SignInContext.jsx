@@ -13,18 +13,44 @@ export default function SignInProvider({ children }) {
   //Used to handle retrieving user data from api
   const [userProfile, setUserProfile] = useState("")
 
+  const handleSignInEmail = () => {
+    setMessage("Sign In With Email")
+    setMode('signInEmail')
+    setIsOpen(true)
+  }
 
+  const handleSignUpEmail = () => {
+    setMessage("Sign Up Now!")
+    setMode('signUpEmail')
+    setIsOpen(true)
+  }
+
+  const handlePhone = () => {
+    setMessage("Sign in or Sign up")
+    setMode('signInPhone')
+    setIsOpen(true)
+  }
+
+  const handleProfile = () => {
+    setMessage("")
+    setMode('profileMakerForm')
+    setIsOpen(true)
+  }
 
 
 
 
   return (
-    <SignInContext.Provider value={{ 
-      isOpen, setIsOpen, 
+    <SignInContext.Provider value={{
+      isOpen, setIsOpen,
       mode, setMode,
-      message, setMessage, 
-      userProfile, 
-      setUserProfile 
+      message, setMessage,
+      userProfile,
+      setUserProfile,
+      handleSignInEmail,
+      handleSignUpEmail,
+      handlePhone,
+      handleProfile,
     }}>
       {children}
     </SignInContext.Provider>

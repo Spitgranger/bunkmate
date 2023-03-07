@@ -155,7 +155,7 @@ export function SignInEmail() {
       </div>
       <div className="button" style={{ borderBottom: "1px solid lightgrey" }}>
         <div style={{ display: 'flex', justifyContent: 'center', fontSize: "10px" }} >
-          <div style={{ borderBottom: '1px solid black', cursor: 'pointer' }} onClick={() => { setMessage("Sign Up Now!"); setMode("signUpEmail") }}>
+          <div className="new-user" onClick={() => { setMessage("Sign Up Now!"); setMode("signUpEmail") }}>
             Don't have an account? Sign Up!
           </div>
         </div>
@@ -278,7 +278,7 @@ export function SignUpEmail() {
         </div>
         <div className="button" style={{ borderBottom: "1px solid lightgrey" }}>
           <div style={{ display: 'flex', justifyContent: 'center', fontSize: "10px" }} >
-            <div style={{ borderBottom: '1px solid black', cursor: 'pointer' }} onClick={() => { setMessage("Sign In With Email!"); setMode("signInWithEmail") }}>
+            <div className="old-user" onClick={() => { setMessage("Sign In With Email!"); setMode("signInWithEmail") }}>
               Already have an account? Sign In!
             </div>
           </div>
