@@ -19,8 +19,8 @@ function SignInPartner({ company, logo, onClick }) {
 
   return (
     <Button id="partnerButton" onClick={onClick}>
-      <div style={{ alignItems: 'center' }}>
-        {logo}
+      {logo}
+      <div>
         <div>
           Continue with {company}
         </div>
@@ -82,8 +82,8 @@ export function SignInEmail() {
 
   const seperatorStyles = {
     display: 'flex',
-    left: '176px',
-    bottom: '275px',
+    left: '190px',
+    bottom: '308px',
     position: 'absolute',
     fontSize: '10px',
     backgroundColor: 'white',
@@ -188,8 +188,8 @@ export function SignUpEmail() {
 
   const seperatorStyles = {
     display: 'flex',
-    left: '176px',
-    bottom: '235px',
+    left: '190px',
+    bottom: '269px',
     position: 'absolute',
     fontSize: '10px',
     backgroundColor: 'white',
@@ -302,8 +302,8 @@ export function SignInPhone() {
 
   const seperatorStyles = {
     display: 'flex',
-    left: '176px',
-    bottom: '275px',
+    left: '190px',
+    bottom: '308px',
     position: 'absolute',
     fontSize: '10px',
     backgroundColor: 'white',
@@ -357,7 +357,7 @@ export function SignInPhone() {
           </h6>
         </div>
         <div className="button" style={{ borderBottom: "1px solid lightgrey" }}>
-          <ActionButton width="100%" type="submit" title="Submit" onClick={() => { setMode("signInEmail"); setMessage("Sign In With Email") }} />
+          <ActionButton width="100%" type="submit" title="Submit" onClick={() => { setMode("signUpEmail"); setMessage("Sign Up Now") }} />
         </div>
         <div className="socials" >
           <div style={seperatorStyles}>

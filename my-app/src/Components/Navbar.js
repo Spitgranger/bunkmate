@@ -70,7 +70,7 @@ function Navbar({ chooseStyle }) {
     useEffect(() => {
         if (user) {
             handleProfile().then((profile) => setUserProfile(profile.data)).catch(() => {
-                setMessage("Complete your profile!");
+                setMessage("Get Matched With Bunkmates!");
                 setMode('profileMakerForm');
                 setIsOpen(true)
             });
@@ -181,7 +181,7 @@ function Navbar({ chooseStyle }) {
                 <NavbarPage toolTipTitle={"Find Roomates"} linkTo={"/bunkmates"} pageName="Bunkmates" />
                 <NavbarPage toolTipTitle={"Apply For Rental Units"} linkTo={"/apply_to_listings"} pageName="Apply to Listings" />
                 <NavbarPage toolTipTitle={"Message Bunkmates"} linkTo={"/messages"} pageName="Messages" />
-                <NavbarPage toolTipTitle={"Create Or Edit Profile"} linkTo={"/profile"} pageName="Profile" />
+                <NavbarPage toolTipTitle={"Create Or Edit Profile"} linkTo={"/profile"} pageName="My Profile" />
                 {/*hidden, used for Sign in pages*/}
                 <RenderWhich />
                 {user ? (

@@ -77,17 +77,13 @@ nav ul a.navCurrentPage {
   top: 0;
   z-index: 999;
   display: flex;
-  min-width: 1000px;
+  min-width: 625px;
   backdrop-filter: blur(4px);
   align-items: center;
   justify-content: space-between;
   box-sizing: border-box;
   z-index: 5;
-  position: 'absolute'
-    /* use for box shadow insetting */
-
-    /*box-shadow: 11px 14px 5px 0px grey,
-    inset 0px 20px 7px 0px grey;*/
+  background-color: rgba(0, 0, 0, 0.6)
 }
 
 .glassPageContainer>* {

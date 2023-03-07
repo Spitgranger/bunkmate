@@ -2,8 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Avatar, useChatContext } from 'stream-chat-react';
 import _debounce from 'lodash.debounce';
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
-
-import './CreateChannel.css';
+import './CreateGroupChannel.css';
 
 //each user profile that shows up after a query
 const UserResult = ({ user }) => {

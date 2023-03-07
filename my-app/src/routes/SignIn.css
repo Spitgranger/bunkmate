@@ -34,19 +34,23 @@
 }
 
 #partnerButton {
-  margin: 10px 20px 10px 20px;
+  margin-top: 10px;
+  margin-bottom: 10px;
   display: flex;
   border: 1px solid lightgrey;
   justify-content: center;
   border-radius: 10px;
   padding: 5px;
+  width: 100%;
 }
 
 #partnerButton div {
   /* Used to make tech company logos positioned in a straight column despite varying lengths of text*/
-  padding: 3px 20px 3px 20px;
-  width: 320px;
+  padding: 5px 20px 5px 20px;
+  align-items: center;
+  float: left;
   display: flex;
+  width: 250px;
   justify-content: center;
 }
 

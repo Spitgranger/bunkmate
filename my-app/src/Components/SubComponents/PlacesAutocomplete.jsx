@@ -67,18 +67,19 @@ const PlacesAutocomplete = (props) => {
                 placeholder="Search for a roommate..."
                 sx={{
                     boxSizing: 'border-box',
-                    minWidth: "100%",
-                    margin: "none",
+                    width: '100%',
                     backgroundColor: 'black',
                     borderRadius: '10px 10px 0px 0px',
-                    opacity: 0.8,
-                    color: 'white'
+                    color: 'white',
+                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
                 }}
 
                 InputProps={{
                     style: {
                         paddingBottom: '15px',
                         paddingLeft: '10px',
+                        fontSize: '15px',
+                        fontWeight: 600,
                         color: 'white',
                     }
                 }}

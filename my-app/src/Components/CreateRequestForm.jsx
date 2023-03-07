@@ -70,7 +70,7 @@ function CreateRequestForm(props) {
   }
 
   const menuItem = listingMenuItems.map((element, index) => {
-    return index == 0 ? "None" : <SavedListingItem index={index} image={element.image} address={element.address} price={element.price} bedBath={element.bedBath} />
+    return index === 0 ? "None" : <SavedListingItem index={index} image={element.image} address={element.address} price={element.price} bedBath={element.bedBath} />
   });
   const [state, dispatch] = useReducer(reducer, initialState)
 
@@ -341,6 +341,7 @@ function CreateRequestForm(props) {
     }
   }
   console.log(state?.globalError)
+  console.log(state?.secondPageValues?.listingObject)
   return (
     <>
 
@@ -362,8 +363,9 @@ function CreateRequestForm(props) {
           {/*if the user has a listing in mind then we use the listing's coordinates else use their own coordinates*/}
           { /* TODO: find a more robust solution than hard coding the index use useRef*/}
           {
-            state?.secondPageValues?.listingObject === "None" ?
-              <LineBox flex={true} CssTextField={[
+            state?.secondPageValues?.listingObject === "None"
+              ?
+              < LineBox flex={true} CssTextField={[
                 <FormSingleLineInput required={true} helperText="Create a pin on the map" value={state?.secondPageValues?.idealLocation} onChange={(e) => { handleEmptyStringValidation(e.target.value, 'idealLocation', 'secondPageValues'); }} size="small" type="text" field="Ideal Location" placeHolder="ex. Toronto" inputRef={inputRef} />,
                 <FormSingleLineInput required={false} helperText="How far can you relocate if needed?" type="number" inputAdornment={true} inputStartAdornment={"~"} inputEndAdornment={"km"} value={state?.secondPageValues?.flexibility} onChange={(e) => handleEmptyStringValidation(e.target.value, 'flexibility', 'secondPageValues')} size="small" field="Range Flexibility" placeHolder="ex. 30" />,
               ]} />
@@ -383,7 +385,7 @@ function CreateRequestForm(props) {
             <DropDownMenu defaultValue="1-3 months" helperText="Optional" value={state?.secondPageValues?.idealLengthStay} onChange={(e) => handleEmptyStringValidation(e.target.value, 'idealLengthStay', 'secondPageValues')} label="Ideal length of stay" menuItem={["1-3 months", "4-6 months", "7-12 months", "1+ years"]} />,
             <Box sx={{ height: '0px' }}>
               <Typography>
-                {"Preferred Age"}
+                {"Preferred Age *"}
               </Typography>
               <Slider getAriaLabel={() => 'Temperature range'} slots onChange={handleRangeChange} valueLabelDisplay="auto" value={sliderArray} getAriaValueText={ariaValuetext} min={16} max={100} size="small" />
             </Box>,

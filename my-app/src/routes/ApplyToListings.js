@@ -22,7 +22,6 @@ function ApplyToListings() {
       <div className="info">
         <section className="ApplicationSubPage">
           <UploadsForm />
-          <ProfileMakerForm />
         </section>
       </div>
     </>

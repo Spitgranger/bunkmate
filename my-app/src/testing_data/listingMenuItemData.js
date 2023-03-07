@@ -16,7 +16,7 @@ export const listingMenuItems = [
     {
         index: 2,
         image: "https://hbrdnhlsprod.blob.core.windows.net/nhlsprod/uploads/ckeditor/pictures/344/content_Calgary_Condos_NHLS.jpg",
-        address: "Square One Shopping Centre, City Centre Drive, Mississauga, ON, Canadassssssssssssssssssssssssssssssssss",
+        address: "Square One Shopping Centre, City Centre Drive, Mississauga, ON, Canada",
         price: `$${2300}`,
         bedBath: "4 Beds | 4 Baths | 2500 sqft",
     },
@@ -43,7 +43,7 @@ export const listingMenuItems = [
     },
     {
         index: 6,
-        image: "https://dmn-dallas-news-prod.cdn.arcpublishing.com/resizer/TOFA0I1HAkCvldr0PMoacKC-eTc:/1660x934/smart/filters:no_upscale()/cloudfront-us-east-1.images.arcpublishing.com/dmn/B53LOI4GQVDOJCXCHTMBPZKWKU.jpg",
+        image: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.thecharlottecondos.com%2F&psig=AOvVaw33h66ujngfvZumcGnqp0J6&ust=1678308569243000&source=images&cd=vfe&ved=0CBAQjRxqFwoTCPi26-LYyv0CFQAAAAAdAAAAABAJ",
         address: "14 Jane Street, York, ON, Canada",
         price: `$${1750}`,
         bedBath: "2 Beds | 3 Baths | 2000 sqft",

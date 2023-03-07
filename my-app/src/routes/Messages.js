@@ -36,7 +36,7 @@ import IconButton from '@mui/material/IconButton';
 import { IoIosExit } from 'react-icons/io'
 import { Navigate } from 'react-router';
 import 'stream-chat-react/dist/css/v2/index.css';
-import CreateChannel from '../Components/CreateChannel'
+import CreateChannel from '../Components/CreateGroupChannel'
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
 import Tooltip from '@mui/material/Tooltip'
@@ -111,6 +111,7 @@ const Messages = () => {
   if (!profile) {
     return (
       <>
+        <div style={{ height: '9vh' }} />
         <Navbar />
         <div style={{ height: '100%', display: 'flex', justifyContent: 'center', margin: '100px' }}>
           <h1>You need to be logged in to message</h1>

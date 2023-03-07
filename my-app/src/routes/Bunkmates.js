@@ -31,16 +31,17 @@ function Profile({ profile }) {
         setSideCard(<div></div>)
     }
 
+
     function BunkmateInfo(props) {
         return (
-            <div style={{ display: 'flex', flexFlow: 'row nowrap', alignItems: 'center' }}>
+            <div style={{ display: 'flex', flexFlow: 'row nowrap', alignItems: 'center' }} >
                 <Typography gutterBottom variant="body1" color="text.primary">
                     {`${props.label}:\u00a0`}
                 </Typography>
                 <Typography gutterBottom variant="body2" color="text.secondary">
                     {props.value}
                 </Typography>
-            </div>
+            </div >
         );
     }
 
@@ -50,14 +51,15 @@ function Profile({ profile }) {
             <Card sx={{ width: 350, position: "absolute", zIndex: "2", opacity: '0.9' }}>
                 <div style={{ flexDirection: 'column', padding: '15px', display: 'flex', justifyContent: 'flex-start' }}>
                     <div className="profile-info" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                        <CardActionArea style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', }}>
-
-                            <CardMedia
-                                component="img"
-                                image={profile.image}
-                                alt="profile picture"
-                                sx={{ width: '100px', height: '200px', borderRadius: '5%' }}
-                            />
+                        <CardActionArea style={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-start', }}>
+                            <div style={{ display: 'flex', alignItems: 'center', height: "245px" }}>
+                                <CardMedia
+                                    component="img"
+                                    image={profile.image}
+                                    alt="profile picture"
+                                    sx={{ width: '100px', height: '200px', borderRadius: '5%' }}
+                                />
+                            </div>
                             <CardContent>
                                 <div className="card-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                     <div className="first-last-name">
@@ -135,6 +137,10 @@ const Bunkmates = () => {
             overflow: 'scroll', height: '77.5vh', position: 'absolute', right: '0.5%', top: '5%', maxWidth: '20%'
         }
     }
+    //retrieve data from local storage
+    const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile')))
+    //Used to handle retrieving user data from api
+    const [userProfile, setUserProfile] = useState("")
 
     const { GetClientInfo, localStorageData } = useContext(chatClientContext)
     //sign in context for when the user tries to create a bunkmate request without an account
@@ -164,8 +170,22 @@ const Bunkmates = () => {
     }
     */
 
+
+
+    //get data from backend
+    const handleProfile = async () => {
+        const profile = await getProfile();
+        return profile
+    }
+
     const handleRequestClick = () => {
-        if (localStorageData) {
+        if (localStorageData && user) {
+            handleProfile().then((profile) => setUserProfile(profile.data)).catch(() => {
+                setMessage("Get Matched With Bunkmates!");
+                setMode('profileMakerForm');
+                setIsOpen(true)
+            });
+        } else if (localStorageData) {
             setShowRequest(!showRequest)
         } else if (!localStorageData) {
             setMessage("Sign Up Now!")
@@ -187,7 +207,7 @@ const Bunkmates = () => {
     function CreateRequestButton() {
         return (
             <div style={{ display: 'flex', bottom: '10vh', justifyContent: 'center', position: 'absolute', }}>
-                <ActionButton onClick={handleRequestClick} bgColor={"black"} title="Create Bunkmate Request" opacity='0.8' />
+                <ActionButton onClick={handleRequestClick} bgColor={"black"} title="Create Bunkmate Request" opacity='0.85' />
             </div>
         )
     }
@@ -195,7 +215,7 @@ const Bunkmates = () => {
     return (
         <div>
             <div className="content-container">
-                <div className="search-bar-container" style={{ height: '200px', position: 'absolute', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                <div className="search-bar-container" style={{ height: '200px', top: '15vh', position: 'absolute', display: 'flex', justifyContent: 'center' }}>
                     <PlacesAutocomplete setSelected={setSelected} setCenter={setCenter} />
                 </div>
                 <div className="map-container">
@@ -206,7 +226,6 @@ const Bunkmates = () => {
                         options={{ styles: mapStyles, streetViewControl: false }}
                         onClick={() => { setProfile(null) }}
                     >
-
                         <Navbar chooseStyle={"glass"} />
                         {/*
                         <div className="social-feed-container" style={socialFeedStyles.FeedContainer}>

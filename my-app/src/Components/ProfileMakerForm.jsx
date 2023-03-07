@@ -256,9 +256,9 @@ function ProfileMakerForm({ forwardButton, backwardButton }) {
     <BackButton />
     */}
 
-    <FormSection title="Habits and LifeStyle" message="*Some of the information here will be used to match you with roomates and some of it will be used to build your profile" />
+    <FormSection title="Your Habits and LifeStyle" message="*Some of the information here will be used to match you with roomates and some of it will be used to build your profile" />
     <LineBox flex={true} CssTextField={[
-      <DropDownMenu required="true" value={state?.values?.havePets} onChange={(e) => handleEmptyStringValidation(e, 'havePets')} label="Do you have pets" menuItem={["Yes", "No"]} />,
+      <DropDownMenu required="true" value={state?.values?.havePets} onChange={(e) => handleEmptyStringValidation(e, 'havePets')} label="Own pets?" menuItem={["Yes", "No"]} />,
       <DropDownMenu required="true" value={state?.values?.sleepSchedule} onChange={(e) => handleEmptyStringValidation(e, 'sleepSchedule')} label="Sleep Schedule" menuItem={["Early Bird", "Normal", "Night Owl"]} />,
       <DropDownMenu required="true" value={state?.values?.cleanliness} onChange={(e) => handleEmptyStringValidation(e, 'cleanliness')} label="Cleanliness" menuItem={["Not clean", "Clean", "Very Clean"]} />,
     ]} />
@@ -280,7 +280,7 @@ function ProfileMakerForm({ forwardButton, backwardButton }) {
 
 
 
-    <ActionButton disabled={state.globalError} fontSize="15px" width="100%" onClick={() => { handleSubmit(state?.values); localStorage.setItem("page1", JSON.stringify(values)); }} type="submit" title="SUBMIT" endIcon={<IoChevronForward color="aqua" />} />
+    <ActionButton disabled={state.globalError} fontSize="15px" width="100%" onClick={() => { handleSubmit(state?.values); handleClose(); localStorage.setItem("page1", JSON.stringify(values)); }} type="submit" title="SUBMIT" endIcon={<IoChevronForward color="aqua" />} />
   </>)
 }
 
