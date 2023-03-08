@@ -137,25 +137,52 @@ const Bunkmates = () => {
             overflow: 'scroll', height: '77.5vh', position: 'absolute', right: '0.5%', top: '5%', maxWidth: '20%'
         }
     }
-    //retrieve data from local storage
-    const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile')))
-    //Used to handle retrieving user data from api
+    //store user profile data
     const [userProfile, setUserProfile] = useState("")
-
+    //retrieve local storage data
     const { GetClientInfo, localStorageData } = useContext(chatClientContext)
     //sign in context for when the user tries to create a bunkmate request without an account
-
     const { setIsOpen, setMessage, setMode } = useContext(SignInContext)
-
-
+    //display, nodisplay of the create request page
     const [showRequest, setShowRequest] = useState(false);
     const [selected, setSelected] = useState(null);
     const [center, setCenter] = useState({ lat: 43.642075, lng: -79.385981 });
     const [profile, setProfile] = useState(null);
+    //if the user has a profile then set profileChecker to true else false
     const { isLoaded, loadError } = useJsApiLoader({
         googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
         libraries: libraries,
     })
+
+
+
+    useEffect(() => {
+        //get data from backend
+        async function handleProfile() {
+            const profile = await getProfile();
+            return profile
+        }
+        //store user profile data
+        handleProfile().then((profile) => setUserProfile(profile));
+    }, [])
+
+
+    const handleRequestClick = () => {
+        //if user is not signed in
+        if (!localStorageData) {
+            setMessage("Sign Up Now!")
+            setMode("signUpEmail")
+            setIsOpen(true)
+            //else if user is logged in but has no profile
+        } else if (localStorageData && !userProfile) {
+            setMessage("Get Matched With Bunkmates!");
+            setMode('profileMakerForm');
+            setIsOpen(true)
+            //if user is logged in and has an existing profile then show them the request page
+        } else if (localStorageData && userProfile) {
+            setShowRequest(!showRequest)
+        }
+    }
 
     if (!isLoaded) {
         return <h1>ERROR HAS OCCURED</h1>
@@ -169,35 +196,6 @@ const Bunkmates = () => {
         return GetClientInfo();
     }
     */
-
-
-
-    //get data from backend
-    const handleProfile = async () => {
-        const profile = await getProfile();
-        return profile
-    }
-
-    const handleRequestClick = () => {
-        //if user is not signed in
-        if (!localStorageData) {
-            setMessage("Sign Up Now!")
-            setMode("signUpEmail")
-            setIsOpen(true)
-            //else if user is logged in but has no profile
-        } else if (localStorageData) {
-            handleProfile().then((profile) => setUserProfile(profile.data)).catch(() => {
-                setMessage("Get Matched With Bunkmates!");
-                setMode('profileMakerForm');
-                setIsOpen(true)
-            });
-            //if user is logged in and has an existing profile then show them the request page
-            if (userProfile) {
-                setShowRequest(!showRequest)
-            }
-        }
-    }
-
 
     function BunkmateRequestPage() {
         return (
