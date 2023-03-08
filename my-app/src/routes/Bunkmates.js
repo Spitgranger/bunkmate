@@ -179,18 +179,22 @@ const Bunkmates = () => {
     }
 
     const handleRequestClick = () => {
-        if (localStorageData && user) {
+        //if user is not signed in
+        if (!localStorageData) {
+            setMessage("Sign Up Now!")
+            setMode("signUpEmail")
+            setIsOpen(true)
+            //else if user is logged in but has no profile
+        } else if (localStorageData) {
             handleProfile().then((profile) => setUserProfile(profile.data)).catch(() => {
                 setMessage("Get Matched With Bunkmates!");
                 setMode('profileMakerForm');
                 setIsOpen(true)
             });
-        } else if (localStorageData) {
-            setShowRequest(!showRequest)
-        } else if (!localStorageData) {
-            setMessage("Sign Up Now!")
-            setMode("signUpEmail")
-            setIsOpen(true)
+            //if user is logged in and has an existing profile then show them the request page
+            if (userProfile) {
+                setShowRequest(!showRequest)
+            }
         }
     }
 

@@ -64,7 +64,7 @@ const PlacesAutocomplete = (props) => {
                 onChange={handleInput}
                 variant="filled"
                 disabled={!ready}
-                placeholder="Search for a roommate..."
+                placeholder="Search for bunkmates..."
                 sx={{
                     boxSizing: 'border-box',
                     width: '100%',
