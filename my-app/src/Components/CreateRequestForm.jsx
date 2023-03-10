@@ -1,5 +1,5 @@
 import { useState, useReducer, useContext, useEffect, useRef, useId } from 'react'
-import { createRequest } from '../api';
+import { createRequest, getProfile } from '../api';
 import {
   FormSection,
   ActionButton,
@@ -23,6 +23,7 @@ import { IoIosArrowBack } from 'react-icons/io'
 import { chatClientContext } from './GlobalStateManagement/MessageContext';
 import { UploadFile } from './SubComponents/Form';
 import { MdUpload } from 'react-icons/md';
+import { getListings } from '../api';
 
 //Within a modal window
 function CreateRequestForm(props) {
@@ -73,11 +74,29 @@ function CreateRequestForm(props) {
     secondPageValues: secondPageValues,
     globalError: true,
   }
-
-  const menuItem = savedListingsData.map((element, index) => {
-    return index === 0 ? "None" : <SavedListingItem index={index} image={element.image} address={element.address} price={element.price} bedBath={element.bedBath} />
+  const [list, setList] = useState({});
+  const [menuItem, setMenuItem] = useState([]);
+  useEffect(() => {
+    async function listings() {
+      const response = await getListings();
+      return response;
+    }
+    listings().then((response) => {
+      console.log(response.data.data);
+      const items = response.data.data.map((element, index) => {
+        return <SavedListingItem index={index} image={element.image} address={element.address} price={element.price} bedBath={element.bedBath} />
+      });
+      items.push("None");
+      items.reverse();
+      setMenuItem(items);
+    });
+    console.log(list)
+  }, []);
+  /*
+  menuItem = list.map((element, index) => {
+    return <SavedListingItem index={index} image={element.image} address={element.address} price={element.price} bedBath={element.bedBath} />
   });
-
+  */
   const [state, dispatch] = useReducer(reducer, initialState)
 
   const handleEmptyStringValidation = (newValue, name, page, date = false) => {
@@ -271,9 +290,6 @@ function CreateRequestForm(props) {
     setGroupChat([channelNames, channelId])
 
   }
-  instantiateChatClient();
-
-
   const handleGroupChat = (e) => {
     const channelIdStorage = []
     const clientChannelNames = e.target.value
