@@ -6,12 +6,15 @@ import { HiMapPin } from 'react-icons/hi2'
 import { GoogleMap, useJsApiLoader, MarkerF, OverlayView, OVERLAY_MOUSE_TARGET, OVERLAY_LAYER } from "@react-google-maps/api";
 import { Button, Grid, Paper, TextField, Card, Typography, CardActionArea, CardMedia, CardContent, CardActions, IconButton } from "@mui/material/"
 import { ActionButton } from '../Form';
+import { useState } from 'react';
+import { TbMessages, TbMessagesOff } from 'react-icons/tb';
 
 function SingleMapCard({ profile, BunkmateInfo }) {
 
+    const [messageButton, setMessageButton] = useState(false)
     return (
         <OverlayView mapPaneName={OVERLAY_MOUSE_TARGET} position={{ lat: profile.idealLocation[0], lng: profile.idealLocation[1] }}>
-            <Card sx={{ width: 370, position: "absolute", zIndex: "2", opacity: '0.9' }}>
+            <Card sx={{ width: 400, position: "absolute", zIndex: "2", opacity: '0.9' }}>
                 <div style={{ flexDirection: 'column', padding: '15px', display: 'flex', justifyContent: 'flex-start' }}>
                     <div className="profile-info" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                         <header style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', }}>
@@ -40,9 +43,18 @@ function SingleMapCard({ profile, BunkmateInfo }) {
                                                 </div>
                                             </Typography >
                                         </div>
-                                        <IconButton style={{ padding: '2px' }}>
-                                            <HiMapPin />
-                                        </IconButton>
+                                        <div className="button-container" style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                                            <Tooltip title={"Pin This Profile"} arrow placement="bottom">
+                                                <IconButton style={{ padding: '2px' }}>
+                                                    <HiMapPin />
+                                                </IconButton>
+                                            </Tooltip>
+                                            <Tooltip title={"Message this group"} arrow placement="bottom">
+                                                <IconButton onClick={() => setMessageButton(true)} >
+                                                    {messageButton ? <TbMessagesOff /> : <TbMessages />}
+                                                </IconButton>
+                                            </Tooltip>
+                                        </div>
                                     </div>
                                     <Tooltip title={`${profile.name}'s budget`} arrow placement="left">
                                         <Typography variant="h6" color="text.primary" style={{ overflow: 'hidden', maxWidth: '130px' }} >

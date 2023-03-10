@@ -6,6 +6,8 @@ import { HiMapPin } from 'react-icons/hi2'
 import { GoogleMap, useJsApiLoader, MarkerF, OverlayView, OVERLAY_MOUSE_TARGET, OVERLAY_LAYER } from "@react-google-maps/api";
 import { Button, Grid, Paper, TextField, Card, Typography, CardActionArea, CardMedia, CardContent, CardActions, IconButton } from "@mui/material/"
 import { ActionButton } from '../Form';
+import { useState } from 'react';
+import { TbMessages, TbMessagesOff } from 'react-icons/tb';
 
 function GroupMapCard({ profile, BunkmateInfo }) {
 
@@ -14,6 +16,7 @@ function GroupMapCard({ profile, BunkmateInfo }) {
     const totalRoommates = (existingBunkmates, newBunkmates) => {
         return (existingBunkmates + newBunkmates)
     }
+    const [messageButton, setMessageButton] = useState(false)
 
     return (
         <OverlayView mapPaneName={OVERLAY_MOUSE_TARGET} position={{ lat: profile?.idealLocation[0], lng: profile?.idealLocation[1] }}>
@@ -50,6 +53,11 @@ function GroupMapCard({ profile, BunkmateInfo }) {
                                         <Tooltip title={"Pin This Profile"} arrow placement="bottom">
                                             <IconButton style={{ padding: '2px', color: 'white' }}>
                                                 <HiMapPin style={{ color: 'white' }} />
+                                            </IconButton>
+                                        </Tooltip>
+                                        <Tooltip title={"Message this group"} arrow placement="bottom">
+                                            <IconButton onClick={() => setMessageButton(true)} style={{ right: '15px', top: '50px', position: 'absolute', padding: '2px', color: 'white' }}>
+                                                {messageButton ? <TbMessagesOff /> : <TbMessages />}
                                             </IconButton>
                                         </Tooltip>
                                     </div >

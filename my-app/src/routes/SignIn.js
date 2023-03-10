@@ -21,7 +21,7 @@ function SignInPartner({ company, logo, onClick }) {
     <Button id="partnerButton" onClick={onClick}>
       {logo}
       <div>
-        <div>
+        <div style={{ whiteSpace: 'nowrap' }}>
           Continue with {company}
         </div>
       </div>

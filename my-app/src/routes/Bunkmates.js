@@ -173,7 +173,8 @@ const Bunkmates = () => {
                     </GoogleMap >
                 </div>
                 <>
-                    {showRequest ?
+                    {showRequest
+                     ?
                         <BunkmateRequestPage />
                         :
                         <CreateRequestButton />

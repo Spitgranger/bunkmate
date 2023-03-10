@@ -384,7 +384,7 @@ function CreateRequestForm(props) {
       {showBody ?
         <>
           <LineBox flex={true} CssTextField={[
-            <DropDownMenu required={true} maxHeight={250} value={handleListingDisplay()} onChange={(e) => { handleEmptyStringValidation(e.target.value?.props || "None", 'listingObject', 'secondPageValues'); }} label="Listing in Mind" menuItem={menuItem} />,
+            <DropDownMenu required={true} maxHeight={250} value={handleListingDisplay() ?? "None"} onChange={(e) => { handleEmptyStringValidation(e.target.value?.props || "None", 'listingObject', 'secondPageValues'); }} label="Listing in Mind" menuItem={menuItem} />,
           ]} />
 
           {/*if the user has a listing in mind then we use the listing's coordinates else use their own coordinates*/}
