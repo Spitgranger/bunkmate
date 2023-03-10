@@ -46,17 +46,16 @@ export function MultipleSelectCheckmarks({ helperText, title, menuItems, require
   };
   return (
     <FormControl size="small" >
-      <InputLabel id="multiple-checkbox-label">{title}</InputLabel>
+      <InputLabel id="multiple-checkbox-label" required={required}>{title}</InputLabel>
       <Select
         labelId="multiple-checkbox-label"
         id="multiple-checkbox"
         multiple
         value={personName}
         onChange={(event) => { handleChange(event); onChange(event); }}
-        input={<OutlinedInput sx={{ width: '100%', maxWidth: 400 }} label={title} required={required} />}
+        input={<OutlinedInput sx={{ width: '100%', maxWidth: 400 }} label={title} />}
         renderValue={(selected) => selected.join(', ')}
         MenuProps={MenuProps}
-        required={required}
       >
         {menuItems?.map((name) => (
           <MenuItem key={name} value={name}>
@@ -150,7 +149,8 @@ export function DropDownMenu({ disabled, helperText, required, autoFocus, inputR
     <FormControl
       sx={{ m: 1, width: '100%', flex: 1 }} size="small" fullWidth>
       <InputLabel
-        id="select-small" required={required}>{label}</InputLabel>
+        id="select-small" required={required}>{label}
+      </InputLabel>
       <Select
         labelId="simple-select-label"
         id="simple-select"
@@ -348,7 +348,7 @@ export function UploadFile(props) {
     color: textColor,
     borderRadius: "10px",
     width: props.width,
-    height: '60px',
+    height: props.height ?? '60px',
     fontSize: props.fontSize,
     ':hover': { bgcolor: 'black', color: handleHover }
   }

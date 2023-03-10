@@ -1,4 +1,5 @@
 import mongoose from 'mongoose'
+const ObjectId = mongoose.Schema.Types.ObjectId
 
 const requestSchema = mongoose.Schema({
     user: {
@@ -14,7 +15,7 @@ const requestSchema = mongoose.Schema({
         required: true,
     },
     flexibility: {
-        type: Number,
+        type: String,
         required: true,
     },
     rentBudget: {
@@ -38,19 +39,16 @@ const requestSchema = mongoose.Schema({
         required: true,
     },
     dateValue: {
-        type: Object,
+        type: String,
         required: true,
     },
     rangeSliderValue: {
-        type: Number,
+        type: [Number],
         require: true,
     },
+    //listingObject stores string and object depending on which item is selected in the dropdown menu
     listingObject: {
-        type: String,
-        require: false,
-    },
-    rangeSliderValue: {
-        type: Number,
+        type: ObjectId,
         require: false,
     },
     aboutUs: {

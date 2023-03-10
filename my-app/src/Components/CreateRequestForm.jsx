@@ -12,8 +12,8 @@ import {
 import { Typography } from '@mui/material'
 import Slider from '@mui/material/Slider'
 import Box from '@mui/material/Box';
-import { listingMenuItems, identityMenuItems } from '../testing_data/listingMenuItemData';
-import { SavedListingItem } from './SubComponents/SavedListingItem';
+import { savedListingsData, identityMenuItems } from '../testing_data/SavedListingsData';
+import { SavedListingItem } from './SubComponents/Bunkmates/SavedListingItem';
 import { FormMultiLineInput } from './SubComponents/Form';
 import { AboutValidationContext } from './GlobalStateManagement/ValidationContext';
 import { MultipleSelectCheckmarks } from './SubComponents/Form';
@@ -21,6 +21,8 @@ import IconButton from '@mui/material/IconButton';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import { IoIosArrowBack } from 'react-icons/io'
 import { chatClientContext } from './GlobalStateManagement/MessageContext';
+import { UploadFile } from './SubComponents/Form';
+import { MdUpload } from 'react-icons/md';
 
 //Within a modal window
 function CreateRequestForm(props) {
@@ -28,14 +30,16 @@ function CreateRequestForm(props) {
   const { GetClientInfo, localStorageData } = useContext(chatClientContext)
   /*const { values, setValue } = useContext(ValuesObjectContext)*/
   //state management of listing array index
-  const [index, setIndex] = useState(0)
   //show or hide the body fields
   const [showBody, setShowBody] = useState(false)
   //show or hide the group fields
   const [showGroup, setShowGroup] = useState(false)
   //show or hide the back button
   const [showButton, setShowButton] = useState(null)
-
+  //controls the title of the create request form
+  const [formTitle, setFormTitle] = useState("Create a Bunkmate Request")
+  //controls the title of the label on the rent budget field
+  const [labelTitle, setLabelTitle] = useState("My Rent Budget")
 
   const actions = {
     checkGlobalError: "check_global_error",
@@ -49,6 +53,7 @@ function CreateRequestForm(props) {
   const firstPageValues = {
     request: "",
     aboutUs: "",
+    linkChats: "",
   }
   const secondPageValues = page3 || {
     listingObject: "",
@@ -69,9 +74,10 @@ function CreateRequestForm(props) {
     globalError: true,
   }
 
-  const menuItem = listingMenuItems.map((element, index) => {
+  const menuItem = savedListingsData.map((element, index) => {
     return index === 0 ? "None" : <SavedListingItem index={index} image={element.image} address={element.address} price={element.price} bedBath={element.bedBath} />
   });
+
   const [state, dispatch] = useReducer(reducer, initialState)
 
   const handleEmptyStringValidation = (newValue, name, page, date = false) => {
@@ -224,7 +230,6 @@ function CreateRequestForm(props) {
   //TODO
   //Convert from hard coded array index to directly storing address in values
   //incorporate useRef
-  //Change remove setIndex and index
   //Remove listing menu items
   //fetching stored data from api for saved listing
 
@@ -277,8 +282,8 @@ function CreateRequestForm(props) {
       const channelIndex = groupChat[0].indexOf(channelName)
       channelIdStorage.push(groupChat[1][channelIndex])
     },
-
-      dispatch({ type: actions.checkValues, payload: channelIdStorage, name: "linkGroupChats", page: 'secondPageValues' })
+      //record the channel ID of the option that was selected
+      dispatch({ type: actions.checkValues, payload: channelIdStorage, name: "linkGroupChatsIds", page: 'secondPageValues' })
       //dispatch function that adds channelIdStorage as a payload
     )
 
@@ -290,18 +295,16 @@ function CreateRequestForm(props) {
     console.log(state.secondPageValues.listingObject)
     dispatch({ type: actions.checkGlobalError, page: 'firstPageValues' })
     if (state?.secondPageValues?.listingObject === "None") {
-      console.log("foo")
       //if the user changes their mind and switches back to None, then address and idealLocation are set back to empty string
       dispatch({ type: actions.checkValues, payload: "", name: "address", page: 'secondPageValues' })
       dispatch({ type: actions.checkValues, payload: "", name: "idealLocation", page: 'secondPageValues' })
-      //if user has selected a listing then the flexibility should be 0
+      //if user has selected a listing then the flexibility should be empty string
       dispatch({ type: actions.checkValues, payload: "", name: "flexibility", page: 'secondPageValues' })
       dispatch({ type: actions.checkGlobalError, page: 'secondPageValues' })
 
     } else {
-      console.log("bar")
-      //when the user doesn't select index 0 then flexibility is set to 0
-      dispatch({ type: actions.checkValues, payload: 0, name: "flexibility", page: 'secondPageValues' })
+      //when the user doesn't select index 0 of listing in mind then flexibility is set to "0"
+      dispatch({ type: actions.checkValues, payload: "0", name: "flexibility", page: 'secondPageValues' })
       dispatch({ type: actions.checkGlobalError, page: 'secondPageValues' })
     }
   }, [showGroup, state.secondPageValues.listingObject])
@@ -313,19 +316,24 @@ function CreateRequestForm(props) {
 
 
 
+  //handle back click so you can change who you want to request as
   const handleBack = () => {
-    //handle back click so you can change who you want to request as
+    setFormTitle("Create A Bunkmate Request")
     setShowBody(false)
     setShowButton(null)
+    //set  request back  to empty string after clicking back button
+    dispatch({ type: actions.checkValues, payload: "", name: "request", page: 'firstPageValues' })
   }
-  const handleShow = (e) => {
-    //change state depending on who you're requesting as
+
+  //change state depending on who you're requesting as
+  const handleRequestShow = (e) => {
 
     switch (e.target.value) {
-      //request "as myself"
       case identityMenuItems[0]:
         setShowBody(true)
-        dispatch({ type: actions.checkValues, payload: "As Myself", name: "request", page: 'firstPageValues' })
+        setFormTitle("Request As Myself")
+        setLabelTitle("My Rent Budget")
+        //this is not to record the value, this is to prevent it from selecting "as myself" if the user presses the backbutton
         setShowGroup(false)
 
         setShowButton(
@@ -334,14 +342,33 @@ function CreateRequestForm(props) {
           </IconButton>
         )
         break
-      //request "as a group"
       case identityMenuItems[1]:
         setShowGroup(true)
         break
     }
   }
-  console.log(state?.globalError)
-  console.log(state?.secondPageValues?.listingObject)
+
+  const handleContinue = () => {
+    //logic that's executed when continue button is pressed
+    setShowBody(true);
+    setShowButton(
+      <IconButton onClick={handleBack}>
+        <IoIosArrowBack />
+      </IconButton>);
+    setFormTitle("Request As A Group");
+    setLabelTitle("Group's Rent Budget")
+  }
+
+  const handleListingDisplay = () => {
+    //only for the listing in field
+    if (state?.secondPageValues?.listingObject === "None") {
+      return ("None")
+    } else {
+      return (menuItem[state?.secondPageValues?.listingObject.index])
+    }
+  }
+
+
   return (
     <>
 
@@ -351,19 +378,19 @@ function CreateRequestForm(props) {
           <CloseRoundedIcon />
         </IconButton>
       </div>
-      <FormSection title="Create A Bunkmate Request" />
+      <FormSection title={formTitle} />
       <br />
 
       {showBody ?
         <>
           <LineBox flex={true} CssTextField={[
-            <DropDownMenu required={true} maxHeight={250} value={menuItem[state?.secondPageValues?.listingObject?.index] ?? "None"} onChange={(e) => { handleEmptyStringValidation(e.target.value?.props || "None", 'listingObject', 'secondPageValues'); }} label="Listing in Mind" menuItem={menuItem} />,
+            <DropDownMenu required={true} maxHeight={250} value={handleListingDisplay()} onChange={(e) => { handleEmptyStringValidation(e.target.value?.props || "None", 'listingObject', 'secondPageValues'); }} label="Listing in Mind" menuItem={menuItem} />,
           ]} />
 
           {/*if the user has a listing in mind then we use the listing's coordinates else use their own coordinates*/}
           { /* TODO: find a more robust solution than hard coding the index use useRef*/}
           {
-            state?.secondPageValues?.listingObject === "None"
+            state?.secondPageValues?.listingObject === "None" || !state?.secondPageValues?.listingObject
               ?
               < LineBox flex={true} CssTextField={[
                 <FormSingleLineInput required={true} helperText="Create a pin on the map" value={state?.secondPageValues?.idealLocation} onChange={(e) => { handleEmptyStringValidation(e.target.value, 'idealLocation', 'secondPageValues'); }} size="small" type="text" field="Ideal Location" placeHolder="ex. Toronto" inputRef={inputRef} />,
@@ -377,7 +404,7 @@ function CreateRequestForm(props) {
 
           <LineBox flex={true} CssTextField={[
             <DatePicker required={true} onChange={(e) => { handleEmptyStringValidation(e, 'dateValue', 'secondPageValues', true); }} value={state?.secondPageValues?.dateValue} label="Move In Date" />,
-            <FormSingleLineInput required={true} inputAdornment={true} inputStartAdornment={"$"} inputEndAdornment="/m" value={state?.secondPageValues?.rentBudget} onChange={(e) => handleEmptyStringValidation(e.target.value, 'rentBudget', 'secondPageValues')} size="small" field="Rent Budget" type="number" placeHolder="ex. 900" />,
+            <FormSingleLineInput required={true} inputAdornment={true} inputStartAdornment={"$"} inputEndAdornment="/m" value={state?.secondPageValues?.rentBudget} onChange={(e) => handleEmptyStringValidation(e.target.value, 'rentBudget', 'secondPageValues')} size="small" field={labelTitle} type="number" placeHolder="ex. 900" />,
 
           ]} />
 
@@ -398,29 +425,30 @@ function CreateRequestForm(props) {
           ]} />
 
           {/* disable cotinue button if the user has not filled out all mandatory fields and / or still has errors*/}
-          <ActionButton helperText="* Please fill out all required fields before continuiing" disabled={state?.globalError} onClick={() => { props.onClick(); console.log({ ...state?.firstPageValues, ...state?.secondPageValues }); handleSubmit({ ...state?.firstPageValues, ...state?.secondPageValues }) }} fontSize="15px" width="100%" type="submit" title="Submit" />
+          <ActionButton helperText="* Please fill out all required fields before continuing" disabled={state?.globalError} onClick={() => { props.onClick(); console.log({ ...state?.firstPageValues, ...state?.secondPageValues }); handleSubmit({ ...state?.firstPageValues, ...state?.secondPageValues }) }} fontSize="15px" width="100%" type="submit" title="Submit" />
         </>
         :
         <>
           {showGroup ?
             <>
               <LineBox flex={true} CssTextField={[
-                <DropDownMenu required={true} autoFocus={true} maxHeight={250} value={state?.firstPageValues?.request} onChange={(e) => { handleEmptyStringValidation(e.target.value, 'request', 'firstPageValues'); handleShow(e); }} label="Request" menuItem={identityMenuItems} />,
+                <DropDownMenu required={true} autoFocus={true} maxHeight={250} value={state?.firstPageValues?.request} onChange={(e) => { handleEmptyStringValidation(e.target.value, 'request', 'firstPageValues'); handleRequestShow(e); }} label="Request" menuItem={identityMenuItems} />,
               ]} />
               < LineBox flex={true} CssTextField={[
-                <MultipleSelectCheckmarks helperText="Optional" title="Group tags" onChange={(e) => handleEmptyStringValidation(e.target.value, 'groupTags', 'firstPageValues')} menuItems={['Non Smokers', 'Have Pets', "Have Jobs", 'Students', 'Have Children', 'LGBTQ Friendly', 'Cannabis Friendly']} />
+                <MultipleSelectCheckmarks helperText="Optional" title="Group tags" onChange={(e) => handleEmptyStringValidation(e.target.value, 'groupTags', 'firstPageValues')} menuItems={['Non Smokers', 'Have Pets', "Have Jobs", 'Students', 'Have Children', 'LGBTQ Friendly', 'Cannabis Friendly']} />,
+                <MultipleSelectCheckmarks required={true} helperText="Optional" onChange={(e) => { handleEmptyStringValidation(e.target.value, 'linkChats', 'firstPageValues'); handleGroupChat(e) }} title="Link Chats" menuItems={groupChat[0]} />
+              ]} />
+              <LineBox flex={true} CssTextField={[
+                <UploadFile height="40px" helperTextPos="85%" helperText="Optional: Supported Files: jpg, png" width="100%" fontSize="14px" endIcon={<MdUpload color="aqua" size={25} />} type="file" accept={["image/jpeg", "image/jpg", "image/png",]} message="Group Photo" />,
               ]} />
               <div id="multiline">
                 <FormMultiLineInput required={true} placeHolder="Talk about your bunkmate(s)" type="text" field="About Us" helperText={aboutHelperText} onChange={(e) => { handleAboutValidation(e); handleEmptyStringValidation(e.target.value, 'aboutUs', 'firstPageValues') }} error={aboutError} value={state?.firstPageValues?.about} />
               </div>
-              <LineBox flex={true} CssTextField={[
-                <MultipleSelectCheckmarks helperText="Optional" onChange={(e) => { handleEmptyStringValidation(e.target.value, 'linkGroupChats', 'firstPageValues'); handleGroupChat(e) }} required={true} title="Link Group Chats" menuItems={groupChat[0]} />
-              ]} />
-              <ActionButton helperText="* Please fill out all required fields before continuing" disabled={state?.globalError} onClick={() => { setShowBody(true); setShowButton(<IconButton onClick={handleBack}><IoIosArrowBack /></IconButton>) }} fontSize="15px" width="100%" type="submit" title="Continue" />
+              <ActionButton helperText="* Please fill out all required fields before continuing" disabled={state?.globalError} onClick={handleContinue} fontSize="15px" width="100%" type="submit" title="Continue" />
             </>
             :
             <LineBox flex={true} CssTextField={[
-              <DropDownMenu required={true} autoFocus={true} maxHeight={250} value={state?.firstPageValues?.request} onChange={(e) => { handleEmptyStringValidation(e.target.value, 'request', 'firstPageValues'); handleShow(e); }} label="Request" menuItem={identityMenuItems} />,
+              <DropDownMenu required={true} autoFocus={true} maxHeight={250} value={state?.firstPageValues?.request} onChange={(e) => { handleEmptyStringValidation(e.target.value, 'request', 'firstPageValues'); handleRequestShow(e); }} label="Request" menuItem={identityMenuItems} />,
             ]} />
           }
         </>

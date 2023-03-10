@@ -9,7 +9,7 @@
   font-weight: 600;
   display: flex;
   box-shadow: 0px 0px 10px lightgrey;
-  min-width: 1000px;
+  min-width: 650px;
   background-color: white;
   align-items: center;
   justify-content: space-between;
@@ -77,7 +77,7 @@ nav ul a.navCurrentPage {
   top: 0;
   z-index: 999;
   display: flex;
-  min-width: 625px;
+  min-width: 650px;
   backdrop-filter: blur(4px);
   align-items: center;
   justify-content: space-between;

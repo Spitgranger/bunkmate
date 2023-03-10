@@ -80,16 +80,6 @@ async function validateLogin(e, data) {
 }
 export function SignInEmail() {
 
-  const seperatorStyles = {
-    display: 'flex',
-    left: '190px',
-    bottom: '308px',
-    position: 'absolute',
-    fontSize: '10px',
-    backgroundColor: 'white',
-    width: '30px',
-    justifyContent: 'center'
-  }
 
   const navigate = useNavigate();
   const { setMode, setIsOpen, setMessage } = useContext(SignInContext)
@@ -162,9 +152,6 @@ export function SignInEmail() {
         <ActionButton width="100%" type="submit" title="Submit" onClick={(e) => { handleSignIn(e) }} />
       </div>
       <div className="socials" >
-        <div style={seperatorStyles}>
-          or
-        </div>
         <SignInPartner logo={<FcGoogle size="20px" />} company="Google" />
         <SignInPartner logo={<IoLogoFacebook size="20px" color="blue" />} company="Facebook" />
         <SignInPartner logo={<BsApple size="20px" color="black" />} company="Apple" />
@@ -185,17 +172,6 @@ async function handleSignUp(e, data) {
 
 
 export function SignUpEmail() {
-
-  const seperatorStyles = {
-    display: 'flex',
-    left: '190px',
-    bottom: '269px',
-    position: 'absolute',
-    fontSize: '10px',
-    backgroundColor: 'white',
-    width: '30px',
-    justifyContent: 'center'
-  }
 
 
   {/* Change default to the user's current location */ }
@@ -285,9 +261,6 @@ export function SignUpEmail() {
           <ActionButton width="100%" type="submit" title="Submit" onClick={(e) => handleRegularSignUpEmail(e, data)} />
         </div>
         <div className="socialsFlex" >
-          <div style={seperatorStyles}>
-            or
-          </div>
           <SignInPartner logo={<FcGoogle size="20px" />} company="Google" />
           <SignInPartner logo={<IoLogoFacebook size="20px" color="blue" />} company="Facebook" />
           <SignInPartner logo={<BsApple size="20px" color="black" />} company="Apple" />
@@ -360,9 +333,6 @@ export function SignInPhone() {
           <ActionButton width="100%" type="submit" title="Submit" onClick={() => { setMode("signUpEmail"); setMessage("Sign Up Now") }} />
         </div>
         <div className="socials" >
-          <div style={seperatorStyles}>
-            or
-          </div>
           <SignInPartner logo={<FcGoogle size="20px" />} company="Google" onClick={() => { setMode("signUpForm"); setMessage("Sign Up Form") }} />
           <SignInPartner logo={<IoLogoFacebook size="20px" color="blue" />} company="Facebook" />
           <SignInPartner logo={<BsApple size="20px" color="black" />} company="Apple" />

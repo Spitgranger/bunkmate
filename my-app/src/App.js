@@ -294,6 +294,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
+        <div style={{ height: '9vh' }} />
         <Navbar />
       </header>
       <body>
