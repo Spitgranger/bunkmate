@@ -15,6 +15,9 @@ import { SignInContext } from "../Components/GlobalStateManagement/SignInContext
 import SingleMapCard from "../Components/SubComponents/Bunkmates/SingleMapCard";
 import GroupMapCard from "../Components/SubComponents/Bunkmates/GroupMapCard";
 import { getRequest } from "../api";
+import { InfoWindow } from "@react-google-maps/api";
+import { borderRadius } from "@mui/system";
+
 
 
 
@@ -146,6 +149,18 @@ const Bunkmates = () => {
         )
     }
 
+    const markerOptions = ({ profile }) => {
+        return {
+            icon: {
+                url: 'https://static.vecteezy.com/system/resources/previews/006/828/456/original/bright-smiley-face-emoji-expression-free-vector.jpg',
+                size: new window.google.maps.Size(50, 50),
+                anchor: new window.google.maps.Point(25, 25)
+            }, label: {
+                text: `${profile?.rentBudget}`,
+            }
+        }
+    };
+
     return (
         <div>
             <div className="content-container">
@@ -168,13 +183,26 @@ const Bunkmates = () => {
                         */}
                         {profile ? profile : null}
                         {selected && <MarkerF position={center} icon={"http://maps.google.com/mapfiles/ms/icons/blue.png"} />}
-                        {profiles.map((profile, index) => { return <MarkerF onClick={e => handleProfileClick(e, index)} key={index} position={{ lat: profile?.idealLocation[0], lng: profile?.idealLocation[1] }} />; })}
+                        {profiles.map((profile, index) => {
+                            return <MarkerF clickable={true} options={{
+                                icon: {
+                                    url: profile?.image,
+                                    size: new window.google.maps.Size(50, 50),
+                                    anchor: new window.google.maps.Point(25, 25),
+                                }, label: {
+                                    text: `$${profile?.rentBudget}`,
+                                    color: 'white',
+                                }, shape: "MarkerShapeCircle",
+
+                            }
+                            } onClick={e => handleProfileClick(e, index)} key={index} position={{ lat: profile?.idealLocation[0], lng: profile?.idealLocation[1] }} >{profile?.rentBudget}</MarkerF>;
+                        })}
 
                     </GoogleMap >
                 </div>
                 <>
                     {showRequest
-                     ?
+                        ?
                         <BunkmateRequestPage />
                         :
                         <CreateRequestButton />

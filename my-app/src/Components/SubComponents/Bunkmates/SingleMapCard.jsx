@@ -3,18 +3,21 @@ import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import Tooltip from "@mui/material/Tooltip";
 import { SavedListingItem } from './SavedListingItem';
 import { HiMapPin } from 'react-icons/hi2'
-import { GoogleMap, useJsApiLoader, MarkerF, OverlayView, OVERLAY_MOUSE_TARGET, OVERLAY_LAYER } from "@react-google-maps/api";
+import { GoogleMap, useJsApiLoader, MarkerF, OverlayView, OVERLAY_MOUSE_TARGET, OVERLAY_LAYER, InfoWindow } from "@react-google-maps/api";
 import { Button, Grid, Paper, TextField, Card, Typography, CardActionArea, CardMedia, CardContent, CardActions, IconButton } from "@mui/material/"
 import { ActionButton } from '../Form';
-import { useState } from 'react';
 import { TbMessages, TbMessagesOff } from 'react-icons/tb';
+import { useRef, useState } from 'react';
+import { InfoWindowF } from '@react-google-maps/api';
+
 
 function SingleMapCard({ profile, BunkmateInfo }) {
 
     const [messageButton, setMessageButton] = useState(false)
+
     return (
-        <OverlayView mapPaneName={OVERLAY_MOUSE_TARGET} position={{ lat: profile.idealLocation[0], lng: profile.idealLocation[1] }}>
-            <Card sx={{ width: 400, position: "absolute", zIndex: "2", opacity: '0.9' }}>
+        <InfoWindowF mapPaneName={"overlayMouseTarget"} position={{ lat: profile.idealLocation[0], lng: profile.idealLocation[1] }}>
+            <Card sx={{ width: 400, zIndex: "2", opacity: '0.9' }} onClick={e => e.stopPropagation()}>
                 <div style={{ flexDirection: 'column', padding: '15px', display: 'flex', justifyContent: 'flex-start' }}>
                     <div className="profile-info" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                         <header style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', }}>
@@ -50,7 +53,7 @@ function SingleMapCard({ profile, BunkmateInfo }) {
                                                 </IconButton>
                                             </Tooltip>
                                             <Tooltip title={"Message this group"} arrow placement="bottom">
-                                                <IconButton onClick={() => setMessageButton(true)} >
+                                                <IconButton onClick={() => setMessageButton(!messageButton)} >
                                                     {messageButton ? <TbMessagesOff /> : <TbMessages />}
                                                 </IconButton>
                                             </Tooltip>
@@ -70,7 +73,7 @@ function SingleMapCard({ profile, BunkmateInfo }) {
                                 </CardContent >
                             </div>
                             <Divider style={{ margin: '10px', width: '93%' }} />
-                            <Typography style={{ padding: '10px', whiteSpace: 'pre-line', overflowY: 'scroll', width: '100%', maxHeight: '130px', textOverflow: 'elipsis' }} variant="body1" color="text.secondary">
+                            <Typography style={{ padding: '10px', overflowY: 'scroll', width: '100%', height: '130px', }} variant="body1" color="text.secondary">
                                 {profile.bio}
                             </Typography>
                         </header>
@@ -122,7 +125,7 @@ function SingleMapCard({ profile, BunkmateInfo }) {
                     </CardContent>
                 </div>
             </Card >
-        </OverlayView >
+        </InfoWindowF >
 
     )
 }
