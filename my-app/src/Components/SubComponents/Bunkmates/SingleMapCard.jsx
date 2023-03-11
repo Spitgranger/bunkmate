@@ -17,7 +17,7 @@ function SingleMapCard({ profile, BunkmateInfo }) {
 
     return (
         <InfoWindowF mapPaneName={"overlayMouseTarget"} position={{ lat: profile.idealLocation[0], lng: profile.idealLocation[1] }}>
-            <Card sx={{ width: 400, zIndex: "2", opacity: '0.9' }} onClick={e => e.stopPropagation()}>
+            <Card sx={{ width: "400px", zIndex: "2", opacity: '0.9' }} onClick={e => e.stopPropagation()}>
                 <div style={{ flexDirection: 'column', padding: '15px', display: 'flex', justifyContent: 'flex-start' }}>
                     <div className="profile-info" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                         <header style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', }}>

@@ -6,8 +6,7 @@
 .gm-style-iw-d {
     background-color: transparent !important;
     box-shadow: none !important;
-    padding-right: none !important;
-    padding-bottom: none !important;
+    overflow: hidden !important;
 
 }
 
