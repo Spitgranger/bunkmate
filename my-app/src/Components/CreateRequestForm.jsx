@@ -1,5 +1,5 @@
 import { useState, useReducer, useContext, useEffect, useRef, useId } from 'react'
-import { createRequest, getProfile } from '../api';
+import { createRequest, getChats, getProfile } from '../api';
 import {
   FormSection,
   ActionButton,
@@ -50,6 +50,7 @@ function CreateRequestForm(props) {
   }
 
   const page3 = JSON.parse(localStorage.getItem("page3"))
+  const user = JSON.parse(localStorage.getItem("profile"));
 
   const firstPageValues = {
     request: "",
@@ -76,10 +77,16 @@ function CreateRequestForm(props) {
   }
   const [list, setList] = useState({});
   const [menuItem, setMenuItem] = useState([]);
+  const [groupChat, setGroupChat] = useState([]);
   useEffect(() => {
     async function listings() {
       const response = await getListings();
       return response;
+    }
+    async function chats() {
+      const chatData = { id: user?.result?._id, token: user?.streamToken }
+      const response = await getChats(chatData);
+      return response
     }
     listings().then((response) => {
       console.log(response.data.data);
@@ -90,7 +97,9 @@ function CreateRequestForm(props) {
       items.reverse();
       setMenuItem(items);
     });
-    console.log(list)
+    chats().then((response) => {
+      setGroupChat(response.data);
+    });
   }, []);
   /*
   menuItem = list.map((element, index) => {
@@ -98,6 +107,7 @@ function CreateRequestForm(props) {
   });
   */
   const [state, dispatch] = useReducer(reducer, initialState)
+
 
   const handleEmptyStringValidation = (newValue, name, page, date = false) => {
     if (date === true) {
@@ -252,57 +262,58 @@ function CreateRequestForm(props) {
   //Remove listing menu items
   //fetching stored data from api for saved listing
 
-  const [groupChat, setGroupChat] = useState([])
 
 
-  const instantiateChatClient = async () => {
-    //to record channel names and id in state
-    const chatClient = await GetClientInfo();
-    console.log(chatClient)
-
-    const filter = { type: 'messaging', members: { $in: [localStorageData?.result?._id] } };
-    const sort = [{ last_message_at: -1 }];
-
-    const channels = await chatClient?.queryChannels(filter, sort, {
-      watch: true, // this is the default
-      state: true,
-    });
-
-    console.log(channels)
-
-    const channelNames = []
-    const channelId = []
-    console.log(channelId)
-
-    channels.map((channel) => {
-      if (channel.data.name !== undefined && channel.data.name !== "Bunkmate Support" && channel.data.name !== "Support Team") {
-        if (Array.isArray(channel.data.name)) {
-          channelNames.push((channel.data.name).join('  '))
-          channelId.push((channel.cid))
-        } else {
-          channelNames.push(channel.data.name)
-          channelId.push((channel.cid))
+  /*
+    const instantiateChatClient = async () => {
+      //to record channel names and id in state
+      const chatClient = await GetClientInfo();
+      console.log(chatClient)
+  
+      const filter = { type: 'messaging', members: { $in: [localStorageData?.result?._id] } };
+      const sort = [{ last_message_at: -1 }];
+  
+      const channels = await chatClient?.queryChannels(filter, sort, {
+        watch: true, // this is the default
+        state: true,
+      });
+  
+      console.log(channels)
+  
+      const channelNames = []
+      const channelId = []
+      console.log(channelId)
+  
+      channels.map((channel) => {
+        if (channel.data.name !== undefined && channel.data.name !== "Bunkmate Support" && channel.data.name !== "Support Team") {
+          if (Array.isArray(channel.data.name)) {
+            channelNames.push((channel.data.name).join('  '))
+            channelId.push((channel.cid))
+          } else {
+            channelNames.push(channel.data.name)
+            channelId.push((channel.cid))
+          }
         }
-      }
-    })
-
-
-    setGroupChat([channelNames, channelId])
-
-  }
+      })
+  
+  
+      setGroupChat([channelNames, channelId])
+  
+    }
+    */
   const handleGroupChat = (e) => {
-    const channelIdStorage = []
-    const clientChannelNames = e.target.value
-    clientChannelNames.map((channelName) => {
-      //retrieve the index of the channelName within groupChat[0] and use that to match the channelId
-      const channelIndex = groupChat[0].indexOf(channelName)
-      channelIdStorage.push(groupChat[1][channelIndex])
-    },
-      //record the channel ID of the option that was selected
-      dispatch({ type: actions.checkValues, payload: channelIdStorage, name: "linkGroupChatsIds", page: 'secondPageValues' })
-      //dispatch function that adds channelIdStorage as a payload
-    )
-
+    let channelIdStorage = null;
+    const clientChannelNames = e
+    groupChat.forEach((element) => {
+      console.log(element.usernames)
+      console.log(clientChannelNames)
+      if (element.usernames === clientChannelNames) {
+        channelIdStorage = element.channel;
+      };
+    });
+    //record the channel ID of the option that was selected
+    dispatch({ type: actions.checkValues, payload: channelIdStorage, name: "linkGroupChatsIds", page: 'secondPageValues' })
+    //dispatch function that adds channelIdStorage as a payload
   }
 
 
@@ -452,7 +463,7 @@ function CreateRequestForm(props) {
               ]} />
               < LineBox flex={true} CssTextField={[
                 <MultipleSelectCheckmarks helperText="Optional" title="Group tags" onChange={(e) => handleEmptyStringValidation(e.target.value, 'groupTags', 'firstPageValues')} menuItems={['Non Smokers', 'Have Pets', "Have Jobs", 'Students', 'Have Children', 'LGBTQ Friendly', 'Cannabis Friendly']} />,
-                <MultipleSelectCheckmarks required={true} helperText="Optional" onChange={(e) => { handleEmptyStringValidation(e.target.value, 'linkChats', 'firstPageValues'); handleGroupChat(e) }} title="Link Chats" menuItems={groupChat[0]} />
+                <DropDownMenu required={true} value={state?.firstPageValues?.linkChats} onChange={(e) => { handleEmptyStringValidation(e.target.value, 'linkChats', 'firstPageValues'); handleGroupChat(e.target.value) }} title="Link Chats" menuItem={groupChat.map((item) => { return item.usernames })} />
               ]} />
               <LineBox flex={true} CssTextField={[
                 <UploadFile height="40px" helperTextPos="85%" helperText="Optional: Supported Files: jpg, png" width="100%" fontSize="14px" endIcon={<MdUpload color="aqua" size={25} />} type="file" accept={["image/jpeg", "image/jpg", "image/png",]} message="Group Photo" />,
