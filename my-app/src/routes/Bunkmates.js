@@ -1,6 +1,6 @@
 import react, { useContext, useEffect, useRef, useState } from "react";
 import Navbar from "../Components/Navbar";
-import { GoogleMap, useJsApiLoader, MarkerF } from "@react-google-maps/api";
+import { GoogleMap, useJsApiLoader, MarkerF, OverlayView, OVERLAY_MOUSE_TARGET, OverlayViewF } from "@react-google-maps/api";
 import mapStyles from './mapStyles.json'
 import { Button, Grid, Paper, TextField, Card, Typography, CardActionArea, CardMedia, CardContent, CardActions, IconButton } from "@mui/material/"
 import "./Bunkmates.css"
@@ -17,6 +17,7 @@ import GroupMapCard from "../Components/SubComponents/Bunkmates/GroupMapCard";
 import { getRequest } from "../api";
 import { InfoWindow } from "@react-google-maps/api";
 import { borderRadius } from "@mui/system";
+
 
 
 
@@ -123,6 +124,7 @@ const Bunkmates = () => {
         return <h1>ERROR HAS OCCURED</h1>
     }
     const handleProfileClick = (e, index) => {
+        console.log("REquest clicked")
         setProfile(<Profile profile={profiles[index]} />)
     }
 
@@ -184,18 +186,33 @@ const Bunkmates = () => {
                         {profile ? profile : null}
                         {selected && <MarkerF position={center} icon={"http://maps.google.com/mapfiles/ms/icons/blue.png"} />}
                         {profiles.map((profile, index) => {
-                            return <MarkerF clickable={true} options={{
-                                icon: {
-                                    url: profile?.image,
-                                    size: new window.google.maps.Size(50, 50),
-                                    anchor: new window.google.maps.Point(25, 25),
-                                }, label: {
-                                    text: `$${profile?.rentBudget}`,
-                                    color: 'white',
-                                }, shape: "MarkerShapeCircle",
+                            console.log(profile.idealLocation);
+                            return (<OverlayViewF key={index}
+                                position={{ lat: profile?.idealLocation[0], lng: profile?.idealLocation[1] }}
+                                styles={{ background: 'DarkGray', color: 'white' }}
+                                mapPaneName={OVERLAY_MOUSE_TARGET}>
+                                <div style={{ display: "flex", flexDirection: "row", alignItems: "center" }} onClick={e => { handleProfileClick(e, index); e.stopPropagation() }}>
+                                    <img style={{ height: "5vw", width: "10vh", objectFit: "cover", borderRadius: "50%" }} src={profile?.image} />
+                                    <span style={{ display: "flex", height: "5vh", padding: "10px", flexDirection: "column", color: "white", paddingRight: "10px", backgroundColor: "darkgray", justifyContent: "space-between", fontSize: "2vh", borderRadius: "2px", cursor: "hover" }} >
+                                        {`$${profile.rentBudget}`}
+                                    </span>
+                                </div>
+                                {/*<button style={{ padding: "2px" }} onClick={e => { handleProfileClick(e, index); e.stopPropagation()}}>{`$${profile.rentBudget}`}</button>*/}
+                            </OverlayViewF >)
+                            /*
+                    return <MarkerF clickable={true} options={{
+                        icon: {
+                            url: profile?.image,
+                            size: new window.google.maps.Size(50, 50),
+                            anchor: new window.google.maps.Point(25, 25),
+                        }, label: {
+                            text: `$${profile?.rentBudget}`,
+                            color: 'white',
+                        }, shape: "MarkerShapeCircle",
 
-                            }
-                            } onClick={e => handleProfileClick(e, index)} key={index} position={{ lat: profile?.idealLocation[0], lng: profile?.idealLocation[1] }} >{profile?.rentBudget}</MarkerF>;
+                    }
+                    } onClick={e => handleProfileClick(e, index)} key={index} position={{ lat: profile?.idealLocation[0], lng: profile?.idealLocation[1] }} >{profile?.rentBudget}</MarkerF>;
+                    */
                         })}
 
                     </GoogleMap >
