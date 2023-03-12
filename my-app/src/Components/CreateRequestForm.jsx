@@ -463,7 +463,7 @@ function CreateRequestForm(props) {
               ]} />
               < LineBox flex={true} CssTextField={[
                 <MultipleSelectCheckmarks helperText="Optional" title="Group tags" onChange={(e) => handleEmptyStringValidation(e.target.value, 'groupTags', 'firstPageValues')} menuItems={['Non Smokers', 'Have Pets', "Have Jobs", 'Students', 'Have Children', 'LGBTQ Friendly', 'Cannabis Friendly']} />,
-                <DropDownMenu required={true} value={state?.firstPageValues?.linkChats} onChange={(e) => { handleEmptyStringValidation(e.target.value, 'linkChats', 'firstPageValues'); handleGroupChat(e.target.value) }} title="Link Chats" menuItem={groupChat.map((item) => { return item.usernames })} />
+                <DropDownMenu required={true} value={state?.firstPageValues?.linkChats} onChange={(e) => { handleEmptyStringValidation(e.target.value, 'linkChats', 'firstPageValues'); handleGroupChat(e.target.value) }} label="Link Chats" menuItem={groupChat.map((item) => { return item.usernames })} />
               ]} />
               <LineBox flex={true} CssTextField={[
                 <UploadFile height="40px" helperTextPos="85%" helperText="Optional: Supported Files: jpg, png" width="100%" fontSize="14px" endIcon={<MdUpload color="aqua" size={25} />} type="file" accept={["image/jpeg", "image/jpg", "image/png",]} message="Group Photo" />,
