@@ -7,7 +7,7 @@ const chatClient = StreamChat.getInstance("asnpsp7e72h6", "djzm2aq63636qg2mjeqx9
 export const getChats = async (req, res) => {
     const streamToken = req.params.token;
     const streamId = req.params.user_id;
-    console.log(streamToken, streamId);
+    //console.log(streamToken, streamId);
     const filter = { type: 'messaging', members: { $in: [streamId] } };
     const sort = [{ last_message_at: -1 }];
 
