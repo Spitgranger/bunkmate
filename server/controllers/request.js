@@ -5,7 +5,6 @@ export const createRequest = async (req, res) => {
     const requestData = req.body;
     try {
         const existingRequest = await Request.findOne({ user: req.userId });
-        console.log(existingRequest);
         if (existingRequest) {
             res.status(409).json("profile already exists");
             return;
