@@ -436,7 +436,7 @@ function CreateRequestForm(props) {
           ]} />
 
           <LineBox flex={true} CssTextField={[
-            <DropDownMenu defaultValue="1-3 months" helperText="Optional" value={state?.secondPageValues?.idealLengthStay} onChange={(e) => handleEmptyStringValidation(e.target.value, 'idealLengthStay', 'secondPageValues')} label="Ideal length of stay" menuItem={["1-3 months", "4-6 months", "7-12 months", "1+ years"]} />,
+            <DropDownMenu required={true} defaultValue="1-3 months" value={state?.secondPageValues?.idealLengthStay} onChange={(e) => handleEmptyStringValidation(e.target.value, 'idealLengthStay', 'secondPageValues')} label="Ideal length of stay" menuItem={["1-3 months", "4-6 months", "7-12 months", "1+ years"]} />,
             <Box sx={{ height: '0px' }}>
               <Typography>
                 {"Preferred Age *"}

@@ -13,10 +13,9 @@ import './GroupMapCard.css'
 
 function NestedMapCard({ profile }) {
 
-    const [messageButton, setMessageButton] = useState(false)
 
     return (
-        <Card sx={{ margin: '10px', width: 400, zIndex: "2", opacity: '0.9' }} onClick={e => e.stopPropagation()}>
+        <Card sx={{ margin: '10px', width: '100%', zIndex: "2", opacity: '0.9' }} onClick={e => e.stopPropagation()}>
             <div style={{ flexDirection: 'column', padding: '15px', display: 'flex', justifyContent: 'flex-start' }}>
                 <div className="profile-info" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                     <header style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', }}>

@@ -144,7 +144,7 @@ function GroupMapCard({ profile, BunkmateInfo, nested }) {
                 {
                     showProfile ?
                         <>
-                            <div className="Nested-Card" style={{ height: '688px', width: 420, margin: '20px', overflowY: "scroll" }}>
+                            <div className="nested-card" style={{ height: '688px', width: 420, margin: '20px', overflowY: "scroll" }}>
                                 {profile.otherProfiles.map((otherProfile) => { return <NestedMapCard profile={otherProfile} /> })}
                             </div>
                         </>
