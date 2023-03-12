@@ -259,6 +259,7 @@ function CreateRequestForm(props) {
     //to record channel names and id in state
     const chatClient = await GetClientInfo();
     console.log(chatClient)
+    console.log(localStorageData?.result?._id)
 
     const filter = { type: 'messaging', members: { $in: [localStorageData?.result?._id] } };
     const sort = [{ last_message_at: -1 }];
@@ -290,6 +291,9 @@ function CreateRequestForm(props) {
     setGroupChat([channelNames, channelId])
 
   }
+
+  instantiateChatClient();
+
   const handleGroupChat = (e) => {
     const channelIdStorage = []
     const clientChannelNames = e.target.value
@@ -425,7 +429,7 @@ function CreateRequestForm(props) {
           ]} />
 
           <LineBox flex={true} CssTextField={[
-            <DropDownMenu defaultValue="1-3 months" helperText="Optional" value={state?.secondPageValues?.idealLengthStay} onChange={(e) => handleEmptyStringValidation(e.target.value, 'idealLengthStay', 'secondPageValues')} label="Ideal length of stay" menuItem={["1-3 months", "4-6 months", "7-12 months", "1+ years"]} />,
+            <DropDownMenu required={true} defaultValue="1-3 months" value={state?.secondPageValues?.idealLengthStay} onChange={(e) => handleEmptyStringValidation(e.target.value, 'idealLengthStay', 'secondPageValues')} label="Ideal length of stay" menuItem={["1-3 months", "4-6 months", "7-12 months", "1+ years"]} />,
             <Box sx={{ height: '0px' }}>
               <Typography>
                 {"Preferred Age *"}
@@ -452,10 +456,7 @@ function CreateRequestForm(props) {
               ]} />
               < LineBox flex={true} CssTextField={[
                 <MultipleSelectCheckmarks helperText="Optional" title="Group tags" onChange={(e) => handleEmptyStringValidation(e.target.value, 'groupTags', 'firstPageValues')} menuItems={['Non Smokers', 'Have Pets', "Have Jobs", 'Students', 'Have Children', 'LGBTQ Friendly', 'Cannabis Friendly']} />,
-                <MultipleSelectCheckmarks required={true} helperText="Optional" onChange={(e) => { handleEmptyStringValidation(e.target.value, 'linkChats', 'firstPageValues'); handleGroupChat(e) }} title="Link Chats" menuItems={groupChat[0]} />
-              ]} />
-              <LineBox flex={true} CssTextField={[
-                <UploadFile height="40px" helperTextPos="85%" helperText="Optional: Supported Files: jpg, png" width="100%" fontSize="14px" endIcon={<MdUpload color="aqua" size={25} />} type="file" accept={["image/jpeg", "image/jpg", "image/png",]} message="Group Photo" />,
+                <MultipleSelectCheckmarks required={true} onChange={(e) => { handleEmptyStringValidation(e.target.value, 'linkChats', 'firstPageValues'); handleGroupChat(e) }} title="Link Chats" menuItems={groupChat[0]} />
               ]} />
               <div id="multiline">
                 <FormMultiLineInput required={true} placeHolder="Talk about your bunkmate(s)" type="text" field="About Us" helperText={aboutHelperText} onChange={(e) => { handleAboutValidation(e); handleEmptyStringValidation(e.target.value, 'aboutUs', 'firstPageValues') }} error={aboutError} value={state?.firstPageValues?.about} />
