@@ -192,8 +192,8 @@ const Bunkmates = () => {
                                 styles={{ background: 'DarkGray', color: 'white' }}
                                 mapPaneName={OVERLAY_MOUSE_TARGET}>
                                 <div style={{ display: "flex", flexDirection: "row", alignItems: "center" }} onClick={e => { handleProfileClick(e, index); e.stopPropagation() }}>
-                                    <img style={{ height: "5vw", width: "10vh", objectFit: "cover", borderRadius: "50%" }} src={profile?.image} />
-                                    <span style={{ display: "flex", height: "5vh", padding: "10px", flexDirection: "column", color: "white", paddingRight: "10px", backgroundColor: "darkgray", justifyContent: "space-between", fontSize: "2vh", borderRadius: "2px", cursor: "hover" }} >
+                                    <img style={{ zIndex: '2', right: '50px', position: 'absolute', width: '45px', height: '45px',  border:  '3px solid #2ACDDD', objectFit: "cover", borderRadius: "50%" }} src={profile?.image} />
+                                    <span style={{ minWidth: '80px', position: 'absolute', right: '-15px', display: "flex", height: "40px", padding: "10px", fontWeight: '500', color: "white", backgroundColor: "#2ACDDD", justifyContent: "center", alignItems: 'center', fontSize: "15px", borderRadius: "2px", cursor: "hover" }} >
                                         {`$${profile.rentBudget}`}
                                     </span>
                                 </div>
