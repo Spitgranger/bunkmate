@@ -170,6 +170,17 @@ const Profile = () => {
     )
 
   }
+  else {
+    return (
+      <div className='page-container'>
+        <div style={{ height: '9vh' }} />
+        <Navbar />
+        <div className="error-content">
+          <h1>No profile associated with this account</h1>
+        </div>
+      </div>
+    )
+  }
 };
 
 export default Profile;

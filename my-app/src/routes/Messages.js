@@ -115,8 +115,8 @@ const Messages = () => {
       <>
         <div style={{ height: '9vh' }} />
         <Navbar />
-        <div style={{ height: '100%', display: 'flex', justifyContent: 'center', margin: '100px' }}>
-          <h1>You need to be logged in to message</h1>
+        <div style={{ display: 'flex', justifyContent: 'center', margin: '100px' }}>
+          <h1 style={{height: '49px'}}>You need to be logged in to message</h1>
         </div>
       </>
     )
