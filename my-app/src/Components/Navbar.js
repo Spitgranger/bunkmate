@@ -164,7 +164,7 @@ function Navbar({ chooseStyle }) {
         )
     }
 
-
+    console.log(user);
 
     return (
         <nav className={`${navStyle}Bar`}>
@@ -207,7 +207,7 @@ function Navbar({ chooseStyle }) {
                             </label>
                         </Tooltip>
                         <AccountDropDownMenu>
-                            <StyledMenuItem icon={<AssignmentIndIcon />} pageName={`${user?.result?.name}'s Account`} />
+                            <StyledMenuItem icon={<AssignmentIndIcon />} pageName={`${user?.result?.email}'s Account`} />
                             <Divider />
                             <StyledMenuItem icon={<ConnectWithoutContactIcon />} pageName={"Contact"} />
                             <StyledMenuItem icon={<SettingsApplications />} pageName={"Settings"} />

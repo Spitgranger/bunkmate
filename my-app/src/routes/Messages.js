@@ -76,6 +76,8 @@ const Messages = () => {
     handleProfile().then((profile) => setUserProfile(profile.data)).catch(error => console.log(error))
   }, []);
 
+  console.log('profile', profile);
+
   const user = {
     id: profile?.result?._id,
     name: userProfile?.firstName,
