@@ -9,7 +9,7 @@ export function SavedListingItem(props) {
     return (
         props.noListingSelected ? "None"
             :
-            <div className="saved-listing" style={{ display: 'flex', flexFlow: 'row nowrap', }}>
+            <div className="saved-listing" style={{ display: 'flex', flexFlow: 'row nowrap', alignItems: 'center'}}>
                 {/*replace hard coded values */}
                 <img style={{ width: "70px", height: "60px", padding: '5px', borderRadius: '10px' }} src={props.image}></img>
                 <div style={{ maxWidth: props.addressWidth ?? '350px', display: 'flex', justifyContent: 'center', flexDirection: 'column', padding: '5px', }}>

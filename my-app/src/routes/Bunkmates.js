@@ -218,12 +218,7 @@ const Bunkmates = () => {
                     </GoogleMap >
                 </div>
                 <>
-                    {showRequest
-                        ?
-                        <BunkmateRequestPage />
-                        :
-                        <CreateRequestButton />
-                    }
+                    {showRequest ? <BunkmateRequestPage /> : <CreateRequestButton />}
                 </>
             </div >
         </div >
