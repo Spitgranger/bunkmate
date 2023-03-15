@@ -18,97 +18,95 @@ import { GrInstagram, GrFacebook, GrLinkedin, GrTwitter  } from 'react-icons/gr'
 import { MdVerified, MdPets, MdCleaningServices, MdHandshake } from 'react-icons/md';
 import { BsFillClockFill, BsInfinity, BsBriefcaseFill, BsPencilFill, BsAlarmFill } from 'react-icons/bs';
 import {FaSmoking, FaCannabis,  FaWineGlassAlt, FaRegHandshake, FaDog} from 'react-icons/fa'
+import {BiMessageDetail} from 'react-icons/bi'
+import { BsBookmarks } from 'react-icons/bs'
+import { BsBookmarksFill } from 'react-icons/bs'
 
-
+/*
+'@media (max-width: 1000px)':{
+  backgroundColor: 'red'
+}
+*/
 //This is the component that handles the user profile, displaying the user details and other things.
 const Profile = () => {
   const pageStyles = {
-    leftColumn: { flex: 1, height: '100%', margin: '30px',borderRadius: '15px', padding: '10px'},
-    rightColumn: { flex: 1, height: '100%', margin: '30px',borderRadius: '15px', padding: '10px'},
-    middleColumn: {flex: 2, height: '100%', margin: '30px', borderRadius: '15px', padding: '10px'},
-    name:{fontSize: '30px', fontWeight: 600},
+    page:{display: 'flex', justifyContent: 'center', alignItems: 'flex-end', height: '100%'},
+    profileContainer:{display: 'flex', flexFLow: 'row wrap', width: '75%', height: '91vh'},
+    leftColumn: { flex: 1,  margin: '30px',borderRadius: '15px', padding: '10px'},
+    rightColumn: { flex: 1, margin: '30px',borderRadius: '15px', padding: '10px'},
+    middleColumn: {flex: 2, margin: '30px', borderRadius: '15px', padding: '10px'},
+    cardHeader:{whiteSpace: 'nowrap', margin: '0px',  padding: '25px', display: 'flex', alignItems: 'center', justifyContent: 'center'},
+    name:{fontSize: '30px', fontWeight: 600, display: 'flex', alignItems: 'center'},
     socialLinks: { padding: '15px', display: 'flex', justifyContent: 'space-around', },
     profilePicture:{borderRadius: '15px', maxHeight: '400px', maxWidth: '100%'},
+    header: {display: 'flex', flexDirection: 'row', justifyContent: 'space-between'},
+    actionCenter: {height: '100%', padding: '25px', display: 'flex', alignItems: 'flex-start'},
+    biography:{ marginBottom:'20px', padding: '5px', display: 'flex', justifyContent: 'flex-start'},
     divider: {fontSize: '20px', padding: '10px'},
-    fieldWrapper: {width: '100%', display: 'flex',  alignItems: 'center', flexDirection: 'column'},
+    habitsAndLifestyle: { padding: '10px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' },
+    fields: {width: '100%', display: 'flex',  alignItems: 'center', flexDirection: 'column'},
+    fieldsWrapper: {width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-around'},
+  };
 
-  }
-
-  const { values } = useContext(ValuesObjectContext)
+  const { values } = useContext(ValuesObjectContext);
+  //state to manage the profile data retrieved from the backend
   const [profile, setProfile] = useState("");
+  //state to manage the bookmark icon that is shown
+  const [bookmark, setBookmark] = useState(false);
   //function to handle fetching the profile data from back end
   const handleLoad = async () => {
     const profile = await getProfile();
     console.log(profile);
     return profile;
-  }
+  };
 
   //get data from backend when the component first loads works
   useEffect(() => {
     handleLoad().then((profile) => setProfile(profile.data)).catch(error => console.log(error))
   }, []);
 
-  /*
-  {profile.data}
-  {profile.firstName}
-  {profile.lastName}
-  {profile.gender}
-  {profile.email}
-  {profile.employment}
-  {profile.address}
-  {profile.province}
-  {profile.city}
-  {profile.education}
-  {profile.picutre}
-  {profile.about}
-  {profile.province}
-  {profile.city}
-  */
 
   const capitalizedName = (name) => {
     return `${name.charAt(0).toUpperCase() + name.slice(1)} `
-  }
-
+  };
  
  console.log(values, profile)
 
   const Fields = ({iconStart, fieldTitle, fieldValue, primaryStyles, bodyStyles}) => {
     //disable display flex to have values appear below keys
+
+    const fieldStyles= {
+      fieldContainer:{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '5px'},
+      keyContainer:{display: 'flex', alignItems: 'center', whiteSpace: 'nowrap'}
+    };
+    
     return(
-    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '5px'}}>
-      <div style={{display: 'flex', alignItems: 'center', whiteSpace: 'nowrap'}}>
+    <div style={fieldStyles.fieldContainer}>
+      <div style={fieldStyles.keyContainer}>
         {iconStart}
         <Typography sx={{...primaryStyles, paddingLeft: '15px', fontSize:"17px"}} variant="h6" color="text.primary">{`${fieldTitle}: `}</Typography>
       </div>
-        <div style={{width: '50%'}}>
-          <Typography sx={{...bodyStyles, padding: '5px', display: 'flex', justifyContent: 'flex-start'}} variant="body1" color="text.secondary">{fieldValue}</Typography>
-        </div>
+      <div style={{width: '50%'}}>
+        <Typography sx={{...bodyStyles, padding: '5px', display: 'flex', justifyContent: 'flex-start'}} variant="body1" color="text.secondary">{fieldValue}</Typography>
+      </div>
     </div>
     )
   }
 
   if (profile) {
     return(
-      <div>
+      <div style={pageStyles.page}>
         <div style={{height: '9vh'}} />
         <Navbar />
-    <div style={{display: 'flex', flexFLow: 'row wrap'}}>
+    <div style={pageStyles.profileContainer}>
     <Card sx={pageStyles.leftColumn}>
       <CardMedia sx={pageStyles.profilePicture} component="img" image={profile.picture}/>
       <CardContent>
         <div style={pageStyles.socialLinks}>
-          <IconButton >
-            <GrInstagram />
-          </IconButton>
-          <IconButton >
-            <GrFacebook/>
-          </IconButton>
-          <IconButton >
-            <GrLinkedin />
-          </IconButton>
-          <IconButton >
-            <GrTwitter />
-          </IconButton>
+          <IconButton ><GrInstagram /></IconButton>
+          <IconButton ><GrFacebook/></IconButton>
+          <IconButton ><GrLinkedin /></IconButton>
+          <IconButton ><GrTwitter /></IconButton>
         </div>
         <Divider sx={pageStyles.divider} flexItem={true} textAlign='center' >Description</Divider>
         <Fields iconStart={<BsFillClockFill />}fieldTitle="Age" fieldValue={'24'}/>      
@@ -118,34 +116,51 @@ const Profile = () => {
       </CardContent>
     </Card>
     <Card sx={pageStyles.middleColumn}>
-      <CardHeader sx={{padding: '25px', display: 'flex', alignItems: 'center', justifyContent: 'center'}} titleTypographyProps={pageStyles.name} subheader={profile.email} color="text.primary" title={[capitalizedName(profile.firstName), capitalizedName(profile.lastName), <MdVerified style={{ color: 'aqua'}} /> ]}/>
+      <header style={pageStyles.header}>
+        <Tooltip arrow placement="right" title={"Active 3 hours ago"}>
+          <CardHeader sx={pageStyles.cardHeader} titleTypographyProps={pageStyles.name} subheader={profile.email} color="text.primary" title={[capitalizedName(profile.firstName), capitalizedName(profile.lastName), <MdVerified style={{ color: 'aqua', margin: '5px'}} /> ]}/>
+        </Tooltip>
+        <div style={pageStyles.actionCenter}>
+          <Tooltip title={`${capitalizedName(profile.firstName)} has an active request`}>
+            <div>
+              <ActionButton startIcon={<HiMapPin />} height="30px" title={"View Request"}/>
+            </div>
+          </Tooltip>
+          <IconButton>
+            <BiMessageDetail />
+          </IconButton>
+          <IconButton onClick={() => setBookmark(!bookmark)}>
+            {bookmark ? <BsBookmarksFill /> : <BsBookmarks />}
+          </IconButton>
+        </div>
+      </header>
       <Divider sx={pageStyles.divider} textAlign='left'>Biography</Divider>
       <CardContent sx={{height: '100%'}}>      
-          <Typography sx={{ marginBottom:'20px', padding: '5px', display: 'flex', justifyContent: 'flex-start'}} variant="body1" color="text.secondary">{profile.about}</Typography>
+          <Typography sx={pageStyles.biography} variant="body1" color="text.secondary">{profile.about}</Typography>
       <Divider sx={pageStyles.divider} textAlign='left'>Habits and Lifestyles</Divider>
-          <div style={{ padding: '10px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between'}}>
-            <section style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-around'}}>
-              <div style={pageStyles.fieldWrapper}>
+          <div style={pageStyles.habitsAndLifestyle}>
+            <section style={pageStyles.fieldsWrapper}>
+              <div style={pageStyles.fields}>
                 <div style={{width: '100%'}}>
                   <Fields iconStart={<MdPets />}fieldTitle="Own Pets" fieldValue={'Yes'}/>      
                   <Fields iconStart={<BsAlarmFill />}fieldTitle="Sleep Schedule" fieldValue={'Early Bird'}/>      
                 </div>
               </div>
-              <div style={pageStyles.fieldWrapper}>
+              <div style={pageStyles.fields}>
                 <div style={{width: '100%'}}>
                   <Fields iconStart={<MdCleaningServices />}  fieldTitle="Cleanliness" fieldValue={'Clean Freak'}/>      
                   <Fields   iconStart={<FaWineGlassAlt/>}fieldTitle="Drinking" fieldValue={"Don't Drink"}/>      
                 </div>
               </div>
             </section>
-            <section style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-around'}}>
-              <div style={pageStyles.fieldWrapper}>
+            <section style={pageStyles.fieldsWrapper}>
+              <div style={pageStyles.fields}>
                 <div style={{width: '100%'}}>
                   <Fields iconStart={<FaSmoking />} fieldTitle="Smoking" fieldValue={'Moderate Smoker'}/>      
                   <Fields iconStart={<FaCannabis />}fieldTitle="Cannabis" fieldValue={'Light Cannabis Use'}/>      
                 </div>
               </div>
-              <div style={pageStyles.fieldWrapper}>
+              <div style={pageStyles.fields}>
                 <div style={{width: '100%'}}>
                   <Fields iconStart={<FaRegHandshake /> }  fieldTitle="Ok With Guests" fieldValue={'Ok With it'}/>      
                   <Fields  iconStart={<FaDog />}fieldTitle="Ok With Pets" fieldValue={"Ok With it"}/>      

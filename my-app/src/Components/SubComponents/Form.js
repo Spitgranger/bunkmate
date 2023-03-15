@@ -393,7 +393,7 @@ export function ActionButton(props) {
     borderRadius: props.borderRadius ?? "10px",
     width: props.width ?? '100%',
     height: props.height ?? '60px',
-    paddingTop: '2px',
+    paddingTop: '5px',
     fontSize: props.fontSize,
     ':hover': { bgcolor: 'black', color: "aqua" },
   }
@@ -420,12 +420,8 @@ export function ActionButton(props) {
         endIcon={props.endIcon}
         startIcon={props.startIcon}
         disabled={props.disabled}
-        sx={
-          buttonStyles
-        }>
-        <h3>
-          {props.title}
-        </h3>
+        sx={buttonStyles}>
+        <h3>{props.title}</h3>
       </Button>
       <div className="helper-text" style={helperTextStyles}>
         <FormHelperText>{props.helperText}</FormHelperText>
