@@ -1,6 +1,6 @@
 import react, { useContext, useEffect, useRef, useState } from "react";
 import Navbar from "../Components/Navbar";
-import { GoogleMap, useJsApiLoader, MarkerF, OverlayView, OVERLAY_MOUSE_TARGET, OverlayViewF } from "@react-google-maps/api";
+import { GoogleMap, useJsApiLoader, MarkerF, OverlayView, OVERLAY_MOUSE_TARGET, OverlayViewF, MapContext } from "@react-google-maps/api";
 import mapStyles from './mapStyles.json'
 import { Button, Grid, Paper, TextField, Card, Typography, CardActionArea, CardMedia, CardContent, CardActions, IconButton } from "@mui/material/"
 import "./Bunkmates.css"
@@ -17,16 +17,20 @@ import GroupMapCard from "../Components/SubComponents/Bunkmates/GroupMapCard";
 import { getRequest } from "../api";
 import { InfoWindow } from "@react-google-maps/api";
 import { borderRadius } from "@mui/system";
+import { BunkmatesContext } from "../Components/GlobalStateManagement/BunkmatesContext";
 
 
 
-const profiles = JSON.parse(localStorage.getItem('mapCardData')) || mapCardData;
 
 
 
 const libraries = ["places"];
-function Profile({ profile }) {
 
+
+export function MapProfile({ profile }) {
+
+    //determines whether to render single or group map card
+    //as well as set bunkmate info at the bottom of the card
     const [sideCard, setSideCard] = useState(null)
     console.log(profile)
 
@@ -80,7 +84,7 @@ const Bunkmates = () => {
     const [showRequest, setShowRequest] = useState(false);
     const [selected, setSelected] = useState(null);
     const [center, setCenter] = useState({ lat: 43.642075, lng: -79.385981 });
-    const [profile, setProfile] = useState(null);
+    const { mapProfileCard, setMapProfileCard } = useContext(BunkmatesContext)
     //if the user has a profile then set profileChecker to true else false
     const { isLoaded, loadError } = useJsApiLoader({
         googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
@@ -127,13 +131,22 @@ const Bunkmates = () => {
         }
     }
 
+    const profiles = JSON.parse(localStorage.getItem('mapCardData')) || mapCardData;
+    /*
+    useEffect(() => {
+        setProfile(<MapProfile profile={profiles[5]} />)
+    }, [])
+    */
+
     if (!isLoaded) {
         return <h1>ERROR HAS OCCURED</h1>
     }
+
     const handleProfileClick = (e, index) => {
         console.log("Request clicked")
-        setProfile(<Profile profile={profiles[index]} />)
+        setMapProfileCard(<MapProfile profile={profiles[index]} />)
     }
+
 
     /*
     const instantiateChatClient = async () => {
@@ -182,7 +195,7 @@ const Bunkmates = () => {
                         zoom={15}
                         mapContainerStyle={{ width: "100%", height: "100vh" }}
                         options={{ styles: mapStyles, streetViewControl: false }}
-                        onClick={() => { setProfile(null) }}
+                        onClick={() => { setMapProfileCard(null) }}
                     >
                         <Navbar chooseStyle={"glass"} />
                         {/*
@@ -190,7 +203,7 @@ const Bunkmates = () => {
                             <SocialFeed />
                         </div>
                         */}
-                        {profile ? profile : null}
+                        {mapProfileCard ? mapProfileCard : null}
                         {selected && <MarkerF position={center} icon={"http://maps.google.com/mapfiles/ms/icons/blue.png"} />}
                         {profiles.map((profile, index) => {
                             console.log(profile.idealLocation);
@@ -207,8 +220,8 @@ const Bunkmates = () => {
                                             </span>
                                         </div> :
                                         <div style={{ display: "flex", flexDirection: "row", alignItems: "center" }} onClick={e => { handleProfileClick(e, index); e.stopPropagation() }}>
-                                            <img style={{ zIndex: '2', right: '50px', position: 'absolute', width: '45px', height: '45px', border: '3px solid black', objectFit: "cover", borderRadius: "50%" }} src={profile?.picture} />
-                                            <span style={{ minWidth: '80px', position: 'absolute', right: '-14px', display: "flex", height: "40px", padding: "10px", fontWeight: '500', color: "aqua", backgroundColor: 'black', justifyContent: "center", alignItems: 'center', fontSize: "15px", borderRadius: "5px", cursor: "hover" }} >
+                                            <img style={{ zIndex: '2', right: '50px', position: 'absolute', width: '45px', height: '45px', border: '3px solid aqua', objectFit: "cover", borderRadius: "50%" }} src={profile?.picture} />
+                                            <span style={{ minWidth: '80px', position: 'absolute', right: '-14px', display: "flex", height: "40px", padding: "10px", fontWeight: '500', color: "aqua", backgroundColor: 'black', border: '3px solid aqua', justifyContent: "center", alignItems: 'center', fontSize: "15px", borderRadius: "5px", cursor: "hover" }} >
                                                 {`$${profile.rentBudget}`}
                                             </span>
                                         </div>

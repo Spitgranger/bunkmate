@@ -15,92 +15,104 @@ import SignInProvider from './Components/GlobalStateManagement/SignInContext';
 import ValidationProvider from './Components/GlobalStateManagement/ValidationContext';
 import MessageProvider from './Components/GlobalStateManagement/MessageContext';
 import FormatProvider from './Components/GlobalStateManagement/FormatContext';
-import Navbar from './Components/Navbar';
+import MapProvider from './Components/GlobalStateManagement/BunkmatesContext'
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 const router = createBrowserRouter([
   {
     path: "/",
     element:
-      <FormatProvider>
-        <MessageProvider>
-          <SignInProvider>
-            <ValidationProvider>
-              <App />
-            </ValidationProvider>
-          </SignInProvider>
-        </MessageProvider>
-      </FormatProvider>,
+      <MapProvider>
+        <FormatProvider>
+          <MessageProvider>
+            <SignInProvider>
+              <ValidationProvider>
+                <App />
+              </ValidationProvider>
+            </SignInProvider>
+          </MessageProvider>
+        </FormatProvider>
+      </MapProvider>,
     errorElement: <Error />,
   },
   {
     path: "/profile",
     element:
-      <FormatProvider>
-        <MessageProvider>
-          <SignInProvider>
-            <ValidationProvider>
-              <Profile />
-            </ValidationProvider>
-          </SignInProvider>
-        </MessageProvider>
-      </FormatProvider>,
+      <MapProvider>
+        <FormatProvider>
+          <MessageProvider>
+            <SignInProvider>
+              <ValidationProvider>
+                <Profile />
+              </ValidationProvider>
+            </SignInProvider>
+          </MessageProvider>
+        </FormatProvider>
+      </MapProvider>,
     errorElement: <Error />,
   },
   {
     path: "/apply_to_listings",
     element:
-      <FormatProvider>
-        <MessageProvider>
-          <SignInProvider>
-            <ValidationProvider>
-              <ApplyToListings />
-            </ValidationProvider>
-          </SignInProvider>
-        </MessageProvider>
-        ,     </FormatProvider>,
+      <MapProvider>
+        <FormatProvider>
+          <MessageProvider>
+            <SignInProvider>
+              <ValidationProvider>
+                <ApplyToListings />
+              </ValidationProvider>
+            </SignInProvider>
+          </MessageProvider>
+        </FormatProvider>
+      </MapProvider>,
     errorElement: <Error />,
   },
   {
     path: '/bunkmates',
     element:
-      <FormatProvider>
-        <MessageProvider>
-          <SignInProvider>
-            <ValidationProvider>
-              <Bunkmates />
-            </ValidationProvider>
-          </SignInProvider>
-        </MessageProvider>
-      </FormatProvider>,
+      <MapProvider>
+        <FormatProvider>
+          <MessageProvider>
+            <SignInProvider>
+              <ValidationProvider>
+                <Bunkmates />
+              </ValidationProvider>
+            </SignInProvider>
+          </MessageProvider>
+        </FormatProvider>
+      </MapProvider>,
     errorElement: <Error />
   },
   {
     path: '/messages',
     element:
       <FormatProvider>
-        <MessageProvider>
-          <SignInProvider>
-            <ValidationProvider>
-              <Messages />
-            </ValidationProvider>
-          </SignInProvider>
-        </MessageProvider>
+        <MapProvider>
+          <MessageProvider>
+            <SignInProvider>
+              <ValidationProvider>
+                <Messages />
+              </ValidationProvider>
+            </SignInProvider>
+          </MessageProvider>
+        </MapProvider>
       </FormatProvider>,
     errorElement: <Error />
   },
   {
     path: '*',
     element:
-      <FormatProvider>
-        <MessageProvider>
-          <SignInProvider>
-            <ValidationProvider>
-              <Error404 />
-            </ValidationProvider>
-          </SignInProvider>
-        </MessageProvider>
-      </FormatProvider>,
+      <MapProvider>
+        <FormatProvider>
+          <MessageProvider>
+            <SignInProvider>
+              <ValidationProvider>
+                <Error404 />
+              </ValidationProvider>
+            </SignInProvider>
+          </MessageProvider>
+        </FormatProvider>
+      </MapProvider >,
   },
 
 ]);

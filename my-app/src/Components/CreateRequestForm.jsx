@@ -9,7 +9,7 @@ import {
   DropDownMenu,
 
 } from './SubComponents/Form';
-import { Typography } from '@mui/material'
+import { Typography, bottomNavigationActionClasses } from '@mui/material'
 import Slider from '@mui/material/Slider'
 import Box from '@mui/material/Box';
 import { savedListingsData, identityMenuItems } from '../testing_data/SavedListingsData';
@@ -25,6 +25,7 @@ import { UploadFile } from './SubComponents/Form';
 import { MdUpload } from 'react-icons/md';
 import profiles from "../testing_data/mapCardData"
 import { getListings } from '../api';
+import { useNavigate } from 'react-router';
 
 
 //Within a modal window
@@ -84,6 +85,8 @@ function CreateRequestForm(props) {
 
   const [list, setList] = useState({});
   const [menuItem, setMenuItem] = useState([]);
+  const navigate = useNavigate()
+
 
   /*
   const [groupChat, setGroupChat] = useState([]);
@@ -260,6 +263,7 @@ function CreateRequestForm(props) {
       console.log(allData)
       mapData.push(allData)
 
+      localStorage.setItem('userRequest', JSON.stringify(allData))
       localStorage.setItem('mapCardData', JSON.stringify(mapData))
 
       /* setplaceholder values immediatly*/

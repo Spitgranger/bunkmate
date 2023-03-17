@@ -20,6 +20,10 @@ import { MdVerified, MdPets, MdCleaningServices } from 'react-icons/md';
 import { BsBookmarks, BsBookmarksFill, BsFillClockFill, BsInfinity, BsBriefcaseFill, BsPencil, BsAlarmFill, BsPen } from 'react-icons/bs';
 import { FaBook, FaSmoking, FaCannabis, FaWineGlassAlt, FaRegHandshake, FaDog } from 'react-icons/fa'
 import { BiMessageDetail } from 'react-icons/bi'
+import { Link } from 'react-router-dom';
+import { BunkmatesContext } from '../Components/GlobalStateManagement/BunkmatesContext';
+import { MapProfile } from './Bunkmates';
+
 
 
 /*
@@ -28,6 +32,8 @@ import { BiMessageDetail } from 'react-icons/bi'
 }
 */
 //This is the component that handles the user profile, displaying the user details and other things.
+const userRequest = JSON.parse(localStorage.getItem('userRequest'))
+const profiles = JSON.parse(localStorage.getItem('mapCardData'));
 
 
 const Profile = () => {
@@ -58,9 +64,14 @@ const Profile = () => {
   const [profile, setProfile] = useState("");
   //state to manage the bookmark icon that is shown
   const [bookmark, setBookmark] = useState(false);
+  //state management just for the requestbutton
+  const [requestButtonMessage, setRequestButtonMessage] = useState("Inactive")
+  const [showIcon, setShowIcon] = useState(null)
+  const [textColor, setTextColor] = useState('red')
+  const { setMapProfileCard } = useContext(BunkmatesContext)
+
+
   //function to handle fetching the profile data from back end
-
-
   const handleLoad = async () => {
     const profile = await getProfile();
     console.log(profile);
@@ -101,7 +112,22 @@ const Profile = () => {
         </div>
       </div>
     )
+
   }
+
+  function handleMouseEnter() {
+    setRequestButtonMessage('Make a request');
+    setShowIcon(<HiMapPin />);
+    setTextColor("aqua")
+  }
+
+  function handleMouseLeave() {
+    setRequestButtonMessage('Inactive');
+    setShowIcon(null);
+    setTextColor("red")
+  }
+
+
 
   if (profile) {
     return (
@@ -131,11 +157,18 @@ const Profile = () => {
                 <CardHeader sx={pageStyles.cardHeader} titleTypographyProps={pageStyles.name} subheader={profile.email} color="text.primary" title={[capitalizedName(profile.firstName), <MdVerified style={{ color: '#2ACDDD', margin: '5px' }} />]} />
               </Tooltip>
               <div style={pageStyles.actionCenter}>
-                <Tooltip arrow title={`${capitalizedName(profile.firstName)} has an active request`}>
-                  <div>
-                    <ActionButton startIcon={<HiMapPin />} height="30px" title={"View Request"} />
-                  </div>
-                </Tooltip>
+                {userRequest
+                  ?
+                  <Tooltip arrow title={`${capitalizedName(profile.firstName)} has an active request`}>
+                    <Link to="/bunkmates" onClick={() => setMapProfileCard(<MapProfile profile={userRequest} />)} style={{ textDecoration: 'none' }}><ActionButton startIcon={<HiMapPin />} height="30px" title={"View Request"} /></Link>
+                  </Tooltip>
+                  :
+                  <Tooltip arrow title={'Making a request will let people know you are actively looking for bunkmates and will make your profile more visible'}>
+                    <Link to="/bunkmates" style={{ textDecoration: 'none' }} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}><ActionButton bgColor={'black'} color={textColor} startIcon={showIcon} height="30px" title={requestButtonMessage} /></Link>
+                  </Tooltip>
+
+
+                }
                 <Tooltip title={`Edit your profile`}>
                   <IconButton onClick={handleEditProfile}>
                     <BsPencil />
@@ -209,7 +242,7 @@ const Profile = () => {
     </Card>
     */}
         </div>
-      </div>
+      </div >
     )
 
   }

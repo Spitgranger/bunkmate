@@ -389,7 +389,7 @@ export function ActionButton(props) {
 
   const buttonStyles = {
     backgroundColor: props.bgColor ?? "#383838",
-    color: 'white',
+    color: props.color ?? 'white',
     borderRadius: props.borderRadius ?? "10px",
     width: props.width ?? '100%',
     height: props.height ?? '60px',
