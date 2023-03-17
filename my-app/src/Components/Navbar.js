@@ -15,12 +15,13 @@ import { useNavigate } from 'react-router-dom';
 import decode from 'jwt-decode';
 import { getProfile } from '../api';
 import { SignInContext } from './GlobalStateManagement/SignInContext';
-
+import { formatContext } from './GlobalStateManagement/FormatContext';
 
 function Navbar({ chooseStyle }) {
 
     const id = useId()
     const [navStyle, setNavStyle] = useState("nav")
+    const { capitalizedName } = useContext(formatContext);
 
     const CheckActive = ({ to, page, ...props }) => {
         //check if the page is the currently active page, if so then highlight it
@@ -207,7 +208,7 @@ function Navbar({ chooseStyle }) {
                             </label>
                         </Tooltip>
                         <AccountDropDownMenu>
-                            <StyledMenuItem icon={<AssignmentIndIcon />} pageName={`${user?.result?.email}'s Account`} />
+                            <StyledMenuItem icon={<AssignmentIndIcon />} pageName={userProfile ? `${capitalizedName(userProfile.firstName)} ${capitalizedName(userProfile.lastName)}'s Account` : user?.result?.email} />
                             <Divider />
                             <StyledMenuItem icon={<ConnectWithoutContactIcon />} pageName={"Contact"} />
                             <StyledMenuItem icon={<SettingsApplications />} pageName={"Settings"} />

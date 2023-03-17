@@ -6,7 +6,7 @@ function Error() {
   const error = useRouteError();
   console.error(error);
   return (
-    <div>Error has Occured.</div>
+    <div>Error has Occured</div>
   )
 }
 

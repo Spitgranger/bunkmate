@@ -4,6 +4,7 @@ export const SignInContext = createContext(null)
 
 export default function SignInProvider({ children }) {
 
+
   //manages the open and closed state of modal window
   const [isOpen, setIsOpen] = useState(false)
   //manages the sign in and signup state

@@ -23,7 +23,9 @@ import { IoIosArrowBack } from 'react-icons/io'
 import { chatClientContext } from './GlobalStateManagement/MessageContext';
 import { UploadFile } from './SubComponents/Form';
 import { MdUpload } from 'react-icons/md';
+import profiles from "../testing_data/mapCardData"
 import { getListings } from '../api';
+
 
 //Within a modal window
 function CreateRequestForm(props) {
@@ -41,6 +43,10 @@ function CreateRequestForm(props) {
   const [formTitle, setFormTitle] = useState("Create a Bunkmate Request")
   //controls the title of the label on the rent budget field
   const [labelTitle, setLabelTitle] = useState("My Rent Budget")
+  //store user profile data
+  const [userProfile, setUserProfile] = useState("")
+  //store user request data
+  const [userRequest, setUserRequest] = useState("")
 
   const actions = {
     checkGlobalError: "check_global_error",
@@ -58,7 +64,7 @@ function CreateRequestForm(props) {
     linkChats: "",
   }
   const secondPageValues = page3 || {
-    listingObject: "",
+    listingObject: "None",
     idealLocation: "",
     dateValue: "",
     rentBudget: "",
@@ -75,9 +81,13 @@ function CreateRequestForm(props) {
     secondPageValues: secondPageValues,
     globalError: true,
   }
+
   const [list, setList] = useState({});
   const [menuItem, setMenuItem] = useState([]);
+
+  /*
   const [groupChat, setGroupChat] = useState([]);
+
   useEffect(() => {
     async function listings() {
       const response = await getListings();
@@ -102,11 +112,16 @@ function CreateRequestForm(props) {
     });
   }, []);
   /*
+
+  //not in use currently
+  /*
   menuItem = list.map((element, index) => {
     return <SavedListingItem index={index} image={element.image} address={element.address} price={element.price} bedBath={element.bedBath} />
   });
   */
+
   const [state, dispatch] = useReducer(reducer, initialState)
+
 
 
   const handleEmptyStringValidation = (newValue, name, page, date = false) => {
@@ -221,8 +236,39 @@ function CreateRequestForm(props) {
     }
   }, [state?.secondPageValues?.listingObject])
 
+
+  useEffect(() => {
+    //get profile data from backend
+    async function handleProfile() {
+      const profile = await getProfile();
+      return profile
+    }
+    //store user profile data
+    handleProfile().then((profile) => setUserProfile(profile));
+  }, [])
+
+
+
   const handleSubmit = async (formData) => {
-    //record values to be stored in the backend
+    //record values in localStorage
+
+    localStorage.setItem('mapCardData', JSON.stringify(profiles))
+    const mapData = JSON.parse(localStorage.getItem('mapCardData'))
+
+    if (userProfile.data && formData) {
+      const allData = { ...userProfile.data, ...formData }
+      console.log(allData)
+      mapData.push(allData)
+
+      localStorage.setItem('mapCardData', JSON.stringify(mapData))
+
+      /* setplaceholder values immediatly*/
+      /* profile ? profile : localstorage.set(placeholder)*/
+      /* {placeholder}, {userprofile, getRequest}*/
+
+    }
+
+    //record values in backend
     try {
       const response = await createRequest(formData);
       console.log(response);
@@ -231,10 +277,9 @@ function CreateRequestForm(props) {
     }
   }
 
-  /*
-    console.log(state?.values)
-    console.log(state)
-  */
+
+
+
 
   //Slider 2 knobbed slider for preferred age range
   function ariaValuetext(value) {
@@ -301,20 +346,23 @@ function CreateRequestForm(props) {
   
     }
     */
-  const handleGroupChat = (e) => {
-    let channelIdStorage = null;
-    const clientChannelNames = e
-    groupChat.forEach((element) => {
-      console.log(element.usernames)
-      console.log(clientChannelNames)
-      if (element.usernames === clientChannelNames) {
-        channelIdStorage = element.channel;
-      };
-    });
-    //record the channel ID of the option that was selected
-    dispatch({ type: actions.checkValues, payload: channelIdStorage, name: "linkGroupChatsIds", page: 'secondPageValues' })
-    //dispatch function that adds channelIdStorage as a payload
-  }
+
+  /*
+const handleGroupChat = (e) => {
+  //record the linkgroupchat ids 
+  let channelIdStorage = null;
+  const clientChannelNames = e
+  groupChat.forEach((element) => {
+    console.log(element.usernames)
+    console.log(clientChannelNames)
+    if (element.usernames === clientChannelNames) {
+      channelIdStorage = element.channel;
+    };
+  });
+  //record the channel ID of the option that was selected
+  dispatch({ type: actions.checkValues, payload: channelIdStorage, name: "linkGroupChatsIds", page: 'secondPageValues' })
+  //dispatch function that adds channelIdStorage as a payload
+}*/
 
 
 
@@ -386,14 +434,24 @@ function CreateRequestForm(props) {
     setLabelTitle("Group's Rent Budget")
   }
 
+  useEffect(() => {
+    const storedData = []
+    savedListingsData.map((element, index) => {
+      storedData.push(index === 0 ? "None" : <SavedListingItem index={index} image={element.image} address={element.address} price={element.price} bedBath={element.bedBath} />);
+    });
+    setMenuItem(storedData)
+  }, [])
+
   const handleListingDisplay = () => {
-    //only for the listing in field
+    //only for the "listing in Mind" field
     if (state?.secondPageValues?.listingObject === "None") {
       return ("None")
     } else {
       return (menuItem[state?.secondPageValues?.listingObject.index])
     }
   }
+
+
 
 
   return (
@@ -421,7 +479,7 @@ function CreateRequestForm(props) {
               ?
               < LineBox flex={true} CssTextField={[
                 <FormSingleLineInput required={true} helperText="Create a pin on the map" value={state?.secondPageValues?.idealLocation} onChange={(e) => { handleEmptyStringValidation(e.target.value, 'idealLocation', 'secondPageValues'); }} size="small" type="text" field="Ideal Location" placeHolder="ex. Toronto" inputRef={inputRef} />,
-                <FormSingleLineInput required={false} helperText="How far can you relocate if needed?" type="number" inputAdornment={true} inputStartAdornment={"~"} inputEndAdornment={"km"} value={state?.secondPageValues?.flexibility} onChange={(e) => handleEmptyStringValidation(e.target.value, 'flexibility', 'secondPageValues')} size="small" field="Range Flexibility" placeHolder="ex. 30" />,
+                <FormSingleLineInput required={false} helperText="How far can you move?" type="number" inputAdornment={true} inputStartAdornment={"~"} inputEndAdornment={"km"} value={state?.secondPageValues?.flexibility} onChange={(e) => handleEmptyStringValidation(e.target.value, 'flexibility', 'secondPageValues')} size="small" field="Range Flexibility" placeHolder="ex. 30" />,
               ]} />
               :
               <LineBox flex={true} CssTextField={[
@@ -461,9 +519,10 @@ function CreateRequestForm(props) {
               <LineBox flex={true} CssTextField={[
                 <DropDownMenu required={true} autoFocus={true} maxHeight={250} value={state?.firstPageValues?.request} onChange={(e) => { handleEmptyStringValidation(e.target.value, 'request', 'firstPageValues'); handleRequestShow(e); }} label="Request" menuItem={identityMenuItems} />,
               ]} />
+              {/* belongs below*/}
+              {/*<DropDownMenu required={true} value={state?.firstPageValues?.linkChats} onChange={(e) => { handleEmptyStringValidation(e.target.value, 'linkChats', 'firstPageValues'); handleGroupChat(e.target.value) }} label="Link Chats" menuItem={groupChat.map((item) => { return item.usernames })} />,*/}
               < LineBox flex={true} CssTextField={[
                 <MultipleSelectCheckmarks helperText="Optional" title="Group tags" onChange={(e) => handleEmptyStringValidation(e.target.value, 'groupTags', 'firstPageValues')} menuItems={['Non Smokers', 'Have Pets', "Have Jobs", 'Students', 'Have Children', 'LGBTQ Friendly', 'Cannabis Friendly']} />,
-                <DropDownMenu required={true} value={state?.firstPageValues?.linkChats} onChange={(e) => { handleEmptyStringValidation(e.target.value, 'linkChats', 'firstPageValues'); handleGroupChat(e.target.value) }} label="Link Chats" menuItem={groupChat.map((item) => { return item.usernames })} />
               ]} />
               <LineBox flex={true} CssTextField={[
                 <UploadFile height="40px" helperTextPos="85%" helperText="Optional: Supported Files: jpg, png" width="100%" fontSize="14px" endIcon={<MdUpload color="aqua" size={25} />} type="file" accept={["image/jpeg", "image/jpg", "image/png",]} message="Group Photo" />,

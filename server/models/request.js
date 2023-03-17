@@ -48,11 +48,11 @@ const requestSchema = mongoose.Schema({
     },
     //listingObject stores string and object depending on which item is selected in the dropdown menu
     listingObject: {
-        type: ObjectId,
+        type: mongoose.SchemaTypes.ObjectId,
         require: false,
     },
     aboutUs: {
-        type: Number,
+        type: String,
         require: false,
     },
     request: {

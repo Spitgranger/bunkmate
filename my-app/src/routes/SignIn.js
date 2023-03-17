@@ -13,6 +13,7 @@ import { signIn, signUp } from "../api";
 import ProfileMakerForm from "../Components/ProfileMakerForm";
 import { getProfile } from '../api'
 import { SignInContext } from "../Components/GlobalStateManagement/SignInContext";
+import Divider from "@mui/material/Divider";
 
 
 function SignInPartner({ company, logo, onClick }) {
@@ -143,20 +144,21 @@ export function SignInEmail() {
           <u style={{ cursor: 'pointer' }}>Privacy Policy</u>
         </h6>
       </div>
-      <div className="button" style={{ borderBottom: "1px solid lightgrey" }}>
-        <div style={{ display: 'flex', justifyContent: 'center', fontSize: "10px" }} >
-          <div className="new-user" onClick={() => { setMessage("Sign Up Now!"); setMode("signUpEmail") }}>
-            Don't have an account? Sign Up!
-          </div>
+      <div style={{ display: 'flex', justifyContent: 'center', fontSize: "10px" }} >
+        <div className="new-user" onClick={() => { setMessage("Sign Up Now!"); setMode("signUpEmail") }}>
+          Don't have an account? Sign Up!
         </div>
-        <ActionButton width="100%" type="submit" title="Submit" onClick={(e) => { handleSignIn(e) }} />
       </div>
-      <div className="socials" >
-        <SignInPartner logo={<FcGoogle size="20px" />} company="Google" />
-        <SignInPartner logo={<IoLogoFacebook size="20px" color="blue" />} company="Facebook" />
-        <SignInPartner logo={<BsApple size="20px" color="black" />} company="Apple" />
-        <SignInPartner logo={<BsPhoneFill size="20px" />} company="Phone" onClick={() => { setMode('signInPhone'); setMessage('Sign In or Sign Up') }} />
-      </div>
+      <ActionButton width="100%" type="submit" title="Submit" onClick={(e) => { handleSignIn(e) }} />
+      <Divider sx={{ fontSize: '12px' }}>
+        or
+      </Divider>
+    </div>
+    <div className="socials" >
+      <SignInPartner logo={<FcGoogle size="20px" />} company="Google" />
+      <SignInPartner logo={<IoLogoFacebook size="20px" color="blue" />} company="Facebook" />
+      <SignInPartner logo={<BsApple size="20px" color="black" />} company="Apple" />
+      <SignInPartner logo={<BsPhoneFill size="20px" />} company="Phone" onClick={() => { setMode('signInPhone'); setMessage('Sign In or Sign Up') }} />
     </div>
   </>)
 }
@@ -232,20 +234,21 @@ export function SignUpEmail() {
             <u style={{ cursor: 'pointer' }}>Privacy Policy</u>
           </h6>
         </div>
-        <div className="button" style={{ borderBottom: "1px solid lightgrey" }}>
-          <div style={{ display: 'flex', justifyContent: 'center', fontSize: "10px" }} >
-            <div className="old-user" onClick={() => { setMessage("Sign In With Email!"); setMode("signInWithEmail") }}>
-              Already have an account? Sign In!
-            </div>
+        <div style={{ display: 'flex', justifyContent: 'center', fontSize: "10px" }} >
+          <div className="old-user" onClick={() => { setMessage("Sign In With Email!"); setMode("signInWithEmail") }}>
+            Already have an account? Sign In!
           </div>
-          <ActionButton width="100%" type="submit" title="Submit" onClick={(e) => handleRegularSignUpEmail(e, data)} />
         </div>
-        <div className="socialsFlex" >
-          <SignInPartner logo={<FcGoogle size="20px" />} company="Google" />
-          <SignInPartner logo={<IoLogoFacebook size="20px" color="blue" />} company="Facebook" />
-          <SignInPartner logo={<BsApple size="20px" color="black" />} company="Apple" />
-          <SignInPartner logo={<BsPhoneFill size="20px" />} company="Phone" onClick={() => { setMode("signInPhone"); setMessage("Sign In or Sign Up") }} />
-        </div>
+        <ActionButton width="100%" type="submit" title="Submit" onClick={(e) => handleRegularSignUpEmail(e, data)} />
+        <Divider sx={{ fontSize: '12px' }}>
+          or
+        </Divider>
+      </div>
+      <div className="socialsFlex" >
+        <SignInPartner logo={<FcGoogle size="20px" />} company="Google" />
+        <SignInPartner logo={<IoLogoFacebook size="20px" color="blue" />} company="Facebook" />
+        <SignInPartner logo={<BsApple size="20px" color="black" />} company="Apple" />
+        <SignInPartner logo={<BsPhoneFill size="20px" />} company="Phone" onClick={() => { setMode("signInPhone"); setMessage("Sign In or Sign Up") }} />
       </div>
     </>
   )
@@ -309,15 +312,16 @@ export function SignInPhone() {
             <u style={{ cursor: 'pointer' }}>Privacy Policy</u>
           </h6>
         </div>
-        <div className="button" style={{ borderBottom: "1px solid lightgrey" }}>
-          <ActionButton width="100%" type="submit" title="Submit" onClick={() => { setMode("signUpEmail"); setMessage("Sign Up Now") }} />
-        </div>
-        <div className="socials" >
-          <SignInPartner logo={<FcGoogle size="20px" />} company="Google" onClick={() => { setMode("signUpForm"); setMessage("Sign Up Form") }} />
-          <SignInPartner logo={<IoLogoFacebook size="20px" color="blue" />} company="Facebook" />
-          <SignInPartner logo={<BsApple size="20px" color="black" />} company="Apple" />
-          <SignInPartner logo={<MdEmail size="20px" />} company="Email" onClick={() => { setMode("signInEmail"); setMessage("Sign In With Email") }} />
-        </div>
+        <ActionButton width="100%" type="submit" title="Submit" onClick={() => { setMode("signUpEmail"); setMessage("Sign Up Now") }} />
+        <Divider style={{ fontSize: '12px' }}>
+          or
+        </Divider>
+      </div>
+      <div className="socials" >
+        <SignInPartner logo={<FcGoogle size="20px" />} company="Google" onClick={() => { setMode("signUpForm"); setMessage("Sign Up Form") }} />
+        <SignInPartner logo={<IoLogoFacebook size="20px" color="blue" />} company="Facebook" />
+        <SignInPartner logo={<BsApple size="20px" color="black" />} company="Apple" />
+        <SignInPartner logo={<MdEmail size="20px" />} company="Email" onClick={() => { setMode("signInEmail"); setMessage("Sign In With Email") }} />
       </div>
     </>
   )

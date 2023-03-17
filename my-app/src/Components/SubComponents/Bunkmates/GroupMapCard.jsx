@@ -13,6 +13,7 @@ import { InfoWindowF } from '@react-google-maps/api';
 import { FiEyeOff } from 'react-icons/fi'
 import { FiEye } from 'react-icons/fi'
 import './GroupMapCard.css'
+import { MdVerified } from 'react-icons/md';
 
 function GroupMapCard({ profile, BunkmateInfo, nested }) {
 
@@ -37,7 +38,7 @@ function GroupMapCard({ profile, BunkmateInfo, nested }) {
                                     <CardActionArea>
                                         <CardMedia
                                             component="img"
-                                            image={profile.image}
+                                            image={profile.picture}
                                             alt="profile picture"
                                             //16:9 aspect ratio
                                             sx={{ width: '330px', height: '330px', borderRadius: '5%', }}
@@ -48,12 +49,12 @@ function GroupMapCard({ profile, BunkmateInfo, nested }) {
                                         <div className="card-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                             <div className="first-name">
                                                 <Typography variant="h5" color="text.primary" noWrap style={{ color: 'white', maxWidth: '300px', fontSize: "25px", fontWeight: 500, display: 'flex', alignItems: 'center' }}>
-                                                    {`${profile.name} 's Group`}
+                                                    {`${profile.firstName} 's Group`}
                                                     < div className="display-verified" style={{ padding: '5px' }}>
                                                         {/*TODO: If all profiles are verified through premium subscription then checkmark*/}
                                                         {
                                                             profile.verified ?
-                                                                <Tooltip title={'All Group Members Are Verified'} arrow><CheckCircleOutlineIcon sx={{ fontSize: "medium", backgroundColor: 'aqua', color: 'white', borderRadius: '50%' }} /></Tooltip>
+                                                                <Tooltip title={'All Group Members Are Verified'} arrow><div><MdVerified style={{ fontSize: "medium", color: 'aqua', }} /></div></Tooltip>
                                                                 : null
                                                         }
                                                     </div >
@@ -88,7 +89,7 @@ function GroupMapCard({ profile, BunkmateInfo, nested }) {
                                 </div >
                                 <Divider style={{ margin: '10px', width: '93%' }} />
                                 <Typography style={{ padding: '10px', overflowY: 'scroll', width: '100%', maxHeight: '100px', }} variant="body1" color="text.secondary">
-                                    {profile.bio}
+                                    {profile.aboutUs}
                                 </Typography>
                             </header >
                         </div >

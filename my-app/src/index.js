@@ -7,77 +7,104 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import CreatePost from './routes/CreatePost';
 import ApplyToListings from './routes/ApplyToListings';
 import Error from './Error';
+import Error404 from './Error404'
 import Bunkmates from './routes/Bunkmates';
 import Messages from './routes/Messages'
 import Profile from './routes/Profile';
 import SignInProvider from './Components/GlobalStateManagement/SignInContext';
 import ValidationProvider from './Components/GlobalStateManagement/ValidationContext';
 import MessageProvider from './Components/GlobalStateManagement/MessageContext';
+import FormatProvider from './Components/GlobalStateManagement/FormatContext';
+import Navbar from './Components/Navbar';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 const router = createBrowserRouter([
   {
     path: "/",
     element:
-      <MessageProvider>
-        <SignInProvider>
-          <ValidationProvider>
-            <App />
-          </ValidationProvider>
-        </SignInProvider>
-      </MessageProvider>,
+      <FormatProvider>
+        <MessageProvider>
+          <SignInProvider>
+            <ValidationProvider>
+              <App />
+            </ValidationProvider>
+          </SignInProvider>
+        </MessageProvider>
+      </FormatProvider>,
     errorElement: <Error />,
   },
   {
     path: "/profile",
     element:
-      <MessageProvider>
-        <SignInProvider>
-          <ValidationProvider>
-            <Profile />
-          </ValidationProvider>
-        </SignInProvider>
-      </MessageProvider>,
+      <FormatProvider>
+        <MessageProvider>
+          <SignInProvider>
+            <ValidationProvider>
+              <Profile />
+            </ValidationProvider>
+          </SignInProvider>
+        </MessageProvider>
+      </FormatProvider>,
     errorElement: <Error />,
   },
   {
     path: "/apply_to_listings",
     element:
-      <MessageProvider>
-        <SignInProvider>
-          <ValidationProvider>
-            <ApplyToListings />
-          </ValidationProvider>
-        </SignInProvider>
-      </MessageProvider>,
+      <FormatProvider>
+        <MessageProvider>
+          <SignInProvider>
+            <ValidationProvider>
+              <ApplyToListings />
+            </ValidationProvider>
+          </SignInProvider>
+        </MessageProvider>
+        ,     </FormatProvider>,
     errorElement: <Error />,
   },
   {
     path: '/bunkmates',
     element:
-      <MessageProvider>
-        <SignInProvider>
-          <ValidationProvider>
-            <Bunkmates />
-          </ValidationProvider>
-        </SignInProvider>
-      </MessageProvider>,
+      <FormatProvider>
+        <MessageProvider>
+          <SignInProvider>
+            <ValidationProvider>
+              <Bunkmates />
+            </ValidationProvider>
+          </SignInProvider>
+        </MessageProvider>
+      </FormatProvider>,
     errorElement: <Error />
   },
   {
     path: '/messages',
     element:
-
-      <MessageProvider>
-        <SignInProvider>
-          <ValidationProvider>
-            <Messages />
-          </ValidationProvider>
-        </SignInProvider>
-      </MessageProvider>,
+      <FormatProvider>
+        <MessageProvider>
+          <SignInProvider>
+            <ValidationProvider>
+              <Messages />
+            </ValidationProvider>
+          </SignInProvider>
+        </MessageProvider>
+      </FormatProvider>,
     errorElement: <Error />
   },
+  {
+    path: '*',
+    element:
+      <FormatProvider>
+        <MessageProvider>
+          <SignInProvider>
+            <ValidationProvider>
+              <Error404 />
+            </ValidationProvider>
+          </SignInProvider>
+        </MessageProvider>
+      </FormatProvider>,
+  },
+
 ]);
+
 
 root.render(
   <React.StrictMode>

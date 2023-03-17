@@ -395,6 +395,7 @@ export function ActionButton(props) {
     height: props.height ?? '60px',
     paddingTop: '5px',
     fontSize: props.fontSize,
+    whiteSpace: 'nowrap',
     ':hover': { bgcolor: 'black', color: "aqua" },
   }
   const containerStyles = {

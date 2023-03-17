@@ -7,12 +7,11 @@ import { GoogleMap, useJsApiLoader, MarkerF, OverlayView, OVERLAY_MOUSE_TARGET, 
 import { Button, Grid, Paper, TextField, Card, Typography, CardActionArea, CardMedia, CardContent, CardActions, IconButton } from "@mui/material/"
 import { ActionButton } from '../Form';
 import { TbMessages, TbMessagesOff } from 'react-icons/tb';
-import { useRef, useState } from 'react';
+import { useRef, useState, useContext } from 'react';
 import './GroupMapCard.css'
 
 
 function NestedMapCard({ profile }) {
-
 
     return (
         <Card sx={{ margin: '10px', width: '100%', zIndex: "2", opacity: '0.9' }} onClick={e => e.stopPropagation()}>
@@ -20,11 +19,11 @@ function NestedMapCard({ profile }) {
                 <div className="profile-info" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                     <header style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', }}>
                         <div style={{ width: '100%', display: 'flex', flexDirection: 'row', padding: '5px' }}>
-                            <Tooltip title={`View ${profile?.name}'s profile`} arrow>
+                            <Tooltip title={`View ${profile?.firstName}'s profile`} arrow>
                                 <CardActionArea style={{ width: '125px' }}>
                                     <CardMedia
                                         component="img"
-                                        image={profile?.image}
+                                        image={profile?.picture}
                                         alt="profile picture"
                                         sx={{ width: '125px', height: '125px', borderRadius: '5%', }}
                                     />
@@ -35,27 +34,27 @@ function NestedMapCard({ profile }) {
                                     <div className="first-name">
                                         <Typography variant="h5" color="text.primary" noWrap style={{ fontSize: "25px", fontWeight: 500, display: 'flex', alignItems: 'center' }}>
                                             <div style={{ maxWidth: '130px', overflow: 'hidden' }}>
-                                                {profile?.name}
+                                                {profile?.firstName}
                                             </div>
                                             <div className="display-verified" style={{ padding: '5px' }}>
                                                 {profile?.verified ?
-                                                    <Tooltip title={`${profile?.name} is verified`} arrow><CheckCircleOutlineIcon sx={{ fontSize: "medium", backgroundColor: 'aqua', color: 'white', borderRadius: '50%' }} /></Tooltip>
+                                                    <Tooltip title={`${profile?.firstName} is verified`} arrow><CheckCircleOutlineIcon sx={{ fontSize: "medium", backgroundColor: 'aqua', color: 'white', borderRadius: '50%' }} /></Tooltip>
                                                     : null}
                                             </div>
                                         </Typography >
                                     </div>
                                 </div>
                                 <Typography variant="body1" color="text.secondary" style={{ fontSize: "17px" }}>
-                                    {`${profile?.age} Year Old, ${profile?.gender}`}
+                                    {`${profile.age} Year Old, ${profile?.gender}`}
                                 </Typography>
                                 <Typography variant="body1" color="text.secondary">
-                                    {`${profile?.occupation}`}
+                                    {profile?.occupation}
                                 </Typography>
                             </CardContent >
                         </div>
                         <Divider style={{ margin: '10px', width: '93%' }} />
                         <Typography style={{ padding: '10px', overflowY: 'scroll', width: '100%', height: '130px', }} variant="body1" color="text.secondary">
-                            {profile?.bio}
+                            {profile?.about}
                         </Typography>
                     </header>
                 </div >

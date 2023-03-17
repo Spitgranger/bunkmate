@@ -27,7 +27,8 @@ import {
 } from './GlobalStateManagement/ValidationContext';
 
 import { createProfile } from '../api';
-import { SignInContext } from './GlobalStateManagement/SignInContext'
+import { SignInContext } from './GlobalStateManagement/SignInContext';
+import { formatContext } from './GlobalStateManagement/FormatContext';
 
 
 
@@ -59,6 +60,7 @@ function ProfileMakerForm({ forwardButton, backwardButton }) {
   const { emailError, emailHelperText } = useContext(EmailValidationContext)
   const { aboutError, aboutHelperText, handleAboutValidation } = useContext(AboutValidationContext)
   const { isOpen, setIsOpen } = useContext(SignInContext)
+  const { calculateAge, capitalizedName } = useContext(formatContext)
 
   const actions = {
     checkGlobalError: "check_global_error",
@@ -106,12 +108,20 @@ function ProfileMakerForm({ forwardButton, backwardButton }) {
   //handle event function to record values of most fields
   const handleEmptyStringValidation = (e, name, date = false) => {
     if (date === true) {
-      return dispatch({ type: actions.checkDate, payload: e })
+      return (
+        dispatch({ type: actions.checkDate, payload: e }))
+    } else if (name === "lastName" || name === "firstName") {
+      return dispatch({ type: actions.checkValues, payload: capitalizedName(e.target.value), name: name })
     }
     dispatch({ type: actions.checkValues, payload: e.target.value, name: name })
     dispatch({ type: actions.checkGlobalError })
     //a special case just for date fields
   }
+
+  useEffect(() => {
+    //synchronizes with birthday, to calculate age
+    dispatch({ type: actions.checkValues, payload: calculateAge(state?.values), name: "age" })
+  }, [state?.values?.birthday])
 
   //special handle event function just to file uploads
   const handleFileUpload = (e) => {

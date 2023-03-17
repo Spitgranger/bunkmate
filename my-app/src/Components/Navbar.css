@@ -1,5 +1,7 @@
 /* Normal Styles*/
 .navBar {
+  min-height: 85px;
+  max-height: 85px;
   position: fixed;
   z-index: 999;
   top: 0;
@@ -70,8 +72,9 @@ nav ul a.navCurrentPage {
 .glassBar {
   position: fixed;
   width: 100%;
+  min-height: 85px;
+  max-height: 85px;
   height: 9vh;
-  zoom: 0.8;
   font-weight: 600;
   top: 0;
   z-index: 999;

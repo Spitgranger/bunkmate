@@ -61,6 +61,10 @@ const profileSchema = mongoose.Schema({
         type: String,
         required: true,
     },
+    age: {
+        type: String,
+        required: true,
+    },
     havePets: {
         type: String,
         required: true,

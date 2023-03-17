@@ -5,7 +5,7 @@ import mapStyles from './mapStyles.json'
 import { Button, Grid, Paper, TextField, Card, Typography, CardActionArea, CardMedia, CardContent, CardActions, IconButton } from "@mui/material/"
 import "./Bunkmates.css"
 import PlacesAutocomplete from "../Components/SubComponents/Bunkmates/PlacesAutocomplete";
-import profiles from "../testing_data/mapCardData"
+import mapCardData from "../testing_data/mapCardData"
 import { getProfile } from '../api'
 import SocialFeed from "../Components/SocialFeed";
 import CreateRequestForm from '../Components/CreateRequestForm'
@@ -19,6 +19,8 @@ import { InfoWindow } from "@react-google-maps/api";
 import { borderRadius } from "@mui/system";
 
 
+
+const profiles = JSON.parse(localStorage.getItem('mapCardData')) || mapCardData;
 
 
 
@@ -68,6 +70,8 @@ const Bunkmates = () => {
     }
     //store user profile data
     const [userProfile, setUserProfile] = useState("")
+    //store user request data
+    const [userRequest, setUserRequest] = useState("")
     //retrieve local storage data
     const { GetClientInfo, localStorageData } = useContext(chatClientContext)
     //sign in context for when the user tries to create a bunkmate request without an account
@@ -99,8 +103,11 @@ const Bunkmates = () => {
         //store user profile data
         handleProfile().then((profile) => setUserProfile(profile));
         //store user request data
-        handleRequest().then((request) => console.log(request))
+        handleRequest().then((request) => setUserRequest(request))
     }, [])
+
+    console.log(userProfile)
+
 
 
     const handleRequestClick = () => {
@@ -124,7 +131,7 @@ const Bunkmates = () => {
         return <h1>ERROR HAS OCCURED</h1>
     }
     const handleProfileClick = (e, index) => {
-        console.log("REquest clicked")
+        console.log("Request clicked")
         setProfile(<Profile profile={profiles[index]} />)
     }
 
@@ -191,18 +198,27 @@ const Bunkmates = () => {
                                 position={{ lat: profile?.idealLocation[0], lng: profile?.idealLocation[1] }}
                                 styles={{ background: 'DarkGray', color: 'white' }}
                                 mapPaneName={OVERLAY_MOUSE_TARGET}>
-                                <div style={{ display: "flex", flexDirection: "row", alignItems: "center" }} onClick={e => { handleProfileClick(e, index); e.stopPropagation() }}>
-                                    <img style={{ zIndex: '2', right: '50px', position: 'absolute', width: '45px', height: '45px',  border:  '3px solid #2ACDDD', objectFit: "cover", borderRadius: "50%" }} src={profile?.image} />
-                                    <span style={{ minWidth: '80px', position: 'absolute', right: '-15px', display: "flex", height: "40px", padding: "10px", fontWeight: '500', color: "white", backgroundColor: "#2ACDDD", justifyContent: "center", alignItems: 'center', fontSize: "15px", borderRadius: "2px", cursor: "hover" }} >
-                                        {`$${profile.rentBudget}`}
-                                    </span>
-                                </div>
+                                {
+                                    profile.request === "As myself" ?
+                                        <div style={{ display: "flex", flexDirection: "row", alignItems: "center" }} onClick={e => { handleProfileClick(e, index); e.stopPropagation() }}>
+                                            <img style={{ zIndex: '2', right: '50px', position: 'absolute', width: '45px', height: '45px', border: '3px solid #2ACDDD', objectFit: "cover", borderRadius: "50%" }} src={profile?.picture} />
+                                            <span style={{ minWidth: '80px', position: 'absolute', right: '-14px', display: "flex", height: "40px", padding: "10px", fontWeight: '500', color: "white", backgroundColor: '#2ACDDD', justifyContent: "center", alignItems: 'center', fontSize: "15px", borderRadius: "5px", cursor: "hover" }} >
+                                                {`$${profile.rentBudget}`}
+                                            </span>
+                                        </div> :
+                                        <div style={{ display: "flex", flexDirection: "row", alignItems: "center" }} onClick={e => { handleProfileClick(e, index); e.stopPropagation() }}>
+                                            <img style={{ zIndex: '2', right: '50px', position: 'absolute', width: '45px', height: '45px', border: '3px solid black', objectFit: "cover", borderRadius: "50%" }} src={profile?.picture} />
+                                            <span style={{ minWidth: '80px', position: 'absolute', right: '-14px', display: "flex", height: "40px", padding: "10px", fontWeight: '500', color: "aqua", backgroundColor: 'black', justifyContent: "center", alignItems: 'center', fontSize: "15px", borderRadius: "5px", cursor: "hover" }} >
+                                                {`$${profile.rentBudget}`}
+                                            </span>
+                                        </div>
+                                }
                                 {/*<button style={{ padding: "2px" }} onClick={e => { handleProfileClick(e, index); e.stopPropagation()}}>{`$${profile.rentBudget}`}</button>*/}
                             </OverlayViewF >)
                             /*
                     return <MarkerF clickable={true} options={{
                         icon: {
-                            url: profile?.image,
+                            url: profile?.picture,
                             size: new window.google.maps.Size(50, 50),
                             anchor: new window.google.maps.Point(25, 25),
                         }, label: {

@@ -1,4 +1,5 @@
-import React, {useRef,  useEffect, useState, useContext } from 'react';
+import React, { useRef, useEffect, useState, useContext } from 'react';
+import { formatContext } from '../Components/GlobalStateManagement/FormatContext';
 import Navbar from '../Components/Navbar';
 import './Profile.css'
 import { getProfile } from '../api';
@@ -14,13 +15,12 @@ import { CardHeader, Avatar, Button, Grid, Paper, TextField, Card, Typography, C
 import { TbMessages, TbMessagesOff } from 'react-icons/tb';
 import { InfoWindowF } from '@react-google-maps/api';
 import { ValuesObjectContext } from '../Components/GlobalStateManagement/ValidationContext';
-import { GrInstagram, GrFacebook, GrLinkedin, GrTwitter  } from 'react-icons/gr'
-import { MdVerified, MdPets, MdCleaningServices, MdHandshake } from 'react-icons/md';
-import { BsFillClockFill, BsInfinity, BsBriefcaseFill, BsPencilFill, BsAlarmFill } from 'react-icons/bs';
-import {FaSmoking, FaCannabis,  FaWineGlassAlt, FaRegHandshake, FaDog} from 'react-icons/fa'
-import {BiMessageDetail} from 'react-icons/bi'
-import { BsBookmarks } from 'react-icons/bs'
-import { BsBookmarksFill } from 'react-icons/bs'
+import { GrInstagram, GrFacebook, GrLinkedin, GrTwitter } from 'react-icons/gr'
+import { MdVerified, MdPets, MdCleaningServices } from 'react-icons/md';
+import { BsBookmarks, BsBookmarksFill, BsFillClockFill, BsInfinity, BsBriefcaseFill, BsPencil, BsAlarmFill, BsPen } from 'react-icons/bs';
+import { FaBook, FaSmoking, FaCannabis, FaWineGlassAlt, FaRegHandshake, FaDog } from 'react-icons/fa'
+import { BiMessageDetail } from 'react-icons/bi'
+
 
 /*
 '@media (max-width: 1000px)':{
@@ -28,32 +28,39 @@ import { BsBookmarksFill } from 'react-icons/bs'
 }
 */
 //This is the component that handles the user profile, displaying the user details and other things.
+
+
 const Profile = () => {
+
   const pageStyles = {
-    page:{display: 'flex', justifyContent: 'center', alignItems: 'flex-end', height: '100%'},
-    profileContainer:{display: 'flex', flexFLow: 'row wrap', width: '75%', height: '91vh'},
-    leftColumn: { flex: 1,  margin: '30px',borderRadius: '15px', padding: '10px'},
-    rightColumn: { flex: 1, margin: '30px',borderRadius: '15px', padding: '10px'},
-    middleColumn: {flex: 2, margin: '30px', borderRadius: '15px', padding: '10px'},
-    cardHeader:{whiteSpace: 'nowrap', margin: '0px',  padding: '25px', display: 'flex', alignItems: 'center', justifyContent: 'center'},
-    name:{fontSize: '30px', fontWeight: 600, display: 'flex', alignItems: 'center'},
+    page: { display: 'flex', justifyContent: 'center', alignItems: 'flex-end', height: '100%' },
+    profileContainer: { display: 'flex', flexFLow: 'row wrap', width: '75%', height: '91vh' },
+    leftColumn: { flex: 1, margin: '30px', borderRadius: '15px', padding: '10px', minWidth: '350px' },
+    rightColumn: { flex: 1, margin: '30px', borderRadius: '15px', padding: '10px' },
+    middleColumn: { flex: 2, margin: '30px', borderRadius: '15px', padding: '10px', minWidth: '680px' },
+    cardHeader: { whiteSpace: 'nowrap', margin: '0px', padding: '25px', display: 'flex', alignItems: 'center', justifyContent: 'center' },
+    name: { fontSize: '30px', fontWeight: 600, display: 'flex', alignItems: 'center' },
     socialLinks: { padding: '15px', display: 'flex', justifyContent: 'space-around', },
-    profilePicture:{borderRadius: '15px', maxHeight: '400px', maxWidth: '100%'},
-    header: {display: 'flex', flexDirection: 'row', justifyContent: 'space-between'},
-    actionCenter: {height: '100%', padding: '25px', display: 'flex', alignItems: 'flex-start'},
-    biography:{ marginBottom:'20px', padding: '5px', display: 'flex', justifyContent: 'flex-start'},
-    divider: {fontSize: '20px', padding: '10px'},
+    profilePicture: { borderRadius: '15px', maxHeight: '400px', maxWidth: '100%' },
+    header: { display: 'flex', flexDirection: 'row', justifyContent: 'space-between' },
+    actionCenter: { height: '100%', padding: '25px', display: 'flex', alignItems: 'center' },
+    biography: { marginBottom: '20px', padding: '5px', display: 'flex', justifyContent: 'flex-start', },
+    divider: { fontSize: '20px', padding: '10px' },
     habitsAndLifestyle: { padding: '10px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' },
-    fields: {width: '100%', display: 'flex',  alignItems: 'center', flexDirection: 'column'},
-    fieldsWrapper: {width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-around'},
+    fields: { width: '100%', display: 'flex', alignItems: 'center', flexDirection: 'column' },
+    fieldsWrapper: { width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-around' },
   };
 
+  const { capitalizedName, calculateAge } = useContext(formatContext);
+  const { setIsOpen, setMode, setMessage } = useContext(SignInContext);
   const { values } = useContext(ValuesObjectContext);
   //state to manage the profile data retrieved from the backend
   const [profile, setProfile] = useState("");
   //state to manage the bookmark icon that is shown
   const [bookmark, setBookmark] = useState(false);
   //function to handle fetching the profile data from back end
+
+
   const handleLoad = async () => {
     const profile = await getProfile();
     console.log(profile);
@@ -66,111 +73,132 @@ const Profile = () => {
   }, []);
 
 
-  const capitalizedName = (name) => {
-    return `${name.charAt(0).toUpperCase() + name.slice(1)} `
-  };
- 
- console.log(values, profile)
 
-  const Fields = ({iconStart, fieldTitle, fieldValue, primaryStyles, bodyStyles}) => {
+  const handleEditProfile = () => {
+    setMessage("Edit Your Profile")
+    setMode("profileMakerForm")
+    setIsOpen(true)
+  }
+
+  console.log(values, profile)
+
+  const Fields = ({ iconStart, fieldTitle, fieldValue, primaryStyles, bodyStyles }) => {
     //disable display flex to have values appear below keys
 
-    const fieldStyles= {
-      fieldContainer:{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '5px'},
-      keyContainer:{display: 'flex', alignItems: 'center', whiteSpace: 'nowrap'}
+    const fieldStyles = {
+      fieldContainer: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '5px' },
+      keyContainer: { display: 'flex', alignItems: 'center', whiteSpace: 'nowrap' }
     };
-    
-    return(
-    <div style={fieldStyles.fieldContainer}>
-      <div style={fieldStyles.keyContainer}>
-        {iconStart}
-        <Typography sx={{...primaryStyles, paddingLeft: '15px', fontSize:"17px"}} variant="h6" color="text.primary">{`${fieldTitle}: `}</Typography>
+
+    return (
+      <div style={fieldStyles.fieldContainer}>
+        <div style={fieldStyles.keyContainer}>
+          {iconStart}
+          <Typography sx={{ ...primaryStyles, paddingLeft: '15px', fontSize: "17px" }} variant="h6" color="text.primary">{`${fieldTitle}: `}</Typography>
+        </div>
+        <div style={{ width: '50%' }}>
+          <Typography sx={{ ...bodyStyles, padding: '5px', display: 'flex', justifyContent: 'flex-start' }} variant="body1" color="text.secondary">{fieldValue}</Typography>
+        </div>
       </div>
-      <div style={{width: '50%'}}>
-        <Typography sx={{...bodyStyles, padding: '5px', display: 'flex', justifyContent: 'flex-start'}} variant="body1" color="text.secondary">{fieldValue}</Typography>
-      </div>
-    </div>
     )
   }
 
   if (profile) {
-    return(
+    return (
       <div style={pageStyles.page}>
-        <div style={{height: '9vh'}} />
+        <div style={{ height: '9vh' }} />
         <Navbar />
-    <div style={pageStyles.profileContainer}>
-    <Card sx={pageStyles.leftColumn}>
-      <CardMedia sx={pageStyles.profilePicture} component="img" image={profile.picture}/>
-      <CardContent>
-        <div style={pageStyles.socialLinks}>
-          <IconButton ><GrInstagram /></IconButton>
-          <IconButton ><GrFacebook/></IconButton>
-          <IconButton ><GrLinkedin /></IconButton>
-          <IconButton ><GrTwitter /></IconButton>
-        </div>
-        <Divider sx={pageStyles.divider} flexItem={true} textAlign='center' >Description</Divider>
-        <Fields iconStart={<BsFillClockFill />}fieldTitle="Age" fieldValue={'24'}/>      
-        <Fields iconStart={<BsInfinity />}fieldTitle="Gender" fieldValue={profile.gender}/>      
-        <Fields iconStart={<BsBriefcaseFill />}fieldTitle="Occupation" fieldValue={profile.employment}/>      
-        <Fields iconStart={<BsPencilFill />} fieldTitle="Current Education"  fieldValue={profile.education}/>      
-      </CardContent>
-    </Card>
-    <Card sx={pageStyles.middleColumn}>
-      <header style={pageStyles.header}>
-        <Tooltip arrow placement="right" title={"Active 3 hours ago"}>
-          <CardHeader sx={pageStyles.cardHeader} titleTypographyProps={pageStyles.name} subheader={profile.email} color="text.primary" title={[capitalizedName(profile.firstName), capitalizedName(profile.lastName), <MdVerified style={{ color: 'aqua', margin: '5px'}} /> ]}/>
-        </Tooltip>
-        <div style={pageStyles.actionCenter}>
-          <Tooltip title={`${capitalizedName(profile.firstName)} has an active request`}>
-            <div>
-              <ActionButton startIcon={<HiMapPin />} height="30px" title={"View Request"}/>
-            </div>
-          </Tooltip>
-          <IconButton>
-            <BiMessageDetail />
-          </IconButton>
-          <IconButton onClick={() => setBookmark(!bookmark)}>
-            {bookmark ? <BsBookmarksFill /> : <BsBookmarks />}
-          </IconButton>
-        </div>
-      </header>
-      <Divider sx={pageStyles.divider} textAlign='left'>Biography</Divider>
-      <CardContent sx={{height: '100%'}}>      
-          <Typography sx={pageStyles.biography} variant="body1" color="text.secondary">{profile.about}</Typography>
-      <Divider sx={pageStyles.divider} textAlign='left'>Habits and Lifestyles</Divider>
-          <div style={pageStyles.habitsAndLifestyle}>
-            <section style={pageStyles.fieldsWrapper}>
-              <div style={pageStyles.fields}>
-                <div style={{width: '100%'}}>
-                  <Fields iconStart={<MdPets />}fieldTitle="Own Pets" fieldValue={'Yes'}/>      
-                  <Fields iconStart={<BsAlarmFill />}fieldTitle="Sleep Schedule" fieldValue={'Early Bird'}/>      
-                </div>
+        <div style={pageStyles.profileContainer}>
+          <Card sx={pageStyles.leftColumn}>
+            <CardMedia sx={pageStyles.profilePicture} component="img" image={profile.picture} />
+            <CardContent>
+              <div style={pageStyles.socialLinks}>
+                <IconButton ><GrInstagram /></IconButton>
+                <IconButton ><GrFacebook /></IconButton>
+                <IconButton ><GrLinkedin /></IconButton>
+                <IconButton ><GrTwitter /></IconButton>
               </div>
-              <div style={pageStyles.fields}>
-                <div style={{width: '100%'}}>
-                  <Fields iconStart={<MdCleaningServices />}  fieldTitle="Cleanliness" fieldValue={'Clean Freak'}/>      
-                  <Fields   iconStart={<FaWineGlassAlt/>}fieldTitle="Drinking" fieldValue={"Don't Drink"}/>      
-                </div>
+              <Divider sx={pageStyles.divider} flexItem={true} textAlign='center' >Description</Divider>
+              <Fields iconStart={<BsFillClockFill style={{ color: '#2ACDDD' }} />} fieldTitle="Age" fieldValue={profile.age ?? calculateAge(profile)} />
+              <Fields iconStart={<BsInfinity style={{ color: '2ACDDD' }} />} fieldTitle="Gender" fieldValue={profile.gender} />
+              <Fields iconStart={<BsBriefcaseFill style={{ color: '2ACDDD' }} />} fieldTitle="Occupation" fieldValue={profile.employment} />
+              <Fields iconStart={<FaBook style={{ color: '2ACDDD' }} />} fieldTitle="Current Education" fieldValue={profile.education} />
+            </CardContent>
+          </Card>
+          <Card sx={pageStyles.middleColumn}>
+            <header style={pageStyles.header}>
+              <Tooltip arrow placement="right" title={"Active 3 hours ago"}>
+                <CardHeader sx={pageStyles.cardHeader} titleTypographyProps={pageStyles.name} subheader={profile.email} color="text.primary" title={[capitalizedName(profile.firstName), <MdVerified style={{ color: '#2ACDDD', margin: '5px' }} />]} />
+              </Tooltip>
+              <div style={pageStyles.actionCenter}>
+                <Tooltip arrow title={`${capitalizedName(profile.firstName)} has an active request`}>
+                  <div>
+                    <ActionButton startIcon={<HiMapPin />} height="30px" title={"View Request"} />
+                  </div>
+                </Tooltip>
+                <Tooltip title={`Edit your profile`}>
+                  <IconButton onClick={handleEditProfile}>
+                    <BsPencil />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title={`Message ${capitalizedName(profile.firstName)}`}>
+                  <IconButton>
+                    <BiMessageDetail />
+                  </IconButton>
+                </Tooltip>
+                {bookmark
+                  ?
+                  <Tooltip arrow title="This profile has been saved!">
+                    <IconButton onClick={() => setBookmark(!bookmark)}>
+                      <BsBookmarksFill style={{ color: '#2ACDDD' }} />
+                    </IconButton>
+                  </Tooltip>
+                  :
+                  <Tooltip arrow title="Save this profile">
+                    <IconButton onClick={() => setBookmark(!bookmark)}>
+                      <BsBookmarks />
+                    </IconButton>
+                  </Tooltip>
+                }
               </div>
-            </section>
-            <section style={pageStyles.fieldsWrapper}>
-              <div style={pageStyles.fields}>
-                <div style={{width: '100%'}}>
-                  <Fields iconStart={<FaSmoking />} fieldTitle="Smoking" fieldValue={'Moderate Smoker'}/>      
-                  <Fields iconStart={<FaCannabis />}fieldTitle="Cannabis" fieldValue={'Light Cannabis Use'}/>      
-                </div>
+            </header>
+            <Divider sx={pageStyles.divider} textAlign='left'>Biography</Divider>
+            <CardContent>
+              <Typography sx={pageStyles.biography} variant="body1" color="text.secondary">{profile.about}</Typography>
+              <Divider sx={pageStyles.divider} textAlign='left'>Habits and Lifestyles</Divider>
+              <div style={pageStyles.habitsAndLifestyle}>
+                <section style={pageStyles.fieldsWrapper}>
+                  <div style={pageStyles.fields}>
+                    <div style={{ width: '100%' }}>
+                      <Fields iconStart={<MdPets style={{ color: '#2ACDDD' }} />} fieldTitle="Own Pets" fieldValue={profile.havePets} />
+                      <Fields iconStart={<BsAlarmFill style={{ color: '#2ACDDD' }} />} fieldTitle="Sleep Schedule" fieldValue={profile.sleepSchedule} />
+                    </div>
+                  </div>
+                  <div style={pageStyles.fields}>
+                    <div style={{ width: '100%' }}>
+                      <Fields iconStart={<MdCleaningServices style={{ color: '#2ACDDD' }} />} fieldTitle="Cleanliness" fieldValue={profile.cleanliness} />
+                      <Fields iconStart={<FaWineGlassAlt style={{ color: '#2ACDDD' }} />} fieldTitle="Drinking" fieldValue={profile.drinking} />
+                    </div>
+                  </div>
+                </section>
+                <section style={pageStyles.fieldsWrapper}>
+                  <div style={pageStyles.fields}>
+                    <div style={{ width: '100%' }}>
+                      <Fields iconStart={<FaSmoking style={{ color: '#2ACDDD' }} />} fieldTitle="Smoking" fieldValue={profile.smoking} />
+                      <Fields iconStart={<FaCannabis style={{ color: '#2ACDDD' }} />} fieldTitle="Cannabis" fieldValue={profile.cannabis} />
+                    </div>
+                  </div>
+                  <div style={pageStyles.fields}>
+                    <div style={{ width: '100%' }}>
+                      <Fields iconStart={<FaRegHandshake style={{ color: '#2ACDDD' }} />} fieldTitle="Ok With Guests" fieldValue={profile.tolerateGuests} />
+                      <Fields iconStart={<FaDog style={{ color: '#2ACDDD' }} />} fieldTitle="Ok With Pets" fieldValue={profile.toleratePets} />
+                    </div>
+                  </div>
+                </section>
               </div>
-              <div style={pageStyles.fields}>
-                <div style={{width: '100%'}}>
-                  <Fields iconStart={<FaRegHandshake /> }  fieldTitle="Ok With Guests" fieldValue={'Ok With it'}/>      
-                  <Fields  iconStart={<FaDog />}fieldTitle="Ok With Pets" fieldValue={"Ok With it"}/>      
-                </div>
-              </div>
-            </section>
-          </div>
-      </CardContent>
-    </Card>
-    {/* 
+            </CardContent>
+          </Card>
+          {/* 
     <Card sx={pageStyles.rightColumn}>
       <CardHeader title="Saved Listing"/>
       <CardContent>      
@@ -180,7 +208,7 @@ const Profile = () => {
       </CardContent>
     </Card>
     */}
-    </div>  
+        </div>
       </div>
     )
 
@@ -199,53 +227,3 @@ const Profile = () => {
 };
 
 export default Profile;
-
-
-    /*
-    return (
-      <div className='page-container'>
-        <div style={{ height: '9vh' }} />
-        <div className='profile-wrapper'>
-          <div className='profile-name'>
-            <h1>{profile.firstName}'s Profile</h1>
-            <Avatar src={profile.picture} alt={`${profile.firstName}-profile-picture`} sx={{ width: 300, height: 300 }}></Avatar>
-            <div className='about-me'>
-              <h1>About me</h1>
-              <h4>{profile.about}</h4>
-
-            </div>
-          </div>
-          <div className="profile-information">
-            <Paper>
-              <header style={{ display: 'flex', flexFlow: 'row nowrap' }}>
-                <h1>Personal Information</h1>
-                <button onClick={handleProfile}>Edit Profile</button>
-              </header>
-              <div className='content'>
-                {Object.entries(profile).map((entry) => {
-                  if (entry[0] !== "picture" && entry[0] !== "_id" && entry[0] !== "about") {
-                    return <div className='info-field'>
-                      <h2>{entry[0]}:</h2>
-                      <h3>{entry[1]}</h3>
-                    </div>
-                  }
-                  return null;
-                })}
-              </div>
-            </Paper>
-          </div>
-        </div>
-      </div >
-    );
-  }
-  else {
-    return (
-      <div className='page-container'>
-        <div style={{ height: '9vh' }} />
-        <Navbar />
-        <div className="error-content">
-          <h1>No profile associated with this account</h1>
-        </div>
-      </div>
-    )
-*/
