@@ -52,5 +52,4 @@ export const signup = async (req, res) => {
         res.status(500).json({ message: 'something went wrong like a gofu' })
         console.log(error)
     }
-
 }

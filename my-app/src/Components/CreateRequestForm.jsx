@@ -85,10 +85,10 @@ function CreateRequestForm(props) {
 
   const [list, setList] = useState({});
   const [menuItem, setMenuItem] = useState([]);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const [listingsHashMap, setListingsHashMap] = useState(new Map());
+  const [listingsDataHashMap, setListingsDataHashMap] = useState(new Map());
 
-
-  /*
   const [groupChat, setGroupChat] = useState([]);
 
   useEffect(() => {
@@ -96,25 +96,34 @@ function CreateRequestForm(props) {
       const response = await getListings();
       return response;
     }
+    /*
     async function chats() {
       const chatData = { id: user?.result?._id, token: user?.streamToken }
       const response = await getChats(chatData);
       return response
     }
+    */
     listings().then((response) => {
       console.log(response.data.data);
+      //this WHOLE SECTION SHOULD PROBABLY MERGE INTO ONE BIG HASH MAP, APPLY THE LOGIC THERE
       const items = response.data.data.map((element, index) => {
-        return <SavedListingItem index={index} image={element.image} address={element.address} price={element.price} bedBath={element.bedBath} />
+        setListingsHashMap(listingsHashMap.set(element._id, element.address));
+        setListingsDataHashMap(listingsDataHashMap.set(element._id, <SavedListingItem id={element._id} index={index} image={element.image} address={element.address} price={element.price} bedBath={element.bedBath} />));
+        return <SavedListingItem id={element._id} index={index} image={element.image} address={element.address} price={element.price} bedBath={element.bedBath} />
       });
+
+      setListingsDataHashMap(listingsDataHashMap.set("None", "None"))
       items.push("None");
       items.reverse();
+      console.log(listingsDataHashMap)
       setMenuItem(items);
     });
+    /*
     chats().then((response) => {
       setGroupChat(response.data);
     });
+    */
   }, []);
-  /*
 
   //not in use currently
   /*
@@ -219,8 +228,10 @@ function CreateRequestForm(props) {
 
   //useEffect in sync with listingObject
   useEffect(() => {
+    console.log(listingsHashMap)
     if (state?.secondPageValues?.listingObject && state?.secondPageValues?.listingObject !== "None") {
-      const address = state?.secondPageValues?.listingObject?.address;
+
+      const address = listingsHashMap.get(state?.secondPageValues?.listingObject)//state?.secondPageValues?.listingObject?.address;
       const geocoder = new window.google.maps.Geocoder();
       geocoder.geocode({ address }, (results, status) => {
         if (status === "OK" && results[0].geometry) {
@@ -254,7 +265,7 @@ function CreateRequestForm(props) {
 
   const handleSubmit = async (formData) => {
     //record values in localStorage
-
+    /*
     localStorage.setItem('mapCardData', JSON.stringify(profiles))
     const mapData = JSON.parse(localStorage.getItem('mapCardData'))
 
@@ -266,12 +277,12 @@ function CreateRequestForm(props) {
       localStorage.setItem('userRequest', JSON.stringify(allData))
       localStorage.setItem('mapCardData', JSON.stringify(mapData))
 
-      /* setplaceholder values immediatly*/
-      /* profile ? profile : localstorage.set(placeholder)*/
-      /* {placeholder}, {userprofile, getRequest}*/
+      // setplaceholder values immediatly
+      // profile ? profile : localstorage.set(placeholder)
+      // {placeholder}, {userprofile, getRequest}
 
     }
-
+    */
     //record values in backend
     try {
       const response = await createRequest(formData);
@@ -437,21 +448,23 @@ const handleGroupChat = (e) => {
     setFormTitle("Request As A Group");
     setLabelTitle("Group's Rent Budget")
   }
-
-  useEffect(() => {
-    const storedData = []
-    savedListingsData.map((element, index) => {
-      storedData.push(index === 0 ? "None" : <SavedListingItem index={index} image={element.image} address={element.address} price={element.price} bedBath={element.bedBath} />);
-    });
-    setMenuItem(storedData)
-  }, [])
+  /*
+    useEffect(() => {
+      const storedData = []
+      savedListingsData.map((element, index) => {
+        storedData.push(index === 0 ? "None" : <SavedListingItem index={index} image={element.image} address={element.address} price={element.price} bedBath={element.bedBath} />);
+      });
+      setMenuItem(storedData)
+    }, [])
+    */
 
   const handleListingDisplay = () => {
     //only for the "listing in Mind" field
     if (state?.secondPageValues?.listingObject === "None") {
       return ("None")
     } else {
-      return (menuItem[state?.secondPageValues?.listingObject.index])
+      console.log(listingsDataHashMap.get(state?.secondPageValues?.listingObject))
+      return (listingsDataHashMap.get(state?.secondPageValues?.listingObject))
     }
   }
 
@@ -473,7 +486,7 @@ const handleGroupChat = (e) => {
       {showBody ?
         <>
           <LineBox flex={true} CssTextField={[
-            <DropDownMenu required={true} maxHeight={250} value={handleListingDisplay() ?? "None"} onChange={(e) => { handleEmptyStringValidation(e.target.value?.props || "None", 'listingObject', 'secondPageValues'); }} label="Listing in Mind" menuItem={menuItem} />,
+            <DropDownMenu required={true} maxHeight={250} value={handleListingDisplay() ?? "None"} onChange={(e) => { handleEmptyStringValidation(e.target.value?.props?.id || "None", 'listingObject', 'secondPageValues'); }} label="Listing in Mind" menuItem={Array.from(listingsDataHashMap.values())} />,
           ]} />
 
           {/*if the user has a listing in mind then we use the listing's coordinates else use their own coordinates*/}

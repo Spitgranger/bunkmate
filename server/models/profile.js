@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 const profileSchema = mongoose.Schema({
     user: {
-        type: mongoose.SchemaTypes.ObjectId,
+        type: mongoose.Schema.ObjectId,
         ref: "User",
     },
     firstName: {

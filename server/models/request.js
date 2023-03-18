@@ -1,9 +1,11 @@
 import mongoose from 'mongoose'
-const ObjectId = mongoose.Schema.Types.ObjectId
-
 const requestSchema = mongoose.Schema({
+    request: {
+        type: String,
+        required: true,
+    },
     user: {
-        type: mongoose.SchemaTypes.ObjectId,
+        type: mongoose.Schema.ObjectId,
         ref: "User",
     },
     address: {
@@ -44,20 +46,21 @@ const requestSchema = mongoose.Schema({
     },
     rangeSliderValue: {
         type: [Number],
-        require: true,
+        required: true,
     },
     //listingObject stores string and object depending on which item is selected in the dropdown menu
     listingObject: {
         type: mongoose.SchemaTypes.ObjectId,
-        require: false,
+        ref: "Post",
+        required: false,
     },
     aboutUs: {
         type: String,
-        require: false,
+        required: false,
     },
     request: {
         type: String,
-        require: true,
+        required: true,
     },
 })
 

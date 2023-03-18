@@ -14,7 +14,7 @@ import { chatClientContext } from "../Components/GlobalStateManagement/MessageCo
 import { SignInContext } from "../Components/GlobalStateManagement/SignInContext";
 import SingleMapCard from "../Components/SubComponents/Bunkmates/SingleMapCard";
 import GroupMapCard from "../Components/SubComponents/Bunkmates/GroupMapCard";
-import { getRequest } from "../api";
+import { getRequests } from "../api";
 import { InfoWindow } from "@react-google-maps/api";
 import { borderRadius } from "@mui/system";
 import { BunkmatesContext } from "../Components/GlobalStateManagement/BunkmatesContext";
@@ -75,7 +75,7 @@ const Bunkmates = () => {
     //store user profile data
     const [userProfile, setUserProfile] = useState("")
     //store user request data
-    const [userRequest, setUserRequest] = useState("")
+    const [userRequest, setUserRequest] = useState(new Map());
     //retrieve local storage data
     const { GetClientInfo, localStorageData } = useContext(chatClientContext)
     //sign in context for when the user tries to create a bunkmate request without an account
@@ -101,16 +101,20 @@ const Bunkmates = () => {
         }
         //get request data from backend
         async function handleRequest() {
-            const request = await getRequest();
+            const request = await getRequests();
             return request
         }
         //store user profile data
         handleProfile().then((profile) => setUserProfile(profile));
         //store user request data
-        handleRequest().then((request) => setUserRequest(request))
+        handleRequest().then((request) => request.data.forEach(
+            (user) => {
+                setUserRequest(userRequest.set(user.user, user));
+            }
+        ));
     }, [])
 
-    console.log(userProfile)
+    console.log(userRequest)
 
 
 
