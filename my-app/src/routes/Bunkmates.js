@@ -18,6 +18,7 @@ import { getRequests } from "../api";
 import { InfoWindow } from "@react-google-maps/api";
 import { borderRadius } from "@mui/system";
 import { BunkmatesContext } from "../Components/GlobalStateManagement/BunkmatesContext";
+import { RxTriangleDown } from "react-icons/rx"
 
 
 
@@ -67,11 +68,13 @@ export function MapProfile({ profile }) {
 
 
 const Bunkmates = () => {
+
     const socialFeedStyles = {
         FeedContainer: {
             overflow: 'scroll', height: '77.5vh', position: 'absolute', right: '0.5%', top: '5%', maxWidth: '20%'
         }
     }
+
     //store user profile data
     const [userProfile, setUserProfile] = useState("")
     //store user request data
@@ -92,6 +95,7 @@ const Bunkmates = () => {
     })
 
 
+    const userRequestData = JSON.parse(localStorage.getItem("userRequest"))
 
     useEffect(() => {
         //get profile data from backend
@@ -119,6 +123,8 @@ const Bunkmates = () => {
 
 
     const handleRequestClick = () => {
+
+
         //if user is not signed in
         if (!localStorageData) {
             setMessage("Sign Up Now!")
@@ -170,7 +176,16 @@ const Bunkmates = () => {
     function CreateRequestButton() {
         return (
             <div style={{ display: 'flex', bottom: '10vh', justifyContent: 'center', position: 'absolute', }}>
-                <ActionButton onClick={handleRequestClick} bgColor={"black"} title="Create Bunkmate Request" opacity='0.85' />
+                <ActionButton onClick={handleRequestClick} bgColor={"black"} title={"Create Bunkmate Request"} opacity='0.85' />
+            </div>
+        )
+    }
+
+
+    function EditRequestButton() {
+        return (
+            <div style={{ display: 'flex', bottom: '10vh', justifyContent: 'center', position: 'absolute', }}>
+                <ActionButton onClick={() => { handleRequestClick(); setCenter({ lat: userRequestData.idealLocation[0], lng: userRequestData.idealLocation[1] }) }} bgColor={"black"} title={"Edit Bunkmate Request"} opacity='0.85' />
             </div>
         )
     }
@@ -190,9 +205,13 @@ const Bunkmates = () => {
     return (
         <div>
             <div className="content-container">
-                <div className="search-bar-container" style={{ height: '200px', top: '19vh', position: 'absolute', display: 'flex', justifyContent: 'center' }}>
-                    <PlacesAutocomplete setSelected={setSelected} setCenter={setCenter} />
-                </div>
+                {
+                    mapProfileCard
+                        ? null
+                        : <div className="search-bar-container" style={{ height: '200px', top: '19vh', position: 'absolute', display: 'flex', justifyContent: 'center' }}>
+                            <PlacesAutocomplete setSelected={setSelected} setCenter={setCenter} />
+                        </div>
+                }
                 <div className="map-container">
                     <GoogleMap
                         center={center}
@@ -217,17 +236,19 @@ const Bunkmates = () => {
                                 mapPaneName={OVERLAY_MOUSE_TARGET}>
                                 {
                                     profile.request === "As myself" ?
-                                        <div style={{ display: "flex", flexDirection: "row", alignItems: "center" }} onClick={e => { handleProfileClick(e, index); e.stopPropagation() }}>
-                                            <img style={{ zIndex: '2', right: '50px', position: 'absolute', width: '45px', height: '45px', border: '3px solid #2ACDDD', objectFit: "cover", borderRadius: "50%" }} src={profile?.picture} />
-                                            <span style={{ minWidth: '80px', position: 'absolute', right: '-14px', display: "flex", height: "40px", padding: "10px", fontWeight: '500', color: "white", backgroundColor: '#2ACDDD', justifyContent: "center", alignItems: 'center', fontSize: "15px", borderRadius: "5px", cursor: "hover" }} >
+                                        <div style={{ display: "flex", flexDirection: "row", }} onClick={e => { handleProfileClick(e, index); e.stopPropagation() }}>
+                                            <img style={{ zIndex: '2', right: '7px', top: '-2.6px', position: 'absolute', width: '45px', height: '45px', border: '3px solid #2ACDDD', objectFit: "cover", borderRadius: "50%" }} src={profile?.picture} />
+                                            <span style={{ minWidth: '90px', position: 'absolute', right: '-65px', display: "flex", height: "40px", padding: "10px", fontWeight: '500', color: "white", backgroundColor: '#2ACDDD', justifyContent: "center", alignItems: 'center', fontSize: "15px", borderRadius: "5px", cursor: "hover" }} >
                                                 {`$${profile.rentBudget}`}
                                             </span>
+                                            <RxTriangleDown style={{ right: '15px', color: '#2ACDDD', position: 'absolute', top: '35px', fontSize: '30px' }} />
                                         </div> :
-                                        <div style={{ display: "flex", flexDirection: "row", alignItems: "center" }} onClick={e => { handleProfileClick(e, index); e.stopPropagation() }}>
-                                            <img style={{ zIndex: '2', right: '50px', position: 'absolute', width: '45px', height: '45px', border: '3px solid aqua', objectFit: "cover", borderRadius: "50%" }} src={profile?.picture} />
-                                            <span style={{ minWidth: '80px', position: 'absolute', right: '-14px', display: "flex", height: "40px", padding: "10px", fontWeight: '500', color: "aqua", backgroundColor: 'black', border: '3px solid aqua', justifyContent: "center", alignItems: 'center', fontSize: "15px", borderRadius: "5px", cursor: "hover" }} >
+                                        <div style={{ display: "flex", flexDirection: "row", }} onClick={e => { handleProfileClick(e, index); e.stopPropagation() }}>
+                                            <img style={{ zIndex: '2', right: '7px', top: '-2.6px', position: 'absolute', width: '45px', height: '45px', border: '3px solid aqua', objectFit: "cover", borderRadius: "50%" }} src={profile?.picture} />
+                                            <span style={{ minWidth: '90px', position: 'absolute', right: '-65px', display: "flex", height: "40px", padding: "10px", fontWeight: '500', color: "aqua", backgroundColor: 'black', border: '3px solid aqua', justifyContent: "center", alignItems: 'center', fontSize: "15px", borderRadius: "5px", cursor: "hover" }} >
                                                 {`$${profile.rentBudget}`}
                                             </span>
+                                            <RxTriangleDown style={{ right: '15px', color: '#2ACDDD', position: 'absolute', top: '35px', fontSize: '30px' }} />
                                         </div>
                                 }
                                 {/*<button style={{ padding: "2px" }} onClick={e => { handleProfileClick(e, index); e.stopPropagation()}}>{`$${profile.rentBudget}`}</button>*/}
@@ -250,9 +271,16 @@ const Bunkmates = () => {
 
                     </GoogleMap >
                 </div>
-                <>
-                    {showRequest ? <BunkmateRequestPage /> : <CreateRequestButton />}
-                </>
+                {
+                    //if the user has clicked on a map card then these buttons won't be shown show that it doesn't clutter the screen
+                    mapProfileCard
+                        ? null
+                        : <>{showRequest
+                            ? <BunkmateRequestPage />
+                            : userRequestData
+                                ? <EditRequestButton />
+                                : <CreateRequestButton />}</>
+                }
             </div >
         </div >
     )

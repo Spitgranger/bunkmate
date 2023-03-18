@@ -32,8 +32,6 @@ import { MapProfile } from './Bunkmates';
 }
 */
 //This is the component that handles the user profile, displaying the user details and other things.
-const userRequest = JSON.parse(localStorage.getItem('userRequest'))
-const profiles = JSON.parse(localStorage.getItem('mapCardData'));
 
 
 const Profile = () => {
@@ -68,8 +66,21 @@ const Profile = () => {
   const [requestButtonMessage, setRequestButtonMessage] = useState("Inactive")
   const [showIcon, setShowIcon] = useState(null)
   const [textColor, setTextColor] = useState('red')
-  const { setMapProfileCard } = useContext(BunkmatesContext)
+  const { mapProfileCard, setMapProfileCard } = useContext(BunkmatesContext)
+  const [userRequest, setUserRequest] = useState(null)
 
+  //query localStorage whenever mapProfileCard changes (primarily used to update the state of the "view request button")
+  useEffect(() => {
+    const userRequest = JSON.parse(localStorage.getItem('userRequest'))
+    setUserRequest(userRequest)
+  }, [mapProfileCard])
+
+
+  const handleEditProfile = () => {
+    setMessage("Edit Your Profile")
+    setMode("profileMakerForm")
+    setIsOpen(true)
+  }
 
   //function to handle fetching the profile data from back end
   const handleLoad = async () => {
@@ -85,17 +96,10 @@ const Profile = () => {
 
 
 
-  const handleEditProfile = () => {
-    setMessage("Edit Your Profile")
-    setMode("profileMakerForm")
-    setIsOpen(true)
-  }
 
-  console.log(values, profile)
 
   const Fields = ({ iconStart, fieldTitle, fieldValue, primaryStyles, bodyStyles }) => {
-    //disable display flex to have values appear below keys
-
+    //Note: disable display flex to have values appear below keys
     const fieldStyles = {
       fieldContainer: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '5px' },
       keyContainer: { display: 'flex', alignItems: 'center', whiteSpace: 'nowrap' }
@@ -146,9 +150,9 @@ const Profile = () => {
               </div>
               <Divider sx={pageStyles.divider} flexItem={true} textAlign='center' >Description</Divider>
               <Fields iconStart={<BsFillClockFill style={{ color: '#2ACDDD' }} />} fieldTitle="Age" fieldValue={profile.age ?? calculateAge(profile)} />
-              <Fields iconStart={<BsInfinity style={{ color: '2ACDDD' }} />} fieldTitle="Gender" fieldValue={profile.gender} />
-              <Fields iconStart={<BsBriefcaseFill style={{ color: '2ACDDD' }} />} fieldTitle="Occupation" fieldValue={profile.employment} />
-              <Fields iconStart={<FaBook style={{ color: '2ACDDD' }} />} fieldTitle="Current Education" fieldValue={profile.education} />
+              <Fields iconStart={<BsInfinity style={{ color: '#2ACDDD' }} />} fieldTitle="Gender" fieldValue={profile.gender} />
+              <Fields iconStart={<BsBriefcaseFill style={{ color: '#2ACDDD' }} />} fieldTitle="Occupation" fieldValue={profile.employment} />
+              <Fields iconStart={<FaBook style={{ color: '#2ACDDD' }} />} fieldTitle="Current Education" fieldValue={profile.education} />
             </CardContent>
           </Card>
           <Card sx={pageStyles.middleColumn}>
