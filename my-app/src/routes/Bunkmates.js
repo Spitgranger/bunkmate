@@ -91,6 +91,7 @@ const Bunkmates = () => {
         libraries: libraries,
     })
     const handleSubmit = useContext(CreateRequestContext)
+    const [listingArray, setListingArray] = useState([]);
 
 
     useEffect(() => {
@@ -110,33 +111,19 @@ const Bunkmates = () => {
         //store user request data
         handleRequest().then((request) => request.data.forEach(
             (user) => {
+                setListingArray([...listingArray, user])
                 setUserRequest(userRequest.set(user.user, user));
             }
         ));
     }, [])
-
     useEffect(() => {
-        //get request data from backend
-        async function handleRequest() {
-            const request = await getRequests();
-            return request
-        }
-        //store user request data
-        handleRequest().then((request) => request.data.forEach(
-            (user) => {
-                setUserRequest(userRequest.set(user.user, user));
-            }
-        ));
-
-    }, [handleSubmit])
-
+        console.log(listingArray)
+    }, [listingArray])
     //THIS LOGIC ONLY WORKS FOR NOW PROBABLY CHANGE THE API ENDPOINT TO RETURN A BOOLEAN THAT IS EITHER TRUE OR FALSE
-    console.log(userRequest)
     const userRequestData = userRequest.get(JSON.parse(localStorage.getItem("profile"))?.result?._id);
     console.log(userRequestData)
 
     const handleRequestClick = () => {
-
 
         //if user is not signed in
         if (!localStorageData) {
@@ -287,7 +274,7 @@ const Bunkmates = () => {
                     */
                         })}
 
-                        {Array.from(userRequest.values()).map((request, index) => {
+                        {listingArray.map((request, index) => {
                             return (<OverlayViewF key={request?.user}
                                 position={{ lat: request?.idealLocation[0], lng: request?.idealLocation[1] }}
                                 styles={{ background: 'DarkGray', color: 'white' }}
