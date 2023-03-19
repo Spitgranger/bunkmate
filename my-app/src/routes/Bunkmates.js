@@ -28,12 +28,12 @@ import { RxTriangleDown } from "react-icons/rx"
 const libraries = ["places"];
 
 
-export function MapProfile({ profile }) {
+export function MapProfile({ profile, type, request }) {
 
     //determines whether to render single or group map card
     //as well as set bunkmate info at the bottom of the card
     const [sideCard, setSideCard] = useState(null)
-    console.log(profile)
+    console.log(type)
 
 
     const handleEnter = () => {
@@ -58,9 +58,9 @@ export function MapProfile({ profile }) {
         /*
         <SingleMapCard profile={profile} BunkmateInfo={BunkmateInfo} />
         */
-        profile.request === "As myself"
+        profile.request || type === "As myself"
             ?
-            <SingleMapCard profile={profile} BunkmateInfo={BunkmateInfo} />
+            <SingleMapCard profile={profile} BunkmateInfo={BunkmateInfo} request={request} />
             :
             <GroupMapCard profile={profile} BunkmateInfo={BunkmateInfo} />
     )
@@ -95,8 +95,6 @@ const Bunkmates = () => {
     })
 
 
-    const userRequestData = JSON.parse(localStorage.getItem("userRequest"))
-
     useEffect(() => {
         //get profile data from backend
         async function handleProfile() {
@@ -117,10 +115,10 @@ const Bunkmates = () => {
             }
         ));
     }, [])
-
+    //THIS LOGIC ONLY WORKS FOR NOW PROBABLY CHANGE THE API ENDPOINT TO RETURN A BOOLEAN THAT IS EITHER TRUE OR FALSE
     console.log(userRequest)
-
-
+    const userRequestData = userRequest.get(JSON.parse(localStorage.getItem("profile"))?.result?._id);
+    console.log(userRequestData)
 
     const handleRequestClick = () => {
 
@@ -155,6 +153,11 @@ const Bunkmates = () => {
     const handleProfileClick = (e, index) => {
         console.log("Request clicked")
         setMapProfileCard(<MapProfile profile={profiles[index]} />)
+    }
+    const handleProfileClickAsync = (e) => {
+        console.log("Request clicked")
+        const request = userRequest.get(e?.currentTarget?.id)
+        setMapProfileCard(<MapProfile profile={request?.profile[0]} type={request?.request} request={request} />)
     }
 
 
@@ -267,6 +270,32 @@ const Bunkmates = () => {
                     }
                     } onClick={e => handleProfileClick(e, index)} key={index} position={{ lat: profile?.idealLocation[0], lng: profile?.idealLocation[1] }} >{profile?.rentBudget}</MarkerF>;
                     */
+                        })}
+
+                        {Array.from(userRequest.values()).map((request, index) => {
+                            return (<OverlayViewF key={request?.user}
+                                position={{ lat: request?.idealLocation[0], lng: request?.idealLocation[1] }}
+                                styles={{ background: 'DarkGray', color: 'white' }}
+                                mapPaneName={OVERLAY_MOUSE_TARGET}>
+                                {
+                                    request.request === "As myself" ?
+                                        <div style={{ display: "flex", flexDirection: "row", }} onClick={e => { handleProfileClickAsync(e, index); e.stopPropagation() }} id={request?.user}>
+                                            <img style={{ zIndex: '2', right: '7px', top: '-2.6px', position: 'absolute', width: '45px', height: '45px', border: '3px solid #2ACDDD', objectFit: "cover", borderRadius: "50%" }} src={request?.profile[0]?.picture} />
+                                            <span style={{ minWidth: '90px', position: 'absolute', right: '-65px', display: "flex", height: "40px", padding: "10px", fontWeight: '500', color: "white", backgroundColor: '#2ACDDD', justifyContent: "center", alignItems: 'center', fontSize: "15px", borderRadius: "5px", cursor: "hover" }} >
+                                                {`$${request.rentBudget}`}
+                                            </span>
+                                            <RxTriangleDown style={{ right: '15px', color: '#2ACDDD', position: 'absolute', top: '35px', fontSize: '30px' }} />
+                                        </div> :
+                                        <div style={{ display: "flex", flexDirection: "row", }} onClick={e => { handleProfileClickAsync(e, index); e.stopPropagation() }} id={request?.user}>
+                                            <img style={{ zIndex: '2', right: '7px', top: '-2.6px', position: 'absolute', width: '45px', height: '45px', border: '3px solid aqua', objectFit: "cover", borderRadius: "50%" }} src={request?.profile[0]?.picture} />
+                                            <span style={{ minWidth: '90px', position: 'absolute', right: '-65px', display: "flex", height: "40px", padding: "10px", fontWeight: '500', color: "aqua", backgroundColor: 'black', border: '3px solid aqua', justifyContent: "center", alignItems: 'center', fontSize: "15px", borderRadius: "5px", cursor: "hover" }} >
+                                                {`$${request.rentBudget}`}
+                                            </span>
+                                            <RxTriangleDown style={{ right: '15px', color: '#2ACDDD', position: 'absolute', top: '35px', fontSize: '30px' }} />
+                                        </div>
+                                }
+                                {/*<button style={{ padding: "2px" }} onClick={e => { handleProfileClick(e, index); e.stopPropagation()}}>{`$${profile.rentBudget}`}</button>*/}
+                            </OverlayViewF >)
                         })}
 
                     </GoogleMap >

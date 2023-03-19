@@ -13,14 +13,14 @@ import { MdVerified } from 'react-icons/md';
 import { formatContext } from '../../GlobalStateManagement/FormatContext';
 
 
-function SingleMapCard({ profile, BunkmateInfo }) {
-    console.log(profile)
+function SingleMapCard({ profile, BunkmateInfo, request }) {
+    console.log(request)
     const [messageButton, setMessageButton] = useState(false)
     const { capitalizedName, calculateAge } = useContext(formatContext)
     console.log(profile)
 
     return (
-        <InfoWindowF mapPaneName={"overlayMouseTarget"} position={{ lat: profile.idealLocation[0], lng: profile.idealLocation[1] }}>
+        <InfoWindowF mapPaneName={"overlayMouseTarget"} position={{ lat: request?.idealLocation[0], lng: request?.idealLocation[1] }}>
             <Card sx={{ width: "400px", zIndex: "2", opacity: '0.95' }} onClick={e => e.stopPropagation()}>
                 <div style={{ flexDirection: 'column', padding: '15px', display: 'flex', justifyContent: 'flex-start' }}>
                     <div className="profile-info" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
@@ -65,7 +65,7 @@ function SingleMapCard({ profile, BunkmateInfo }) {
                                     </div>
                                     <Tooltip title={`${capitalizedName(profile.firstName)}'s budget`} arrow placement="left">
                                         <Typography variant="h6" color="text.primary" style={{ overflow: 'hidden', maxWidth: '130px' }} >
-                                            {`$${profile.rentBudget}/month`}
+                                            {`$${request.rentBudget}/month`}
                                         </Typography>
                                     </Tooltip>
                                     <Typography variant="body1" color="text.secondary" style={{ fontSize: "17px" }}>
@@ -90,17 +90,17 @@ function SingleMapCard({ profile, BunkmateInfo }) {
                     </div>
                                                     */}
 
-                    {profile.listingObject === "None" ? null :
+                    {request.listingObject === "None" ? null :
                         <>
                             <Divider style={{ margin: '10px', width: '93%' }} />
                             <Tooltip title={`${capitalizedName(profile.firstName)}'s listing in mind`} arrow>
                                 <CardActionArea >
                                     <SavedListingItem
                                         index={1}
-                                        image={profile.listingObject.image}
-                                        address={profile.listingObject.address}
-                                        price={profile.listingObject.price}
-                                        bedBath={profile.listingObject.bedBath}
+                                        image={request?.listing[0]?.image}
+                                        address={request?.listing[0]?.address}
+                                        price={request?.listing[0]?.price}
+                                        bedBath={request?.listing[0]?.bedBath}
                                         addressWidth="270px"
                                     />
                                 </CardActionArea>
@@ -111,17 +111,17 @@ function SingleMapCard({ profile, BunkmateInfo }) {
 
                     <CardContent sx={{ width: '100%', display: 'flex', justifyContent: 'space-between', flexFlow: 'row wrap' }}>
                         <div className="column-1">
-                            <BunkmateInfo label="Seeking" value={profile.numRoommates} />
-                            <BunkmateInfo label="Ideal Gender" value={profile.roommateGender} />
-                            <BunkmateInfo label="Ideal Age" value={`${profile.rangeSliderValue[0]}-${profile.rangeSliderValue[1]}`} />
+                            <BunkmateInfo label="Seeking" value={request.numRoommates} />
+                            <BunkmateInfo label="Ideal Gender" value={request.roommateGender} />
+                            <BunkmateInfo label="Ideal Age" value={`${request.rangeSliderValue[0]}-${request.rangeSliderValue[1]}`} />
                         </div>
                         <div className="column-2">
-                            <BunkmateInfo label="Move In" value={profile.dateValue} />
-                            <BunkmateInfo label="For" value={profile.idealLengthStay} />
+                            <BunkmateInfo label="Move In" value={request.dateValue} />
+                            <BunkmateInfo label="For" value={request.idealLengthStay} />
                             {profile.flexibility !== "0" ?
                                 <Tooltip title="How far the user is willing to move from the current location">
                                     <div>
-                                        <BunkmateInfo label="Flexibility" value={`${profile.flexibility} km`} />
+                                        <BunkmateInfo label="Flexibility" value={`${request.flexibility} km`} />
                                     </div>
                                 </Tooltip> : null
                             }
