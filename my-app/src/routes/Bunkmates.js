@@ -19,8 +19,7 @@ import { InfoWindow } from "@react-google-maps/api";
 import { borderRadius } from "@mui/system";
 import { BunkmatesContext } from "../Components/GlobalStateManagement/BunkmatesContext";
 import { RxTriangleDown } from "react-icons/rx"
-
-
+import { CreateRequestContext } from "../Components/GlobalStateManagement/BunkmatesContext";
 
 
 
@@ -59,10 +58,8 @@ export function MapProfile({ profile, type, request }) {
         <SingleMapCard profile={profile} BunkmateInfo={BunkmateInfo} />
         */
         profile.request || type === "As myself"
-            ?
-            <SingleMapCard profile={profile} BunkmateInfo={BunkmateInfo} request={request} />
-            :
-            <GroupMapCard profile={profile} BunkmateInfo={BunkmateInfo} />
+            ? <SingleMapCard profile={profile} BunkmateInfo={BunkmateInfo} request={request} />
+            : <GroupMapCard profile={profile} BunkmateInfo={BunkmateInfo} />
     )
 }
 
@@ -93,6 +90,7 @@ const Bunkmates = () => {
         googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
         libraries: libraries,
     })
+    const handleSubmit = useContext(CreateRequestContext)
 
 
     useEffect(() => {
@@ -108,6 +106,7 @@ const Bunkmates = () => {
         }
         //store user profile data
         handleProfile().then((profile) => setUserProfile(profile));
+
         //store user request data
         handleRequest().then((request) => request.data.forEach(
             (user) => {
@@ -115,6 +114,22 @@ const Bunkmates = () => {
             }
         ));
     }, [])
+
+    useEffect(() => {
+        //get request data from backend
+        async function handleRequest() {
+            const request = await getRequests();
+            return request
+        }
+        //store user request data
+        handleRequest().then((request) => request.data.forEach(
+            (user) => {
+                setUserRequest(userRequest.set(user.user, user));
+            }
+        ));
+
+    }, [handleSubmit])
+
     //THIS LOGIC ONLY WORKS FOR NOW PROBABLY CHANGE THE API ENDPOINT TO RETURN A BOOLEAN THAT IS EITHER TRUE OR FALSE
     console.log(userRequest)
     const userRequestData = userRequest.get(JSON.parse(localStorage.getItem("profile"))?.result?._id);
@@ -171,7 +186,7 @@ const Bunkmates = () => {
         return (
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', top: '35vh', position: 'absolute', maxWidth: '500px' }}>
                 <Card variant="outlined" className="create-request-container" sx={{ padding: '20px', borderRadius: '10px' }}>
-                    <CreateRequestForm onClick={handleRequestClick} />
+                    <CreateRequestForm userRequest={userRequestData} onClick={handleRequestClick} />
                 </Card>
             </div >)
     }
@@ -238,17 +253,17 @@ const Bunkmates = () => {
                                 styles={{ background: 'DarkGray', color: 'white' }}
                                 mapPaneName={OVERLAY_MOUSE_TARGET}>
                                 {
-                                    profile.request === "As myself" ?
-                                        <div style={{ display: "flex", flexDirection: "row", }} onClick={e => { handleProfileClick(e, index); e.stopPropagation() }}>
-                                            <img style={{ zIndex: '2', right: '7px', top: '-2.6px', position: 'absolute', width: '45px', height: '45px', border: '3px solid #2ACDDD', objectFit: "cover", borderRadius: "50%" }} src={profile?.picture} />
-                                            <span style={{ minWidth: '90px', position: 'absolute', right: '-65px', display: "flex", height: "40px", padding: "10px", fontWeight: '500', color: "white", backgroundColor: '#2ACDDD', justifyContent: "center", alignItems: 'center', fontSize: "15px", borderRadius: "5px", cursor: "hover" }} >
+                                    profile.request === "As myself"
+                                        ? <div style={{ display: "flex", flexDirection: "row", }} onClick={e => { handleProfileClick(e, index); e.stopPropagation() }}>
+                                            <img style={{ zIndex: '3', right: '7px', top: '-2.6px', position: 'absolute', width: '45px', height: '45px', border: '3px solid #2ACDDD', objectFit: "cover", borderRadius: "50%" }} src={profile?.picture} />
+                                            <span style={{ zIndex: '2', minWidth: '90px', position: 'absolute', right: '-65px', display: "flex", height: "40px", padding: "10px", fontWeight: '500', color: "white", backgroundColor: '#2ACDDD', justifyContent: "center", alignItems: 'center', fontSize: "15px", borderRadius: "5px", cursor: "hover" }} >
                                                 {`$${profile.rentBudget}`}
                                             </span>
                                             <RxTriangleDown style={{ right: '15px', color: '#2ACDDD', position: 'absolute', top: '35px', fontSize: '30px' }} />
-                                        </div> :
-                                        <div style={{ display: "flex", flexDirection: "row", }} onClick={e => { handleProfileClick(e, index); e.stopPropagation() }}>
-                                            <img style={{ zIndex: '2', right: '7px', top: '-2.6px', position: 'absolute', width: '45px', height: '45px', border: '3px solid aqua', objectFit: "cover", borderRadius: "50%" }} src={profile?.picture} />
-                                            <span style={{ minWidth: '90px', position: 'absolute', right: '-65px', display: "flex", height: "40px", padding: "10px", fontWeight: '500', color: "aqua", backgroundColor: 'black', border: '3px solid aqua', justifyContent: "center", alignItems: 'center', fontSize: "15px", borderRadius: "5px", cursor: "hover" }} >
+                                        </div>
+                                        : <div style={{ display: "flex", flexDirection: "row", }} onClick={e => { handleProfileClick(e, index); e.stopPropagation() }}>
+                                            <img style={{ zIndex: '3', right: '7px', top: '-2.6px', position: 'absolute', width: '45px', height: '45px', border: '3px solid aqua', objectFit: "cover", borderRadius: "50%" }} src={profile?.picture} />
+                                            <span style={{ zIndex: '2', minWidth: '90px', position: 'absolute', right: '-65px', display: "flex", height: "40px", padding: "10px", fontWeight: '500', color: "aqua", backgroundColor: 'black', border: '3px solid aqua', justifyContent: "center", alignItems: 'center', fontSize: "15px", borderRadius: "5px", cursor: "hover" }} >
                                                 {`$${profile.rentBudget}`}
                                             </span>
                                             <RxTriangleDown style={{ right: '15px', color: '#2ACDDD', position: 'absolute', top: '35px', fontSize: '30px' }} />

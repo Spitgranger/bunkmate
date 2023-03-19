@@ -1,5 +1,5 @@
 import { useState, useReducer, useContext, useEffect, useRef, useId } from 'react'
-import { createRequest, getChats, getProfile } from '../api';
+import { getChats, getProfile } from '../api';
 import {
   FormSection,
   ActionButton,
@@ -20,6 +20,7 @@ import { MultipleSelectCheckmarks } from './SubComponents/Form';
 import IconButton from '@mui/material/IconButton';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import { IoIosArrowBack } from 'react-icons/io'
+import { CreateRequestContext } from './GlobalStateManagement/BunkmatesContext';
 import { chatClientContext } from './GlobalStateManagement/MessageContext';
 import { UploadFile } from './SubComponents/Form';
 import { MdUpload } from 'react-icons/md';
@@ -47,7 +48,7 @@ function CreateRequestForm(props) {
   //store user profile data
   const [userProfile, setUserProfile] = useState("")
   //store user request data
-  const [userRequest, setUserRequest] = useState("")
+  const handleSubmit = useContext(CreateRequestContext)
 
   const actions = {
     checkGlobalError: "check_global_error",
@@ -56,15 +57,14 @@ function CreateRequestForm(props) {
     checkDate: "check_dates",
   }
 
-  const page3 = JSON.parse(localStorage.getItem("page3"))
-  const user = JSON.parse(localStorage.getItem("profile"));
 
   const firstPageValues = {
     request: "",
     aboutUs: "",
     linkChats: "",
   }
-  const secondPageValues = page3 || {
+
+  const secondPageValues = props.userRequest || {
     listingObject: "None",
     idealLocation: "",
     dateValue: "",
@@ -106,15 +106,13 @@ function CreateRequestForm(props) {
     listings().then((response) => {
       console.log(response.data.data);
       //this WHOLE SECTION SHOULD PROBABLY MERGE INTO ONE BIG HASH MAP, APPLY THE LOGIC THERE
+      setListingsDataHashMap(listingsDataHashMap.set("None", "None"))
       const items = response.data.data.map((element, index) => {
         setListingsHashMap(listingsHashMap.set(element._id, element.address));
         setListingsDataHashMap(listingsDataHashMap.set(element._id, <SavedListingItem id={element._id} index={index} image={element.image} address={element.address} price={element.price} bedBath={element.bedBath} />));
         return <SavedListingItem id={element._id} index={index} image={element.image} address={element.address} price={element.price} bedBath={element.bedBath} />
       });
 
-      setListingsDataHashMap(listingsDataHashMap.set("None", "None"))
-      items.push("None");
-      items.reverse();
       console.log(listingsDataHashMap)
       setMenuItem(items);
     });
@@ -263,34 +261,6 @@ function CreateRequestForm(props) {
 
 
 
-  const handleSubmit = async (formData) => {
-    //record values in localStorage
-    /*
-    localStorage.setItem('mapCardData', JSON.stringify(profiles))
-    const mapData = JSON.parse(localStorage.getItem('mapCardData'))
-
-    if (userProfile.data && formData) {
-      const allData = { ...userProfile.data, ...formData }
-      console.log(allData)
-      mapData.push(allData)
-
-      localStorage.setItem('userRequest', JSON.stringify(allData))
-      localStorage.setItem('mapCardData', JSON.stringify(mapData))
-
-      // setplaceholder values immediatly
-      // profile ? profile : localstorage.set(placeholder)
-      // {placeholder}, {userprofile, getRequest}
-
-    }
-    */
-    //record values in backend
-    try {
-      const response = await createRequest(formData);
-      console.log(response);
-    } catch (error) {
-      console.log("An error has occured: ", error)
-    }
-  }
 
 
 
@@ -384,7 +354,7 @@ const handleGroupChat = (e) => {
   useEffect(() => {
     console.log(state.secondPageValues.listingObject)
     dispatch({ type: actions.checkGlobalError, page: 'firstPageValues' })
-    if (state?.secondPageValues?.listingObject === "None") {
+    if (state?.secondPageValues?.listingObject === "None" && !props.userRequest) {
       //if the user changes their mind and switches back to None, then address and idealLocation are set back to empty string
       dispatch({ type: actions.checkValues, payload: "", name: "address", page: 'secondPageValues' })
       dispatch({ type: actions.checkValues, payload: "", name: "idealLocation", page: 'secondPageValues' })
@@ -392,7 +362,7 @@ const handleGroupChat = (e) => {
       dispatch({ type: actions.checkValues, payload: "", name: "flexibility", page: 'secondPageValues' })
       dispatch({ type: actions.checkGlobalError, page: 'secondPageValues' })
 
-    } else {
+    } else if (!props.userRequest) {
       //when the user doesn't select index 0 of listing in mind then flexibility is set to "0"
       dispatch({ type: actions.checkValues, payload: "0", name: "flexibility", page: 'secondPageValues' })
       dispatch({ type: actions.checkGlobalError, page: 'secondPageValues' })
