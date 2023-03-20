@@ -64,7 +64,29 @@ function CreateRequestForm(props) {
     linkChats: "",
   }
 
-  const secondPageValues = props.userRequest || {
+  //need to extract values from larger object
+  const keysToExtract = [
+    'listingObject',
+    'idealLocation',
+    'dateValue',
+    'rentBudget',
+    'flexibility',
+    'rangeSliderValue',
+    'roommateGender',
+    'numRoommates',
+    'address',
+    'idealLengthStay',
+  ];
+
+  const userRequest = keysToExtract.reduce((obj, key) => {
+    if (props.userRequest.hasOwnProperty(key)) {
+      obj[key] = props.userRequest[key];
+    }
+    return obj;
+  }, {});
+
+
+  const secondPageValues = userRequest || {
     listingObject: "None",
     idealLocation: "",
     dateValue: "",
@@ -76,6 +98,7 @@ function CreateRequestForm(props) {
     address: "",
     idealLengthStay: "",
   }
+
 
   const initialState = {
     firstPageValues: firstPageValues,
@@ -146,7 +169,7 @@ function CreateRequestForm(props) {
 
 
   /* calling reducer function again gets the next state*/
-  const newState = reducer(state, { type: actions.checkValues })
+  const checkValues = reducer(state, { type: actions.checkValues })
 
   function reducer(state, action) {
     console.log('firstpage', state?.firstPageValues)
@@ -354,7 +377,7 @@ const handleGroupChat = (e) => {
   useEffect(() => {
     console.log(state.secondPageValues.listingObject)
     dispatch({ type: actions.checkGlobalError, page: 'firstPageValues' })
-    if (state?.secondPageValues?.listingObject === "None" && !props.userRequest) {
+    if (state?.secondPageValues?.listingObject === "None" && !userRequest) {
       //if the user changes their mind and switches back to None, then address and idealLocation are set back to empty string
       dispatch({ type: actions.checkValues, payload: "", name: "address", page: 'secondPageValues' })
       dispatch({ type: actions.checkValues, payload: "", name: "idealLocation", page: 'secondPageValues' })
@@ -362,7 +385,7 @@ const handleGroupChat = (e) => {
       dispatch({ type: actions.checkValues, payload: "", name: "flexibility", page: 'secondPageValues' })
       dispatch({ type: actions.checkGlobalError, page: 'secondPageValues' })
 
-    } else if (!props.userRequest) {
+    } else if (!userRequest) {
       //when the user doesn't select index 0 of listing in mind then flexibility is set to "0"
       dispatch({ type: actions.checkValues, payload: "0", name: "flexibility", page: 'secondPageValues' })
       dispatch({ type: actions.checkGlobalError, page: 'secondPageValues' })
@@ -372,8 +395,9 @@ const handleGroupChat = (e) => {
   useEffect(() => {
     //after completing the form and then switching back to firstpage will cause the globalerror to be set to false
     dispatch({ type: actions.checkGlobalError, page: 'firstPageValues' })
+    //makes sure that the checkGlobalError runs after user decides to edit their bunkmate request
+    dispatch({ type: actions.checkGlobalError, page: 'secondPageValues' })
   }, [state?.firstPageValues?.request])
-
 
 
   //handle back click so you can change who you want to request as

@@ -115,7 +115,8 @@ const Bunkmates = () => {
                 setUserRequest(userRequest.set(user.user, user));
             }
         ));
-    }, [])
+    }, [handleSubmit])
+
     useEffect(() => {
         console.log(listingArray)
     }, [listingArray])
