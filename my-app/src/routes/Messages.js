@@ -54,7 +54,7 @@ const Messages = () => {
   const hasShownMessage = localStorage.getItem('hasShownMessage')
   /*
   //Initialize a new support user
-  const supportToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjNmM2Q2N2I2MWM5YTNkMjU0NjIxMTQwIn0._hwRRwzLK4OvwgJxptajqQQMYoFmYjvhtg5Z_vtK6Wo'
+  const supportToken = ''
   const supportUser = {
     id: "63f3d67b61c9a3d254621140",
     name: "Support Team",

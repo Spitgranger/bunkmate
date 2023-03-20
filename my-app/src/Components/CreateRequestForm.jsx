@@ -49,20 +49,7 @@ function CreateRequestForm(props) {
   const [userProfile, setUserProfile] = useState("")
   //store user request data
   const handleSubmit = useContext(CreateRequestContext)
-
-  const actions = {
-    checkGlobalError: "check_global_error",
-    checkLocalError: "check_local_error", //TODO
-    checkValues: "check_values",
-    checkDate: "check_dates",
-  }
-
-
-  const firstPageValues = {
-    request: "",
-    aboutUs: "",
-    linkChats: "",
-  }
+  //state management for bunkmate request titles
 
   //need to extract values from larger object
   const keysToExtract = [
@@ -78,13 +65,37 @@ function CreateRequestForm(props) {
     'idealLengthStay',
   ];
 
+
   const userRequest = keysToExtract.reduce((obj, key) => {
-    if (props.userRequest.hasOwnProperty(key)) {
-      obj[key] = props.userRequest[key];
+    if (props?.userRequest?.hasOwnProperty(key)) {
+      obj[key] = props?.userRequest[key];
     }
-    return obj;
+    return Object.keys(obj).length === 0 ? "" : obj;
   }, {});
 
+
+  useEffect(() => {
+    if (!state?.firstPageValues?.request && userRequest) {
+      setFormTitle("Edit Bunkmate Request")
+    }
+  }, [userRequest])
+
+
+  const actions = {
+    checkGlobalError: "check_global_error",
+    checkLocalError: "check_local_error", //TODO
+    checkValues: "check_values",
+    checkDate: "check_dates",
+  }
+
+
+  const firstPageValues = {
+    request: "",
+    aboutUs: "",
+    /*
+    linkChats: "",
+    */
+  }
 
   const secondPageValues = userRequest || {
     listingObject: "None",
@@ -393,16 +404,23 @@ const handleGroupChat = (e) => {
   }, [showGroup, state.secondPageValues.listingObject])
 
   useEffect(() => {
-    //after completing the form and then switching back to firstpage will cause the globalerror to be set to false
-    dispatch({ type: actions.checkGlobalError, page: 'firstPageValues' })
-    //makes sure that the checkGlobalError runs after user decides to edit their bunkmate request
-    dispatch({ type: actions.checkGlobalError, page: 'secondPageValues' })
+    if (state?.firstPageValues?.request === 'As myself') {
+      //after completing the form and then switching back to firstpage will cause the globalerror to be set to false
+      dispatch({ type: actions.checkGlobalError, page: 'secondPageValues' })
+    } else if (state?.firstPageValues?.request === 'As a group') {
+      //makes sure that the checkGlobalError runs after user decides to edit their bunkmate request
+      dispatch({ type: actions.checkGlobalError, page: 'firstPageValues' })
+    }
   }, [state?.firstPageValues?.request])
 
 
   //handle back click so you can change who you want to request as
   const handleBack = () => {
-    setFormTitle("Create A Bunkmate Request")
+    if (!userRequest) {
+      setFormTitle("Create a Bunkmate Request")
+    } else {
+      setFormTitle("Edit Bunkmate Request")
+    }
     setShowBody(false)
     setShowButton(null)
     //set  request back  to empty string after clicking back button

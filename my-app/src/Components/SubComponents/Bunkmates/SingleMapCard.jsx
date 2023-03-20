@@ -52,7 +52,7 @@ function SingleMapCard({ profile, BunkmateInfo, request }) {
                                         </div>
                                         <div className="button-container" style={{ display: 'flex', justifyContent: 'flex-end' }}>
                                             <Tooltip title={"Pin This Profile"} arrow placement="bottom">
-                                                <IconButton style={{ padding: '2px' }}>
+                                                <IconButton >
                                                     <HiMapPin />
                                                 </IconButton>
                                             </Tooltip>
