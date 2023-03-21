@@ -10,8 +10,8 @@ import {
   FormMultiLineInput,
   LineBox,
 } from './SubComponents/Form';
-import { IoChevronForward } from 'react-icons/io5';
-import { IoChevronBack } from 'react-icons/io5';
+import { IoChevronForward, IoChevronBack } from 'react-icons/io5';
+import { createProfile, getProfile } from '../api';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import {
 
@@ -26,7 +26,6 @@ import {
 
 } from './GlobalStateManagement/ValidationContext';
 
-import { createProfile } from '../api';
 import { SignInContext } from './GlobalStateManagement/SignInContext';
 import { formatContext } from './GlobalStateManagement/FormatContext';
 import { BuildUserContext } from './GlobalStateManagement/BunkmatesContext';
@@ -45,7 +44,7 @@ const backButtonStyles = {
 //everything below will be displayed within a modal window, this page is shown after signing up for an account
 function ProfileMakerForm({ forwardButton, backwardButton }) {
 
-  const { values, setValues } = useContext(ValuesObjectContext)
+  const { values } = useContext(ValuesObjectContext)
   const { phoneError, phoneHelperText } = useContext(PhoneValidationContext)
   const { emailError, emailHelperText } = useContext(EmailValidationContext)
   const { aboutError, aboutHelperText, handleAboutValidation } = useContext(AboutValidationContext)
@@ -64,10 +63,9 @@ function ProfileMakerForm({ forwardButton, backwardButton }) {
     globalError: true,
   }
 
+
   const [state, dispatch] = useReducer(reducer, initialState)
-  console.log(state?.values)
-
-
+  console.log(state.values)
 
   function reducer(state, action) {
     switch (action.type) {
@@ -99,8 +97,7 @@ function ProfileMakerForm({ forwardButton, backwardButton }) {
   //handle event function to record values of most fields
   const handleEmptyStringValidation = (e, name, date = false) => {
     if (date === true) {
-      return (
-        dispatch({ type: actions.checkDate, payload: e }))
+      return (dispatch({ type: actions.checkDate, payload: e }))
     } else if (name === "lastName" || name === "firstName") {
       return dispatch({ type: actions.checkValues, payload: capitalizedName(e.target.value), name: name })
     }

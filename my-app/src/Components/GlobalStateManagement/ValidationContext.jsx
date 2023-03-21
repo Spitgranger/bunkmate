@@ -1,4 +1,5 @@
 import { createContext, useState, useEffect } from 'react';
+import { getProfile } from '../../api';
 import dayjs from 'dayjs';
 
 export const LinkValidationContext = createContext(null)
@@ -13,8 +14,17 @@ export const GlobalValidationContext = createContext(null)
 
 export default function ValidationProvider({ children }) {
 
-  const page1 = JSON.parse(localStorage.getItem("page1"))
-  const [values, setValues] = useState(page1 ? page1 : {
+  useEffect(() => {
+    const handleProfile = async () => {
+      const profile = await getProfile()
+      return profile
+    }
+
+    handleProfile().then((profile) => { setValues(profile.data) });
+  }, [])
+
+
+  const [values, setValues] = useState({
     picture: "",
     firstName: "",
     lastName: "",
@@ -40,6 +50,7 @@ export default function ValidationProvider({ children }) {
     tolerateGuests: "",
     toleratePets: "",
   });
+
 
 
   //checks to see if individual fields are empty
