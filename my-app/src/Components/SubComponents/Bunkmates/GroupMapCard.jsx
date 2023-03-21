@@ -17,7 +17,7 @@ import { MdVerified } from 'react-icons/md';
 
 function GroupMapCard({ profile, BunkmateInfo, nested }) {
 
-    const existingBunkmates = profile.linkChats.length;
+    const existingBunkmates = profile?.linkChats?.length;
     const newBunkmates = parseInt(profile.numRoommates);
     const totalRoommates = (existingBunkmates, newBunkmates) => {
         return (existingBunkmates + newBunkmates)

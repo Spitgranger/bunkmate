@@ -29,6 +29,7 @@ import {
 import { createProfile } from '../api';
 import { SignInContext } from './GlobalStateManagement/SignInContext';
 import { formatContext } from './GlobalStateManagement/FormatContext';
+import { BuildUserContext } from './GlobalStateManagement/BunkmatesContext';
 
 
 
@@ -42,17 +43,6 @@ const backButtonStyles = {
 
 
 //everything below will be displayed within a modal window, this page is shown after signing up for an account
-
-const handleSubmit = async (data) => {
-  try {
-    const response = await createProfile(data);
-    console.log(response);
-  } catch (error) {
-    console.log(error);
-  }
-
-}
-
 function ProfileMakerForm({ forwardButton, backwardButton }) {
 
   const { values, setValues } = useContext(ValuesObjectContext)
@@ -61,6 +51,7 @@ function ProfileMakerForm({ forwardButton, backwardButton }) {
   const { aboutError, aboutHelperText, handleAboutValidation } = useContext(AboutValidationContext)
   const { isOpen, setIsOpen } = useContext(SignInContext)
   const { calculateAge, capitalizedName } = useContext(formatContext)
+  const { profileHandleSubmit } = useContext(BuildUserContext)
 
   const actions = {
     checkGlobalError: "check_global_error",
@@ -290,7 +281,7 @@ function ProfileMakerForm({ forwardButton, backwardButton }) {
 
 
 
-    <ActionButton disabled={state.globalError} fontSize="15px" width="100%" onClick={() => { handleSubmit(state?.values); handleClose(); localStorage.setItem("page1", JSON.stringify(values)); }} type="submit" title="SUBMIT" endIcon={<IoChevronForward color="aqua" />} />
+    <ActionButton disabled={state.globalError} fontSize="15px" width="100%" onClick={() => { profileHandleSubmit(state?.values); handleClose(); localStorage.setItem("page1", JSON.stringify(values)); }} type="submit" title="SUBMIT" endIcon={<IoChevronForward color="aqua" />} />
   </>)
 }
 

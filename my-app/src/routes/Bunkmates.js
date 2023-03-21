@@ -17,9 +17,8 @@ import GroupMapCard from "../Components/SubComponents/Bunkmates/GroupMapCard";
 import { getRequests } from "../api";
 import { InfoWindow } from "@react-google-maps/api";
 import { borderRadius } from "@mui/system";
-import { BunkmatesContext } from "../Components/GlobalStateManagement/BunkmatesContext";
+import { BuildUserContext, BunkmatesContext } from "../Components/GlobalStateManagement/BunkmatesContext";
 import { RxTriangleDown } from "react-icons/rx"
-import { CreateRequestContext } from "../Components/GlobalStateManagement/BunkmatesContext";
 
 
 
@@ -27,12 +26,11 @@ import { CreateRequestContext } from "../Components/GlobalStateManagement/Bunkma
 const libraries = ["places"];
 
 
-export function MapProfile({ profile, type, request }) {
+export function MapProfile({ request }) {
 
     //determines whether to render single or group map card
     //as well as set bunkmate info at the bottom of the card
     const [sideCard, setSideCard] = useState(null)
-    console.log(type)
 
 
     const handleEnter = () => {
@@ -53,13 +51,15 @@ export function MapProfile({ profile, type, request }) {
         );
     }
 
+
     return (
         /*
         <SingleMapCard profile={profile} BunkmateInfo={BunkmateInfo} />
         */
-        profile.request || type === "As myself"
-            ? <SingleMapCard profile={profile} BunkmateInfo={BunkmateInfo} request={request} />
-            : <GroupMapCard profile={profile} BunkmateInfo={BunkmateInfo} />
+        request?.request === "As myself"
+            ? <SingleMapCard profile={request?.profile[0]} BunkmateInfo={BunkmateInfo} request={request} />
+            : <GroupMapCard profile={request?.profile[0]} BunkmateInfo={BunkmateInfo} />
+
     )
 }
 
@@ -75,7 +75,7 @@ const Bunkmates = () => {
     //store user profile data
     const [userProfile, setUserProfile] = useState("")
     //store user request data
-    const [userRequest, setUserRequest] = useState(new Map());
+    const [userRequests, setUserRequests] = useState(new Map());
     //retrieve local storage data
     const { GetClientInfo, localStorageData } = useContext(chatClientContext)
     //sign in context for when the user tries to create a bunkmate request without an account
@@ -83,19 +83,19 @@ const Bunkmates = () => {
     //display, nodisplay of the create request page
     const [showRequest, setShowRequest] = useState(false);
     const [selected, setSelected] = useState(null);
-    const [center, setCenter] = useState({ lat: 43.642075, lng: -79.385981 });
+    const { center, setCenter } = useContext(BunkmatesContext)
     const { mapProfileCard, setMapProfileCard } = useContext(BunkmatesContext)
     //if the user has a profile then set profileChecker to true else false
     const { isLoaded, loadError } = useJsApiLoader({
         googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
         libraries: libraries,
     })
-    const handleSubmit = useContext(CreateRequestContext)
+    const requestHandleSubmit = useContext(BuildUserContext)
     const [listingArray, setListingArray] = useState([]);
 
 
     useEffect(() => {
-        //get profile data from backend
+        //get profile data from backend 
         async function handleProfile() {
             const profile = await getProfile();
             return profile
@@ -103,26 +103,36 @@ const Bunkmates = () => {
         //get request data from backend
         async function handleRequest() {
             const request = await getRequests();
+            //access all requests stored in an array using request.data
+            console.log(request)
             return request
         }
+
         //store user profile data
         handleProfile().then((profile) => setUserProfile(profile));
 
         //store user request data
-        handleRequest().then((request) => request.data.forEach(
-            (user) => {
-                setListingArray([...listingArray, user])
-                setUserRequest(userRequest.set(user.user, user));
-            }
-        ));
-    }, [handleSubmit])
+        handleRequest().then((request) => {
+            const allRequests = []
+            request.data.forEach(
+                (user) => {
+                    allRequests.push(user)
+                    setUserRequests(userRequests.set(user.user, user));
+                });
+            setListingArray(allRequests)
+        });
+    }, [requestHandleSubmit])
 
-    useEffect(() => {
-        console.log(listingArray)
-    }, [listingArray])
     //THIS LOGIC ONLY WORKS FOR NOW PROBABLY CHANGE THE API ENDPOINT TO RETURN A BOOLEAN THAT IS EITHER TRUE OR FALSE
-    const userRequestData = userRequest.get(JSON.parse(localStorage.getItem("profile"))?.result?._id);
-    console.log(userRequestData)
+    //contains the user's own data
+    const userOwnData = userRequests.get(JSON.parse(localStorage.getItem("profile"))?.result?._id);
+    console.log(userOwnData)
+    //dictionary that stores the userId as the key and the object as the value
+    console.log(userRequests)
+    //contains all requests generated through accounts
+    console.log(listingArray)
+
+
 
     const handleRequestClick = () => {
 
@@ -142,25 +152,18 @@ const Bunkmates = () => {
         }
     }
 
+    //hard coded requests
     const profiles = JSON.parse(localStorage.getItem('mapCardData')) || mapCardData;
-    /*
-    useEffect(() => {
-        setProfile(<MapProfile profile={profiles[5]} />)
-    }, [])
-    */
 
     if (!isLoaded) {
         return <h1>ERROR HAS OCCURED</h1>
     }
 
-    const handleProfileClick = (e, index) => {
-        console.log("Request clicked")
-        setMapProfileCard(<MapProfile profile={profiles[index]} />)
-    }
     const handleProfileClickAsync = (e) => {
+        console.log('async', e?.currentTarget?.id)
         console.log("Request clicked")
-        const request = userRequest.get(e?.currentTarget?.id)
-        setMapProfileCard(<MapProfile profile={request?.profile[0]} type={request?.request} request={request} />)
+        const request = userRequests.get(e?.currentTarget?.id)
+        setMapProfileCard(<MapProfile request={request} />)
     }
 
 
@@ -174,7 +177,7 @@ const Bunkmates = () => {
         return (
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', top: '35vh', position: 'absolute', maxWidth: '500px' }}>
                 <Card variant="outlined" className="create-request-container" sx={{ padding: '20px', borderRadius: '10px', opacity: 0.9 }}>
-                    <CreateRequestForm userRequest={userRequestData} onClick={handleRequestClick} />
+                    <CreateRequestForm userRequest={userOwnData} onClick={handleRequestClick} />
                 </Card>
             </div >)
     }
@@ -191,11 +194,12 @@ const Bunkmates = () => {
     function EditRequestButton() {
         return (
             <div style={{ display: 'flex', bottom: '10vh', justifyContent: 'center', position: 'absolute', }}>
-                <ActionButton onClick={() => { handleRequestClick(); setCenter({ lat: userRequestData.idealLocation[0], lng: userRequestData.idealLocation[1] }) }} bgColor={"black"} title={"Edit Bunkmate Request"} opacity='0.85' />
+                <ActionButton onClick={() => { handleRequestClick(); setCenter({ lat: userOwnData.idealLocation[0], lng: userOwnData.idealLocation[1] }) }} bgColor={"black"} title={"Edit Bunkmate Request"} opacity='0.85' />
             </div>
         )
     }
 
+    /*
     const markerOptions = ({ profile }) => {
         return {
             icon: {
@@ -203,10 +207,11 @@ const Bunkmates = () => {
                 size: new window.google.maps.Size(50, 50),
                 anchor: new window.google.maps.Point(25, 25)
             }, label: {
-                text: `${profile?.rentBudget}`,
+                text: `${userOwnData.rentBudget}`,
             }
         }
     };
+    */
 
     return (
         <div>
@@ -234,47 +239,6 @@ const Bunkmates = () => {
                         */}
                         {mapProfileCard ? mapProfileCard : null}
                         {selected && <MarkerF position={center} icon={"http://maps.google.com/mapfiles/ms/icons/blue.png"} />}
-                        {profiles.map((profile, index) => {
-                            console.log(profile.idealLocation);
-                            return (<OverlayViewF key={index}
-                                position={{ lat: profile?.idealLocation[0], lng: profile?.idealLocation[1] }}
-                                styles={{ background: 'DarkGray', color: 'white' }}
-                                mapPaneName={OVERLAY_MOUSE_TARGET}>
-                                {
-                                    profile.request === "As myself"
-                                        ? <div style={{ display: "flex", flexDirection: "row", }} onClick={e => { handleProfileClick(e, index); e.stopPropagation() }}>
-                                            <img style={{ zIndex: '3', right: '7px', top: '-2.6px', position: 'absolute', width: '45px', height: '45px', border: '3px solid #2ACDDD', objectFit: "cover", borderRadius: "50%" }} src={profile?.picture} />
-                                            <span style={{ zIndex: '2', minWidth: '90px', position: 'absolute', right: '-65px', display: "flex", height: "40px", padding: "10px", fontWeight: '500', color: "white", backgroundColor: '#2ACDDD', justifyContent: "center", alignItems: 'center', fontSize: "15px", borderRadius: "5px", cursor: "hover" }} >
-                                                {`$${profile.rentBudget}`}
-                                            </span>
-                                            <RxTriangleDown style={{ right: '15px', color: '#2ACDDD', position: 'absolute', top: '35px', fontSize: '30px' }} />
-                                        </div>
-                                        : <div style={{ display: "flex", flexDirection: "row", }} onClick={e => { handleProfileClick(e, index); e.stopPropagation() }}>
-                                            <img style={{ zIndex: '3', right: '7px', top: '-2.6px', position: 'absolute', width: '45px', height: '45px', border: '3px solid aqua', objectFit: "cover", borderRadius: "50%" }} src={profile?.picture} />
-                                            <span style={{ zIndex: '2', minWidth: '90px', position: 'absolute', right: '-65px', display: "flex", height: "40px", padding: "10px", fontWeight: '500', color: "aqua", backgroundColor: 'black', border: '3px solid aqua', justifyContent: "center", alignItems: 'center', fontSize: "15px", borderRadius: "5px", cursor: "hover" }} >
-                                                {`$${profile.rentBudget}`}
-                                            </span>
-                                            <RxTriangleDown style={{ right: '15px', color: '#2ACDDD', position: 'absolute', top: '35px', fontSize: '30px' }} />
-                                        </div>
-                                }
-                                {/*<button style={{ padding: "2px" }} onClick={e => { handleProfileClick(e, index); e.stopPropagation()}}>{`$${profile.rentBudget}`}</button>*/}
-                            </OverlayViewF >)
-                            /*
-                    return <MarkerF clickable={true} options={{
-                        icon: {
-                            url: profile?.picture,
-                            size: new window.google.maps.Size(50, 50),
-                            anchor: new window.google.maps.Point(25, 25),
-                        }, label: {
-                            text: `$${profile?.rentBudget}`,
-                            color: 'white',
-                        }, shape: "MarkerShapeCircle",
-
-                    }
-                    } onClick={e => handleProfileClick(e, index)} key={index} position={{ lat: profile?.idealLocation[0], lng: profile?.idealLocation[1] }} >{profile?.rentBudget}</MarkerF>;
-                    */
-                        })}
-
                         {listingArray.map((request, index) => {
                             return (<OverlayViewF key={request?.user}
                                 position={{ lat: request?.idealLocation[0], lng: request?.idealLocation[1] }}
@@ -301,15 +265,31 @@ const Bunkmates = () => {
                             </OverlayViewF >)
                         })}
 
+                        {/*
+                    return <MarkerF clickable={true} options={{
+                        icon: {
+                            url: profile?.picture,
+                            size: new window.google.maps.Size(50, 50),
+                            anchor: new window.google.maps.Point(25, 25),
+                        }, label: {
+                            text: `$${profile?.rentBudget}`,
+                            color: 'white',
+                        }, shape: "MarkerShapeCircle",
+
+                    }
+                    } onClick={e => handleProfileClick(e, index)} key={index} position={{ lat: profile?.idealLocation[0], lng: profile?.idealLocation[1] }} >{profile?.rentBudget}</MarkerF>;
+                */}
                     </GoogleMap >
                 </div>
                 {
                     //if the user has clicked on a map card then these buttons won't be shown show that it doesn't clutter the screen
                     mapProfileCard
                         ? null
+                        //if the user has clicked on the button show the request page else show the button
                         : <>{showRequest
                             ? <BunkmateRequestPage />
-                            : userRequestData
+                            : userOwnData
+                                //if the user has an active request then show the edit request button else show the create request button
                                 ? <EditRequestButton />
                                 : <CreateRequestButton />}
                         </>

@@ -20,7 +20,7 @@ import { MultipleSelectCheckmarks } from './SubComponents/Form';
 import IconButton from '@mui/material/IconButton';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import { IoIosArrowBack } from 'react-icons/io'
-import { CreateRequestContext } from './GlobalStateManagement/BunkmatesContext';
+import { BuildUserContext } from './GlobalStateManagement/BunkmatesContext';
 import { chatClientContext } from './GlobalStateManagement/MessageContext';
 import { UploadFile } from './SubComponents/Form';
 import { MdUpload } from 'react-icons/md';
@@ -48,7 +48,7 @@ function CreateRequestForm(props) {
   //store user profile data
   const [userProfile, setUserProfile] = useState("")
   //store user request data
-  const handleSubmit = useContext(CreateRequestContext)
+  const { requestHandleSubmit } = useContext(BuildUserContext)
   //state management for bunkmate request titles
 
   //need to extract values from larger object
@@ -92,9 +92,7 @@ function CreateRequestForm(props) {
   const firstPageValues = {
     request: "",
     aboutUs: "",
-    /*
     linkChats: "",
-    */
   }
 
   const secondPageValues = userRequest || {
@@ -117,6 +115,16 @@ function CreateRequestForm(props) {
     globalError: true,
   }
 
+  useEffect(() => {
+    //get profile data from backend
+    async function handleProfile() {
+      const profile = await getProfile();
+      return profile
+    }
+    //store user profile data
+    handleProfile().then((profile) => setUserProfile(profile));
+  }, [])
+
   const [list, setList] = useState({});
   const [menuItem, setMenuItem] = useState([]);
   const navigate = useNavigate();
@@ -125,18 +133,19 @@ function CreateRequestForm(props) {
 
   const [groupChat, setGroupChat] = useState([]);
 
+  const profile = JSON.parse(localStorage.getItem("profile"))
+
   useEffect(() => {
     async function listings() {
       const response = await getListings();
       return response;
     }
-    /*
     async function chats() {
-      const chatData = { id: user?.result?._id, token: user?.streamToken }
+      const chatData = { id: profile?.result?._id, token: profile.userRequest?.streamToken }
+      console.log(chatData)
       const response = await getChats(chatData);
       return response
     }
-    */
     listings().then((response) => {
       console.log(response.data.data);
       //this WHOLE SECTION SHOULD PROBABLY MERGE INTO ONE BIG HASH MAP, APPLY THE LOGIC THERE
@@ -150,11 +159,9 @@ function CreateRequestForm(props) {
       console.log(listingsDataHashMap)
       setMenuItem(items);
     });
-    /*
     chats().then((response) => {
       setGroupChat(response.data);
     });
-    */
   }, []);
 
   //not in use currently
@@ -283,15 +290,6 @@ function CreateRequestForm(props) {
   }, [state?.secondPageValues?.listingObject])
 
 
-  useEffect(() => {
-    //get profile data from backend
-    async function handleProfile() {
-      const profile = await getProfile();
-      return profile
-    }
-    //store user profile data
-    handleProfile().then((profile) => setUserProfile(profile));
-  }, [])
 
 
 
@@ -366,22 +364,21 @@ function CreateRequestForm(props) {
     }
     */
 
-  /*
-const handleGroupChat = (e) => {
-  //record the linkgroupchat ids 
-  let channelIdStorage = null;
-  const clientChannelNames = e
-  groupChat.forEach((element) => {
-    console.log(element.usernames)
-    console.log(clientChannelNames)
-    if (element.usernames === clientChannelNames) {
-      channelIdStorage = element.channel;
-    };
-  });
-  //record the channel ID of the option that was selected
-  dispatch({ type: actions.checkValues, payload: channelIdStorage, name: "linkGroupChatsIds", page: 'secondPageValues' })
-  //dispatch function that adds channelIdStorage as a payload
-}*/
+  const handleGroupChat = (e) => {
+    //record the linkgroupchat ids 
+    let channelIdStorage = null;
+    const clientChannelNames = e
+    groupChat.forEach((element) => {
+      console.log(element.usernames)
+      console.log(clientChannelNames)
+      if (element.usernames === clientChannelNames) {
+        channelIdStorage = element.channel;
+      };
+    });
+    //record the channel ID of the option that was selected
+    dispatch({ type: actions.checkValues, payload: channelIdStorage, name: "linkGroupChatsIds", page: 'secondPageValues' })
+    //dispatch function that adds channelIdStorage as a payload
+  }
 
 
 
@@ -539,7 +536,7 @@ const handleGroupChat = (e) => {
           ]} />
 
           {/* disable cotinue button if the user has not filled out all mandatory fields and / or still has errors*/}
-          <ActionButton helperText="* Please fill out all required fields before continuing" disabled={state?.globalError} onClick={() => { props.onClick(); console.log({ ...state?.firstPageValues, ...state?.secondPageValues }); handleSubmit({ ...state?.firstPageValues, ...state?.secondPageValues }) }} fontSize="15px" width="100%" type="submit" title="Submit" />
+          <ActionButton helperText="* Please fill out all required fields before continuing" disabled={state?.globalError} onClick={() => { props.onClick(); console.log({ ...state?.firstPageValues, ...state?.secondPageValues }); requestHandleSubmit({ ...state?.firstPageValues, ...state?.secondPageValues }) }} fontSize="15px" width="100%" type="submit" title="Submit" />
         </>
         :
         <>
@@ -548,10 +545,9 @@ const handleGroupChat = (e) => {
               <LineBox flex={true} CssTextField={[
                 <DropDownMenu required={true} autoFocus={true} maxHeight={250} value={state?.firstPageValues?.request} onChange={(e) => { handleEmptyStringValidation(e.target.value, 'request', 'firstPageValues'); handleRequestShow(e); }} label="Request" menuItem={identityMenuItems} />,
               ]} />
-              {/* belongs below*/}
-              {/*<DropDownMenu required={true} value={state?.firstPageValues?.linkChats} onChange={(e) => { handleEmptyStringValidation(e.target.value, 'linkChats', 'firstPageValues'); handleGroupChat(e.target.value) }} label="Link Chats" menuItem={groupChat.map((item) => { return item.usernames })} />,*/}
               < LineBox flex={true} CssTextField={[
                 <MultipleSelectCheckmarks helperText="Optional" title="Group tags" onChange={(e) => handleEmptyStringValidation(e.target.value, 'groupTags', 'firstPageValues')} menuItems={['Non Smokers', 'Have Pets', "Have Jobs", 'Students', 'Have Children', 'LGBTQ Friendly', 'Cannabis Friendly']} />,
+                <DropDownMenu required={true} value={state?.firstPageValues?.linkChats} onChange={(e) => { handleEmptyStringValidation(e.target.value, 'linkChats', 'firstPageValues'); handleGroupChat(e.target.value) }} label="Link Chats" menuItem={groupChat.map((item) => { return item.usernames })} />,
               ]} />
               <LineBox flex={true} CssTextField={[
                 <UploadFile height="40px" helperTextPos="85%" helperText="Optional: Supported Files: jpg, png" width="100%" fontSize="14px" endIcon={<MdUpload color="aqua" size={25} />} type="file" accept={["image/jpeg", "image/jpg", "image/png",]} message="Group Photo" />,

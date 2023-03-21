@@ -13,11 +13,10 @@ import { MdVerified } from 'react-icons/md';
 import { formatContext } from '../../GlobalStateManagement/FormatContext';
 
 
-function SingleMapCard({ profile, BunkmateInfo, request }) {
-    console.log(request)
+function SingleMapCard({ BunkmateInfo, request }) {
     const [messageButton, setMessageButton] = useState(false)
     const { capitalizedName, calculateAge } = useContext(formatContext)
-    console.log(profile)
+    console.log(request)
 
     return (
         <InfoWindowF mapPaneName={"overlayMouseTarget"} position={{ lat: request?.idealLocation[0], lng: request?.idealLocation[1] }}>
@@ -26,11 +25,11 @@ function SingleMapCard({ profile, BunkmateInfo, request }) {
                     <div className="profile-info" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                         <header style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', }}>
                             <div style={{ width: '100%', display: 'flex', flexDirection: 'row', padding: '5px' }}>
-                                <Tooltip title={`View ${capitalizedName(profile.firstName)}'s profile`} arrow>
+                                <Tooltip title={`View ${capitalizedName(request.profile[0].firstName)}'s profile`} arrow>
                                     <CardActionArea style={{ width: '125px' }}>
                                         <CardMedia
                                             component="img"
-                                            image={profile.picture}
+                                            image={request.profile[0].picture}
                                             alt="profile picture"
                                             sx={{ width: '125px', height: '125px', borderRadius: '5%', }}
                                         />
@@ -41,11 +40,11 @@ function SingleMapCard({ profile, BunkmateInfo, request }) {
                                         <div className="first-name">
                                             <Typography variant="h5" color="text.primary" noWrap style={{ fontSize: "25px", fontWeight: 500, display: 'flex', alignItems: 'center' }}>
                                                 <div style={{ maxWidth: '130px', overflow: 'hidden' }}>
-                                                    {capitalizedName(profile.firstName)}
+                                                    {capitalizedName(request.profile[0].firstName)}
                                                 </div>
                                                 <div className="display-verified" style={{ padding: '5px' }}>
-                                                    {profile.verified ?
-                                                        <Tooltip title={`${capitalizedName(profile.firstName)} is verified`} arrow><div><MdVerified style={{ fontSize: "medium", color: 'aqua', borderRadius: '50%' }} /></div></Tooltip>
+                                                    {request.profile[0].verified ?
+                                                        <Tooltip title={`${capitalizedName(request.profile[0].firstName)} is verified`} arrow><div><MdVerified style={{ fontSize: "medium", color: 'aqua', borderRadius: '50%' }} /></div></Tooltip>
                                                         : null}
                                                 </div>
                                             </Typography >
@@ -63,22 +62,22 @@ function SingleMapCard({ profile, BunkmateInfo, request }) {
                                             </Tooltip>
                                         </div>
                                     </div>
-                                    <Tooltip title={`${capitalizedName(profile.firstName)}'s budget`} arrow placement="left">
+                                    <Tooltip title={`${capitalizedName(request.profile[0].firstName)}'s budget`} arrow placement="left">
                                         <Typography variant="h6" color="text.primary" style={{ overflow: 'hidden', maxWidth: '130px' }} >
                                             {`$${request.rentBudget}/month`}
                                         </Typography>
                                     </Tooltip>
                                     <Typography variant="body1" color="text.secondary" style={{ fontSize: "17px" }}>
-                                        {profile.age ? `${profile.age} Year Old` : `${calculateAge(profile)} Year Old, ${profile.gender}`}
+                                        {request.profile[0].age ? `${request.profile[0].age} Year Old` : `${calculateAge(request.profile[0])} Year Old, ${request.profile[0].gender}`}
                                     </Typography>
                                     <Typography variant="body1" color="text.secondary">
-                                        {`${profile.occupation}`}
+                                        {`${request.profile[0].occupation}`}
                                     </Typography>
                                 </CardContent >
                             </div>
                             <Divider style={{ margin: '10px', width: '93%' }} />
                             <Typography style={{ padding: '10px', overflowY: 'scroll', width: '100%', height: '130px', }} variant="body1" color="text.secondary">
-                                {profile.about}
+                                {request.profile[0].about}
                             </Typography>
                         </header>
                     </div >
@@ -93,7 +92,7 @@ function SingleMapCard({ profile, BunkmateInfo, request }) {
                     {request.listingObject === "None" ? null :
                         <>
                             <Divider style={{ margin: '10px', width: '93%' }} />
-                            <Tooltip title={`${capitalizedName(profile.firstName)}'s listing in mind`} arrow>
+                            <Tooltip title={`${capitalizedName(request.profile[0].firstName)}'s listing in mind`} arrow>
                                 <CardActionArea >
                                     <SavedListingItem
                                         index={1}
@@ -118,12 +117,13 @@ function SingleMapCard({ profile, BunkmateInfo, request }) {
                         <div className="column-2">
                             <BunkmateInfo label="Move In" value={request.dateValue} />
                             <BunkmateInfo label="For" value={request.idealLengthStay} />
-                            {profile.flexibility !== "0" ?
-                                <Tooltip title="How far the user is willing to move from the current location">
+                            {request.flexibility !== "0"
+                                ? <Tooltip title="How far the user is willing to move from the current location">
                                     <div>
                                         <BunkmateInfo label="Flexibility" value={`${request.flexibility} km`} />
                                     </div>
-                                </Tooltip> : null
+                                </Tooltip>
+                                : null
                             }
                         </div>
                     </CardContent>

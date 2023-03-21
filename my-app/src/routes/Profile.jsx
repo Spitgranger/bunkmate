@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useState, useContext } from 'react';
 import { formatContext } from '../Components/GlobalStateManagement/FormatContext';
 import Navbar from '../Components/Navbar';
 import './Profile.css'
-import { getProfile } from '../api';
+import { getProfile, getRequests } from '../api';
 import { SignInContext } from '../Components/GlobalStateManagement/SignInContext';
 import { ActionButton } from '../Components/SubComponents/Form';
 import Divider from '@mui/material/Divider'
@@ -68,13 +68,33 @@ const Profile = () => {
   const [textColor, setTextColor] = useState('red')
   const { mapProfileCard, setMapProfileCard } = useContext(BunkmatesContext)
   const [userRequest, setUserRequest] = useState(null)
+  const { setCenter } = useContext(BunkmatesContext)
+
 
   //query localStorage whenever mapProfileCard changes (primarily used to update the state of the "view request button")
   useEffect(() => {
-    const userRequest = JSON.parse(localStorage.getItem('userRequest'))
-    setUserRequest(userRequest)
+    //get request data from backend
+    async function handleRequest() {
+      const request = await getRequests();
+      console.log(request)
+      return request
+    }
+    const userId = (JSON.parse(localStorage.getItem("profile"))?.result?._id)
+
+    //store user request data
+    handleRequest().then((request) => {
+      const requestDict = {}
+      request.data.map(
+        (user) => {
+          requestDict[user.user] = user;
+        });
+      const userOwnId = requestDict[userId]
+      setUserRequest(userOwnId);
+    });
+
   }, [mapProfileCard])
 
+  console.log(userRequest)
 
   const handleEditProfile = () => {
     setMessage("Edit Your Profile")
@@ -131,7 +151,12 @@ const Profile = () => {
     setTextColor("red")
   }
 
+  const handleViewRequest = () => {
+    setCenter({ lat: userRequest.idealLocation[0], lng: userRequest.idealLocation[1] })
+    setMapProfileCard(<MapProfile profile={userRequest.profile[0]} request={userRequest} />)
+  }
 
+  console.log(userRequest)
 
   if (profile) {
     return (
@@ -164,7 +189,7 @@ const Profile = () => {
                 {userRequest
                   ?
                   <Tooltip arrow title={`${capitalizedName(profile.firstName)} has an active request`}>
-                    <Link to="/bunkmates" onClick={() => setMapProfileCard(<MapProfile profile={userRequest} />)} style={{ textDecoration: 'none' }}><ActionButton startIcon={<HiMapPin />} height="30px" title={"View Request"} /></Link>
+                    <Link to="/bunkmates" onClick={handleViewRequest} style={{ textDecoration: 'none' }}><ActionButton startIcon={<HiMapPin />} height="30px" title={"View Request"} /></Link>
                   </Tooltip>
                   :
                   <Tooltip arrow title={'Making a request will let people know you are actively looking for bunkmates and will make your profile more visible'}>
