@@ -9,7 +9,7 @@ dotenv.config();
 //const streamChat = StreamChat.getInstance("asnpsp7e72h6", "djzm2aq63636qg2mjeqx9x5422hb4qu78pqepyf7fx7j7fuu44zwdgathr24zeyu");
 
 //new streamchat api key and api secret
-const streamChat = StreamChat.getInstance("98yace2hntdc", "dsdz3mtngwc7d33betg4yzw57pw95urbs7977atzw8h7a3xa5mtgdr7rgrspxhqh");
+const streamChat = StreamChat.getInstance(process.env.STREAM_API_KEY, process.env.STREAM_PRIVATE_API_KEY);
 
 export const signin = async (req, res) => {
     const { email, password } = req.body;

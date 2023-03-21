@@ -1,5 +1,5 @@
 import { StreamChat } from 'stream-chat';
-const chatClient = StreamChat.getInstance("98yace2hntdc", "dsdz3mtngwc7d33betg4yzw57pw95urbs7977atzw8h7a3xa5mtgdr7rgrspxhqh", {
+const chatClient = StreamChat.getInstance(process.env.STREAM_API_KEY, process.env.STREAM_PRIVATE_API_KEY, {
     timeout: 6000,
 });
 //Endpoint for array of chats that users in involved in, returns an array objects.
