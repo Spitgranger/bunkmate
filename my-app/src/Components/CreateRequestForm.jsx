@@ -63,6 +63,9 @@ function CreateRequestForm(props) {
     'numRoommates',
     'address',
     'idealLengthStay',
+    'request',
+    'aboutUs',
+    'linkChats',
   ];
 
 
@@ -89,7 +92,7 @@ function CreateRequestForm(props) {
   }
 
 
-  const firstPageValues = {
+  const firstPageValues = userRequest || {
     request: "",
     aboutUs: "",
     linkChats: "",
