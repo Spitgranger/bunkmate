@@ -480,6 +480,18 @@ function CreateRequestForm(props) {
     }
   }
 
+  useEffect(() => {
+    if (state.firstPageValues.request === "As myself") {
+      setShowBody(true)
+      setFormTitle("Request As Myself")
+      setShowButton(
+        <IconButton onClick={handleBack}>
+          <IoIosArrowBack />
+        </IconButton>
+      )
+    }
+  }, [])
+
 
 
 
