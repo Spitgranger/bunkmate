@@ -407,11 +407,27 @@ function CreateRequestForm(props) {
     if (state?.firstPageValues?.request === 'As myself') {
       //after completing the form and then switching back to firstpage will cause the globalerror to be set to false
       dispatch({ type: actions.checkGlobalError, page: 'secondPageValues' })
+      //if the user has an acitve request and "As myself" is being used as a placeholder then it will immedialty show the body of the form
+      setShowBody(true)
+      setFormTitle("Request As Myself")
+      setShowButton(
+        <IconButton onClick={handleBack}>
+          <IoIosArrowBack />
+        </IconButton>
+      )
+
     } else if (state?.firstPageValues?.request === 'As a group') {
       //makes sure that the checkGlobalError runs after user decides to edit their bunkmate request
       dispatch({ type: actions.checkGlobalError, page: 'firstPageValues' })
+      //if the user has an active request and "As a group" is being used as a placeholder then it will show the group section of the form
+      setShowBody(false)
+      setShowGroup(true)
+      setFormTitle("Request As A Group")
+      setLabelTitle("Group's Rent Budget")
     }
+    console.log(showBody)
   }, [state?.firstPageValues?.request])
+
 
 
   //handle back click so you can change who you want to request as
@@ -480,17 +496,6 @@ function CreateRequestForm(props) {
     }
   }
 
-  useEffect(() => {
-    if (state.firstPageValues.request === "As myself") {
-      setShowBody(true)
-      setFormTitle("Request As Myself")
-      setShowButton(
-        <IconButton onClick={handleBack}>
-          <IoIosArrowBack />
-        </IconButton>
-      )
-    }
-  }, [])
 
 
 
