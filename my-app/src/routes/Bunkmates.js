@@ -185,7 +185,7 @@ const Bunkmates = () => {
     function CreateRequestButton() {
         return (
             <div style={{ display: 'flex', bottom: '10vh', justifyContent: 'center', position: 'absolute', }}>
-                <ActionButton onClick={handleRequestClick} bgColor={"black"} title={"Create Bunkmate Request"} opacity='0.85' />
+                <ActionButton onClick={(e) => { handleRequestClick(); e.stopPropagation() }} bgColor={"black"} title={"Create Bunkmate Request"} opacity='0.85' />
             </div>
         )
     }
@@ -194,7 +194,7 @@ const Bunkmates = () => {
     function EditRequestButton() {
         return (
             <div style={{ display: 'flex', bottom: '10vh', justifyContent: 'center', position: 'absolute', }}>
-                <ActionButton onClick={() => { handleRequestClick(); setCenter({ lat: userOwnData.idealLocation[0], lng: userOwnData.idealLocation[1] }) }} bgColor={"black"} title={"Edit Bunkmate Request"} opacity='0.85' />
+                <ActionButton onClick={(e) => { handleRequestClick(); setCenter({ lat: userOwnData.idealLocation[0], lng: userOwnData.idealLocation[1] }); e.stopPropagation() }} bgColor={"black"} title={"Edit Bunkmate Request"} opacity='0.85' />
             </div>
         )
     }

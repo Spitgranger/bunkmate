@@ -36,9 +36,9 @@ function CreateRequestForm(props) {
   /*const { values, setValue } = useContext(ValuesObjectContext)*/
   //state management of listing array index
   //show or hide the body fields
-  const [showBody, setShowBody] = useState(false)
+  const [showBody, setShowBody] = useState(null)
   //show or hide the group fields
-  const [showGroup, setShowGroup] = useState(false)
+  const [showGroup, setShowGroup] = useState(null)
   //show or hide the back button
   const [showButton, setShowButton] = useState(null)
   //controls the title of the create request form
@@ -485,7 +485,7 @@ function CreateRequestForm(props) {
       setShowBody(true)
       setFormTitle("Request As Myself")
       setShowButton(
-        <IconButton onClick={handleBack}>
+        <IconButton onClick={() => { handleBack() }}>
           <IoIosArrowBack />
         </IconButton>
       )
@@ -507,7 +507,7 @@ function CreateRequestForm(props) {
       <FormSection title={formTitle} />
       <br />
 
-      {showBody ?
+      {showBody === null ? null : showBody ?
         <>
           <LineBox flex={true} CssTextField={[
             <DropDownMenu required={true} maxHeight={250} value={handleListingDisplay() ?? "None"} onChange={(e) => { handleEmptyStringValidation(e.target.value?.props?.id || "None", 'listingObject', 'secondPageValues'); }} label="Listing in Mind" menuItem={Array.from(listingsDataHashMap.values())} />,
