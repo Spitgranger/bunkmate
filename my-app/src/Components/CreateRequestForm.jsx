@@ -42,7 +42,7 @@ function CreateRequestForm(props) {
   //show or hide the back button
   const [showButton, setShowButton] = useState(null)
   //controls the title of the create request form
-  const [formTitle, setFormTitle] = useState("Create a Bunkmate Request")
+  const [formTitle, setFormTitle] = useState(null)
   //controls the title of the label on the rent budget field
   const [labelTitle, setLabelTitle] = useState("My Rent Budget")
   //store user profile data
@@ -76,12 +76,21 @@ function CreateRequestForm(props) {
     return Object.keys(obj).length === 0 ? "" : obj;
   }, {});
 
+  //default: userRequest ? Edit bunkmate request: create bunkmate request
+  //
+
 
   useEffect(() => {
-    if (!state?.firstPageValues?.request && userRequest) {
+    //the default state when the user hasn't made a request
+    if (!userRequest) {
+      setFormTitle("Create Bunkmate Request")
+      setShowBody(false)
+      //the default state when the user has made a request
+    } else if (userRequest) {
       setFormTitle("Edit Bunkmate Request")
+      setShowBody(false)
     }
-  }, [userRequest])
+  }, [])
 
 
   const actions = {
@@ -404,6 +413,7 @@ function CreateRequestForm(props) {
   }, [showGroup, state.secondPageValues.listingObject])
 
   useEffect(() => {
+    //only executes if the user has already filled in a filed before
     if (state?.firstPageValues?.request === 'As myself') {
       //after completing the form and then switching back to firstpage will cause the globalerror to be set to false
       dispatch({ type: actions.checkGlobalError, page: 'secondPageValues' })
@@ -415,14 +425,18 @@ function CreateRequestForm(props) {
           <IoIosArrowBack />
         </IconButton>
       )
-
     } else if (state?.firstPageValues?.request === 'As a group') {
       //makes sure that the checkGlobalError runs after user decides to edit their bunkmate request
       dispatch({ type: actions.checkGlobalError, page: 'firstPageValues' })
       //if the user has an active request and "As a group" is being used as a placeholder then it will show the group section of the form
+
+      if (userRequest) {
+        setFormTitle("Edit Bunkmate Request")
+      } else if (!userRequest) {
+        setFormTitle("Create Bunkmate Request")
+      }
       setShowBody(false)
       setShowGroup(true)
-      setFormTitle("Request As A Group")
       setLabelTitle("Group's Rent Budget")
     }
     console.log(showBody)
@@ -433,14 +447,15 @@ function CreateRequestForm(props) {
   //handle back click so you can change who you want to request as
   const handleBack = () => {
     if (!userRequest) {
-      setFormTitle("Create a Bunkmate Request")
-    } else {
+      setFormTitle("Create Bunkmate Request")
+    } else if (userRequest) {
       setFormTitle("Edit Bunkmate Request")
     }
     setShowBody(false)
     setShowButton(null)
     //set  request back  to empty string after clicking back button
     dispatch({ type: actions.checkValues, payload: "", name: "request", page: 'firstPageValues' })
+    dispatch({ type: actions.checkGlobalError, page: 'firstPageValues' })
   }
 
   //change state depending on who you're requesting as
@@ -448,6 +463,7 @@ function CreateRequestForm(props) {
 
     switch (e.target.value) {
       case identityMenuItems[0]:
+        dispatch({ type: actions.checkGlobalError, page: 'firstPageValues' })
         setShowBody(true)
         setFormTitle("Request As Myself")
         setLabelTitle("My Rent Budget")
@@ -461,13 +477,20 @@ function CreateRequestForm(props) {
         )
         break
       case identityMenuItems[1]:
+        dispatch({ type: actions.checkGlobalError, page: 'firstPageValues' })
         setShowGroup(true)
+        if (userRequest) {
+          setFormTitle("Edit Bunkmate Request")
+        } else if (!userRequest) {
+          setFormTitle("Create Bunkmate request")
+        }
         break
     }
   }
 
   const handleContinue = () => {
     //logic that's executed when continue button is pressed
+    dispatch({ type: actions.checkGlobalError, page: 'secondPageValues' })
     setShowBody(true);
     setShowButton(
       <IconButton onClick={handleBack}>
@@ -496,17 +519,6 @@ function CreateRequestForm(props) {
     }
   }
 
-  useEffect(() => {
-    if (state.firstPageValues.request === "As myself") {
-      setShowBody(true)
-      setFormTitle("Request As Myself")
-      setShowButton(
-        <IconButton onClick={() => { handleBack() }}>
-          <IoIosArrowBack />
-        </IconButton>
-      )
-    }
-  }, [])
 
 
 
