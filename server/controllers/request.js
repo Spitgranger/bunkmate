@@ -18,9 +18,18 @@ export const createRequest = async (req, res) => {
     }
 }
 
+export const deleteRequest = async (req, res) => {
+    try {
+        const userId = req.userId;
+        const existRequest = await Request.findOne({ user: userId })
+        await Request.deleteOne({ _id: existRequest._id });
+        res.status(204).json(`Request for user ${userId} delete successfully`);
+    } catch (error) {
+        res.status(500).json("User has no requests");
+    }
+}
+
 export const getRequests = async (req, res) => {
-    let today = new Date();
-    let results
     //Can add more criterion to this query when limit to map range is needed
     Request.aggregate([
         {
