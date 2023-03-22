@@ -26,6 +26,7 @@ export const createProfile = (formData) => API.post('/profile', formData);
 export const getProfile = () => API.get('/profile');
 export const createRequest = (formData) => API.post('/request', formData);
 export const getRequests = () => API.get('/request');
+export const deleteRequest = () => API.delete('request');
 export const getListings = () => API.get("/posts");
 export const getChats = (chatData) => API.get(`/chats/${chatData.id}/${chatData.token}`);
 
