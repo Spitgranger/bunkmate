@@ -1,4 +1,5 @@
-import Profile from '../models/profile.js'
+import Profile from '../models/profile.js';
+import mongoose from 'mongoose';
 
 export const createProfile = async (req, res) => {
     const profileData = req.body;
@@ -30,6 +31,18 @@ export const getProfile = async (req, res) => {
     } catch (error) {
         console.log(error);
         res.status(500).json({ message: "Something Went Wrong" });
+    }
+}
+
+export const getProfiles = async (req, res) => {
+    try {
+        const profileArray = req.params.profiles.split(".");
+        console.log(profileArray)
+        const result = await Profile.find({ 'user': { $in: profileArray } })
+        res.status(200).json(result);
+    } catch (error) {
+        res.status(404).json(error)
+        console.log(error)
     }
 }
 

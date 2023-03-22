@@ -505,6 +505,8 @@ function CreateRequestForm(props) {
           <IoIosArrowBack />
         </IconButton>
       )
+    } else {
+      setShowBody(false);
     }
   }, [])
 
