@@ -254,6 +254,8 @@ function CreateRequestForm(props) {
   const [listingsHashMap, setListingsHashMap] = useState(new Map());
   const [listingsDataHashMap, setListingsDataHashMap] = useState(new Map());
 
+
+  console.log(props.userRequest)
   //need to extract values from larger object
   const keysToExtract = [
     'listingObject',
@@ -267,6 +269,10 @@ function CreateRequestForm(props) {
     'address',
     'idealLengthStay',
   ];
+  //if listing object doesn't exist then remove from keys to extract
+  if (!props.userRequest.listingObject) {
+    keysToExtract.splice(0, 1)
+  }
 
 
   const userRequest = keysToExtract.reduce((obj, key) => {

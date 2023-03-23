@@ -16,7 +16,7 @@ import { formatContext } from '../../../Components/GlobalStateManagement/FormatC
 function SingleMapCard({ BunkmateInfo, request }) {
     const [messageButton, setMessageButton] = useState(false)
     const { capitalizedName, calculateAge } = useContext(formatContext)
-    console.log(request)
+    console.log('sssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss', request)
 
     return (
         <InfoWindowF mapPaneName={"overlayMouseTarget"} position={{ lat: request?.idealLocation[0], lng: request?.idealLocation[1] }}>
