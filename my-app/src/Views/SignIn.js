@@ -196,6 +196,26 @@ export function SignUpEmail() {
       <div className="content">
         <LineBox flex={true} CssTextField={[
           <FormSingleLineInput
+            name="name"
+            field="Name"
+            size="small"
+            type="name"
+            value={data.name}
+            onChange={handleFieldChange}
+          />,
+          <FormSingleLineInput
+            name="phoneNumber"
+            field="Phone Number"
+            placeHolder="6473547123"
+            size="small"
+            value={data.phoneNumber}
+            onChange={handleFieldChange}
+          />,
+        ]
+        }
+        />
+        <LineBox flex={true} CssTextField={[
+          <FormSingleLineInput
             name="email"
             field="Email"
             placeHolder="example@example.com"

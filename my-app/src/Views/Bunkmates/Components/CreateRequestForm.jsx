@@ -255,13 +255,15 @@ function CreateRequestForm(props) {
   const [listingsDataHashMap, setListingsDataHashMap] = useState(new Map());
 
 
-  console.log(props.userRequest)
   //need to extract values from larger object
   const keysToExtract = [
     'listingObject',
     'idealLocation',
     'dateValue',
     'rentBudget',
+    'aboutUs',
+    'linkChats',
+    'request',
     'flexibility',
     'rangeSliderValue',
     'roommateGender',
@@ -270,10 +272,9 @@ function CreateRequestForm(props) {
     'idealLengthStay',
   ];
   //if listing object doesn't exist then remove from keys to extract
-  if (!props.userRequest.listingObject) {
+  if (!props?.userRequest?.listingObject) {
     keysToExtract.splice(0, 1)
   }
-
 
   const userRequest = keysToExtract.reduce((obj, key) => {
     if (props?.userRequest?.hasOwnProperty(key)) {
@@ -298,7 +299,7 @@ function CreateRequestForm(props) {
     const profile = JSON.parse(localStorage.getItem("profile"))
 
     async function chats() {
-      const chatData = { id: profile.result?.result?._id, token: profile?.streamToken }
+      const chatData = { id: profile?.result?._id, token: profile?.streamToken }
       const response = await getChats(chatData);
       return response
     }
@@ -314,6 +315,7 @@ function CreateRequestForm(props) {
 
       console.log(listingsDataHashMap)
     });
+
     chats().then((response) => {
       setGroupChat(response.data);
     });
@@ -341,9 +343,7 @@ function CreateRequestForm(props) {
   const firstPageValues = userRequest || {
     request: "",
     aboutUs: "",
-    /*
     linkChats: "",
-    */
   }
 
   const secondPageValues = userRequest || {

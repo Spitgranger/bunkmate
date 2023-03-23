@@ -2,11 +2,11 @@ import react, { useContext, useEffect, useRef, useState, memo, useMemo } from "r
 import Navbar from "../../Components/Navbar";
 import { GoogleMap, useJsApiLoader, MarkerF, OverlayView, OVERLAY_MOUSE_TARGET, OverlayViewF, MapContext } from "@react-google-maps/api";
 import mapStyles from '../../data/mapStyles.json'
-import { Button, Grid, Paper, TextField, Card, Typography, CardActionArea, CardMedia, CardContent, CardActions, IconButton } from "@mui/material/"
+import { Button, Grid, Paper, TextField, Card, Typography, CardActionArea, CardMedia, CardContent, CardActions, IconButton, Tooltip } from "@mui/material/"
 import "./Styles/Bunkmates.css"
 import PlacesAutocomplete from './Components/PlacesAutocomplete';
 import mapCardData from "../../data/mapCardData"
-import { getProfile } from '../../api'
+import { deleteRequest, getProfile } from '../../api'
 import SocialFeed from "../../Components/SocialFeed";
 import CreateRequestForm from './Components/CreateRequestForm'
 import { ActionButton } from "../../Components/Utils/Form";
@@ -19,6 +19,7 @@ import { InfoWindow } from "@react-google-maps/api";
 import { borderRadius } from "@mui/system";
 import { BuildUserContext, BunkmatesContext } from "../../Components/GlobalStateManagement/BunkmatesContext";
 import { RxTriangleDown } from "react-icons/rx"
+import { useNavigate } from "react-router";
 
 
 
@@ -67,6 +68,7 @@ const Bunkmates = () => {
         }
     }
 
+    const navigate = useNavigate()
     //store user profile data
     const [userProfile, setUserProfile] = useState("")
     //store user request data
@@ -187,9 +189,15 @@ const Bunkmates = () => {
 
 
     function EditRequestButton() {
+        //edit and delete functionality
         return (
             <div style={{ display: 'flex', bottom: '10vh', justifyContent: 'center', position: 'absolute', }}>
                 <ActionButton onClick={(e) => { handleRequestClick(); setCenter({ lat: userOwnData.idealLocation[0], lng: userOwnData.idealLocation[1] }); e.stopPropagation() }} bgColor={"black"} title={"Edit Bunkmate Request"} opacity='0.85' />
+                <Tooltip title={"Delete Request"}>
+                    <div>
+                        <ActionButton onClick={(e) => { deleteRequest(userOwnData); navigate(0) }} bgColor={"black"} title={"X"} opacity='0.85' />
+                    </div>
+                </Tooltip>
             </div>
         )
     }
