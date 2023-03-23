@@ -9,7 +9,7 @@ import {
   FormSingleLineAddressInput,
   FormMultiLineInput,
   LineBox,
-} from './SubComponents/Form';
+} from './Utils/Form';
 import { IoChevronForward, IoChevronBack } from 'react-icons/io5';
 import { createProfile, getProfile } from '../api';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';

@@ -1,23 +1,23 @@
 import react, { useContext, useEffect, useRef, useState } from "react";
-import Navbar from "../Components/Navbar";
+import Navbar from "../../Components/Navbar";
 import { GoogleMap, useJsApiLoader, MarkerF, OverlayView, OVERLAY_MOUSE_TARGET, OverlayViewF, MapContext } from "@react-google-maps/api";
-import mapStyles from './mapStyles.json'
+import mapStyles from '../mapStyles.json'
 import { Button, Grid, Paper, TextField, Card, Typography, CardActionArea, CardMedia, CardContent, CardActions, IconButton } from "@mui/material/"
-import "./Bunkmates.css"
-import PlacesAutocomplete from "../Components/SubComponents/Bunkmates/PlacesAutocomplete";
-import mapCardData from "../testing_data/mapCardData"
-import { getProfile } from '../api'
-import SocialFeed from "../Components/SocialFeed";
-import CreateRequestForm from '../Components/CreateRequestForm'
-import { ActionButton } from "../Components/SubComponents/Form";
-import { chatClientContext } from "../Components/GlobalStateManagement/MessageContext";
-import { SignInContext } from "../Components/GlobalStateManagement/SignInContext";
-import SingleMapCard from "../Components/SubComponents/Bunkmates/SingleMapCard";
-import GroupMapCard from "../Components/SubComponents/Bunkmates/GroupMapCard";
-import { getRequests } from "../api";
+import "./Styles/Bunkmates.css"
+import PlacesAutocomplete from './Components/PlacesAutocomplete';
+import mapCardData from "../../data/mapCardData"
+import { getProfile } from '../../api'
+import SocialFeed from "../../Components/SocialFeed";
+import CreateRequestForm from './CreateRequestForm'
+import { ActionButton } from "../../Components/Utils/Form";
+import { chatClientContext } from "../../Components/GlobalStateManagement/MessageContext";
+import { SignInContext } from "../../Components/GlobalStateManagement/SignInContext";
+import SingleMapCard from './Components/GroupMapCard'
+import GroupMapCard from "./Components/GroupMapCard"
+import { getRequests } from "../../api";
 import { InfoWindow } from "@react-google-maps/api";
 import { borderRadius } from "@mui/system";
-import { BuildUserContext, BunkmatesContext } from "../Components/GlobalStateManagement/BunkmatesContext";
+import { BuildUserContext, BunkmatesContext } from "../../Components/GlobalStateManagement/BunkmatesContext";
 import { RxTriangleDown } from "react-icons/rx"
 
 

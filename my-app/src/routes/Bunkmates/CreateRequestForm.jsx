@@ -1,5 +1,5 @@
 import { useState, useReducer, useContext, useEffect, useRef, useId } from 'react'
-import { getChats, getProfile } from '../api';
+import { getChats, getProfile } from '../../api';
 import {
   FormSection,
   ActionButton,
@@ -8,24 +8,24 @@ import {
   DatePicker,
   DropDownMenu,
 
-} from './SubComponents/Form';
+} from '../../Components/Utils/Form';
 import { Typography, bottomNavigationActionClasses } from '@mui/material'
 import Slider from '@mui/material/Slider'
 import Box from '@mui/material/Box';
-import { savedListingsData, identityMenuItems } from '../testing_data/SavedListingsData';
-import { SavedListingItem } from './SubComponents/Bunkmates/SavedListingItem';
-import { FormMultiLineInput } from './SubComponents/Form';
-import { AboutValidationContext } from './GlobalStateManagement/ValidationContext';
-import { MultipleSelectCheckmarks } from './SubComponents/Form';
+import { savedListingsData, identityMenuItems } from '../../data/SavedListingsData';
+import { SavedListingItem } from './Components/SavedListingItem';
+import { FormMultiLineInput } from '../../Components/Utils/Form';
+import { AboutValidationContext } from '../../Components/GlobalStateManagement/ValidationContext';
+import { MultipleSelectCheckmarks } from '../../Components/Utils/Form';
 import IconButton from '@mui/material/IconButton';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import { IoIosArrowBack } from 'react-icons/io'
-import { BuildUserContext } from './GlobalStateManagement/BunkmatesContext';
-import { chatClientContext } from './GlobalStateManagement/MessageContext';
-import { UploadFile } from './SubComponents/Form';
+import { BuildUserContext } from '../../Components/GlobalStateManagement/BunkmatesContext';
+import { chatClientContext } from '../../Components/GlobalStateManagement/MessageContext';
+import { UploadFile } from '../../Components/Utils/Form';
 import { MdUpload } from 'react-icons/md';
-import profiles from "../testing_data/mapCardData"
-import { getListings } from '../api';
+import profiles from "../../data/mapCardData"
+import { getListings } from '../../api';
 import { useNavigate } from 'react-router';
 
 

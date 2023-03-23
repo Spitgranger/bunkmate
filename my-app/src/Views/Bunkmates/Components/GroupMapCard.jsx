@@ -5,14 +5,14 @@ import { SavedListingItem } from './SavedListingItem';
 import { HiMapPin } from 'react-icons/hi2'
 import { GoogleMap, useJsApiLoader, MarkerF, OverlayView, OVERLAY_MOUSE_TARGET, OVERLAY_LAYER, InfoWindow } from "@react-google-maps/api";
 import { Button, Grid, Paper, TextField, Card, Typography, CardActionArea, CardMedia, CardContent, CardActions, IconButton } from "@mui/material/"
-import { ActionButton } from '../Form';
+import { ActionButton } from '../../../Components/Utils/Form';
 import { useState } from 'react';
 import { TbMessages, TbMessagesOff } from 'react-icons/tb';
 import NestedMapCard from './NestedMapCard';
 import { InfoWindowF } from '@react-google-maps/api';
 import { FiEyeOff } from 'react-icons/fi'
 import { FiEye } from 'react-icons/fi'
-import './GroupMapCard.css'
+import '../Styles/GroupMapCard.css'
 import { MdVerified } from 'react-icons/md';
 
 function GroupMapCard({ profile, BunkmateInfo, nested }) {
@@ -101,7 +101,7 @@ function GroupMapCard({ profile, BunkmateInfo, nested }) {
                     </div>
                                                     */}
 
-                        {profile.listingObject === "None" ? null :
+                        {profile.listingObject ?
                             <>
                                 <Divider style={{ margin: '10px', width: '93%' }} />
                                 <Tooltip title={`Listing in Mind: $${profile.listingObject.price} per month, split across ${totalRoommates(existingBunkmates, newBunkmates)} bunkmates`} arrow>
@@ -118,7 +118,7 @@ function GroupMapCard({ profile, BunkmateInfo, nested }) {
                                         />
                                     </CardActionArea>
                                 </Tooltip>
-                            </>
+                            </> : null
                         }
                         <Divider style={{ margin: '10px', width: '93%' }} />
 

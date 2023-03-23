@@ -20,12 +20,11 @@ import {
   DateSeparator,
 } from 'stream-chat-react';
 
-import Navbar from '../Components/Navbar';
-import SignInProvider from '../Components/GlobalStateManagement/SignInContext';
+import Navbar from '../../Components/Navbar';
+import SignInProvider from '../../Components/GlobalStateManagement/SignInContext';
 import { useClient } from './hooks/useClient';
 import './Messages.css';
 
-import support from '../Components/Assets/support.jpg'
 import { IoMdMore } from 'react-icons/io'
 import { styled, alpha } from '@mui/material/styles';
 import Menu from '@mui/material/Menu';
@@ -36,11 +35,11 @@ import IconButton from '@mui/material/IconButton';
 import { IoIosExit } from 'react-icons/io'
 import { Navigate } from 'react-router';
 import 'stream-chat-react/dist/css/v2/index.css';
-import CreateChannel from '../Components/CreateGroupChannel'
+import CreateChannel from '../../Components/CreateGroupChannel'
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
 import Tooltip from '@mui/material/Tooltip'
-import { getProfile } from '../api';
+import { getProfile } from '../../api';
 import { Buffer } from 'buffer-es6'
 import { MessageProvider } from 'stream-chat-react';
 

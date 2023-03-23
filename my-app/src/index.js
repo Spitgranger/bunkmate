@@ -4,13 +4,13 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import CreatePost from './routes/CreatePost';
-import ApplyToListings from './routes/ApplyToListings';
+import CreatePost from './Views/CreatePost';
+import ApplyToListings from './Views/ApplyToListings';
 import Error from './Error';
 import Error404 from './Error404'
-import Bunkmates from './routes/Bunkmates';
-import Messages from './routes/Messages'
-import Profile from './routes/Profile';
+import Bunkmates from './Views/Bunkmates/Bunkmates';
+import Messages from './Views/Messages/Messages'
+import Profile from './Views/Profile';
 import SignInProvider from './Components/GlobalStateManagement/SignInContext';
 import ValidationProvider from './Components/GlobalStateManagement/ValidationContext';
 import MessageProvider from './Components/GlobalStateManagement/MessageContext';

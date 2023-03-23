@@ -1,8 +1,6 @@
 import './ApplyToListings.css';
 import Navbar from '../Components/Navbar';
 import UploadsForm from '../Components/UploadsForm'
-import ProfileMakerForm from '../Components/ProfileMakerForm'
-import CreateRequestForm from '../Components/CreateRequestForm'
 import { useState, createContext } from 'react'
 
 function ApplyToListings() {

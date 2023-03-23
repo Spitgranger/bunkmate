@@ -1,7 +1,7 @@
 import { useState, useContext, useEffect, useRef } from "react"
 import "./SignIn.css"
-import Modal from "../Components/SubComponents/Modal";
-import { LineBox, DropDownMenu, FormSingleLineInput, ActionButton } from '../Components/SubComponents/Form';
+import Modal from "../Components/Utils/Modal";
+import { LineBox, DropDownMenu, FormSingleLineInput, ActionButton } from '../Components/Utils/Form';
 import { Button } from "@mui/material";
 import { FcGoogle } from 'react-icons/fc'
 import { IoLogoFacebook } from 'react-icons/io'

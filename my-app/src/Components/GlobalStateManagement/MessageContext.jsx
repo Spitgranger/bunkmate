@@ -1,5 +1,5 @@
 import { useState, createContext, useEffect } from 'react';
-import { useClient } from '../../routes/hooks/useClient';
+import { useClient } from '../../Views/Messages/hooks/useClient';
 import { getProfile } from '../../api';
 
 export const chatClientContext = createContext(null)

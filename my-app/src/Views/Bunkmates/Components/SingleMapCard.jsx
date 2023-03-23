@@ -5,12 +5,12 @@ import { SavedListingItem } from './SavedListingItem';
 import { HiMapPin } from 'react-icons/hi2'
 import { GoogleMap, useJsApiLoader, MarkerF, OverlayView, OVERLAY_MOUSE_TARGET, OVERLAY_LAYER, InfoWindow } from "@react-google-maps/api";
 import { Button, Grid, Paper, TextField, Card, Typography, CardActionArea, CardMedia, CardContent, CardActions, IconButton } from "@mui/material/"
-import { ActionButton } from '../Form';
+import { ActionButton } from '../../../Components/Utils/Form';
 import { TbMessages, TbMessagesOff } from 'react-icons/tb';
 import { useRef, useState, useContext } from 'react';
 import { InfoWindowF } from '@react-google-maps/api';
 import { MdVerified } from 'react-icons/md';
-import { formatContext } from '../../GlobalStateManagement/FormatContext';
+import { formatContext } from '../../../Components/GlobalStateManagement/FormatContext';
 
 
 function SingleMapCard({ BunkmateInfo, request }) {
@@ -89,7 +89,7 @@ function SingleMapCard({ BunkmateInfo, request }) {
                     </div>
                                                     */}
 
-                    {request.listingObject === "None" ? null :
+                    {request.listingObject ?
                         <>
                             <Divider style={{ margin: '10px', width: '93%' }} />
                             <Tooltip title={`${capitalizedName(request.profile[0].firstName)}'s listing in mind`} arrow>
@@ -105,6 +105,7 @@ function SingleMapCard({ BunkmateInfo, request }) {
                                 </CardActionArea>
                             </Tooltip>
                         </>
+                        : null
                     }
                     <Divider style={{ margin: '10px', width: '93%' }} />
 

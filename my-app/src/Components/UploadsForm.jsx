@@ -7,7 +7,7 @@ import {
   LineBox,
   FormSingleLineInput,
   DropDownMenu,
-} from './SubComponents/Form';
+} from './Utils/Form';
 import { IoChevronForward } from 'react-icons/io5';
 import { MdUpload } from "react-icons/md"
 import { useEffect } from 'react';

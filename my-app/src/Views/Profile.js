@@ -1,15 +1,15 @@
 import React, { useRef, useEffect, useState, useContext } from 'react';
 import { formatContext } from '../Components/GlobalStateManagement/FormatContext';
 import Navbar from '../Components/Navbar';
-import './Profile.css'
 import { getProfile, getRequests } from '../api';
 import { SignInContext } from '../Components/GlobalStateManagement/SignInContext';
-import { ActionButton } from '../Components/SubComponents/Form';
+import { ActionButton } from '../Components/Utils/Form';
 import Divider from '@mui/material/Divider'
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import Tooltip from "@mui/material/Tooltip";
-import { SavedListingItem } from '../Components/SubComponents/Bunkmates/SavedListingItem';
+import { SavedListingItem } from './Bunkmates/Components/SavedListingItem';
 import { HiMapPin } from 'react-icons/hi2'
+import './Profile.css'
 import { GoogleMap, useJsApiLoader, MarkerF, OverlayView, OVERLAY_MOUSE_TARGET, OVERLAY_LAYER, InfoWindow } from "@react-google-maps/api";
 import { CardHeader, Avatar, Button, Grid, Paper, TextField, Card, Typography, CardActionArea, CardMedia, CardContent, CardActions, IconButton } from "@mui/material/"
 import { TbMessages, TbMessagesOff } from 'react-icons/tb';
@@ -22,7 +22,7 @@ import { FaBook, FaSmoking, FaCannabis, FaWineGlassAlt, FaRegHandshake, FaDog } 
 import { BiMessageDetail } from 'react-icons/bi'
 import { Link } from 'react-router-dom';
 import { BunkmatesContext } from '../Components/GlobalStateManagement/BunkmatesContext';
-import { MapProfile } from './Bunkmates';
+import { MapProfile } from './Bunkmates/Bunkmates';
 
 
 
