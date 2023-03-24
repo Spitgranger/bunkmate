@@ -23,6 +23,8 @@ import { BiMessageDetail } from 'react-icons/bi'
 import { Link } from 'react-router-dom';
 import { BunkmatesContext } from '../Components/GlobalStateManagement/BunkmatesContext';
 import { MapProfile } from './Bunkmates/Bunkmates';
+import CircularProgress from '@mui/material/CircularProgress';
+import { Box } from '@mui/system';
 
 
 
@@ -53,6 +55,7 @@ const Profile = () => {
     habitsAndLifestyle: { padding: '10px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' },
     fields: { width: '100%', display: 'flex', alignItems: 'center', flexDirection: 'column' },
     fieldsWrapper: { width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-around' },
+    loadingUi: {display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100wh', height: '100vh'}
   };
 
   const { capitalizedName, calculateAge } = useContext(formatContext);
@@ -69,6 +72,7 @@ const Profile = () => {
   const { mapProfileCard, setMapProfileCard } = useContext(BunkmatesContext)
   const [userRequest, setUserRequest] = useState(null)
   const { setCenter } = useContext(BunkmatesContext)
+  const [loading, setLoading] = useState(<CircularProgress size={50} />)
 
 
   //query localStorage whenever mapProfileCard changes (primarily used to update the state of the "view request button")
@@ -111,7 +115,7 @@ const Profile = () => {
 
   //get data from backend when the component first loads works
   useEffect(() => {
-    handleLoad().then((profile) => setProfile(profile.data)).catch(error => console.log(error))
+    handleLoad().then((profile) => setProfile(profile.data)).finally(() => setLoading(null))
   }, []);
 
 
@@ -158,7 +162,15 @@ const Profile = () => {
 
   console.log(userRequest)
 
-  if (profile) {
+  //if profile true and loading indicator false
+  //display profile page
+  //if profile false and loading indicator false
+  //display no profiel exists page
+  //else (profile no proifile, loaindg indicator){
+  //display loading indicator
+  //}
+
+  if (profile && !loading) {
     return (
       <div style={pageStyles.page}>
         <div style={{ height: '9vh' }} />
@@ -275,7 +287,7 @@ const Profile = () => {
     )
 
   }
-  else {
+  else if (!profile && !loading) {
     return (
       <div className='page-container'>
         <div style={{ height: '9vh' }} />
@@ -285,6 +297,9 @@ const Profile = () => {
         </div>
       </div>
     )
+  } else {
+    return (
+      <Box style={pageStyles.loadingUi}>{loading}</Box>)
   }
 };
 

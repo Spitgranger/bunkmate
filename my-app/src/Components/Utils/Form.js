@@ -391,7 +391,7 @@ export function ActionButton(props) {
     borderRadius: props.borderRadius ?? "10px",
     width: props.width ?? '100%',
     height: props.height ?? '60px',
-    paddingTop: '5px',
+    paddingTop: props.paddingTop ?? '12px',
     fontSize: props.fontSize,
     whiteSpace: 'nowrap',
     ':hover': { bgcolor: 'black', color: "aqua" },

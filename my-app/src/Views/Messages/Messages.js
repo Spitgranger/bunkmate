@@ -7,7 +7,6 @@ import {
   Channel,
   ChannelHeader,
   ChannelList,
-  LoadingIndicator,
   MessageInput,
   MessageList,
   Thread,
@@ -19,6 +18,7 @@ import {
   Avatar,
   DateSeparator,
 } from 'stream-chat-react';
+import CircularProgress from '@mui/material/CircularProgress';
 
 import Navbar from '../../Components/Navbar';
 import SignInProvider from '../../Components/GlobalStateManagement/SignInContext';
@@ -126,7 +126,7 @@ const Messages = () => {
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center'
-    }} ><LoadingIndicator size={50} />
+    }} ><CircularProgress size={50} />
   </div >)
 
   console.log(chatClient)

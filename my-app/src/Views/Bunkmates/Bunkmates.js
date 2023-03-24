@@ -2,7 +2,7 @@ import react, { useContext, useEffect, useRef, useState, memo, useMemo } from "r
 import Navbar from "../../Components/Navbar";
 import { GoogleMap, useJsApiLoader, MarkerF, OverlayView, OVERLAY_MOUSE_TARGET, OverlayViewF, MapContext } from "@react-google-maps/api";
 import mapStyles from '../../data/mapStyles.json'
-import { Button, Grid, Paper, TextField, Card, Typography, CardActionArea, CardMedia, CardContent, CardActions, IconButton, Tooltip } from "@mui/material/"
+import { Button, Grid, Paper, TextField, Card, Typography, CardActionArea, CardMedia, CardContent, CardActions, IconButton, Tooltip, CircularProgress } from "@mui/material/"
 import "./Styles/Bunkmates.css"
 import PlacesAutocomplete from './Components/PlacesAutocomplete';
 import mapCardData from "../../data/mapCardData"
@@ -87,6 +87,7 @@ const Bunkmates = () => {
         googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
         libraries: libraries,
     })
+    const [loading, setLoading] = useState(true)
     const requestHandleSubmit = useContext(BuildUserContext)
     const [listingArray, setListingArray] = useState([]);
 
@@ -117,7 +118,13 @@ const Bunkmates = () => {
                     setUserRequests(userRequests.set(user.user, user));
                 });
             setListingArray(allRequests)
-        });
+        }).finally(() => setLoading(false))
+
+
+
+
+
+
     }, [requestHandleSubmit])
 
     //THIS LOGIC ONLY WORKS FOR NOW PROBABLY CHANGE THE API ENDPOINT TO RETURN A BOOLEAN THAT IS EITHER TRUE OR FALSE
@@ -198,6 +205,14 @@ const Bunkmates = () => {
                         <ActionButton onClick={(e) => { deleteRequest(userOwnData); }} bgColor={"black"} title={"X"} opacity='0.85' />
                     </div>
                 </Tooltip>
+            </div>
+        )
+    }
+
+    function LoadingUi() {
+        return (
+            <div style={{ display: 'flex', bottom: '10vh', justifyContent: 'center', position: 'absolute' }}>
+                <ActionButton opacity={0.85} bgColor="black" height='55px' title={<CircularProgress size={35} />} />
             </div>
         )
     }
@@ -290,10 +305,12 @@ const Bunkmates = () => {
                         //if the user has clicked on the button show the request page else show the button
                         : <>{showRequest
                             ? <BunkmateRequestPage />
-                            : userOwnData
-                                //if the user has an active request then show the edit request button else show the create request button
-                                ? <EditRequestButton />
-                                : <CreateRequestButton />}
+                            : loading
+                                ? <LoadingUi />
+                                : userOwnData
+                                    //if the user has an active request then show the edit request button else show the create request button
+                                    ? <EditRequestButton />
+                                    : <CreateRequestButton />}
                         </>
                 }
             </div >
