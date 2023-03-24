@@ -29,6 +29,14 @@ export const deleteRequest = async (req, res) => {
     }
 }
 
+export const updateRequest = async (req, res) => {
+    try {
+
+    } catch (error) {
+        res.status(500).json("Something went wrong during updateing.")
+    }
+}
+
 export const getRequests = async (req, res) => {
     //Can add more criterion to this query when limit to map range is needed
     Request.aggregate([

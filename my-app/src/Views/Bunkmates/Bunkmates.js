@@ -67,7 +67,7 @@ const Bunkmates = () => {
             overflow: 'scroll', height: '77.5vh', position: 'absolute', right: '0.5%', top: '5%', maxWidth: '20%'
         }
     }
-
+    const id = JSON.parse(localStorage.getItem("profile"))?.result?._id;
     const navigate = useNavigate()
     //store user profile data
     const [userProfile, setUserProfile] = useState("")
@@ -89,9 +89,11 @@ const Bunkmates = () => {
     })
     const requestHandleSubmit = useContext(BuildUserContext)
     const [listingArray, setListingArray] = useState([]);
-
+    const [deleted, setDeleted] = useState(false);
+    const [userOwnData, setUserOwnData] = useState("");
 
     useEffect(() => {
+
         //get profile data from backend 
         async function handleProfile() {
             const profile = await getProfile();
@@ -114,15 +116,18 @@ const Bunkmates = () => {
             request.data.forEach(
                 (user) => {
                     allRequests.push(user)
-                    setUserRequests(userRequests.set(user.user, user));
+                    setUserRequests(new Map(userRequests.set(user.user, user)));
                 });
             setListingArray(allRequests)
         });
-    }, [requestHandleSubmit])
+    }, [requestHandleSubmit, deleted])
 
+    useEffect(() => {
+        setUserOwnData(userRequests.get(id));
+    }, [userRequests])
     //THIS LOGIC ONLY WORKS FOR NOW PROBABLY CHANGE THE API ENDPOINT TO RETURN A BOOLEAN THAT IS EITHER TRUE OR FALSE
     //contains the user's own data
-    const userOwnData = userRequests.get(JSON.parse(localStorage.getItem("profile"))?.result?._id);
+
     console.log(userOwnData)
     //dictionary that stores the userId as the key and the object as the value
     console.log(userRequests)
@@ -195,7 +200,7 @@ const Bunkmates = () => {
                 <ActionButton onClick={(e) => { handleRequestClick(); setCenter({ lat: userOwnData.idealLocation[0], lng: userOwnData.idealLocation[1] }); e.stopPropagation() }} bgColor={"black"} title={"Edit Bunkmate Request"} opacity='0.85' />
                 <Tooltip title={"Delete Request"}>
                     <div>
-                        <ActionButton onClick={(e) => { deleteRequest(userOwnData); }} bgColor={"black"} title={"X"} opacity='0.85' />
+                        <ActionButton onClick={(e) => { deleteRequest(userOwnData).then(() => { userRequests.delete(id); setDeleted(!deleted) }) }} bgColor={"black"} title={"X"} opacity='0.85' />
                     </div>
                 </Tooltip>
             </div>
