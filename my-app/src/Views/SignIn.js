@@ -197,7 +197,7 @@ export function SignUpEmail() {
         <LineBox flex={true} CssTextField={[
           <FormSingleLineInput
             name="name"
-            field="Name"
+            field="Full Name"
             size="small"
             type="name"
             value={data.name}
@@ -260,7 +260,7 @@ export function SignUpEmail() {
           </div>
         </div>
         <ActionButton width="100%" type="submit" title="Submit" onClick={(e) => handleRegularSignUpEmail(e, data)} />
-        <Divider sx={{ fontSize: '12px' }}>
+        <Divider sx={{ fontSize: '12px' }} >
           or
         </Divider>
       </div>

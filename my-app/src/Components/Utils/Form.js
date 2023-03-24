@@ -32,13 +32,11 @@ const MenuProps = {
   },
 };
 
-export function MultipleSelectCheckmarks({ helperText, title, menuItems, required, onChange }) {
+export function MultipleSelectCheckmarks({ value, helperText, title, menuItems, required, onChange }) {
   const [personName, setPersonName] = React.useState([]);
 
   const handleChange = (event) => {
-    const {
-      target: { value },
-    } = event;
+    const { target: { value }, } = event;
     setPersonName(
       // On autofill we get a stringified value.
       typeof value === 'string' ? value.split(',') : value,
@@ -51,7 +49,7 @@ export function MultipleSelectCheckmarks({ helperText, title, menuItems, require
         labelId="multiple-checkbox-label"
         id="multiple-checkbox"
         multiple
-        value={personName}
+        value={value || personName}
         onChange={(event) => { handleChange(event); onChange(event); }}
         input={<OutlinedInput sx={{ width: '100%', maxWidth: 400 }} label={title} />}
         renderValue={(selected) => selected.join(', ')}

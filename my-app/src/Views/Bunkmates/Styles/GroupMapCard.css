@@ -14,14 +14,14 @@
     display: none !important;
 }
 
-.gm-style-iw-d  {
+.gm-style-iw-d {
     -ms-overflow-style: none;
     /* Internet Explorer 10+ */
     scrollbar-width: none;
     /* Firefox */
 }
 
-.nested-card  {
+.nested-card {
     -ms-overflow-style: none;
     /* Internet Explorer 10+ */
     scrollbar-width: none;
@@ -37,3 +37,24 @@
     display: none;
 }
 
+
+
+@keyframes fadeOut {
+    0% {
+        opacity: 0.9;
+    }
+
+    100% {
+        opacity: 0.2;
+    }
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0.2;
+    }
+
+    100% {
+        opacity: 0.9;
+    }
+}

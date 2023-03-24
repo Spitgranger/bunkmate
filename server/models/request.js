@@ -58,9 +58,13 @@ const requestSchema = mongoose.Schema({
         type: String,
         required: false,
     },
-    request: {
-        type: String,
-        required: true,
+    linkChats: {
+        type: [String],
+        required: false,
+    },
+    groupTags: {
+        type: [String],
+        required: false,
     },
 })
 

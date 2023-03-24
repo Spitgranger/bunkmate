@@ -36,10 +36,9 @@ import { BunkmatesContext } from '../../../Components/GlobalStateManagement/Bunk
 //Remove listing menu items #FINISHED
 //fetching stored data from api for saved listing
 
-const FirstPageForm = ({ groupChat, dispatch, state, actions, handleEmptyStringValidation, handleRequestShow, handleContinue }) => {
+const FirstPageForm = ({ groupChat, dispatch, state, actions, handleEmptyStringValidation, handleRequestShow, handleContinue, }) => {
 
   const { aboutError, aboutHelperText, handleAboutValidation } = useContext(AboutValidationContext);
-
 
 
   const handleGroupChat = (e) => {
@@ -59,26 +58,27 @@ const FirstPageForm = ({ groupChat, dispatch, state, actions, handleEmptyStringV
   }
 
 
+
   return (<>
     <LineBox flex={true} CssTextField={[
       <DropDownMenu required={true} autoFocus={true} maxHeight={250} value={state?.firstPageValues?.request} onChange={(e) => { handleEmptyStringValidation(e.target.value, 'request', 'firstPageValues'); handleRequestShow(e); }} label="Request" menuItem={identityMenuItems} />,
     ]} />
     {/* belongs below*/}
     < LineBox flex={true} CssTextField={[
-      <MultipleSelectCheckmarks helperText="Optional" title="Group tags" onChange={(e) => handleEmptyStringValidation(e.target.value, 'groupTags', 'firstPageValues')} menuItems={['Non Smokers', 'Have Pets', "Have Jobs", 'Students', 'Have Children', 'LGBTQ Friendly', 'Cannabis Friendly']} />,
+      <MultipleSelectCheckmarks value={state?.firstPageValues?.groupTags} helperText="Optional" title="Group tags" onChange={(e) => handleEmptyStringValidation(e.target.value, 'groupTags', 'firstPageValues')} menuItems={['Non Smokers', 'Have Pets', "Have Jobs", 'Students', 'Have Children', 'LGBTQ Friendly', 'Cannabis Friendly']} />,
       <DropDownMenu required={true} value={state?.firstPageValues?.linkChats} onChange={(e) => { handleEmptyStringValidation(e.target.value, 'linkChats', 'firstPageValues'); handleGroupChat(e.target.value) }} label="Link Chats" menuItem={groupChat.map((item) => { return item.usernames })} />,
     ]} />
     <LineBox flex={true} CssTextField={[
       <UploadFile height="40px" helperTextPos="85%" helperText="Optional: Supported Files: jpg, png" width="100%" fontSize="14px" endIcon={<MdUpload color="aqua" size={25} />} type="file" accept={["image/jpeg", "image/jpg", "image/png",]} message="Group Photo" />,
     ]} />
     <div id="multiline">
-      <FormMultiLineInput required={true} placeHolder="Talk about your bunkmate(s)" type="text" field="About Us" helperText={aboutHelperText} onChange={(e) => { handleAboutValidation(e); handleEmptyStringValidation(e.target.value, 'aboutUs', 'firstPageValues') }} error={aboutError} value={state?.firstPageValues?.about} />
+      <FormMultiLineInput required={true} placeHolder="Talk about your bunkmate(s)" type="text" field="About Us" helperText={aboutHelperText} onChange={(e) => { handleAboutValidation(e); handleEmptyStringValidation(e.target.value, 'aboutUs', 'firstPageValues') }} error={aboutError} value={state?.firstPageValues?.aboutUs} />
     </div>
     <ActionButton helperText="* Please fill out all required fields before continuing" disabled={state?.globalError} onClick={handleContinue} fontSize="15px" width="100%" type="submit" title="Continue" />
   </>)
 }
 
-const SecondPageForm = ({ handleEmptyStringValidation, state, dispatch, actions, labelTitle, props, setSliderArray, sliderArray, ariaValuetext, listingsDataHashMap, listingsHashMap }) => {
+const SecondPageForm = ({ handleEmptyStringValidation, state, dispatch, actions, labelTitle, props, listingsDataHashMap, listingsHashMap }) => {
 
 
 
@@ -108,11 +108,10 @@ const SecondPageForm = ({ handleEmptyStringValidation, state, dispatch, actions,
       console.log(coordinates)
       //ideal location stores the coordinates
       dispatch({ type: actions.checkValues, payload: coordinates, name: "idealLocation", page: 'secondPageValues' });
-      //set the address of the location
+      //set the address of the location, also used as the validation to make sure that the user selects from the dropdown menu
       dispatch({ type: actions.checkValues, payload: place?.formatted_address, name: "address", page: 'secondPageValues' });
       dispatch({ type: actions.checkGlobalError, page: 'secondPageValues' })
       //setValues({ ...values, city: place.address_components[3].long_name, country: place.address_components[6].long_name, province: place.address_components[5].long_name })
-
     });
 
     const handleKeyDown = (e) => {
@@ -152,10 +151,6 @@ const SecondPageForm = ({ handleEmptyStringValidation, state, dispatch, actions,
     }
   }, [state?.secondPageValues?.listingObject])
 
-  const handleRangeChange = (e, newValue) => {
-    setSliderArray(newValue)
-    dispatch({ type: actions.checkValues, payload: sliderArray, name: "rangeSliderValue", page: 'secondPageValues' });
-  }
 
   const handleListingDisplay = () => {
     //only for the "listing in Mind" field
@@ -179,6 +174,14 @@ const SecondPageForm = ({ handleEmptyStringValidation, state, dispatch, actions,
   }
 
 
+  //Slider 2 knobbed slider for preferred age range
+  function ariaValuetext(value) {
+    return `${value}`;
+  }
+  //handle the recording of  the dual knob slider values
+  const handleRangeChange = (e, newValue) => {
+    dispatch({ type: actions.checkValues, payload: e.target.value, name: "rangeSliderValue", page: 'secondPageValues' });
+  }
 
   return (
     <>
@@ -214,7 +217,7 @@ const SecondPageForm = ({ handleEmptyStringValidation, state, dispatch, actions,
 
             {"Preferred Age *"}
           </Typography>
-          <Slider getAriaLabel={() => 'Temperature range'} slots onChange={handleRangeChange} valueLabelDisplay="auto" value={sliderArray} getAriaValueText={ariaValuetext} min={16} max={100} size="small" />
+          <Slider getAriaLabel={() => 'Bunkmate Age range'} slots onChange={handleRangeChange} valueLabelDisplay="auto" value={state?.secondPageValues?.rangeSliderValue} getAriaValueText={ariaValuetext} min={16} max={100} size="small" />
         </Box>,
       ]} />
 
@@ -255,33 +258,54 @@ function CreateRequestForm(props) {
   const [listingsDataHashMap, setListingsDataHashMap] = useState(new Map());
 
 
-  //need to extract values from larger object
-  const keysToExtract = [
+  //extract values from larger object
+  const extractKeys = [
+    'request',
+    'groupTags',
+    'aboutUs',
+    'linkChats',
     'listingObject',
     'idealLocation',
     'dateValue',
+    'address',
     'rentBudget',
-    'aboutUs',
-    'linkChats',
-    'request',
     'flexibility',
     'rangeSliderValue',
     'roommateGender',
     'numRoommates',
-    'address',
     'idealLengthStay',
   ];
+
+
   //if listing object doesn't exist then remove from keys to extract
   if (!props?.userRequest?.listingObject) {
-    keysToExtract.splice(0, 1)
+    extractKeys.splice(0, 1)
   }
 
-  const userRequest = keysToExtract.reduce((obj, key) => {
+  const combinedUserRequest = extractKeys.reduce((obj, key) => {
     if (props?.userRequest?.hasOwnProperty(key)) {
       obj[key] = props?.userRequest[key];
     }
-    return Object.keys(obj).length === 0 ? "" : obj;
+    return obj;
   }, {});
+
+  console.log(combinedUserRequest)
+
+  //check if object is empty
+  function handleCheckEmpty() {
+    if (Object.keys(combinedUserRequest).length === 0) {
+      const userFirstPageRequest = null
+      const userSecondPageRequest = null
+      return [userFirstPageRequest, userSecondPageRequest]
+    } else {
+      const { aboutUs, linkChats, request, groupTags, ...userSecondPageRequest } = combinedUserRequest
+      const userFirstPageRequest = { aboutUs, linkChats, request, groupTags }
+      return [userFirstPageRequest, userSecondPageRequest]
+    }
+  }
+
+  const userFirstPageRequest = handleCheckEmpty()[0]
+  const userSecondPageRequest = handleCheckEmpty()[1]
 
   useEffect(() => {
     //get backend data
@@ -301,6 +325,7 @@ function CreateRequestForm(props) {
     async function chats() {
       const chatData = { id: profile?.result?._id, token: profile?.streamToken }
       const response = await getChats(chatData);
+      console.log('response', response)
       return response
     }
     listings().then((response) => {
@@ -317,20 +342,24 @@ function CreateRequestForm(props) {
     });
 
     chats().then((response) => {
+      console.log('response', response)
       setGroupChat(response.data);
     });
+
 
 
     //store user profile data
     handleProfile().then((profile) => setUserProfile(profile));
     //decides what to display as the form title
-    if (userRequest) {
+    if (userSecondPageRequest) {
       setFormTitle("Edit Bunkmate Request")
-    } else if (!userRequest) {
+    } else if (!userSecondPageRequest) {
       setFormTitle("Create Bunkmate Request")
     }
 
   }, [])
+
+
 
   const actions = {
     checkGlobalError: "check_global_error",
@@ -339,20 +368,19 @@ function CreateRequestForm(props) {
     checkDate: "check_dates",
   }
 
-
-  const firstPageValues = userRequest || {
+  const firstPageValues = userFirstPageRequest || {
     request: "",
     aboutUs: "",
     linkChats: "",
   }
 
-  const secondPageValues = userRequest || {
+  const secondPageValues = userSecondPageRequest || {
     listingObject: "None",
     idealLocation: "",
     dateValue: "",
     rentBudget: "",
     flexibility: "",
-    rangeSliderValue: "",
+    rangeSliderValue: [18, 40],
     roommateGender: "",
     numRoommates: "",
     address: "",
@@ -410,22 +438,12 @@ function CreateRequestForm(props) {
   }
 
 
-  //Slider 2 knobbed slider for preferred age range
-  function ariaValuetext(value) {
-    return `${value}`;
-  }
-
-  const [sliderArray, setSliderArray] = useState([18, 40]);
-
-  useEffect(() => {
-    dispatch({ type: actions.checkValues, payload: sliderArray, name: "rangeSliderValue", page: 'secondPageValues' });
-  }, [sliderArray])
 
 
   useEffect(() => {
     console.log(state.secondPageValues.listingObject)
     dispatch({ type: actions.checkGlobalError, page: 'firstPageValues' })
-    if (state?.secondPageValues?.listingObject === "None" && !userRequest) {
+    if (state?.secondPageValues?.listingObject === "None") {
       //if the user changes their mind and switches back to None, then address and idealLocation are set back to empty string
       dispatch({ type: actions.checkValues, payload: "", name: "address", page: 'secondPageValues' })
       dispatch({ type: actions.checkValues, payload: "", name: "idealLocation", page: 'secondPageValues' })
@@ -433,7 +451,8 @@ function CreateRequestForm(props) {
       dispatch({ type: actions.checkValues, payload: "", name: "flexibility", page: 'secondPageValues' })
       dispatch({ type: actions.checkGlobalError, page: 'secondPageValues' })
 
-    } else if (!userRequest) {
+      //if listingObject isn't equal to none and is defined then execute the code (second condition is for when user has already made request)
+    } else if (state?.secondPageValues.listingObject !== "None" && state?.secondPageValues?.listingObject) {
       //when the user doesn't select index 0 of listing in mind then flexibility is set to "0"
       dispatch({ type: actions.checkValues, payload: "0", name: "flexibility", page: 'secondPageValues' })
       dispatch({ type: actions.checkGlobalError, page: 'secondPageValues' })
@@ -443,25 +462,41 @@ function CreateRequestForm(props) {
   useEffect(() => {
     if (state?.firstPageValues?.request === 'As myself') {
       //after completing the form and then switching back to firstpage will cause the globalerror to be set to false
+      setShowSecondPage(true)
       dispatch({ type: actions.checkGlobalError, page: 'secondPageValues' })
     } else if (state?.firstPageValues?.request === 'As a group') {
       //makes sure that the checkGlobalError runs after user decides to edit their bunkmate request
+      setShowSecondPage(false)
+      setShowFirstPage(true)
       dispatch({ type: actions.checkGlobalError, page: 'firstPageValues' })
     }
-  }, [state?.firstPageValues?.request])
+  }, [state?.firstPageValues?.request, props.onClick])
 
 
   //handle back click so you can change who you want to request as
   const handleBack = () => {
-    if (!userRequest) {
+    if (!userSecondPageRequest) {
       setFormTitle("Create a Bunkmate Request")
-    } else if (userRequest) {
+      /*
+      if (state?.firstPageValues?.request === "As myself" || state?.firstPageValues?.request === "") {
+        dispatch({ type: actions.checkValues, payload: "", name: "request", page: 'firstPageValues' })
+      }
+      */
+    } else if (userSecondPageRequest) {
       setFormTitle("Edit Bunkmate Request")
+      console.log(state?.firstPageValues?.request)
+      //broken
+      /*
+      if (state?.firstPageValues?.request === "As myself" || !state?.firstPageValues?.request) {
+        dispatch({ type: actions.checkValues, payload: "", name: "request", page: 'firstPageValues' })
+      }
+      */
+      //this method causes request to be recorded as null sometimes
+      dispatch({ type: actions.checkValues, payload: "", name: "request", page: 'firstPageValues' })
     }
     setShowSecondPage(false)
     setShowButton(null)
-    //set  request back  to empty string after clicking back button
-    dispatch({ type: actions.checkValues, payload: "", name: "request", page: 'firstPageValues' })
+    dispatch({ type: actions.checkGlobalError, page: 'firstPageValues' })
   }
 
   //change state depending on who you're requesting as
@@ -469,11 +504,11 @@ function CreateRequestForm(props) {
 
     switch (e.target.value) {
       case identityMenuItems[0]:
-        setShowSecondPage(true)
         setFormTitle("Request As Myself")
         setLabelTitle("My Rent Budget")
         //this is not to record the value, this is to prevent it from selecting "as myself" if the user presses the backbutton
-        setShowFirstPage(false)
+        setShowSecondPage(true)
+        dispatch({ type: actions.checkGlobalError, page: 'secondPageValues' })
 
         setShowButton(
           <IconButton onClick={handleBack}>
@@ -489,6 +524,7 @@ function CreateRequestForm(props) {
 
   const handleContinue = () => {
     //logic that's executed when continue button is pressed
+    dispatch({ type: actions.checkGlobalError, page: 'secondPageValues' })
     setShowSecondPage(true);
     setShowButton(
       <IconButton onClick={handleBack}>
@@ -516,9 +552,6 @@ function CreateRequestForm(props) {
           actions={actions}
           handleEmptyStringValidation={handleEmptyStringValidation}
           props={props}
-          sliderArray={sliderArray}
-          setSliderArray={setSliderArray}
-          ariaValuetext={ariaValuetext}
           groupChat={groupChat}
           setGroupChat={setGroupChat}
           labelTitle={labelTitle}

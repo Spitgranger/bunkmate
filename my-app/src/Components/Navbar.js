@@ -208,7 +208,7 @@ function Navbar({ chooseStyle }) {
                             </label>
                         </Tooltip>
                         <AccountDropDownMenu>
-                            <StyledMenuItem icon={<AssignmentIndIcon />} pageName={userProfile ? `${capitalizedName(userProfile.firstName)} ${capitalizedName(userProfile.lastName)}'s Account` : user?.result?.name} />
+                            <StyledMenuItem icon={<AssignmentIndIcon />} pageName={userProfile ? `${capitalizedName(userProfile.firstName)} ${capitalizedName(userProfile.lastName)}'s Account` : `${user?.result?.name}'s account`} />
                             <Divider />
                             <StyledMenuItem icon={<ConnectWithoutContactIcon />} pageName={"Contact"} />
                             <StyledMenuItem icon={<SettingsApplications />} pageName={"Settings"} />

@@ -53,8 +53,8 @@ export function MapProfile({ request }) {
         <SingleMapCard profile={profile} BunkmateInfo={BunkmateInfo} />
         */
         request.request === "As myself"
-            ? <SingleMapCard profile={request?.profile[0]} BunkmateInfo={BunkmateInfo} request={request} />
-            : <GroupMapCard profile={request?.profile[0]} BunkmateInfo={BunkmateInfo} />
+            ? <SingleMapCard BunkmateInfo={BunkmateInfo} request={request} />
+            : <GroupMapCard BunkmateInfo={BunkmateInfo} request={request} />
 
     )
 }
@@ -195,7 +195,7 @@ const Bunkmates = () => {
                 <ActionButton onClick={(e) => { handleRequestClick(); setCenter({ lat: userOwnData.idealLocation[0], lng: userOwnData.idealLocation[1] }); e.stopPropagation() }} bgColor={"black"} title={"Edit Bunkmate Request"} opacity='0.85' />
                 <Tooltip title={"Delete Request"}>
                     <div>
-                        <ActionButton onClick={(e) => { deleteRequest(userOwnData); navigate(0) }} bgColor={"black"} title={"X"} opacity='0.85' />
+                        <ActionButton onClick={(e) => { deleteRequest(userOwnData); }} bgColor={"black"} title={"X"} opacity='0.85' />
                     </div>
                 </Tooltip>
             </div>
