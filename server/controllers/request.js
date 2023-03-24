@@ -1,5 +1,6 @@
 import Request from "../models/request.js";
 import Profile from "../models/profile.js";
+import mongoose from "mongoose";
 
 export const createRequest = async (req, res) => {
     const requestData = req.body;
@@ -31,6 +32,12 @@ export const deleteRequest = async (req, res) => {
 
 export const updateRequest = async (req, res) => {
     try {
+        const userId = req.userId;
+        const { id: _id } = req.params;
+        const post = req.body;
+        if (!mongoose.Types.ObjectId.isValid(_id)) return res.status(404).send("Post doesn't exist");
+        const updatedPost = await Request.findByIdAndUpdate(_id, { ...post, _id }, { new: true });
+        res.json(updatedPost).status(201);
 
     } catch (error) {
         res.status(500).json("Something went wrong during updateing.")
