@@ -31,6 +31,7 @@ export const getRequests = () => API.get('/request');
 export const deleteRequest = () => API.delete('request');
 export const getListings = () => API.get("/posts");
 export const getChats = (chatData) => API.get(`/chats/${chatData.id}/${chatData.token}`);
+export const updateRequest = (id, formData) => API.patch(`/request/${id}`, formData);
 
 
 

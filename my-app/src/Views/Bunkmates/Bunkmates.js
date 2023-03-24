@@ -67,7 +67,7 @@ const Bunkmates = () => {
             overflow: 'scroll', height: '77.5vh', position: 'absolute', right: '0.5%', top: '5%', maxWidth: '20%'
         }
     }
-
+    const id = JSON.parse(localStorage.getItem("profile"))?.result?._id;
     const navigate = useNavigate()
     //store user profile data
     const [userProfile, setUserProfile] = useState("")
@@ -90,9 +90,11 @@ const Bunkmates = () => {
     const [loading, setLoading] = useState(true)
     const requestHandleSubmit = useContext(BuildUserContext)
     const [listingArray, setListingArray] = useState([]);
-
+    const [deleted, setDeleted] = useState(false);
+    const [userOwnData, setUserOwnData] = useState("");
 
     useEffect(() => {
+
         //get profile data from backend 
         async function handleProfile() {
             const profile = await getProfile();
@@ -115,84 +117,82 @@ const Bunkmates = () => {
             request.data.forEach(
                 (user) => {
                     allRequests.push(user)
-                    setUserRequests(userRequests.set(user.user, user));
+                    setUserRequests(new Map(userRequests.set(user.user, user)));
                 });
             setListingArray(allRequests)
         }).finally(() => setLoading(false))
 
+    }, [requestHandleSubmit, deleted])
+
+    useEffect(() => {
+        setUserOwnData(userRequests.get(id));
+    }, [userRequests])
+//THIS LOGIC ONLY WORKS FOR NOW PROBABLY CHANGE THE API ENDPOINT TO RETURN A BOOLEAN THAT IS EITHER TRUE OR FALSE
+//contains the user's own data
+
+console.log(userOwnData)
+//dictionary that stores the userId as the key and the object as the value
+console.log(userRequests)
+//contains all requests generated through accounts
+console.log(listingArray)
 
 
 
+const handleRequestClick = () => {
 
-
-    }, [requestHandleSubmit])
-
-    //THIS LOGIC ONLY WORKS FOR NOW PROBABLY CHANGE THE API ENDPOINT TO RETURN A BOOLEAN THAT IS EITHER TRUE OR FALSE
-    //contains the user's own data
-    const userOwnData = userRequests.get(JSON.parse(localStorage.getItem("profile"))?.result?._id);
-    console.log(userOwnData)
-    //dictionary that stores the userId as the key and the object as the value
-    console.log(userRequests)
-    //contains all requests generated through accounts
-    console.log(listingArray)
-
-
-
-    const handleRequestClick = () => {
-
-        //if user is not signed in
-        if (!localStorageData) {
-            setMessage("Sign Up Now!")
-            setMode("signUpEmail")
-            setIsOpen(true)
-            //else if user is logged in but has no profile
-        } else if (localStorageData && !userProfile) {
-            setMessage("Get Matched With Bunkmates!");
-            setMode('profileMakerForm');
-            setIsOpen(true)
-            //if user is logged in and has an existing profile then show them the request page
-        } else if (localStorageData && userProfile) {
-            setShowRequest(!showRequest)
-        }
+    //if user is not signed in
+    if (!localStorageData) {
+        setMessage("Sign Up Now!")
+        setMode("signUpEmail")
+        setIsOpen(true)
+        //else if user is logged in but has no profile
+    } else if (localStorageData && !userProfile) {
+        setMessage("Get Matched With Bunkmates!");
+        setMode('profileMakerForm');
+        setIsOpen(true)
+        //if user is logged in and has an existing profile then show them the request page
+    } else if (localStorageData && userProfile) {
+        setShowRequest(!showRequest)
     }
+}
 
-    //hard coded requests
-    const profiles = JSON.parse(localStorage.getItem('mapCardData')) || mapCardData;
+//hard coded requests
+const profiles = JSON.parse(localStorage.getItem('mapCardData')) || mapCardData;
 
-    if (!isLoaded) {
-        return <h1>ERROR HAS OCCURED</h1>
-    }
+if (!isLoaded) {
+    return <h1>ERROR HAS OCCURED</h1>
+}
 
-    const handleProfileClickAsync = (e) => {
-        console.log('async', e?.currentTarget?.id)
-        console.log("Request clicked")
-        const request = userRequests.get(e?.currentTarget?.id)
-        setMapProfileCard(<MapProfile request={request} />)
-    }
+const handleProfileClickAsync = (e) => {
+    console.log('async', e?.currentTarget?.id)
+    console.log("Request clicked")
+    const request = userRequests.get(e?.currentTarget?.id)
+    setMapProfileCard(<MapProfile request={request} />)
+}
 
 
-    /*
-    const instantiateChatClient = async () => {
-        return GetClientInfo();
-    }
-    */
+/*
+const instantiateChatClient = async () => {
+    return GetClientInfo();
+}
+*/
 
-    function BunkmateRequestPage() {
-        return (
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', top: '35vh', position: 'absolute', maxWidth: '500px' }}>
-                <Card variant="outlined" className="create-request-container" sx={{ padding: '20px', borderRadius: '10px', opacity: 0.9 }}>
-                    <CreateRequestForm userRequest={userOwnData} onClick={handleRequestClick} />
-                </Card>
-            </div >)
-    }
+function BunkmateRequestPage() {
+    return (
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', top: '35vh', position: 'absolute', maxWidth: '500px' }}>
+            <Card variant="outlined" className="create-request-container" sx={{ padding: '20px', borderRadius: '10px', opacity: 0.9 }}>
+                <CreateRequestForm userRequest={userOwnData} onClick={handleRequestClick} />
+            </Card>
+        </div >)
+}
 
-    function CreateRequestButton() {
-        return (
-            <div style={{ display: 'flex', bottom: '10vh', justifyContent: 'center', position: 'absolute', }}>
-                <ActionButton onClick={(e) => { handleRequestClick(); e.stopPropagation() }} bgColor={"black"} title={"Create Bunkmate Request"} opacity='0.85' />
-            </div>
-        )
-    }
+function CreateRequestButton() {
+    return (
+        <div style={{ display: 'flex', bottom: '10vh', justifyContent: 'center', position: 'absolute', }}>
+            <ActionButton onClick={(e) => { handleRequestClick(); e.stopPropagation() }} bgColor={"black"} title={"Create Bunkmate Request"} opacity='0.85' />
+        </div>
+    )
+}
 
 
     function EditRequestButton() {
@@ -217,73 +217,73 @@ const Bunkmates = () => {
         )
     }
 
-    /*
-    const markerOptions = ({ profile }) => {
-        return {
-            icon: {
-                url: 'https://static.vecteezy.com/system/resources/previews/006/828/456/original/bright-smiley-face-emoji-expression-free-vector.jpg',
-                size: new window.google.maps.Size(50, 50),
-                anchor: new window.google.maps.Point(25, 25)
-            }, label: {
-                text: `${userOwnData.rentBudget}`,
-            }
+/*
+const markerOptions = ({ profile }) => {
+    return {
+        icon: {
+            url: 'https://static.vecteezy.com/system/resources/previews/006/828/456/original/bright-smiley-face-emoji-expression-free-vector.jpg',
+            size: new window.google.maps.Size(50, 50),
+            anchor: new window.google.maps.Point(25, 25)
+        }, label: {
+            text: `${userOwnData.rentBudget}`,
         }
-    };
-    */
+    }
+};
+*/
 
-    return (
-        <div>
-            <div className="content-container">
-                {
-                    mapProfileCard
-                        ? null
-                        : <div className="search-bar-container" style={{ height: '200px', top: '19vh', position: 'absolute', display: 'flex', justifyContent: 'center' }}>
-                            <PlacesAutocomplete setSelected={setSelected} setCenter={setCenter} />
-                        </div>
-                }
-                <div className="map-container">
-                    <GoogleMap
-                        center={center}
-                        zoom={15}
-                        mapContainerStyle={{ width: "100%", height: "100vh" }}
-                        options={{ styles: mapStyles, streetViewControl: false }}
-                        onClick={() => { setMapProfileCard(null) }}
-                    >
-                        <Navbar chooseStyle={"glass"} />
-                        {/*
+return (
+    <div>
+        <div className="content-container">
+            {
+                mapProfileCard
+                    ? null
+                    : <div className="search-bar-container" style={{ height: '200px', top: '19vh', position: 'absolute', display: 'flex', justifyContent: 'center' }}>
+                        <PlacesAutocomplete setSelected={setSelected} setCenter={setCenter} />
+                    </div>
+            }
+            <div className="map-container">
+                <GoogleMap
+                    center={center}
+                    zoom={15}
+                    mapContainerStyle={{ width: "100%", height: "100vh" }}
+                    options={{ styles: mapStyles, streetViewControl: false }}
+                    onClick={() => { setMapProfileCard(null) }}
+                >
+                    <Navbar chooseStyle={"glass"} />
+                    {/*
                         <div className="social-feed-container" style={socialFeedStyles.FeedContainer}>
                             <SocialFeed />
                         </div>
                         */}
-                        {mapProfileCard ? mapProfileCard : null}
-                        {selected && <MarkerF position={center} icon={"http://maps.google.com/mapfiles/ms/icons/blue.png"} />}
-                        {listingArray.map((request, index) => {
-                            return (<OverlayViewF key={request?.user}
-                                position={{ lat: request?.idealLocation[0], lng: request?.idealLocation[1] }}
-                                styles={{ background: 'DarkGray', color: 'white' }}
-                                mapPaneName={OVERLAY_MOUSE_TARGET}>
-                                {
-                                    request.request === "As myself" ?
-                                        <div style={{ display: "flex", flexDirection: "row", }} onClick={e => { handleProfileClickAsync(e, index); e.stopPropagation() }} id={request?.user}>
-                                            <img style={{ zIndex: '2', right: '7px', top: '-2.6px', position: 'absolute', width: '45px', height: '45px', border: '3px solid #2ACDDD', objectFit: "cover", borderRadius: "50%" }} src={request?.profile[0]?.picture} />
-                                            <span style={{ minWidth: '90px', position: 'absolute', right: '-65px', display: "flex", height: "40px", padding: "10px", fontWeight: '500', color: "white", backgroundColor: '#2ACDDD', justifyContent: "center", alignItems: 'center', fontSize: "15px", borderRadius: "5px", cursor: "hover" }} >
-                                                {`$${request.rentBudget}`}
-                                            </span>
-                                            <RxTriangleDown style={{ right: '15px', color: '#2ACDDD', position: 'absolute', top: '35px', fontSize: '30px' }} />
-                                        </div> :
-                                        <div style={{ display: "flex", flexDirection: "row", }} onClick={e => { handleProfileClickAsync(e, index); e.stopPropagation() }} id={request?.user}>
-                                            <img style={{ zIndex: '2', right: '7px', top: '-2.6px', position: 'absolute', width: '45px', height: '45px', border: '3px solid aqua', objectFit: "cover", borderRadius: "50%" }} src={request?.profile[0]?.picture} />
-                                            <span style={{ minWidth: '90px', position: 'absolute', right: '-65px', display: "flex", height: "40px", padding: "10px", fontWeight: '500', color: "aqua", backgroundColor: 'black', border: '3px solid aqua', justifyContent: "center", alignItems: 'center', fontSize: "15px", borderRadius: "5px", cursor: "hover" }} >
-                                                {`$${request.rentBudget}`}
-                                            </span>
-                                            <RxTriangleDown style={{ right: '15px', color: '#2ACDDD', position: 'absolute', top: '35px', fontSize: '30px' }} />
-                                        </div>
-                                }
-                                {/*<button style={{ padding: "2px" }} onClick={e => { handleProfileClick(e, index); e.stopPropagation()}}>{`$${profile.rentBudget}`}</button>*/}
-                            </OverlayViewF >)
-                        })}
+                    {mapProfileCard ? mapProfileCard : null}
+                    {selected && <MarkerF position={center} icon={"http://maps.google.com/mapfiles/ms/icons/blue.png"} />}
+                    {listingArray.map((request, index) => {
+                        return (<OverlayViewF key={request?.user}
+                            position={{ lat: request?.idealLocation[0], lng: request?.idealLocation[1] }}
+                            styles={{ background: 'DarkGray', color: 'white' }}
+                            mapPaneName={OVERLAY_MOUSE_TARGET}>
+                            {
+                                request.request === "As myself" ?
+                                    <div style={{ display: "flex", flexDirection: "row", }} onClick={e => { handleProfileClickAsync(e, index); e.stopPropagation() }} id={request?.user}>
+                                        <img style={{ zIndex: '2', right: '7px', top: '-2.6px', position: 'absolute', width: '45px', height: '45px', border: '3px solid #2ACDDD', objectFit: "cover", borderRadius: "50%" }} src={request?.profile[0]?.picture} />
+                                        <span style={{ minWidth: '90px', position: 'absolute', right: '-65px', display: "flex", height: "40px", padding: "10px", fontWeight: '500', color: "white", backgroundColor: '#2ACDDD', justifyContent: "center", alignItems: 'center', fontSize: "15px", borderRadius: "5px", cursor: "hover" }} >
+                                            {`$${request.rentBudget}`}
+                                        </span>
+                                        <RxTriangleDown style={{ right: '15px', color: '#2ACDDD', position: 'absolute', top: '35px', fontSize: '30px' }} />
+                                    </div> :
+                                    <div style={{ display: "flex", flexDirection: "row", }} onClick={e => { handleProfileClickAsync(e, index); e.stopPropagation() }} id={request?.user}>
+                                        <img style={{ zIndex: '2', right: '7px', top: '-2.6px', position: 'absolute', width: '45px', height: '45px', border: '3px solid aqua', objectFit: "cover", borderRadius: "50%" }} src={request?.profile[0]?.picture} />
+                                        <span style={{ minWidth: '90px', position: 'absolute', right: '-65px', display: "flex", height: "40px", padding: "10px", fontWeight: '500', color: "aqua", backgroundColor: 'black', border: '3px solid aqua', justifyContent: "center", alignItems: 'center', fontSize: "15px", borderRadius: "5px", cursor: "hover" }} >
+                                            {`$${request.rentBudget}`}
+                                        </span>
+                                        <RxTriangleDown style={{ right: '15px', color: '#2ACDDD', position: 'absolute', top: '35px', fontSize: '30px' }} />
+                                    </div>
+                            }
+                            {/*<button style={{ padding: "2px" }} onClick={e => { handleProfileClick(e, index); e.stopPropagation()}}>{`$${profile.rentBudget}`}</button>*/}
+                        </OverlayViewF >)
+                    })}
 
-                        {/*
+                    {/*
                     return <MarkerF clickable={true} options={{
                         icon: {
                             url: profile?.picture,
@@ -296,26 +296,26 @@ const Bunkmates = () => {
                     }
                     } onClick={e => handleProfileClick(e, index)} key={index} position={{ lat: profile?.idealLocation[0], lng: profile?.idealLocation[1] }} >{profile?.rentBudget}</MarkerF>;
                 */}
-                    </GoogleMap >
-                </div>
-                {
-                    //if the user has clicked on a map card then these buttons won't be shown show that it doesn't clutter the screen
-                    mapProfileCard
-                        ? null
-                        //if the user has clicked on the button show the request page else show the button
-                        : <>{showRequest
-                            ? <BunkmateRequestPage />
-                            : loading
-                                ? <LoadingUi />
-                                : userOwnData
-                                    //if the user has an active request then show the edit request button else show the create request button
-                                    ? <EditRequestButton />
-                                    : <CreateRequestButton />}
-                        </>
-                }
-            </div >
+                </GoogleMap >
+            </div>
+            {
+                //if the user has clicked on a map card then these buttons won't be shown show that it doesn't clutter the screen
+                mapProfileCard
+                    ? null
+                    //if the user has clicked on the button show the request page else show the button
+                    : <>{showRequest
+                        ? <BunkmateRequestPage />
+                        : loading
+                            ? <LoadingUi />
+                            : userOwnData
+                                //if the user has an active request then show the edit request button else show the create request button
+                                ? <EditRequestButton />
+                                : <CreateRequestButton />}
+                    </>
+            }
         </div >
-    )
+    </div >
+)
 }
 
 export default Bunkmates;
