@@ -165,7 +165,7 @@ export function DropDownMenu({ disabled, helperText, required, autoFocus, inputR
 
         {menuItem.map((item, i) => {
           return (
-            <MenuItem key={i} value={item} >
+            <MenuItem index={i} key={i} value={item} >
               {Array.isArray(item) ? item.join(", ") : item}
             </MenuItem>
           );

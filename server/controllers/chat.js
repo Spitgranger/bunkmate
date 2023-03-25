@@ -22,8 +22,9 @@ export const getChats = async (req, res) => {
         );
         // console.log(response)
         let usernames = []
-        response.users.forEach((element) => { usernames.push(element.name) })
-        return { usernames, channel: channel.cid }
+        let ids = []
+        response.users.forEach((element) => { console.log(element); usernames.push(element.name); ids.push(element.id) })
+        return { usernames, ids, cid: channel.cid }
     })
     Promise.all(responses).then((response) => res.json(response).status(201))
 }
