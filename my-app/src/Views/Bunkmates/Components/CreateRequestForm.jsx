@@ -1,6 +1,6 @@
 //
 import { useState, useReducer, useContext, useEffect, useRef, useId, memo } from 'react'
-import { getChats, getProfile } from '../../../api';
+import { deleteRequest, getChats, getProfile } from '../../../api';
 import {
   FormSection,
   ActionButton,
@@ -39,7 +39,7 @@ import { BunkmatesContext } from '../../../Components/GlobalStateManagement/Bunk
 const FirstPageForm = ({ groupChat, dispatch, state, actions, handleEmptyStringValidation, handleRequestShow, handleContinue, }) => {
 
   const { aboutError, aboutHelperText, handleAboutValidation } = useContext(AboutValidationContext);
-  const [index, setIndex] = useState(null);
+  const [index, setIndex] = useState("");
 
   const handleGroupChat = (e) => {
     console.log(e);
@@ -85,7 +85,6 @@ const SecondPageForm = ({ handleEmptyStringValidation, state, dispatch, actions,
   //store user request data
   const { requestHandleSubmit, requestHandleUpdate } = useContext(BuildUserContext)
 
-  console.log(props?.userRequest?._id)
 
   //Utilizing google maps api, for the "ideal location", and "listing in mind" fields
   const autoCompleteRef = useRef();
@@ -166,12 +165,12 @@ const SecondPageForm = ({ handleEmptyStringValidation, state, dispatch, actions,
 
   const handleSubmit = () => {
     //only return the second page values if the user requests "as myself"
-    const { request, ...modifiedFirstPageValues } = state.firstPageValues
     const { listingObject, ...modifiedSecondPageValues } = state.secondPageValues
+    const { request } = state.firstPageValues
     if (state?.firstPageValues?.request === "As myself") {
       //if listing object is "None" then don't even submit a listingObject key
       if (state?.secondPageValues?.listingObject === "None") {
-        //extract listingobject leaving behind the rest of the object
+        //making sure to incorporate request from the firstPageValues as it is an essential field
         return ({ request, ...modifiedSecondPageValues });
       } else {
         return ({ request, ...state.secondPageValues });
@@ -181,6 +180,7 @@ const SecondPageForm = ({ handleEmptyStringValidation, state, dispatch, actions,
         //extract listingobject leaving behind the rest of the object
         return ({ ...state.firstPageValues, ...modifiedSecondPageValues });
       } else {
+        //record everything
         return ({ ...state.firstPageValues, ...state.secondPageValues });
       }
     }
@@ -195,7 +195,7 @@ const SecondPageForm = ({ handleEmptyStringValidation, state, dispatch, actions,
     return `${value}`;
   }
   //handle the recording of  the dual knob slider values
-  const handleRangeChange = (e, newValue) => {
+  const handleRangeChange = (e) => {
     dispatch({ type: actions.checkValues, payload: e.target.value, name: "rangeSliderValue", page: 'secondPageValues' });
   }
 
@@ -260,7 +260,7 @@ function CreateRequestForm(props) {
   //show or hide the group fields
   const [showFirstPage, setShowFirstPage] = useState(false)
   //show or hide the back button
-  const [showButton, setShowButton] = useState(null)
+  const [showButton, setShowButton] = useState("")
   //controls the title of the create request form
   const [formTitle, setFormTitle] = useState("Create a Bunkmate Request")
   //controls the title of the label on the rent budget field
@@ -310,6 +310,7 @@ function CreateRequestForm(props) {
 
   //check if object is empty
   function handleCheckEmpty() {
+    //empty when user hasn't made a request yet
     if (Object.keys(combinedUserRequest).length === 0) {
       const userFirstPageRequest = null
       const userSecondPageRequest = null
