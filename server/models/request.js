@@ -66,6 +66,10 @@ const requestSchema = mongoose.Schema({
         type: [String],
         required: false,
     },
+    groupPhoto: {
+        type: String,
+        required: false,
+    }
 })
 
 const Request = mongoose.model('Request', requestSchema);

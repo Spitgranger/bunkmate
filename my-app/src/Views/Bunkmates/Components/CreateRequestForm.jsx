@@ -29,6 +29,7 @@ import profiles from "../../../data/mapCardData"
 import { getListings } from '../../../api';
 import { useNavigate } from 'react-router';
 import { BunkmatesContext } from '../../../Components/GlobalStateManagement/BunkmatesContext';
+import CameraAltIcon from '@mui/icons-material/CameraAlt';
 
 //TODO
 //Convert from hard coded array index to directly storing address in values #FINISHED
@@ -36,7 +37,7 @@ import { BunkmatesContext } from '../../../Components/GlobalStateManagement/Bunk
 //Remove listing menu items #FINISHED
 //fetching stored data from api for saved listing
 
-const FirstPageForm = ({ groupChat, dispatch, state, actions, handleEmptyStringValidation, handleRequestShow, handleContinue, }) => {
+const FirstPageForm = ({ groupChat, dispatch, state, actions, handleEmptyStringValidation, handleRequestShow, handleContinue }) => {
 
   const { aboutError, aboutHelperText, handleAboutValidation } = useContext(AboutValidationContext);
   const [index, setIndex] = useState("");
@@ -61,6 +62,24 @@ const FirstPageForm = ({ groupChat, dispatch, state, actions, handleEmptyStringV
   console.log(groupChat)
   const chatMenuItems = groupChat.map((item) => { return item.usernames })
 
+  //special handle event function just to file uploads
+  const handleFileUpload = (e) => {
+    const file = e.target.files[0];
+    handleConversion(file, (result) => {
+      dispatch({ type: actions.checkValues, payload: result, name: "groupPhoto", page: 'firstPageValues' });
+    });
+  }
+
+  //converts image to base64-encoded string
+  const handleConversion = (file, callback) => {
+    let reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = function () {
+      callback(reader.result);
+    };
+    reader.onerror = function (error) {
+    };
+  }
   return (<>
     <LineBox flex={true} CssTextField={[
       <DropDownMenu required={true} autoFocus={true} maxHeight={250} value={state?.firstPageValues?.request} onChange={(e) => { handleEmptyStringValidation(e.target.value, 'request', 'firstPageValues'); handleRequestShow(e); }} label="Request" menuItem={identityMenuItems} />,
@@ -71,7 +90,7 @@ const FirstPageForm = ({ groupChat, dispatch, state, actions, handleEmptyStringV
       <DropDownMenu required={true} value={chatMenuItems[index]} onChange={(e) => { console.log(e.explicitOriginalTarget.attributes.index.value); handleEmptyStringValidation(groupChat[e.explicitOriginalTarget.attributes.index.value].ids, 'linkChats', 'firstPageValues'); setIndex(e.explicitOriginalTarget.attributes.index.value) }} label="Link Chats" menuItem={chatMenuItems} />,
     ]} />
     <LineBox flex={true} CssTextField={[
-      <UploadFile height="40px" helperTextPos="85%" helperText="Optional: Supported Files: jpg, png" width="100%" fontSize="14px" endIcon={<MdUpload color="aqua" size={25} />} type="file" accept={["image/jpeg", "image/jpg", "image/png",]} message="Group Photo" />,
+      <UploadFile helperText="Optional: Supported Files: jpg, jpeg, png" helperTextPos="85%" width="100%" height="40px" type="file" message="Upload Group Photo" accept={["image/jpg", "image/jpeg", "image/png"]} endIcon={<CameraAltIcon sx={{ color: "aqua" }} />} handleFileUpload={handleFileUpload} />,
     ]} />
     <div id="multiline">
       <FormMultiLineInput required={true} placeHolder="Talk about your bunkmate(s)" type="text" field="About Us" helperText={aboutHelperText} onChange={(e) => { handleAboutValidation(e); handleEmptyStringValidation(e.target.value, 'aboutUs', 'firstPageValues') }} error={aboutError} value={state?.firstPageValues?.aboutUs} />
@@ -274,6 +293,12 @@ function CreateRequestForm(props) {
   const [listingsDataHashMap, setListingsDataHashMap] = useState(new Map());
   const [chatHash, setChatHash] = useState(new Map());
 
+  /* useState hook for managing the upload file ui state 
+  (placed in parent hook to preserve state when switching between components occupying
+  the same position in the dom)*/
+
+  //TODO
+  //const [storedFile, setStoredFile] = useState("")
 
   //extract values from larger object
   const extractKeys = [
@@ -591,7 +616,7 @@ function CreateRequestForm(props) {
               handleEmptyStringValidation={handleEmptyStringValidation}
               handleRequestShow={handleRequestShow}
               handleContinue={handleContinue}
-
+              handleBack={handleBack}
             />
             :
             <LineBox flex={true} CssTextField={[

@@ -32,7 +32,6 @@ function GroupMapCard({ request, BunkmateInfo }) {
     const handleEnterActionArea = () => {
         setOpacity(0)
     }
-
     const handleLeaveActionArea = () => {
         setOpacity(0.8)
     }
@@ -52,14 +51,14 @@ function GroupMapCard({ request, BunkmateInfo }) {
                                     <CardActionArea style={{ borderTopLeftRadius: '5%', borderTopRightRadius: '5%' }} onMouseEnter={handleEnterActionArea} onMouseLeave={handleLeaveActionArea}>
                                         <CardMedia
                                             component="img"
-                                            image={request.profile[0].picture}
-                                            alt="profile picture"
+                                            image={request.groupPhoto ?? request.profile[0].picture}
+                                            alt="profile photo"
                                             //16:9 aspect ratio
                                             sx={{ width: '330px', height: '330px', borderTopLeftRadius: '5%', borderTopRightRadius: '5%' }}
                                         />
                                     </CardActionArea>
 
-                                    <CardContent style={{ transition: '0.5s', top: '240px', backgroundColor: 'black', opacity: [opacity], position: 'absolute', width: '330px', padding: '15px 15px 15px 15px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', }} >
+                                    <CardContent style={{ transition: '0.5s', top: '227px', backgroundColor: 'black', opacity: [opacity], position: 'absolute', width: '330px', padding: '15px 15px 15px 15px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', }} >
                                         <div className="card-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                             <div className="first-name">
                                                 <Typography variant="h5" color="text.primary" noWrap style={{ color: 'white', maxWidth: '300px', fontSize: "25px", fontWeight: 500, display: 'flex', alignItems: 'center' }}>
@@ -74,33 +73,34 @@ function GroupMapCard({ request, BunkmateInfo }) {
                                                     </div >
                                                 </Typography >
                                             </div >
-                                            <Tooltip title={"Pin This Profile"} arrow placement="left">
+                                            <Tooltip title={"View Profiles"} arrow placement="left">
                                                 <IconButton style={{ padding: '2px', color: 'white' }}>
-                                                    <HiMapPin style={{ color: 'white' }} />
+                                                    {showProfile ? <FiEyeOff /> : <FiEye />}
                                                 </IconButton>
                                             </Tooltip>
                                             <Tooltip title={"Message this group"} arrow placement="left">
-                                                <IconButton onClick={() => { setMessageButton(!messageButton); }} style={{ right: '15px', top: '50px', position: 'absolute', padding: '2px', color: 'white' }}>
+                                                <IconButton onClick={() => { setMessageButton(!messageButton); }} style={{ right: '15px', top: '80px', position: 'absolute', padding: '2px', color: 'white' }}>
                                                     {messageButton ? <TbMessagesOff /> : <TbMessages />}
                                                 </IconButton>
                                             </Tooltip>
-                                            <Tooltip title={"View Profiles"} arrow placement="left">
-                                                <IconButton onClick={() => { setShowProfile(!showProfile); }} style={{ right: '15px', top: '75px', position: 'absolute', padding: '2px', color: 'white' }}>
-                                                    {showProfile ? <FiEyeOff /> : <FiEye />}
+                                            <Tooltip title={"Pin This Profile"} arrow placement="left">
+                                                <IconButton onClick={() => { setShowProfile(!showProfile); }} style={{ right: '15px', top: '50px', position: 'absolute', padding: '2px', color: 'white' }}>
+                                                    <HiMapPin style={{ color: 'white' }} />
                                                 </IconButton>
                                             </Tooltip>
                                         </div >
                                         <div style={{ display: 'flex', alignItems: 'center' }}>
                                             <Tooltip title={"The Group's Total Budget"} arrow placement="right">
-                                                <Typography variant="h6" color="text.primary" style={{ display: 'inline-block', alignItems: 'center', color: 'white', overflow: 'hidden', }} >
+                                                <Typography variant="h6" color="text.primary" style={{ fontSize: '22px', display: 'inline-block', alignItems: 'center', color: 'white', overflow: 'hidden', }} >
                                                     {`$${request.rentBudget}/month  `}
                                                 </Typography>
                                             </Tooltip>
                                         </div>
                                         <div style={{ display: 'flex', alignItems: 'center' }}>
-                                            <Tooltip arrow placement="right" title={`${request.profile[0].firstName} currently has ${existingBunkmates} other Bunkamte(s)`}>
-                                                <Typography variant="body1" color="text.secondary" style={{ display: 'inline-block', color: 'aqua', overflow: 'hidden', }} >
-                                                    {`${existingBunkmates} Bunkmates`}
+                                            <Tooltip arrow placement="right" title={
+                                                existingBunkmates === 1 ? `${request.profile[0].firstName} currently has ${existingBunkmates} other bunkmate` : `${request.profile[0].firstName} current has ${existingBunkmates} other bunkmates`}>
+                                                <Typography variant="h6" color="text.primary" style={{ fontSize: "18px", display: 'inline-block', color: 'aqua', overflow: 'hidden', }} >
+                                                    {existingBunkmates === 1 ? `${existingBunkmates} bunkmate` : `${existingBunkmates} bunkmates`}
                                                 </Typography>
                                             </Tooltip>
                                         </div>

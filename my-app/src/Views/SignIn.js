@@ -197,7 +197,7 @@ export function SignUpEmail() {
         <LineBox flex={true} CssTextField={[
           <FormSingleLineInput
             name="name"
-            field="Full Name"
+            field="First Name"
             size="small"
             type="name"
             value={data.name}

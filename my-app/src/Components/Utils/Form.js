@@ -16,7 +16,7 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import ListItemText from '@mui/material/ListItemText';
 import Checkbox from '@mui/material/Checkbox';
 import { FormHelperText, InputAdornment, Typography } from "@mui/material";
-import { useState, memo, useCallback } from 'react'
+import { useState, memo, useCallback, useEffect } from 'react'
 import { BsFillCheckCircleFill } from "react-icons/bs";
 import { MdOutlineError } from "react-icons/md";
 import dayjs from 'dayjs';
@@ -143,6 +143,7 @@ export function DropDownMenu({ disabled, helperText, required, autoFocus, inputR
       },
     },
   };
+
   return (
     <FormControl
       sx={{ m: 1, width: '100%', flex: 1 }} size="small" fullWidth>
@@ -305,7 +306,6 @@ export function UploadFile(props) {
   const [backgroundColor, setBackgroundColor] = useState('#383838')
 
 
-
   const handleUpload = (e) => {
     const errorMessage = `Invalid file type. ${props.helperText}`;
     const successMessage = `Successfully uploaded: ${e.target.files[0].name}`;
@@ -314,14 +314,16 @@ export function UploadFile(props) {
 
 
 
+    //props.storeFile is used as a default value if the user has uploaded files before
+    //storedFile might not be the best because after user uploads one photo then uploads an incorret photo type after it will show as valid
     if (uploadedFile && allowedTypes.includes(uploadedFile.type)) {
 
       setFile(uploadedFile);
       setTextColor('aqua');
+      setHelperText(successMessage);
       setError(false);
       setHelperTextColor('black');
       setBackgroundColor('black');
-      setHelperText(successMessage);
       setIcon(<BsFillCheckCircleFill color="aqua" />);
 
     } else {
@@ -371,8 +373,8 @@ export function UploadFile(props) {
       </Button>
       <div style={{ width: props.helperTextPos, position: 'relative', }}>
         {/* set the margin to 1px to remove default margin and position helper text properly*/}
-        <FormHelperText sx={{ color: helperTextColor }}>
-          {props.helperText}
+        <FormHelperText sx={{ color: helperTextColor, whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden', width: '100%' }}>
+          {helperText}
         </FormHelperText>
       </div>
     </div >

@@ -23,7 +23,6 @@ export default function MapProvider({ children }) {
     } catch (error) {
       console.log("An error has occured: ", error)
     }
-    navigate(0)
   }
 
 
@@ -34,7 +33,6 @@ export default function MapProvider({ children }) {
     } catch (error) {
       console.log(error);
     }
-    navigate(0)
   }
 
 
