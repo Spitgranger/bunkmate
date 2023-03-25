@@ -39,9 +39,10 @@ import { BunkmatesContext } from '../../../Components/GlobalStateManagement/Bunk
 const FirstPageForm = ({ groupChat, dispatch, state, actions, handleEmptyStringValidation, handleRequestShow, handleContinue, }) => {
 
   const { aboutError, aboutHelperText, handleAboutValidation } = useContext(AboutValidationContext);
-
+  const [index, setIndex] = useState(null);
 
   const handleGroupChat = (e) => {
+    console.log(e);
     //record the linkgroupchat ids 
     let channelIdStorage = null;
     const clientChannelNames = e
@@ -57,27 +58,26 @@ const FirstPageForm = ({ groupChat, dispatch, state, actions, handleEmptyStringV
     //dispatch function that adds channelIdStorage as a payload
   }
 
+  console.log(groupChat)
+  const chatMenuItems = groupChat.map((item) => { return item.usernames })
 
-
-  return (
-    <>
-      <LineBox flex={true} CssTextField={[
-        <DropDownMenu required={true} autoFocus={true} maxHeight={250} value={state?.firstPageValues?.request} onChange={(e) => { handleEmptyStringValidation(e.target.value, 'request', 'firstPageValues'); handleRequestShow(e); }} label="Request" menuItem={identityMenuItems} />,
-      ]} />
-      {/* belongs below*/}
-      < LineBox flex={true} CssTextField={[
-        <MultipleSelectCheckmarks value={state?.firstPageValues?.groupTags} helperText="Optional" title="Group tags" onChange={(e) => handleEmptyStringValidation(e.target.value, 'groupTags', 'firstPageValues')} menuItems={['Non Smokers', 'Have Pets', "Have Jobs", 'Students', 'Have Children', 'LGBTQ Friendly', 'Cannabis Friendly']} />,
-        <DropDownMenu required={true} value={state?.firstPageValues?.linkChats} onChange={(e) => { handleEmptyStringValidation(e.target.value, 'linkChats', 'firstPageValues'); handleGroupChat(e.target.value) }} label="Link Chats" menuItem={groupChat.map((item) => { return item.usernames })} />,
-      ]} />
-      <LineBox flex={true} CssTextField={[
-        <UploadFile height="40px" helperTextPos="85%" helperText="Optional: Supported Files: jpg, png" width="100%" fontSize="14px" endIcon={<MdUpload color="aqua" size={25} />} type="file" accept={["image/jpeg", "image/jpg", "image/png",]} message="Group Photo" />,
-      ]} />
-      <div id="multiline">
-        <FormMultiLineInput required={true} placeHolder="Talk about your bunkmate(s)" type="text" field="About Us" helperText={aboutHelperText} onChange={(e) => { handleAboutValidation(e); handleEmptyStringValidation(e.target.value, 'aboutUs', 'firstPageValues') }} error={aboutError} value={state?.firstPageValues?.aboutUs} />
-      </div>
-      <ActionButton helperText="* Please fill out all required fields before continuing" disabled={state?.globalError} onClick={handleContinue} fontSize="15px" width="100%" type="submit" title="Continue" />
-    </>
-  )
+  return (<>
+    <LineBox flex={true} CssTextField={[
+      <DropDownMenu required={true} autoFocus={true} maxHeight={250} value={state?.firstPageValues?.request} onChange={(e) => { handleEmptyStringValidation(e.target.value, 'request', 'firstPageValues'); handleRequestShow(e); }} label="Request" menuItem={identityMenuItems} />,
+    ]} />
+    {/* belongs below*/}
+    < LineBox flex={true} CssTextField={[
+      <MultipleSelectCheckmarks value={state?.firstPageValues?.groupTags} helperText="Optional" title="Group tags" onChange={(e) => handleEmptyStringValidation(e.target.value, 'groupTags', 'firstPageValues')} menuItems={['Non Smokers', 'Have Pets', "Have Jobs", 'Students', 'Have Children', 'LGBTQ Friendly', 'Cannabis Friendly']} />,
+      <DropDownMenu required={true} value={chatMenuItems[index]} onChange={(e) => { console.log(e.explicitOriginalTarget.attributes.index.value); handleEmptyStringValidation(groupChat[e.explicitOriginalTarget.attributes.index.value].ids, 'linkChats', 'firstPageValues'); setIndex(e.explicitOriginalTarget.attributes.index.value) }} label="Link Chats" menuItem={chatMenuItems} />,
+    ]} />
+    <LineBox flex={true} CssTextField={[
+      <UploadFile height="40px" helperTextPos="85%" helperText="Optional: Supported Files: jpg, png" width="100%" fontSize="14px" endIcon={<MdUpload color="aqua" size={25} />} type="file" accept={["image/jpeg", "image/jpg", "image/png",]} message="Group Photo" />,
+    ]} />
+    <div id="multiline">
+      <FormMultiLineInput required={true} placeHolder="Talk about your bunkmate(s)" type="text" field="About Us" helperText={aboutHelperText} onChange={(e) => { handleAboutValidation(e); handleEmptyStringValidation(e.target.value, 'aboutUs', 'firstPageValues') }} error={aboutError} value={state?.firstPageValues?.aboutUs} />
+    </div>
+    <ActionButton helperText="* Please fill out all required fields before continuing" disabled={state?.globalError} onClick={handleContinue} fontSize="15px" width="100%" type="submit" title="Continue" />
+  </>)
 }
 
 const SecondPageForm = ({ handleEmptyStringValidation, state, dispatch, actions, labelTitle, props, listingsDataHashMap, listingsHashMap }) => {
@@ -272,6 +272,7 @@ function CreateRequestForm(props) {
   //state managemnt for listing in mind field
   const [listingsHashMap, setListingsHashMap] = useState(new Map());
   const [listingsDataHashMap, setListingsDataHashMap] = useState(new Map());
+  const [chatHash, setChatHash] = useState(new Map());
 
 
   //extract values from larger object
@@ -341,7 +342,6 @@ function CreateRequestForm(props) {
     async function chats() {
       const chatData = { id: profile?.result?._id, token: profile?.streamToken }
       const response = await getChats(chatData);
-      console.log('response', response)
       return response
     }
     listings().then((response) => {
@@ -358,7 +358,6 @@ function CreateRequestForm(props) {
     });
 
     chats().then((response) => {
-      console.log('response', response)
       setGroupChat(response.data);
     });
 
