@@ -59,31 +59,33 @@ const FirstPageForm = ({ groupChat, dispatch, state, actions, handleEmptyStringV
 
 
 
-  return (<>
-    <LineBox flex={true} CssTextField={[
-      <DropDownMenu required={true} autoFocus={true} maxHeight={250} value={state?.firstPageValues?.request} onChange={(e) => { handleEmptyStringValidation(e.target.value, 'request', 'firstPageValues'); handleRequestShow(e); }} label="Request" menuItem={identityMenuItems} />,
-    ]} />
-    {/* belongs below*/}
-    < LineBox flex={true} CssTextField={[
-      <MultipleSelectCheckmarks value={state?.firstPageValues?.groupTags} helperText="Optional" title="Group tags" onChange={(e) => handleEmptyStringValidation(e.target.value, 'groupTags', 'firstPageValues')} menuItems={['Non Smokers', 'Have Pets', "Have Jobs", 'Students', 'Have Children', 'LGBTQ Friendly', 'Cannabis Friendly']} />,
-      <DropDownMenu required={true} value={state?.firstPageValues?.linkChats} onChange={(e) => { handleEmptyStringValidation(e.target.value, 'linkChats', 'firstPageValues'); handleGroupChat(e.target.value) }} label="Link Chats" menuItem={groupChat.map((item) => { return item.usernames })} />,
-    ]} />
-    <LineBox flex={true} CssTextField={[
-      <UploadFile height="40px" helperTextPos="85%" helperText="Optional: Supported Files: jpg, png" width="100%" fontSize="14px" endIcon={<MdUpload color="aqua" size={25} />} type="file" accept={["image/jpeg", "image/jpg", "image/png",]} message="Group Photo" />,
-    ]} />
-    <div id="multiline">
-      <FormMultiLineInput required={true} placeHolder="Talk about your bunkmate(s)" type="text" field="About Us" helperText={aboutHelperText} onChange={(e) => { handleAboutValidation(e); handleEmptyStringValidation(e.target.value, 'aboutUs', 'firstPageValues') }} error={aboutError} value={state?.firstPageValues?.aboutUs} />
-    </div>
-    <ActionButton helperText="* Please fill out all required fields before continuing" disabled={state?.globalError} onClick={handleContinue} fontSize="15px" width="100%" type="submit" title="Continue" />
-  </>)
+  return (
+    <>
+      <LineBox flex={true} CssTextField={[
+        <DropDownMenu required={true} autoFocus={true} maxHeight={250} value={state?.firstPageValues?.request} onChange={(e) => { handleEmptyStringValidation(e.target.value, 'request', 'firstPageValues'); handleRequestShow(e); }} label="Request" menuItem={identityMenuItems} />,
+      ]} />
+      {/* belongs below*/}
+      < LineBox flex={true} CssTextField={[
+        <MultipleSelectCheckmarks value={state?.firstPageValues?.groupTags} helperText="Optional" title="Group tags" onChange={(e) => handleEmptyStringValidation(e.target.value, 'groupTags', 'firstPageValues')} menuItems={['Non Smokers', 'Have Pets', "Have Jobs", 'Students', 'Have Children', 'LGBTQ Friendly', 'Cannabis Friendly']} />,
+        <DropDownMenu required={true} value={state?.firstPageValues?.linkChats} onChange={(e) => { handleEmptyStringValidation(e.target.value, 'linkChats', 'firstPageValues'); handleGroupChat(e.target.value) }} label="Link Chats" menuItem={groupChat.map((item) => { return item.usernames })} />,
+      ]} />
+      <LineBox flex={true} CssTextField={[
+        <UploadFile height="40px" helperTextPos="85%" helperText="Optional: Supported Files: jpg, png" width="100%" fontSize="14px" endIcon={<MdUpload color="aqua" size={25} />} type="file" accept={["image/jpeg", "image/jpg", "image/png",]} message="Group Photo" />,
+      ]} />
+      <div id="multiline">
+        <FormMultiLineInput required={true} placeHolder="Talk about your bunkmate(s)" type="text" field="About Us" helperText={aboutHelperText} onChange={(e) => { handleAboutValidation(e); handleEmptyStringValidation(e.target.value, 'aboutUs', 'firstPageValues') }} error={aboutError} value={state?.firstPageValues?.aboutUs} />
+      </div>
+      <ActionButton helperText="* Please fill out all required fields before continuing" disabled={state?.globalError} onClick={handleContinue} fontSize="15px" width="100%" type="submit" title="Continue" />
+    </>
+  )
 }
 
 const SecondPageForm = ({ handleEmptyStringValidation, state, dispatch, actions, labelTitle, props, listingsDataHashMap, listingsHashMap }) => {
 
-
-
   //store user request data
-  const { requestHandleSubmit } = useContext(BuildUserContext)
+  const { requestHandleSubmit, requestHandleUpdate } = useContext(BuildUserContext)
+
+  console.log(props?.userRequest?._id)
 
   //Utilizing google maps api, for the "ideal location", and "listing in mind" fields
   const autoCompleteRef = useRef();
@@ -163,14 +165,28 @@ const SecondPageForm = ({ handleEmptyStringValidation, state, dispatch, actions,
   }
 
   const handleSubmit = () => {
-    if (state?.secondPageValues?.listingObject === "None") {
-      //extract listingobject leaving behind the rest of the object
-      const { listingObject, ...modifiedSecondPageValues } = state.secondPageValues
-      return ({ ...state.firstPageValues, ...modifiedSecondPageValues });
-
-    } else {
-      return ({ ...state.firstPageValues, ...state.secondPageValues });
+    //only return the second page values if the user requests "as myself"
+    const { request, ...modifiedFirstPageValues } = state.firstPageValues
+    const { listingObject, ...modifiedSecondPageValues } = state.secondPageValues
+    if (state?.firstPageValues?.request === "As myself") {
+      //if listing object is "None" then don't even submit a listingObject key
+      if (state?.secondPageValues?.listingObject === "None") {
+        //extract listingobject leaving behind the rest of the object
+        return ({ request, ...modifiedSecondPageValues });
+      } else {
+        return ({ request, ...state.secondPageValues });
+      }
+    } else if (state?.firstPageValues?.request === "As a group") {
+      if (state?.secondPageValues?.listingObject === "None") {
+        //extract listingobject leaving behind the rest of the object
+        return ({ ...state.firstPageValues, ...modifiedSecondPageValues });
+      } else {
+        return ({ ...state.firstPageValues, ...state.secondPageValues });
+      }
     }
+
+
+
   }
 
 
@@ -228,7 +244,7 @@ const SecondPageForm = ({ handleEmptyStringValidation, state, dispatch, actions,
       ]} />
 
       {/* disable cotinue button if the user has not filled out all mandatory fields and / or still has errors*/}
-      <ActionButton helperText="* Please fill out all required fields before continuing" disabled={state?.globalError} onClick={() => { props.onClick(); console.log({ ...state?.firstPageValues, ...state?.secondPageValues }); requestHandleSubmit(handleSubmit()) }} fontSize="15px" width="100%" type="submit" title="Submit" />
+      <ActionButton helperText="* Please fill out all required fields before continuing" disabled={state?.globalError} onClick={() => { props.onClick(); console.log({ ...state?.firstPageValues, ...state?.secondPageValues }); props.userRequest ? requestHandleUpdate(props.userRequest._id, handleSubmit()) : requestHandleSubmit(handleSubmit()); console.log(handleSubmit()) }} fontSize="15px" width="100%" type="submit" title="Submit" />
     </>
   )
 }
@@ -463,6 +479,10 @@ function CreateRequestForm(props) {
     if (state?.firstPageValues?.request === 'As myself') {
       //after completing the form and then switching back to firstpage will cause the globalerror to be set to false
       setShowSecondPage(true)
+      setShowButton(
+        <IconButton onClick={handleBack}>
+          <IoIosArrowBack />
+        </IconButton>);
       dispatch({ type: actions.checkGlobalError, page: 'secondPageValues' })
     } else if (state?.firstPageValues?.request === 'As a group') {
       //makes sure that the checkGlobalError runs after user decides to edit their bunkmate request
@@ -557,6 +577,8 @@ function CreateRequestForm(props) {
           labelTitle={labelTitle}
           listingsDataHashMap={listingsDataHashMap}
           listingsHashMap={listingsHashMap}
+          combinedUserRequest={combinedUserRequest}
+
         />
         : <>
           {showFirstPage

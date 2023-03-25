@@ -26,7 +26,7 @@ function GroupMapCard({ request, BunkmateInfo }) {
     const [messageButton, setMessageButton] = useState(false)
     const [showProfile, setShowProfile] = useState(false)
     //state management for card opacity
-    const [opacity, setOpacity] = useState(0.9)
+    const [opacity, setOpacity] = useState(0.8)
 
 
     const handleEnterActionArea = () => {
@@ -34,7 +34,7 @@ function GroupMapCard({ request, BunkmateInfo }) {
     }
 
     const handleLeaveActionArea = () => {
-        setOpacity(0.9)
+        setOpacity(0.8)
     }
 
 
