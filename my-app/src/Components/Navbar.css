@@ -1,11 +1,16 @@
+/* Normal Styles*/
 .navBar {
+  min-height: 85px;
+  max-height: 85px;
+  position: fixed;
+  z-index: 999;
+  top: 0;
   width: 100%;
   height: 9vh;
-  zoom: 0.8;
   font-weight: 600;
   display: flex;
   box-shadow: 0px 0px 10px lightgrey;
-  min-width: 1000px;
+  min-width: 650px;
   background-color: white;
   align-items: center;
   justify-content: space-between;
@@ -16,32 +21,8 @@
     inset 0px 20px 7px 0px grey;*/
 }
 
-.navBar .webPages {
-  display: flex;
-  align-items: center;
-  white-space: nowrap;
-  height: 100%;
-}
 
-
-.pageContainer {
-  height: 100%;
-  display: flex;
-  align-items: center;
-}
-
-.userAccount {
-  padding: 15px;
-  margin: 5px;
-}
-
-
-
-.navBar .webPages .pageContainer div {
-  float: right;
-}
-
-.pageContainer>* {
+.navPageContainer>* {
   padding-left: 15px;
   padding-right: 15px;
   text-decoration: none;
@@ -51,18 +32,114 @@
   align-items: center;
   justify-content: center;
   color: black;
+  z-index: 999;
 }
 
 
-.navBar .webPages .pageContainer :hover {
+.navBar .navPages .navPageContainer :hover {
   background-color: rgb(246, 246, 246);
   border-bottom: 5px solid aqua;
 }
 
-nav ul a.currentPage {
+nav ul a.navCurrentPage {
   border-bottom: 5px solid aqua;
   background-color: rgb(246, 246, 246);
 }
+
+.navBar .navPages {
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  height: 100%;
+}
+
+
+.navPageContainer {
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+
+
+.navBar .navPages .navPageContainer div {
+  float: right;
+}
+
+
+
+/* Glass Styles */
+.glassBar {
+  position: fixed;
+  width: 100%;
+  min-height: 85px;
+  max-height: 85px;
+  height: 9vh;
+  font-weight: 600;
+  top: 0;
+  z-index: 999;
+  display: flex;
+  min-width: 650px;
+  backdrop-filter: blur(4px);
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+  z-index: 5;
+  background-color: rgba(0, 0, 0, 0.6)
+}
+
+.glassPageContainer>* {
+  padding-left: 15px;
+  padding-right: 15px;
+  text-decoration: none;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  z-index: 5;
+}
+
+.glassBar .glassPages .glassPageContainer :hover {
+  background-color: transparent;
+  backdrop-filter: blur(3px);
+  border-bottom: 5px solid aqua;
+}
+
+nav ul a.glassCurrentPage {
+  border-bottom: 5px solid aqua;
+  backdrop-filter: blur(3px);
+  background-color: transparent;
+}
+
+
+
+
+.glassBar .glassPages {
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  height: 100%;
+}
+
+.glassPageContainer {
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.glassBar .glassPages .glassPageContainer div {
+  float: right;
+}
+
+
+
+.userAccount {
+  padding: 15px;
+  margin: 5px;
+}
+
 
 
 @media (prefers-reduced-motion: no-preference) {

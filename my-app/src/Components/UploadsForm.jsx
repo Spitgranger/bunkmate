@@ -1,4 +1,4 @@
-import { useState, useReducer } from 'react'
+import { useState, useReducer, useContext } from 'react'
 import { IoChevronBack } from 'react-icons/io5';
 import {
   FormSection,
@@ -6,29 +6,25 @@ import {
   UploadFile,
   LineBox,
   FormSingleLineInput,
-} from './SubComponents/Form';
+  DropDownMenu,
+} from './Utils/Form';
 import { IoChevronForward } from 'react-icons/io5';
 import { MdUpload } from "react-icons/md"
 import { useEffect } from 'react';
-
-
-const backButtonStyles = {
-  display: 'flex',
-  alignItems: 'center',
-  padding: '8px'
-}
+import { CreditValidationContext, ValuesObjectContext } from './GlobalStateManagement/ValidationContext'
 
 const checkBoxStyles = {
   margin: "5px"
 }
 
-
-
-
-
-function Uploads({ backwardButton, forwardButton }) {
+function Uploads({ forwardButton }) {
   const page2 = JSON.parse(localStorage.getItem("page1"))
-  const [values, setValues] = useState(page2);
+  const { values, setValues } = useContext(ValuesObjectContext)
+  const { creditError, creditHelperText } = useContext(CreditValidationContext)
+
+  const handleFieldChange = (e, field) => {
+    setValues(prevValue => ({ ...prevValue, [field]: e.target.value }));
+  };
 
   //SSN/SIN validation
   //Must be 9 characters long
@@ -38,7 +34,7 @@ function Uploads({ backwardButton, forwardButton }) {
   const [sinHelperText, setSinHelperText] = useState('');
 
   const handleSocialNumberValidation = (values) => {
-    const checkLength = values?.sin.length !== 9;
+    const checkLength = values?.sin?.length !== 9;
     const checkIsEmpty = !values?.sin;
     const checkIsNumber = isNaN(parseInt(values?.sin));
     const validFormat = !/^\d+$/.test(values?.sin);
@@ -69,18 +65,20 @@ function Uploads({ backwardButton, forwardButton }) {
   useEffect(() => { if (values?.sin) { handleSocialNumberValidation(values) } else { return } }, [values])
 
   return (<>
-    <label style={{ cursor: 'pointer' }}>
-      <input style={{ display: 'none' }} onClick={backwardButton} type="button" />
-      <h3 style={backButtonStyles}>
-        <IoChevronBack />Back</h3>
-    </label>
 
-    <FormSection title="Finances Check"
-      message="*if you have good finances you'll get a 'Strong Financials' badge that'll be visible to other users" />
+    <br />
+    <FormSection title="Finances and Verification" message="If you have good finances you'll get a 'Strong Financials' badge that'll be visible to othe users" />
+    {/* ranges from 10000 - 100000*/}
+    <LineBox flex={true} CssTextField={[
+      <FormSingleLineInput size="small" helperText={creditHelperText} error={creditError} field="Credit Score" placeHolder="ex. 740" value={values?.credit} onChange={(e) => { handleFieldChange(e, 'credit'); }} />,
+      <DropDownMenu default={""} label="Annual Income" menuItem={["< $10000", "$10000 - $50000", "$50001 - $100000", "$100001 - $200000", "> $200001"]} value={values?.income} onChange={(e) => { handleFieldChange(e, 'income'); }} />,
+      <FormSingleLineInput type="text" size="small" helperText={sinHelperText} value={values?.sin} field="SIN/SSN" placeHolder="ex. 234452874" onChange={(e) => { handleSSNChange(e) }} error={sinError} />,
+    ]
+    } />
 
     <LineBox flex={true} CssTextField={[
+      <UploadFile helperTextPos='85%' helperText="Supported Files: pdf" width="100%" fontSize="14px" endIcon={<MdUpload color="aqua" size={25} />} type="file" accept="application/pdf" message="Credit Score" />,
       <UploadFile helperTextPos='85%' helperText="Supported Files: jpg, png, pdf, docx, doc" width="100%" fontSize="14px" endIcon={<MdUpload color="aqua" size={25} />} type="file" accept={["image/jpeg", "image/jpg", "image/png", "application/pdf", "application/docx", "application/doc"]} message="Void Check" />,
-      <UploadFile helperTextPos='85%' helperText="Supported Files: pdf" width="100%" fontSize="14px" endIcon={<MdUpload color="aqua" size={25} />} type="file" accept="application/pdf" message="Credit Score" />
     ]
     } />
     <FormSection message="*Please upload at least two of the three" />
@@ -94,7 +92,7 @@ function Uploads({ backwardButton, forwardButton }) {
 
     <br></br>
     <FormSection title="Background Check"
-      message={"*Please upload at least two of the four. We'll use this data to perform a FREE background check. Should you pass you'll receive a 'No Criminal History' and 'ID verified' badge."}
+      message={"*Please upload at least two of the three. We'll use this data to perform a FREE background check. Should you pass you'll receive a 'No Criminal History' and 'ID verified' badge."}
     />
 
     <LineBox flex={true} CssTextField={[
@@ -104,7 +102,6 @@ function Uploads({ backwardButton, forwardButton }) {
     } />
     <LineBox flex={true} CssTextField={[
       <UploadFile helperTextPos='85%' helperText="Supported Files: jpg, png, pdf" width="100%" fontSize="14px" endIcon={<MdUpload color="aqua" size={25} />} type="file" accept={["image/jpeg", "image/jpg", "image/png", "application/pdf"]} message="Study Permit" />,
-      <FormSingleLineInput type="text" size="large" helperText={sinHelperText} value={values?.sin} field="SIN/SSN" placeHolder="ex. 234452874" onChange={(e) => { handleSSNChange(e) }} error={sinError} />,
     ]
     } />
 
@@ -119,7 +116,7 @@ function Uploads({ backwardButton, forwardButton }) {
       </label>
     </div>
     {/* disable cotinue button if the user has not filled out all mandatory fields and / or still has errors*/}
-    <ActionButton fontSize="15px" width="100%" onClick={forwardButton} type="submit" title="Continue" endIcon={<IoChevronForward color="aqua" />} />
+    <ActionButton fontSize="15px" width="100%" onClick={forwardButton} type="submit" title="Submit" endIcon={<IoChevronForward color="aqua" />} />
   </>)
 }
 

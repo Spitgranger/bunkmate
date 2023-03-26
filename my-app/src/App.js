@@ -1,8 +1,8 @@
 import './App.css';
 import Navbar from './Components/Navbar';
 import Post from './Components/Post';
-import { Rating } from './Components/SubComponents/Feedback';
-import { Like } from './Components/SubComponents/Feedback';
+import { Rating } from './Components/Utils/Feedback';
+import { Like } from './Components/Utils/Feedback';
 
 
 import Apartment2 from "./Components/Assets/apartment.jpg"
@@ -10,6 +10,7 @@ import Apartment from "./Components/Assets/apartment2.jpg"
 import Room from "./Components/Assets/living_space.jpg"
 import Room2 from "./Components/Assets/living_space2.jpg"
 import SignInProvider from './Components/GlobalStateManagement/SignInContext';
+import ValidationProvider from './Components/GlobalStateManagement/ValidationContext';
 
 function App() {
   const keyinfo = [
@@ -293,9 +294,8 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <SignInProvider>
-          <Navbar />
-        </SignInProvider>
+        <div style={{ height: '9vh' }} />
+        <Navbar />
       </header>
       <body>
         <section className="Listings">
@@ -309,7 +309,7 @@ function App() {
         <section className="map">
         </section>
       </body>
-    </div>
+    </div >
   );
 }
 

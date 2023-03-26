@@ -1,4 +1,5 @@
-import Profile from '../models/profile.js'
+import Profile from '../models/profile.js';
+import mongoose from 'mongoose';
 
 export const createProfile = async (req, res) => {
     const profileData = req.body;
@@ -21,10 +22,27 @@ export const createProfile = async (req, res) => {
 
 export const getProfile = async (req, res) => {
     try {
-        const profile = await Profile.findOne({ user: req.userId }).select("about address city credit education email employment firstName gender income lastName links phone picture province");
-        res.status(200).json(profile);
+        const profile = await Profile.findOne({ user: req.userId }).select("about address age birthday cannabis city cleanliness credit drinking education email employment firstName gender havePets lastName occupation phone picture province sleepSchedule smoking tolerateGuests toleratePets");
+        if (profile) {
+            res.status(200).json(profile);
+        } else {
+            res.status(404).json({ message: "no profile associated with this account" });
+        }
     } catch (error) {
         console.log(error);
-        res.status(404).json({ message: "no profile associated with this account" });
+        res.status(500).json({ message: "Something Went Wrong" });
     }
 }
+
+export const getProfiles = async (req, res) => {
+    try {
+        const profileArray = req.params.profiles.split(".");
+        console.log(profileArray)
+        const result = await Profile.find({ 'user': { $in: profileArray } })
+        res.status(200).json(result);
+    } catch (error) {
+        res.status(404).json(error)
+        console.log(error)
+    }
+}
+

@@ -10,7 +10,7 @@ API.interceptors.request.use((req) => {
     }
     return req;
 });
-
+//api endpoints
 export const fetchPost = (id) => API.get(`/posts/${id}`);
 export const fetchPosts = (page) => API.get(`/posts?page=${page}`);
 export const fetchPostsBySearch = (searchQuery) => API.get(`/posts/search?searchQuery=${searchQuery.search || 'none'}&tags=${searchQuery.tags}`)
@@ -24,6 +24,14 @@ export const signUp = (formData) => API.post('/users/signup', formData)
 
 export const createProfile = (formData) => API.post('/profile', formData);
 export const getProfile = () => API.get('/profile');
+//need to seperate each profile id by . when using getProfiles endpoint 
+export const getProfiles = (profiles) => API.get(`/profile/${profiles}`)
+export const createRequest = (formData) => API.post('/request', formData);
+export const getRequests = () => API.get('/request');
+export const deleteRequest = () => API.delete('/request');
+export const getListings = () => API.get("/posts");
+export const getChats = (chatData) => API.get(`/chats/${chatData.id}/${chatData.token}`);
+export const updateRequest = (id, formData) => API.patch(`/request/${id}`, formData);
 
 
 

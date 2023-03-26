@@ -1,4 +1,5 @@
 import { createContext, useState, useEffect } from 'react';
+import { getProfile } from '../../api';
 import dayjs from 'dayjs';
 
 export const LinkValidationContext = createContext(null)
@@ -13,26 +14,43 @@ export const GlobalValidationContext = createContext(null)
 
 export default function ValidationProvider({ children }) {
 
-  const page1 = JSON.parse(localStorage.getItem("page1"))
-  const [values, setValues] = useState(page1 ? page1 : {
+  useEffect(() => {
+    const handleProfile = async () => {
+      const profile = await getProfile()
+      return profile
+    }
+
+    handleProfile().then((profile) => { setValues(profile.data) });
+  }, [])
+
+
+  const [values, setValues] = useState({
     picture: "",
     firstName: "",
     lastName: "",
     about: "",
+    age: "",
     city: "",
     gender: "",
     country: "",
     address: "",
     province: "",
-    links: "",
     employment: "",
     phone: "",
     education: "",
     email: "",
-    income: "",
-    credit: "",
     birthday: "",
+    cannabis: "",
+    havePets: "",
+    sleepSchedule: "",
+    cleanliness: "",
+    drinking: "",
+    smoking: "",
+    occupation: "",
+    tolerateGuests: "",
+    toleratePets: "",
   });
+
 
 
   //checks to see if individual fields are empty
@@ -42,18 +60,26 @@ export default function ValidationProvider({ children }) {
     firstName: true,
     lastName: true,
     about: true,
+    age: true,
     gender: true,
     email: true,
     phone: true,
     address: true,
     employment: true,
     education: true,
-    credit: true,
-    income: true,
+    cannabis: true,
+    havePets: true,
+    sleepSchedule: true,
+    cleanliness: true,
+    drinking: true,
+    smoking: true,
+    occupation: true,
+    tolerateGuests: true,
+    toleratePets: true,
   });
 
   //checks to see if all fields are empty
-  const handleEmptyStringValidation = (field) => {
+  const handleLocalError = (field) => {
     if (values[field]) {
       setFieldError(prevValue => ({ ...prevValue, [field]: false }))
     } else if (!values[field]) {
@@ -64,6 +90,7 @@ export default function ValidationProvider({ children }) {
   const [globalError, setGlobalError] = useState(true)
 
   const handleGlobalError = (fieldError) => {
+    console.log(fieldError)
     //checks to see if all items within the object are false
     if (Object.values(fieldError).every(val => val === false)) {
       setGlobalError(false)
@@ -228,12 +255,10 @@ export default function ValidationProvider({ children }) {
   }
 
   //handle file uploads
-  const handleFileUpload = e => {
+  const handleFileUpload = (e) => {
     const file = e.target.files[0];
     handleConversion(file, (result) => {
-      setValues((prevValue) => (
-        { ...prevValue, picture: result }
-      ));
+      return result;
     });
   }
 
@@ -243,19 +268,24 @@ export default function ValidationProvider({ children }) {
     handlePhoneLogic(handlePhoneValidation(values));
     handleEmailValidation(values);
     checkValidity(values);
-    Object.keys(fieldError).forEach((value) => handleEmptyStringValidation(value));
+    Object.keys(fieldError).forEach((value) => handleLocalError(value));
   }, [values]);
+
+
+  //provides the default date for mui picker
+  const [initialDate, setInitialDate] = useState(dayjs('2023-09-15T21:11:54'));
+
 
   return (
     <ValuesObjectContext.Provider value={{ values, setValues }}>
       <LinkValidationContext.Provider value={{ link, LinkHelperText, handleLinkValidation }}>
-        <ImageValidationContext.Provider value={handleFileUpload}>
+        <ImageValidationContext.Provider value={{ handleFileUpload }}>
           <BirthdayValidationContext.Provider value={{ birthday, handleBirthdayChange }}>
             <PhoneValidationContext.Provider value={{ phoneError, phoneHelperText }}>
               <CreditValidationContext.Provider value={{ creditError, creditHelperText }}>
                 <EmailValidationContext.Provider value={{ emailError, emailHelperText }}>
                   <AboutValidationContext.Provider value={{ aboutHelperText, aboutError, handleAboutValidation }}>
-                    <GlobalValidationContext.Provider value={globalError}>
+                    <GlobalValidationContext.Provider value={{ globalError, fieldError, handleLocalError }}>
                       {children}
                     </GlobalValidationContext.Provider>
                   </AboutValidationContext.Provider>
@@ -269,3 +299,22 @@ export default function ValidationProvider({ children }) {
   );
 }
 
+/*
+      <ValidationProvider>
+        <div className="info">
+          <div className="ApplicationPage">
+            <FormProgressBar steps={totalSteps} currentStep={page}>
+              <div className="progressBar" style={progressBarStyles['.progressBar']}>
+                <h5 className="1" style={progressBarStyles[`.${page + 1}`]}>(1) Background</h5>
+                <h5 className="1" style={progressBarStyles[`.${page}`]}>(2) Uploads</h5>
+                <h5 className="1" style={progressBarStyles[`.${page - 1}`]}>(3) LifeStyle</h5>
+              </div>
+            </FormProgressBar>
+            <section className="ApplicationSubPage">
+              {pages[page]}
+            </section>
+          </div>
+        </div>
+      </ValidationProvider>
+
+*/

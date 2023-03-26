@@ -5,8 +5,11 @@ import { StreamChat } from "stream-chat";
 import dotenv from 'dotenv'
 import multer from "multer";
 dotenv.config();
-const streamChat = StreamChat.getInstance("asnpsp7e72h6", "djzm2aq63636qg2mjeqx9x5422hb4qu78pqepyf7fx7j7fuu44zwdgathr24zeyu"
-);
+//old stream chat api key and api secret
+//const streamChat = StreamChat.getInstance("asnpsp7e72h6", "djzm2aq63636qg2mjeqx9x5422hb4qu78pqepyf7fx7j7fuu44zwdgathr24zeyu");
+
+//new streamchat api key and api secret
+const streamChat = StreamChat.getInstance(process.env.STREAM_API_KEY, process.env.STREAM_PRIVATE_API_KEY);
 
 export const signin = async (req, res) => {
     const { email, password } = req.body;
@@ -51,5 +54,4 @@ export const signup = async (req, res) => {
         res.status(500).json({ message: 'something went wrong like a gofu' })
         console.log(error)
     }
-
 }

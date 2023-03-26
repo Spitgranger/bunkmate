@@ -1,0 +1,80 @@
+.buttonWrapperStyles {
+  position: relative;
+  z-index: 1;
+}
+
+.content {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+}
+
+.disclaimerContainer {
+  display: flex;
+  justify-content: center;
+}
+
+#disclaimer {
+  width: 80%;
+  margin: 5px;
+  display: flex;
+  justify-content: center;
+  flex-flow: row wrap;
+}
+
+.socials>* {
+  cursor: pointer;
+}
+
+.socials {
+  display: flex;
+  padding: 5px;
+  justify-content: center;
+  flex-flow: column nowrap;
+}
+
+#partnerButton {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  display: flex;
+  border: 1px solid lightgrey;
+  justify-content: center;
+  border-radius: 10px;
+  padding: 5px;
+  width: 100%;
+}
+
+#partnerButton div {
+  /* Used to make tech company logos positioned in a straight column despite varying lengths of text*/
+  padding: 5px 20px 5px 20px;
+  align-items: center;
+  float: left;
+  display: flex;
+  width: 250px;
+  justify-content: center;
+}
+
+
+.App-logo {
+  display: flex;
+  height: 80px;
+  max-width: 90px;
+  cursor: pointer;
+}
+
+.old-user {
+  cursor: pointer;
+}
+
+.old-user:hover {
+  border-bottom: 2px solid black;
+}
+
+
+.new-user {
+  cursor: pointer;
+}
+
+.new-user:hover {
+  border-bottom: 2px solid black;
+}

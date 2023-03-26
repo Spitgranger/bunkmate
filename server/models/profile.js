@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 const profileSchema = mongoose.Schema({
     user: {
-        type: mongoose.SchemaTypes.ObjectId,
+        type: mongoose.Schema.ObjectId,
         ref: "User",
     },
     firstName: {
@@ -14,10 +14,6 @@ const profileSchema = mongoose.Schema({
         required: true,
     },
     gender: {
-        type: String,
-        required: true,
-    },
-    links: {
         type: String,
         required: true,
     },
@@ -33,6 +29,10 @@ const profileSchema = mongoose.Schema({
         type: String,
         required: true,
     },
+    birthday: {
+        type: String,
+        required: true,
+    },
     address: {
         type: String,
         required: true,
@@ -45,15 +45,11 @@ const profileSchema = mongoose.Schema({
         type: String,
         required: true,
     },
-    education: {
+    country: {
         type: String,
         required: true,
     },
-    credit: {
-        type: Number,
-        required: true,
-    },
-    income: {
+    education: {
         type: String,
         required: true,
     },
@@ -64,7 +60,47 @@ const profileSchema = mongoose.Schema({
     about: {
         type: String,
         required: true,
-    }
+    },
+    age: {
+        type: String,
+        required: true,
+    },
+    havePets: {
+        type: String,
+        required: true,
+    },
+    sleepSchedule: {
+        type: String,
+        required: true,
+    },
+    cleanliness: {
+        type: String,
+        required: true,
+    },
+    drinking: {
+        type: String,
+        required: true,
+    },
+    smoking: {
+        type: String,
+        required: true,
+    },
+    cannabis: {
+        type: String,
+        required: true,
+    },
+    occupation: {
+        type: String,
+        required: true,
+    },
+    tolerateGuests: {
+        type: String,
+        required: true,
+    },
+    toleratePets: {
+        type: String,
+        required: true,
+    },
 });
 
 const Profile = mongoose.model('Profile', profileSchema);

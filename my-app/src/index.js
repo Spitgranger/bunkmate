@@ -4,41 +4,119 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import CreatePost from './routes/CreatePost';
-import Applications from './routes/Applications';
+import CreatePost from './Views/CreatePost';
+import ApplyToListings from './Views/ApplyToListings';
 import Error from './Error';
-import Social from './routes/Social';
-import Messages from './routes/Messages'
-import Profile from './routes/Profile';
+import Error404 from './Error404'
+import Bunkmates from './Views/Bunkmates/Bunkmates';
+import Messages from './Views/Messages/Messages'
+import Profile from './Views/Profile';
+import SignInProvider from './Components/GlobalStateManagement/SignInContext';
+import ValidationProvider from './Components/GlobalStateManagement/ValidationContext';
+import MessageProvider from './Components/GlobalStateManagement/MessageContext';
+import FormatProvider from './Components/GlobalStateManagement/FormatContext';
+import MapProvider from './Components/GlobalStateManagement/BunkmatesContext'
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App />,
+    element:
+      <MapProvider>
+        <FormatProvider>
+          <MessageProvider>
+            <SignInProvider>
+              <ValidationProvider>
+                <App />
+              </ValidationProvider>
+            </SignInProvider>
+          </MessageProvider>
+        </FormatProvider>
+      </MapProvider>,
     errorElement: <Error />,
   },
   {
     path: "/profile",
-    element: <Profile />,
+    element:
+      <MapProvider>
+        <FormatProvider>
+          <MessageProvider>
+            <SignInProvider>
+              <ValidationProvider>
+                <Profile />
+              </ValidationProvider>
+            </SignInProvider>
+          </MessageProvider>
+        </FormatProvider>
+      </MapProvider>,
     errorElement: <Error />,
   },
   {
-    path: "/applications",
-    element: <Applications />,
+    path: "/apply_to_listings",
+    element:
+      <MapProvider>
+        <FormatProvider>
+          <MessageProvider>
+            <SignInProvider>
+              <ValidationProvider>
+                <ApplyToListings />
+              </ValidationProvider>
+            </SignInProvider>
+          </MessageProvider>
+        </FormatProvider>
+      </MapProvider>,
     errorElement: <Error />,
   },
   {
     path: '/bunkmates',
-    element: <Social />,
+    element:
+      <MapProvider>
+        <FormatProvider>
+          <MessageProvider>
+            <SignInProvider>
+              <ValidationProvider>
+                <Bunkmates />
+              </ValidationProvider>
+            </SignInProvider>
+          </MessageProvider>
+        </FormatProvider>
+      </MapProvider>,
     errorElement: <Error />
   },
   {
     path: '/messages',
-    element: <Messages />,
+    element:
+      <FormatProvider>
+        <MapProvider>
+          <MessageProvider>
+            <SignInProvider>
+              <ValidationProvider>
+                <Messages />
+              </ValidationProvider>
+            </SignInProvider>
+          </MessageProvider>
+        </MapProvider>
+      </FormatProvider>,
     errorElement: <Error />
   },
+  {
+    path: '*',
+    element:
+      <MapProvider>
+        <FormatProvider>
+          <MessageProvider>
+            <SignInProvider>
+              <ValidationProvider>
+                <Error404 />
+              </ValidationProvider>
+            </SignInProvider>
+          </MessageProvider>
+        </FormatProvider>
+      </MapProvider >,
+  },
+
 ]);
+
 
 root.render(
   <React.StrictMode>
