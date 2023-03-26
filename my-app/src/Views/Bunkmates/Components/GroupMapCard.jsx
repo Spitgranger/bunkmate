@@ -6,7 +6,7 @@ import { HiMapPin } from 'react-icons/hi2'
 import { GoogleMap, useJsApiLoader, MarkerF, OverlayView, OVERLAY_MOUSE_TARGET, OVERLAY_LAYER, InfoWindow } from "@react-google-maps/api";
 import { Button, Grid, Paper, TextField, Card, Typography, CardActionArea, CardMedia, CardContent, CardActions, IconButton } from "@mui/material/"
 import { ActionButton } from '../../../Components/Utils/Form';
-import { useState } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { TbMessages, TbMessagesOff } from 'react-icons/tb';
 import NestedMapCard from './NestedMapCard';
 import { InfoWindowF } from '@react-google-maps/api';
@@ -14,6 +14,7 @@ import { FiEyeOff } from 'react-icons/fi'
 import { FiEye } from 'react-icons/fi'
 import styles from '../Styles/GroupMapCard.css'
 import { MdVerified } from 'react-icons/md';
+import { BuildUserContext } from '../../../Components/GlobalStateManagement/BunkmatesContext';
 
 function GroupMapCard({ request, BunkmateInfo }) {
 
@@ -23,10 +24,16 @@ function GroupMapCard({ request, BunkmateInfo }) {
     const totalRoommates = (existingBunkmates, newBunkmates) => {
         return (existingBunkmates + newBunkmates)
     }
-    const [messageButton, setMessageButton] = useState(false)
-    const [showProfile, setShowProfile] = useState(false)
+    //change icon pictures from open to close state
+    const [messageIcon, setMessageIcon] = useState(false)
+    const [eyeIcon, setEyeIcon] = useState(false)
     //state management for card opacity
     const [opacity, setOpacity] = useState(0.8)
+    const { profileHandleRetrieval } = useContext(BuildUserContext)
+    //state management for other profiles
+    const [otherProfiles, setOtherProfiles] = useState([])
+    const [showProfile, setShowProfile] = useState(false)
+
 
 
     const handleEnterActionArea = () => {
@@ -36,7 +43,21 @@ function GroupMapCard({ request, BunkmateInfo }) {
         setOpacity(0.8)
     }
 
+    const handleGetProfiles = async () => {
+        const arrayUserId = request.linkChats
+        console.log(arrayUserId)
+        const profiles = await profileHandleRetrieval(arrayUserId.join('.'))
+        return profiles
+    }
+    useEffect(() => {
+        handleGetProfiles().then((profiles) => setOtherProfiles(profiles.data))
+    }, [])
 
+    const handleEyeButtonChange = () => {
+        //clicking on the eye icon will show other group members profiles
+        setEyeIcon(!eyeIcon)
+        setShowProfile(!showProfile)
+    }
 
     return (
         <InfoWindowF options={{ minWidth: '2000px', }} position={{ lat: request.idealLocation[0], lng: request.idealLocation[1] }}>
@@ -74,13 +95,13 @@ function GroupMapCard({ request, BunkmateInfo }) {
                                                 </Typography >
                                             </div >
                                             <Tooltip title={"View Profiles"} arrow placement="left">
-                                                <IconButton style={{ padding: '2px', color: 'white' }}>
-                                                    {showProfile ? <FiEyeOff /> : <FiEye />}
+                                                <IconButton onClick={handleEyeButtonChange} style={{ padding: '2px', color: 'white' }}>
+                                                    {eyeIcon ? <FiEyeOff /> : <FiEye />}
                                                 </IconButton>
                                             </Tooltip>
                                             <Tooltip title={"Message this group"} arrow placement="left">
-                                                <IconButton onClick={() => { setMessageButton(!messageButton); }} style={{ right: '15px', top: '80px', position: 'absolute', padding: '2px', color: 'white' }}>
-                                                    {messageButton ? <TbMessagesOff /> : <TbMessages />}
+                                                <IconButton onClick={() => { setMessageIcon(!messageIcon); }} style={{ right: '15px', top: '80px', position: 'absolute', padding: '2px', color: 'white' }}>
+                                                    {messageIcon ? <TbMessagesOff /> : <TbMessages />}
                                                 </IconButton>
                                             </Tooltip>
                                             <Tooltip title={"Pin This Profile"} arrow placement="left">
@@ -165,10 +186,8 @@ function GroupMapCard({ request, BunkmateInfo }) {
                 {
                     showProfile ?
                         <>
-                            < div className="nested-card" style={{ height: '688px', width: 420, margin: '20px', overflowY: "scroll" }
-                            }>
-                                {/*TODO broken*/}
-                                {request.otherProfiles.map((otherProfile) => { return <NestedMapCard profile={otherProfile} /> })}
+                            < div className="nested-card" style={{ height: '688px', width: 420, margin: '20px', overflowY: "scroll" }}>
+                                {otherProfiles.map((otherProfile) => { return <NestedMapCard profile={otherProfile} /> })}
                             </div >
                         </>
                         : null
