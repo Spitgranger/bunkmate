@@ -40,7 +40,7 @@ export const updateRequest = async (req, res) => {
         res.json(updatedPost).status(201);
 
     } catch (error) {
-        res.status(500).json("Something went wrong during updateing.")
+        res.status(500).json("Something went wrong during updating.")
     }
 }
 

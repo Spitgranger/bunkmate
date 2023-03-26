@@ -99,10 +99,12 @@ const FirstPageForm = ({ groupChat, dispatch, state, actions, handleEmptyStringV
   </>)
 }
 
-const SecondPageForm = ({ handleEmptyStringValidation, state, dispatch, actions, labelTitle, props, listingsDataHashMap, listingsHashMap }) => {
+const SecondPageForm = ({ handleEmptyStringValidation, state, dispatch, actions, labelTitle, props, listingsDataHashMap, listingsHashMap, }) => {
 
   //store user request data
   const { requestHandleSubmit, requestHandleUpdate } = useContext(BuildUserContext)
+  //used to rerender useEffect in Bunkmates.js containing async functions that gets data from backend
+  const { rerender, setRerender } = useContext(BunkmatesContext)
 
 
   //Utilizing google maps api, for the "ideal location", and "listing in mind" fields
@@ -186,6 +188,8 @@ const SecondPageForm = ({ handleEmptyStringValidation, state, dispatch, actions,
     //only return the second page values if the user requests "as myself"
     const { listingObject, ...modifiedSecondPageValues } = state.secondPageValues
     const { request } = state.firstPageValues
+    //update the button titles in Bunkmates.js
+    setRerender(!rerender)
     if (state?.firstPageValues?.request === "As myself") {
       //if listing object is "None" then don't even submit a listingObject key
       if (state?.secondPageValues?.listingObject === "None") {

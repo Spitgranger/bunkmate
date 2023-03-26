@@ -14,6 +14,8 @@ export default function MapProvider({ children }) {
 
   //state management for where to center the google maps page
   const [center, setCenter] = useState({ lat: 43.642075, lng: -79.385981 });
+  //can be used to rerender components
+  const [rerender, setRerender] = useState(false)
 
   const requestHandleSubmit = async (formData) => {
     //record values in backend
@@ -24,7 +26,6 @@ export default function MapProvider({ children }) {
       console.log("An error has occured: ", error)
     }
   }
-
 
   const profileHandleSubmit = async (data) => {
     try {
@@ -72,7 +73,7 @@ export default function MapProvider({ children }) {
 
 
   return (
-    <BunkmatesContext.Provider value={{ mapProfileCard, setMapProfileCard, center, setCenter }}>
+    <BunkmatesContext.Provider value={{ mapProfileCard, setMapProfileCard, center, setCenter, rerender, setRerender }}>
       <BuildUserContext.Provider value={{ profileHandleSubmit, requestHandleSubmit, requestHandleUpdate, profileHandleRetrieval }}>
         {children}
       </BuildUserContext.Provider>

@@ -19,7 +19,7 @@ import { BuildUserContext } from '../../../Components/GlobalStateManagement/Bunk
 function GroupMapCard({ request, BunkmateInfo }) {
 
     //subtract 1 because linkchats contains the user's own profile in the array
-    const existingBunkmates = request?.linkChats?.length - 1;
+    const existingBunkmates = request?.linkChats?.length;
     const newBunkmates = parseInt(request.numRoommates);
     const totalRoommates = (existingBunkmates, newBunkmates) => {
         return (existingBunkmates + newBunkmates)
@@ -66,7 +66,7 @@ function GroupMapCard({ request, BunkmateInfo }) {
                 <Card sx={{ width: 370, zIndex: "2", opacity: '0.9' }} onClick={e => e.stopPropagation()}>
                     <div style={{ flexDirection: 'column', padding: '15px', display: 'flex', justifyContent: 'flex-start' }}>
                         <div className="profile-info" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                            <header style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', }}>
+                            <header style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', }}>
                                 <div style={{ width: '100%', display: 'flex', flexDirection: 'column', padding: '5px' }}>
                                     {/* onclick will show first peron's profile in the array can also click the eye button to view profiles*/}
                                     <CardActionArea style={{ borderTopLeftRadius: '5%', borderTopRightRadius: '5%' }} onMouseEnter={handleEnterActionArea} onMouseLeave={handleLeaveActionArea}>
@@ -94,7 +94,7 @@ function GroupMapCard({ request, BunkmateInfo }) {
                                                     </div >
                                                 </Typography >
                                             </div >
-                                            <Tooltip title={"View Profiles"} arrow placement="left">
+                                            <Tooltip title={eyeIcon ? "Close Profiles" :"View All Profiles"} arrow placement="left">
                                                 <IconButton onClick={handleEyeButtonChange} style={{ padding: '2px', color: 'white' }}>
                                                     {eyeIcon ? <FiEyeOff /> : <FiEye />}
                                                 </IconButton>
@@ -118,8 +118,7 @@ function GroupMapCard({ request, BunkmateInfo }) {
                                             </Tooltip>
                                         </div>
                                         <div style={{ display: 'flex', alignItems: 'center' }}>
-                                            <Tooltip arrow placement="right" title={
-                                                existingBunkmates === 1 ? `${request.profile[0].firstName} currently has ${existingBunkmates} other bunkmate` : `${request.profile[0].firstName} current has ${existingBunkmates} other bunkmates`}>
+                                            <Tooltip arrow placement="right" title={`There are ${existingBunkmates} people in this group`}>
                                                 <Typography variant="h6" color="text.primary" style={{ fontSize: "18px", display: 'inline-block', color: 'aqua', overflow: 'hidden', }} >
                                                     {existingBunkmates === 1 ? `${existingBunkmates} bunkmate` : `${existingBunkmates} bunkmates`}
                                                 </Typography>

@@ -89,13 +89,13 @@ const Bunkmates = () => {
         libraries: libraries,
     })
     const [loading, setLoading] = useState(true)
-    const requestHandleSubmit = useContext(BuildUserContext)
+    const { requestHandleSubmit, requestHandleUpdate, profileHandleSubmit } = useContext(BuildUserContext)
     const [listingArray, setListingArray] = useState([]);
-    const [deleted, setDeleted] = useState(false);
     const [userOwnData, setUserOwnData] = useState("");
+    //used to rerender useEffect in Bunkmates.js containing async functions that gets data from backend
+    const { rerender, setRerender } = useContext(BunkmatesContext)
 
     useEffect(() => {
-
         //get profile data from backend 
         async function handleProfile() {
             const profile = await getProfile();
@@ -123,13 +123,16 @@ const Bunkmates = () => {
             setListingArray(allRequests)
         }).finally(() => setLoading(false))
 
-    }, [requestHandleSubmit, deleted])
+        setUserOwnData(userRequests.get(id));
+    }, [requestHandleSubmit, requestHandleUpdate, profileHandleSubmit, rerender, deleteRequest])
 
     useEffect(() => {
-
+        //add same dependencies as the above
         console.log(userRequests)
         setUserOwnData(userRequests.get(id));
-    }, [userRequests])
+    }, [userRequests, requestHandleSubmit, requestHandleUpdate, profileHandleSubmit, rerender, deleteRequest])
+
+
     //THIS LOGIC ONLY WORKS FOR NOW PROBABLY CHANGE THE API ENDPOINT TO RETURN A BOOLEAN THAT IS EITHER TRUE OR FALSE
     //contains the user's own data
 
@@ -204,7 +207,7 @@ const Bunkmates = () => {
                 <ActionButton onClick={(e) => { handleRequestClick(); setCenter({ lat: userOwnData.idealLocation[0], lng: userOwnData.idealLocation[1] }); e.stopPropagation() }} bgColor={"black"} title={"Edit Bunkmate Request"} opacity='0.85' />
                 <Tooltip title={"Delete Request"}>
                     <div>
-                        <ActionButton onClick={(e) => { deleteRequest(userOwnData).then(() => { userRequests.delete(id); setDeleted(!deleted) }); }} bgColor={"black"} title={"X"} opacity='0.85' />
+                        <ActionButton onClick={(e) => { deleteRequest(userOwnData).then(() => { userRequests.delete(id); setRerender(!rerender) }); }} bgColor={"black"} title={"X"} opacity='0.85' />
                     </div>
                 </Tooltip>
             </div>
@@ -260,13 +263,15 @@ const Bunkmates = () => {
                         {mapProfileCard ? mapProfileCard : null}
                         {selected && <MarkerF position={center} icon={"http://maps.google.com/mapfiles/ms/icons/blue.png"} />}
                         {listingArray.map((request, index) => {
-                            return (<OverlayViewF key={request?.user}
-                                position={{ lat: request?.idealLocation[0], lng: request?.idealLocation[1] }}
-                                styles={{ background: 'DarkGray', color: 'white' }}
-                                mapPaneName={OVERLAY_MOUSE_TARGET}>
-                                {<CustomMapMarker request={request} handleClick={handleProfileClickAsync} index={index} icon={<RxTriangleDown style={{ right: '15px', color: '#2ACDDD', position: 'absolute', top: '35px', fontSize: '30px' }} />} />}
-                                {/*<button style={{ padding: "2px" }} onClick={e => { handleProfileClick(e, index); e.stopPropagation()}}>{`$${profile.rentBudget}`}</button>*/}
-                            </OverlayViewF >)
+                            return (
+                                <OverlayViewF
+                                    key={request?.user}
+                                    position={{ lat: request?.idealLocation[0], lng: request?.idealLocation[1] }}
+                                    styles={{ background: 'DarkGray', color: 'white' }}
+                                    mapPaneName={OVERLAY_MOUSE_TARGET}>
+                                    {<CustomMapMarker request={request} handleClick={handleProfileClickAsync} index={index} icon={<RxTriangleDown style={{ right: '15px', color: '#2ACDDD', position: 'absolute', top: '35px', fontSize: '30px' }} />} />}
+                                    {/*<button style={{ padding: "2px" }} onClick={e => { handleProfileClick(e, index); e.stopPropagation()}}>{`$${profile.rentBudget}`}</button>*/}
+                                </OverlayViewF >)
                         })}
 
                         {/*

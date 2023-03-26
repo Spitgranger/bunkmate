@@ -22,7 +22,7 @@ function SingleMapCard({ BunkmateInfo, request }) {
             <Card sx={{ width: "400px", zIndex: "2", opacity: '0.95' }} onClick={e => e.stopPropagation()}>
                 <div style={{ flexDirection: 'column', padding: '15px', display: 'flex', justifyContent: 'flex-start' }}>
                     <div className="profile-info" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                        <header style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', }}>
+                        <header style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', }}>
                             <div style={{ width: '100%', display: 'flex', flexDirection: 'row', padding: '5px' }}>
                                 <Tooltip title={`View ${capitalizedName(request.profile[0].firstName)}'s profile`} arrow>
                                     <CardActionArea style={{ width: '125px' }}>
@@ -67,7 +67,7 @@ function SingleMapCard({ BunkmateInfo, request }) {
                                         </Typography>
                                     </Tooltip>
                                     <Typography variant="body1" color="text.secondary" style={{ fontSize: "17px" }}>
-                                        {request.profile[0].age ? `${request.profile[0].age} Year Old` : `${calculateAge(request.profile[0])} Year Old, ${request.profile[0].gender}`}
+                                        {`${request.profile[0].age} Year Old, ${request.profile[0].gender}`}
                                     </Typography>
                                     <Typography variant="body1" color="text.secondary">
                                         {`${request.profile[0].occupation}`}
