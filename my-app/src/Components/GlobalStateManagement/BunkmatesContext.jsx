@@ -16,6 +16,7 @@ export default function MapProvider({ children }) {
   const [center, setCenter] = useState({ lat: 43.642075, lng: -79.385981 });
   //can be used to rerender components
   const [rerender, setRerender] = useState(false)
+  const [click, setClick] = useState(false);
 
   const requestHandleSubmit = async (formData) => {
     //record values in backend
@@ -27,23 +28,25 @@ export default function MapProvider({ children }) {
     }
   }
 
-  const profileHandleSubmit = async (data) => {
+  const profileHandleSubmit = (data) => {
     try {
-      const response = await createProfile(data);
-      console.log(response);
+      //const response = await createProfile(data);
+      return createProfile(data);
+      //console.log(response);
     } catch (error) {
       console.log(error);
     }
   }
 
+  let done = false;
 
   const requestHandleUpdate = async (id, userRequestData) => {
     try {
       //superior method
-      deleteRequest(userRequestData).then(() => {
-        const response = createRequest(userRequestData)
-        console.log(response)
-      })
+      await deleteRequest()
+      //const response = await createRequest(userRequestData)
+      return createRequest(userRequestData);
+      //console.log(response)
     } catch (error) {
       console.log("An error has occured: ", error)
     }
@@ -73,7 +76,7 @@ export default function MapProvider({ children }) {
 
 
   return (
-    <BunkmatesContext.Provider value={{ mapProfileCard, setMapProfileCard, center, setCenter, rerender, setRerender }}>
+    <BunkmatesContext.Provider value={{ mapProfileCard, setMapProfileCard, center, setCenter, rerender, setRerender, click, setClick }}>
       <BuildUserContext.Provider value={{ profileHandleSubmit, requestHandleSubmit, requestHandleUpdate, profileHandleRetrieval }}>
         {children}
       </BuildUserContext.Provider>

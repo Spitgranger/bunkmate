@@ -10,7 +10,7 @@ import {
   DropDownMenu,
 
 } from '../../../Components/Utils/Form';
-import { Typography, bottomNavigationActionClasses } from '@mui/material'
+import { Typography, bottomNavigationActionClasses, setRef } from '@mui/material'
 import Slider from '@mui/material/Slider'
 import Box from '@mui/material/Box';
 import { savedListingsData, identityMenuItems } from '../../../data/SavedListingsData';
@@ -105,6 +105,7 @@ const SecondPageForm = ({ handleEmptyStringValidation, state, dispatch, actions,
   const { requestHandleSubmit, requestHandleUpdate } = useContext(BuildUserContext)
   //used to rerender useEffect in Bunkmates.js containing async functions that gets data from backend
   const { rerender, setRerender } = useContext(BunkmatesContext)
+  const { click, setClick } = useContext(BunkmatesContext);
 
 
   //Utilizing google maps api, for the "ideal location", and "listing in mind" fields
@@ -189,7 +190,6 @@ const SecondPageForm = ({ handleEmptyStringValidation, state, dispatch, actions,
     const { listingObject, ...modifiedSecondPageValues } = state.secondPageValues
     const { request } = state.firstPageValues
     //update the button titles in Bunkmates.js
-    setRerender(!rerender)
     if (state?.firstPageValues?.request === "As myself") {
       //if listing object is "None" then don't even submit a listingObject key
       if (state?.secondPageValues?.listingObject === "None") {
@@ -267,7 +267,7 @@ const SecondPageForm = ({ handleEmptyStringValidation, state, dispatch, actions,
       ]} />
 
       {/* disable cotinue button if the user has not filled out all mandatory fields and / or still has errors*/}
-      <ActionButton helperText="* Please fill out all required fields before continuing" disabled={state?.globalError} onClick={() => { props.onClick(); console.log({ ...state?.firstPageValues, ...state?.secondPageValues }); props.userRequest ? requestHandleUpdate(props.userRequest._id, handleSubmit()) : requestHandleSubmit(handleSubmit()); console.log(handleSubmit()) }} fontSize="15px" width="100%" type="submit" title="Submit" />
+      <ActionButton helperText="* Please fill out all required fields before continuing" disabled={state?.globalError} onClick={() => { props.onClick(); console.log({ ...state?.firstPageValues, ...state?.secondPageValues }); props.userRequest ? requestHandleUpdate(props.userRequest._id, handleSubmit()).then(() => { console.log("DONE"); setRerender(!rerender) }) : requestHandleSubmit(handleSubmit()).then(() => { console.log("DONE"); setRerender(!rerender) }); console.log(handleSubmit()) }} fontSize="15px" width="100%" type="submit" title="Submit" />
     </>
   )
 }
@@ -359,7 +359,7 @@ function CreateRequestForm(props) {
     //get profile data from backend
     async function handleProfile() {
       const profile = await getProfile();
-      return profile
+      return profile;
     }
 
     async function listings() {
@@ -486,7 +486,7 @@ function CreateRequestForm(props) {
 
 
   useEffect(() => {
-    console.log(state.secondPageValues.listingObject)
+    //console.log(state.secondPageValues.listingObject)
     dispatch({ type: actions.checkGlobalError, page: 'firstPageValues' })
     if (state?.secondPageValues?.listingObject === "None") {
       //if the user changes their mind and switches back to None, then address and idealLocation are set back to empty string

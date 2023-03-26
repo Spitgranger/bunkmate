@@ -124,13 +124,15 @@ const Bunkmates = () => {
         }).finally(() => setLoading(false))
 
         setUserOwnData(userRequests.get(id));
-    }, [requestHandleSubmit, requestHandleUpdate, profileHandleSubmit, rerender, deleteRequest])
+    }, [requestHandleSubmit, rerender])
 
     useEffect(() => {
         //add same dependencies as the above
         console.log(userRequests)
         setUserOwnData(userRequests.get(id));
-    }, [userRequests, requestHandleSubmit, requestHandleUpdate, profileHandleSubmit, rerender, deleteRequest])
+    }, [userRequests])
+
+
 
 
     //THIS LOGIC ONLY WORKS FOR NOW PROBABLY CHANGE THE API ENDPOINT TO RETURN A BOOLEAN THAT IS EITHER TRUE OR FALSE
@@ -207,7 +209,7 @@ const Bunkmates = () => {
                 <ActionButton onClick={(e) => { handleRequestClick(); setCenter({ lat: userOwnData.idealLocation[0], lng: userOwnData.idealLocation[1] }); e.stopPropagation() }} bgColor={"black"} title={"Edit Bunkmate Request"} opacity='0.85' />
                 <Tooltip title={"Delete Request"}>
                     <div>
-                        <ActionButton onClick={(e) => { deleteRequest(userOwnData).then(() => { userRequests.delete(id); setRerender(!rerender) }); }} bgColor={"black"} title={"X"} opacity='0.85' />
+                        <ActionButton onClick={(e) => { userRequests.delete(id); deleteRequest(userOwnData).then(() => { setRerender(!rerender) }); }} bgColor={"black"} title={"X"} opacity='0.85' />
                     </div>
                 </Tooltip>
             </div>

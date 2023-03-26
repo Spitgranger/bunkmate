@@ -28,7 +28,7 @@ export const getProfile = () => API.get('/profile');
 export const getProfiles = (profiles) => API.get(`/profile/${profiles}`)
 export const createRequest = (formData) => API.post('/request', formData);
 export const getRequests = () => API.get('/request');
-export const deleteRequest = () => API.delete('request');
+export const deleteRequest = () => API.delete('/request');
 export const getListings = () => API.get("/posts");
 export const getChats = (chatData) => API.get(`/chats/${chatData.id}/${chatData.token}`);
 export const updateRequest = (id, formData) => API.patch(`/request/${id}`, formData);
