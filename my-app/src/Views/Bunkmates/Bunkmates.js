@@ -101,16 +101,16 @@ const Bunkmates = () => {
             const profile = await getProfile();
             return profile
         }
+
+        //store user profile data
+        handleProfile().then((profile) => setUserProfile(profile));
+
         //get request data from backend
         async function handleRequest() {
             const request = await getRequests();
             //access all requests stored in an array using request.data
-            console.log(request)
             return request
         }
-
-        //store user profile data
-        handleProfile().then((profile) => setUserProfile(profile));
 
         //store user request data
         handleRequest().then((request) => {
@@ -124,22 +124,20 @@ const Bunkmates = () => {
         }).finally(() => setLoading(false))
 
         setUserOwnData(userRequests.get(id));
-    }, [requestHandleSubmit, requestHandleUpdate, profileHandleSubmit, rerender, deleteRequest])
+    }, [rerender])
+
 
     useEffect(() => {
         //add same dependencies as the above
-        console.log(userRequests)
         setUserOwnData(userRequests.get(id));
-    }, [userRequests, requestHandleSubmit, requestHandleUpdate, profileHandleSubmit, rerender, deleteRequest])
+    }, [userRequests])
 
 
     //THIS LOGIC ONLY WORKS FOR NOW PROBABLY CHANGE THE API ENDPOINT TO RETURN A BOOLEAN THAT IS EITHER TRUE OR FALSE
     //contains the user's own data
 
-    console.log(userOwnData)
     //dictionary that stores the userId as the key and the object as the value
     //contains all requests generated through accounts
-    console.log(listingArray)
 
 
 
@@ -170,7 +168,6 @@ const Bunkmates = () => {
 
     const handleProfileClickAsync = (e) => {
         console.log('async', e?.currentTarget?.id)
-        console.log("Request clicked")
         const request = userRequests.get(e?.currentTarget?.id)
         setMapProfileCard(<MapProfile request={request} />)
     }
@@ -204,10 +201,12 @@ const Bunkmates = () => {
         //edit and delete functionality
         return (
             <div style={{ display: 'flex', bottom: '10vh', justifyContent: 'center', position: 'absolute', }}>
+                {/* edit bunkmates request button */}
                 <ActionButton onClick={(e) => { handleRequestClick(); setCenter({ lat: userOwnData.idealLocation[0], lng: userOwnData.idealLocation[1] }); e.stopPropagation() }} bgColor={"black"} title={"Edit Bunkmate Request"} opacity='0.85' />
                 <Tooltip title={"Delete Request"}>
+                    {/* X buton to delete profiles */}
                     <div>
-                        <ActionButton onClick={(e) => { deleteRequest(userOwnData).then(() => { userRequests.delete(id); setRerender(!rerender) }); }} bgColor={"black"} title={"X"} opacity='0.85' />
+                        <ActionButton onClick={(e) => { deleteRequest(userOwnData).then(() => { userRequests.delete(id); setRerender(!rerender); e.stopPropagation() }); }} bgColor={"black"} title={"X"} opacity='0.85' />
                     </div>
                 </Tooltip>
             </div>

@@ -55,7 +55,7 @@ const Profile = () => {
     habitsAndLifestyle: { padding: '10px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' },
     fields: { width: '100%', display: 'flex', alignItems: 'center', flexDirection: 'column' },
     fieldsWrapper: { width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-around' },
-    loadingUi: {display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100wh', height: '100vh'}
+    loadingUi: { display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100wh', height: '100vh' }
   };
 
   const { capitalizedName, calculateAge } = useContext(formatContext);
@@ -80,7 +80,6 @@ const Profile = () => {
     //get request data from backend
     async function handleRequest() {
       const request = await getRequests();
-      console.log(request)
       return request
     }
     const userId = (JSON.parse(localStorage.getItem("profile"))?.result?._id)
@@ -98,7 +97,6 @@ const Profile = () => {
 
   }, [mapProfileCard])
 
-  console.log(userRequest)
 
   const handleEditProfile = () => {
     setMessage("Edit Your Profile")
@@ -109,7 +107,6 @@ const Profile = () => {
   //function to handle fetching the profile data from back end
   const handleLoad = async () => {
     const profile = await getProfile();
-    console.log(profile);
     return profile;
   };
 

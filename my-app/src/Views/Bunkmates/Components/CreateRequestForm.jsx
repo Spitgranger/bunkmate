@@ -48,8 +48,6 @@ const FirstPageForm = ({ groupChat, dispatch, state, actions, handleEmptyStringV
     let channelIdStorage = null;
     const clientChannelNames = e
     groupChat.forEach((element) => {
-      console.log(element.usernames)
-      console.log(clientChannelNames)
       if (element.usernames === clientChannelNames) {
         channelIdStorage = element.channel;
       };
@@ -59,7 +57,6 @@ const FirstPageForm = ({ groupChat, dispatch, state, actions, handleEmptyStringV
     //dispatch function that adds channelIdStorage as a payload
   }
 
-  console.log(groupChat)
   const chatMenuItems = groupChat.map((item) => { return item.usernames })
 
   //special handle event function just to file uploads
@@ -151,7 +148,6 @@ const SecondPageForm = ({ handleEmptyStringValidation, state, dispatch, actions,
 
   //useEffect in sync with listingObject, extracts and converts the saved listing address into coordinates
   useEffect(() => {
-    console.log(listingsHashMap)
     if (state?.secondPageValues?.listingObject && state?.secondPageValues?.listingObject !== "None") {
 
       const address = listingsHashMap.get(state?.secondPageValues?.listingObject)//state?.secondPageValues?.listingObject?.address;
@@ -267,7 +263,7 @@ const SecondPageForm = ({ handleEmptyStringValidation, state, dispatch, actions,
       ]} />
 
       {/* disable cotinue button if the user has not filled out all mandatory fields and / or still has errors*/}
-      <ActionButton helperText="* Please fill out all required fields before continuing" disabled={state?.globalError} onClick={() => { props.onClick(); console.log({ ...state?.firstPageValues, ...state?.secondPageValues }); props.userRequest ? requestHandleUpdate(props.userRequest._id, handleSubmit()) : requestHandleSubmit(handleSubmit()); console.log(handleSubmit()) }} fontSize="15px" width="100%" type="submit" title="Submit" />
+      <ActionButton helperText="* Please fill out all required fields before continuing" disabled={state?.globalError} onClick={() => { props.onClick(); props.userRequest ? requestHandleUpdate(props.userRequest._id, handleSubmit()) : requestHandleSubmit(handleSubmit());  }} fontSize="15px" width="100%" type="submit" title="Submit" />
     </>
   )
 }
@@ -335,7 +331,6 @@ function CreateRequestForm(props) {
     return obj;
   }, {});
 
-  console.log(combinedUserRequest)
 
   //check if object is empty
   function handleCheckEmpty() {
@@ -375,7 +370,6 @@ function CreateRequestForm(props) {
       return response
     }
     listings().then((response) => {
-      console.log(response.data.data);
       //this WHOLE SECTION SHOULD PROBABLY MERGE INTO ONE BIG HASH MAP, APPLY THE LOGIC THERE
       setListingsDataHashMap(listingsDataHashMap.set("None", "None"))
       const items = response.data.data.map((element, index) => {
@@ -384,7 +378,6 @@ function CreateRequestForm(props) {
         return <SavedListingItem id={element._id} index={index} image={element.image} address={element.address} price={element.price} bedBath={element.bedBath} />
       });
 
-      console.log(listingsDataHashMap)
     });
 
     chats().then((response) => {
@@ -533,7 +526,6 @@ function CreateRequestForm(props) {
       */
     } else if (userSecondPageRequest) {
       setFormTitle("Edit Bunkmate Request")
-      console.log(state?.firstPageValues?.request)
       //broken
       /*
       if (state?.firstPageValues?.request === "As myself" || !state?.firstPageValues?.request) {

@@ -75,7 +75,6 @@ const Messages = () => {
     handleProfile().then((profile) => setUserProfile(profile.data)).catch(error => console.log(error))
   }, []);
 
-  console.log('profile', profile);
 
   const user = {
     id: profile?.result?._id,
@@ -129,7 +128,6 @@ const Messages = () => {
     }} ><CircularProgress size={50} />
   </div >)
 
-  console.log(chatClient)
   //Channel with the most recent message will appear at the top of the message list
   const sort = { last_message_at: -1 };
   //message limit controls for much history is stored (not sure if it will increase costs)
@@ -162,7 +160,6 @@ const Messages = () => {
 
   const CustomPreviewChannel = (props) => {
     //manages state for time since last message
-    console.log(props)
     const [timeLastMessage, setTimeLastMessage] = useState("");
     const { displayImage, online, activeChannel, watchers, active, channel, displayTitle, unread, lastMessage, setActiveChannel } = props
 

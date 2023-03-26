@@ -49,7 +49,7 @@ export default function RenderWhich() {
         return <SignInEmail />
     }
   }
-  console.log(mode)
+
   return (
     <Modal open={isOpen} modalMessage={message} onClose={() => setIsOpen(false)} content={
       <div className='buttonWrapperStyles'>
@@ -61,7 +61,6 @@ export default function RenderWhich() {
 
 async function validateLogin(e, data) {
   //validate login credentials
-  console.log(data);
   e.preventDefault();
   try {
     const jsonResponse = await signIn(data);
@@ -166,7 +165,6 @@ export function SignInEmail() {
 
 async function handleSignUp(e, data) {
   //Record user data after signing up
-  console.log(data);
   e.preventDefault();
   const response = await signUp(data);
   console.log(JSON.stringify(response));
