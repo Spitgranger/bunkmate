@@ -124,7 +124,7 @@ const Bunkmates = () => {
         }).finally(() => setLoading(false))
 
         setUserOwnData(userRequests.get(id));
-    }, [requestHandleSubmit, rerender])
+    }, [rerender])
 
     useEffect(() => {
         //add same dependencies as the above
