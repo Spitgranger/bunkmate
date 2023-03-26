@@ -124,13 +124,14 @@ const Bunkmates = () => {
         }).finally(() => setLoading(false))
 
         setUserOwnData(userRequests.get(id));
-    }, [rerender])
-
+    }, [requestHandleSubmit, rerender])
 
     useEffect(() => {
         //add same dependencies as the above
         setUserOwnData(userRequests.get(id));
     }, [userRequests])
+
+
 
 
     //THIS LOGIC ONLY WORKS FOR NOW PROBABLY CHANGE THE API ENDPOINT TO RETURN A BOOLEAN THAT IS EITHER TRUE OR FALSE
