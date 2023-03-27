@@ -157,7 +157,6 @@ const Profile = () => {
     setMapProfileCard(<MapProfile profile={userRequest.profile[0]} request={userRequest} />)
   }
 
-  console.log(userRequest)
 
   //if profile true and loading indicator false
   //display profile page

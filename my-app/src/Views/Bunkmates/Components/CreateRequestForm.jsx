@@ -57,7 +57,8 @@ const FirstPageForm = ({ groupChat, dispatch, state, actions, handleEmptyStringV
     //dispatch function that adds channelIdStorage as a payload
   }
 
-  const chatMenuItems = groupChat.map((item) => { return item.usernames })
+  //an empty array is evaluated as truthy which is why ternary operator needed here
+  const chatMenuItems = groupChat ? groupChat.map((item) => { return item.usernames }) : ""
 
   //special handle event function just to file uploads
   const handleFileUpload = (e) => {
@@ -281,7 +282,7 @@ function CreateRequestForm(props) {
   //show or hide the back button
   const [showButton, setShowButton] = useState("")
   //controls the title of the create request form
-  const [formTitle, setFormTitle] = useState("Create a Bunkmate Request")
+  const [formTitle, setFormTitle] = useState("Create Bunkmate Request")
   //controls the title of the label on the rent budget field
   const [labelTitle, setLabelTitle] = useState("My Rent Budget")
   //store user profile data
@@ -518,7 +519,7 @@ function CreateRequestForm(props) {
   //handle back click so you can change who you want to request as
   const handleBack = () => {
     if (!userSecondPageRequest) {
-      setFormTitle("Create a Bunkmate Request")
+      setFormTitle("Create Bunkmate Request")
       /*
       if (state?.firstPageValues?.request === "As myself" || state?.firstPageValues?.request === "") {
         dispatch({ type: actions.checkValues, payload: "", name: "request", page: 'firstPageValues' })

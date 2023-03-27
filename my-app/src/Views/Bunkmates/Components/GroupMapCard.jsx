@@ -69,13 +69,13 @@ function GroupMapCard({ request, BunkmateInfo }) {
                             <header style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', }}>
                                 <div style={{ width: '100%', display: 'flex', flexDirection: 'column', padding: '5px' }}>
                                     {/* onclick will show first peron's profile in the array can also click the eye button to view profiles*/}
-                                    <CardActionArea style={{ borderTopLeftRadius: '5%', borderTopRightRadius: '5%' }} onMouseEnter={handleEnterActionArea} onMouseLeave={handleLeaveActionArea}>
+                                    <CardActionArea style={{ borderTopLeftRadius: '1%', borderTopRightRadius: '1%' }} onMouseEnter={handleEnterActionArea} onMouseLeave={handleLeaveActionArea}>
                                         <CardMedia
                                             component="img"
                                             image={request.groupPhoto ?? request.profile[0].picture}
                                             alt="profile photo"
                                             //16:9 aspect ratio
-                                            sx={{ width: '330px', height: '330px', borderTopLeftRadius: '5%', borderTopRightRadius: '5%' }}
+                                            sx={{ width: '330px', height: '330px', borderTopLeftRadius: '2%', borderTopRightRadius: '2%' }}
                                         />
                                     </CardActionArea>
 
@@ -83,7 +83,7 @@ function GroupMapCard({ request, BunkmateInfo }) {
                                         <div className="card-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                             <div className="first-name">
                                                 <Typography variant="h5" color="text.primary" noWrap style={{ color: 'white', maxWidth: '300px', fontSize: "25px", fontWeight: 500, display: 'flex', alignItems: 'center' }}>
-                                                    {`${request.profile[0].firstName} 's Group`}
+                                                    {`${request.profile[0].firstName}'s Group`}
                                                     < div className="display-verified" style={{ padding: '5px' }}>
                                                         {/*TODO: If all profiles are verified through premium subscription then checkmark*/}
                                                         {
@@ -94,7 +94,7 @@ function GroupMapCard({ request, BunkmateInfo }) {
                                                     </div >
                                                 </Typography >
                                             </div >
-                                            <Tooltip title={eyeIcon ? "Close Profiles" :"View All Profiles"} arrow placement="left">
+                                            <Tooltip title={eyeIcon ? "Close Profiles" : "View All Profiles"} arrow placement="left">
                                                 <IconButton onClick={handleEyeButtonChange} style={{ padding: '2px', color: 'white' }}>
                                                     {eyeIcon ? <FiEyeOff /> : <FiEye />}
                                                 </IconButton>

@@ -129,8 +129,15 @@ const Bunkmates = () => {
     useEffect(() => {
         //add same dependencies as the above
         setUserOwnData(userRequests.get(id));
+
     }, [userRequests])
 
+    useEffect(() => {
+        //recenters screen on submitting create request form
+        if (isLoaded && userOwnData) {
+            setCenter({ lat: userOwnData.idealLocation[0], lng: userOwnData.idealLocation[1] })
+        }
+    }, [userOwnData])
 
 
 
@@ -162,6 +169,8 @@ const Bunkmates = () => {
 
     //hard coded requests
     const profiles = JSON.parse(localStorage.getItem('mapCardData')) || mapCardData;
+
+
 
     if (!isLoaded) {
         return <h1>ERROR HAS OCCURED</h1>
@@ -198,6 +207,7 @@ const Bunkmates = () => {
     }
 
 
+
     function EditRequestButton() {
         //edit and delete functionality
         return (
@@ -207,7 +217,7 @@ const Bunkmates = () => {
                 <Tooltip title={"Delete Request"}>
                     {/* X buton to delete profiles */}
                     <div>
-                        <ActionButton onClick={(e) => { deleteRequest(userOwnData).then(() => { userRequests.delete(id); setRerender(!rerender); e.stopPropagation() }); }} bgColor={"black"} title={"X"} opacity='0.85' />
+                        <ActionButton onClick={(e) => { deleteRequest().then(() => { userRequests.delete(id); setRerender(!rerender); e.stopPropagation() }); }} bgColor={"black"} title={"X"} opacity='0.85' />
                     </div>
                 </Tooltip>
             </div>
