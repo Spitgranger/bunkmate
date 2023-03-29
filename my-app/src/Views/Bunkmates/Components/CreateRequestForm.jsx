@@ -21,14 +21,14 @@ import { MultipleSelectCheckmarks } from '../../../Components/Utils/Form';
 import IconButton from '@mui/material/IconButton';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import { IoIosArrowBack } from 'react-icons/io'
-import { BuildUserContext } from '../../../Components/GlobalStateManagement/BunkmatesContext';
+import { BuildUserContext } from '../../../Components/GlobalStateManagement/UserContext';
 import { chatClientContext } from '../../../Components/GlobalStateManagement/MessageContext';
 import { UploadFile } from '../../../Components/Utils/Form';
 import { MdUpload } from 'react-icons/md';
 import profiles from "../../../data/mapCardData"
 import { getListings } from '../../../api';
 import { useNavigate } from 'react-router';
-import { BunkmatesContext } from '../../../Components/GlobalStateManagement/BunkmatesContext';
+import { BunkmatesContext } from '../../../Components/GlobalStateManagement/UserContext';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 
 //TODO

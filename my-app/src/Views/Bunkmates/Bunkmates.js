@@ -1,8 +1,8 @@
-import react, { useContext, useEffect, useRef, useState, memo, useMemo } from "react";
+import react, { useContext, useEffect, useRef, useState, memo, useMemo, useId } from "react";
 import Navbar from "../../Components/Navbar";
 import { GoogleMap, useJsApiLoader, MarkerF, OverlayView, OVERLAY_MOUSE_TARGET, OverlayViewF, MapContext } from "@react-google-maps/api";
 import mapStyles from '../../data/mapStyles.json'
-import { Button, Grid, Paper, TextField, Card, Typography, CardActionArea, CardMedia, CardContent, CardActions, IconButton, Tooltip, CircularProgress } from "@mui/material/"
+import { Button, Grid, Paper, TextField, Card, Typography, CardActionArea, CardMedia, CardContent, CardActions, IconButton, Tooltip, CircularProgress, Divider } from "@mui/material/"
 import "./Styles/Bunkmates.css"
 import PlacesAutocomplete from './Components/PlacesAutocomplete';
 import mapCardData from "../../data/mapCardData"
@@ -17,10 +17,12 @@ import GroupMapCard from "./Components/GroupMapCard"
 import { getRequests } from "../../api";
 import { InfoWindow } from "@react-google-maps/api";
 import { borderRadius } from "@mui/system";
-import { BuildUserContext, BunkmatesContext } from "../../Components/GlobalStateManagement/BunkmatesContext";
+import { BuildUserContext, BunkmatesContext } from "../../Components/GlobalStateManagement/UserContext";
 import { RxTriangleDown } from "react-icons/rx"
 import { useNavigate } from "react-router";
 import CustomMapMarker from './Components/MapMarker'
+import Avatar from "@mui/material/Avatar";
+import { IoReturnUpBack } from "react-icons/io5";
 
 
 
@@ -65,7 +67,10 @@ const Bunkmates = () => {
 
     const socialFeedStyles = {
         FeedContainer: {
-            overflow: 'scroll', height: '77.5vh', position: 'absolute', right: '0.5%', top: '5%', maxWidth: '20%'
+            borderRadius: '10px', backgroundColor: 'black', position: 'absolute', top: '115px', zIndex: '5', width: '400px', right: '75px', display: 'flex', alignItems: 'flex-start',
+        },
+        Posts: {
+            overflowY: 'scroll', borderRadius: '10px', flexDirection: 'column', position: 'absolute', height: '75vh', top: '215px', zIndex: '5', width: '400px', right: '75px'
         }
     }
     const id = JSON.parse(localStorage.getItem("profile"))?.result?._id;
@@ -126,6 +131,8 @@ const Bunkmates = () => {
         setUserOwnData(userRequests.get(id));
     }, [rerender])
 
+    console.log(userProfile)
+
     useEffect(() => {
         //add same dependencies as the above
         setUserOwnData(userRequests.get(id));
@@ -148,6 +155,9 @@ const Bunkmates = () => {
     //contains all requests generated through accounts
 
 
+    if (!isLoaded) {
+        return <h1>ERROR HAS OCCURED</h1>
+    }
 
     const handleRequestClick = () => {
 
@@ -172,9 +182,6 @@ const Bunkmates = () => {
 
 
 
-    if (!isLoaded) {
-        return <h1>ERROR HAS OCCURED</h1>
-    }
 
     const handleProfileClickAsync = (e) => {
         console.log('async', e?.currentTarget?.id)
@@ -188,6 +195,150 @@ const Bunkmates = () => {
         return GetClientInfo();
     }
     */
+
+
+    function SocialFeed() {
+        const id = useId()
+        //used to store values of posts
+
+        const postArray =
+            [
+                {
+                    firstName: 'Christina',
+                    Avatar: userOwnData?.profile[0]?.picture,
+                    location: 'New York City',
+                    postMessage: 'Looking for roommates in chicago illinois. Budget is 2600 dollars if anyone is interested please message and we will talk',
+                    images: ["https://www.nobroker.in/blog/wp-content/uploads/2022/07/Modern-Bedroom-Design.jpg", "image2"],
+                    postId: `post-id-${id}`,
+                    userId: `user-id-${id}`,
+                    likes: 3,
+                    comments: { 'UserId245': "I love the idea", 'UserId244': "I'm in the area" },
+                },
+                {
+                    firstName: 'Jesse',
+                    Avatar: userOwnData?.profile[0].picture,
+                    location: 'Chicago',
+                    postMessage: 'Hey everyone, I need some roommates now please. Im actively searching so please message me if youre interested, this is the place I had in mind: ',
+                    images: ["https://www.nobroker.in/blog/wp-content/uploads/2022/07/Modern-Bedroom-Design.jpg", "image2"],
+                    postId: `post-id-${id}`,
+                    userId: `user-id-${id}`,
+                    likes: 3,
+                    comments: { 'UserId245': "I love the idea", 'UserId244': "I'm in the area" },
+                },
+                {
+                    //modifiable field
+                    firstName: 'Lauren',
+                    Avatar: userOwnData?.profile[0].picture,
+                    location: 'Chicago',
+                    //modifiable field
+                    postMessage: 'Hey everyone, I need some roommates now please. Im actively searching so please message me if youre interested, this is the place I had in mind: ',
+                    //modifiable field
+                    images: ["https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Balcony_View.jpg/1200px-Balcony_View.jpg", "image2"],
+                    postId: `post-id-${id}`,
+                    userId: `user-id-${id}`,
+                    //modifiable field
+                    likes: 3,
+                    //modifiable field
+                    comments: { 'UserId245': "I love the idea", 'UserId244': "I'm in the area" },
+                },
+            ]
+
+        const [statePostArray, setStatePostArray] = useState(postArray)
+        //post / enter onclick onkeydown will gather the user's firstname, avatar, request (not sure yet), uploaded image 
+        //append likes and comments to the userobject, plus postID
+
+        const PostCard = ({ post }) => {
+            return <Card style={{ marginTop: '10px', flexDirection: 'column', borderRadius: '10px', backgroundColor: 'black', zIndex: '5', width: '400px', right: '75px', display: 'flex', alignItems: 'flex-start', }}>
+                <header style={{ display: 'flex', alignItems: 'center', width: '100%', }}>
+                    <Avatar sx={{ width: '50px', height: '50px', margin: '20px', display: 'flex', justifyContent: 'flex-start' }} src={userOwnData?.profile[0]?.picture} className="Avatar" alt={`${userOwnData?.profile[0]?.firstName}'s Profile picture`} />
+                    <div className="bunkmates__post-card__key-info">
+                        <Typography style={{ color: 'white' }} variant="body1" color="text.primary">{post.firstName}</Typography>
+                        {/* post.location should be an optional field*/}
+                        {post.location ?
+                            <Tooltip title={`View ${post.firstName}'s active request`}>
+                                <Typography style={{ color: 'grey' }} variant="body2" color="text.secondary">{post.location}</Typography>
+                            </Tooltip>
+                            :
+                            null
+                        }
+                    </div>
+                </header>
+                <CardContent>
+                    <Typography style={{ color: 'white' }} variant="body2" color="text.primary">{post.postMessage}</Typography>
+                </CardContent>
+                {/* Not working because the array is pushing an empty object to the end of the array*/}
+                <CardMedia component={"img"} image={post.images ? post?.images[0] : ""} sx={{ padding: '15px', borderRadius: '20px' }} />
+
+            </Card >
+        }
+        console.log(userProfile)
+
+        const CreatePost = ({ statePostArray, setStatePostArray }) => {
+
+            const [fieldValues, setFieldvalues] = useState("")
+            const user = JSON.parse(localStorage.getItem('profile'))
+
+            const handlePost = () => {
+                const firstName = userProfile.data.firstName
+                const Avatar = userProfile.data.picture
+                const location = userOwnData?.address ?? "";
+                const postMessage = fieldValues
+                //hardcoded for now
+                /* ***BROKEN***
+                const images = ["https://www.cai-illinois.org/wp-content/uploads/2017/04/condo-building-imagepng.png", ""]
+                */
+                const postId = `post-id-${id}`
+                const profile = userOwnData.profile[0]
+                const userId = user.result._id
+                //hardcoded for now
+                const likes = 3
+                const comments = { 'UserId245': "I love the idea", 'UserId244': "I'm in the area" }
+
+                //hardcoded for now (images was removed)
+                statePostArray.unshift({ firstName, Avatar, location, postMessage, postId, profile, userId, likes, comments })
+                setStatePostArray([...statePostArray, fieldValues])
+
+            }
+
+            return (
+                <Card style={socialFeedStyles.FeedContainer}>
+                    <div style={{ width: '100%', display: 'flex', flexDirection: 'row' }}>
+                        <div>
+                            <Avatar sx={{ width: '50px', height: '50px', margin: '20px', display: 'flex', justifyContent: 'flex-start' }} src={userOwnData?.profile[0]?.picture} className="Avatar" alt={`${userOwnData?.profile[0]?.firstName}'s Profile picture`} />
+                        </div>
+                        <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                            <TextField maxRows={4}
+                                multiline
+                                onChange={(e) => setFieldvalues(e.target.value)}
+                                value={fieldValues}
+                                sx={{
+                                    marginTop: '20px',
+                                    marginBottom: '20px',
+                                    "& .MuiInputBase-root": {
+                                        color: 'white',
+                                        backgroundColor: 'black',
+                                    }
+                                }
+                                } placeholder="Talk with others..." />
+                            <ActionButton onClick={handlePost} bgColor="black" hoverBgColor="rgb(67, 78, 91)" hoverColor="aqua" title="Post" borderRadius='7%' color="white" height='55px' />
+                        </div>
+                    </div>
+                </Card>
+            )
+        }
+
+
+        return (
+            <>
+
+                <CreatePost statePostArray={statePostArray} setStatePostArray={setStatePostArray} />
+                <div style={socialFeedStyles.Posts}>
+                    {statePostArray.map((post) => { return <PostCard post={post} /> })}
+                </div>
+
+            </>
+        )
+    }
 
     function BunkmateRequestPage() {
         return (
@@ -265,6 +416,7 @@ const Bunkmates = () => {
                         onClick={() => { setMapProfileCard(null) }}
                     >
                         <Navbar chooseStyle={"glass"} />
+                        <SocialFeed />
                         {/*
                         <div className="social-feed-container" style={socialFeedStyles.FeedContainer}>
                             <SocialFeed />
@@ -284,19 +436,6 @@ const Bunkmates = () => {
                                 </OverlayViewF >)
                         })}
 
-                        {/*
-                    return <MarkerF clickable={true} options={{
-                        icon: {
-                            url: profile?.picture,
-                            size: new window.google.maps.Size(50, 50),
-                            anchor: new window.google.maps.Point(25, 25),
-                        }, label: {
-                            text: `$${profile?.rentBudget}`,
-                            color: 'white',
-                        }, shape: "MarkerShapeCircle",
-                    }
-                    } onClick={e => handleProfileClick(e, index)} key={index} position={{ lat: profile?.idealLocation[0], lng: profile?.idealLocation[1] }} >{profile?.rentBudget}</MarkerF>;
-                */}
                     </GoogleMap >
                 </div>
                 {
@@ -322,6 +461,19 @@ const Bunkmates = () => {
 export default Bunkmates;
 
 
+{/*
+                    return <MarkerF clickable={true} options={{
+                        icon: {
+                            url: profile?.picture,
+                            size: new window.google.maps.Size(50, 50),
+                            anchor: new window.google.maps.Point(25, 25),
+                        }, label: {
+                            text: `$${profile?.rentBudget}`,
+                            color: 'white',
+                        }, shape: "MarkerShapeCircle",
+                    }
+                    } onClick={e => handleProfileClick(e, index)} key={index} position={{ lat: profile?.idealLocation[0], lng: profile?.idealLocation[1] }} >{profile?.rentBudget}</MarkerF>;
+                */}
 
 /*
 <div className="card">

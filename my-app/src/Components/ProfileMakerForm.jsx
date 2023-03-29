@@ -28,7 +28,7 @@ import {
 
 import { SignInContext } from './GlobalStateManagement/SignInContext';
 import { formatContext } from './GlobalStateManagement/FormatContext';
-import { BuildUserContext } from './GlobalStateManagement/BunkmatesContext';
+import { BuildUserContext } from './GlobalStateManagement/UserContext';
 
 
 

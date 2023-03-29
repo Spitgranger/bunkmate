@@ -21,7 +21,7 @@ import { BsBookmarks, BsBookmarksFill, BsFillClockFill, BsInfinity, BsBriefcaseF
 import { FaBook, FaSmoking, FaCannabis, FaWineGlassAlt, FaRegHandshake, FaDog } from 'react-icons/fa'
 import { BiMessageDetail } from 'react-icons/bi'
 import { Link } from 'react-router-dom';
-import { BunkmatesContext } from '../Components/GlobalStateManagement/BunkmatesContext';
+import { BunkmatesContext } from '../Components/GlobalStateManagement/UserContext';
 import { MapProfile } from './Bunkmates/Bunkmates';
 import CircularProgress from '@mui/material/CircularProgress';
 import { Box } from '@mui/system';

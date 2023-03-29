@@ -15,7 +15,7 @@ import SignInProvider from './Components/GlobalStateManagement/SignInContext';
 import ValidationProvider from './Components/GlobalStateManagement/ValidationContext';
 import MessageProvider from './Components/GlobalStateManagement/MessageContext';
 import FormatProvider from './Components/GlobalStateManagement/FormatContext';
-import MapProvider from './Components/GlobalStateManagement/BunkmatesContext'
+import MapProvider from './Components/GlobalStateManagement/UserContext'
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 const router = createBrowserRouter([

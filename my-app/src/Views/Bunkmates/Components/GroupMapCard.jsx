@@ -14,7 +14,7 @@ import { FiEyeOff } from 'react-icons/fi'
 import { FiEye } from 'react-icons/fi'
 import styles from '../Styles/GroupMapCard.css'
 import { MdVerified } from 'react-icons/md';
-import { BuildUserContext } from '../../../Components/GlobalStateManagement/BunkmatesContext';
+import { BuildUserContext } from '../../../Components/GlobalStateManagement/UserContext';
 
 function GroupMapCard({ request, BunkmateInfo }) {
 
