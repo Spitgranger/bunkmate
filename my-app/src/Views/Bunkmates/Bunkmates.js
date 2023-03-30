@@ -23,7 +23,9 @@ import { useNavigate } from "react-router";
 import CustomMapMarker from './Components/MapMarker'
 import Avatar from "@mui/material/Avatar";
 import { IoReturnUpBack } from "react-icons/io5";
-import { BsPaperclip } from "react-icons/bs";
+import { BsPaperclip, BsPinFill } from "react-icons/bs";
+import { TbSocial, TbSocialOff } from "react-icons/tb";
+import { AiFillLike } from 'react-icons/ai'
 
 
 
@@ -100,6 +102,7 @@ const Bunkmates = () => {
     const [userOwnData, setUserOwnData] = useState("");
     //used to rerender useEffect in Bunkmates.js containing async functions that gets data from backend
     const { rerender, setRerender } = useContext(BunkmatesContext)
+    const [displaySocial, setDisplaySocial] = useState(true)
 
     useEffect(() => {
         //get profile data from backend 
@@ -256,7 +259,7 @@ const Bunkmates = () => {
                         <Typography style={{ color: 'white' }} variant="body1" color="text.primary">{post.firstName}</Typography>
                         {/* post.location should be an optional field*/}
                         {post.location
-                            ? <Tooltip title={`View ${post.firstName}'s active request`}>
+                            ? <Tooltip arrow title={`View ${post.firstName}'s active request`}>
                                 <Typography style={{ color: 'grey' }} variant="body2" color="text.secondary">{post.location}</Typography>
                             </Tooltip>
                             : null
@@ -267,7 +270,38 @@ const Bunkmates = () => {
                     <Typography style={{ padding: '0px 8px 0px 8px', color: 'white' }} variant="body2" color="text.primary">{post.postMessage}</Typography>
                 </CardContent>
                 {/* Not working because the array is pushing an empty object to the end of the array*/}
-                <img component={"img"} src={post?.images ? post?.images[0] : ""} style={{ padding: '15px', borderRadius: '20px' }} />
+                <CardMedia component={"img"} image={post?.images ? post?.images[0] : ""} sx={{ padding: '15px', borderRadius: '20px' }} />
+                <div style={{ width: '100%', display: 'flex', padding: '0px 20px 0px 20px', justifyContent: 'space-around' }}>
+                    <IconButton><AiFillLike style={{ color: 'white' }} /></IconButton>
+                    <div style={{ padding: '10px' }}>
+                        <Divider orientation="vertical" sx={{ width: '100%', backgroundColor: 'grey', color: "white", height: '100%' }} />
+                    </div>
+                    <TextField maxRows={2}
+                        size="small"
+                        multiline
+                        /*
+                        onChange={}
+                        value={}
+                        */
+                        sx={{
+                            "& .MuiInputBase-root": {
+                                color: 'white',
+                                backgroundColor: 'black',
+                            },
+                            margin: '0px',
+                            padding: '0px'
+
+
+
+                        }
+                        } placeholder="Comment..." />
+                    <div style={{ margin: '10px' }}>
+                        <Divider orientation="vertical" sx={{ backgroundColor: 'grey', color: "white", height: '100%' }} />
+                    </div>
+                    <IconButton><BsPinFill style={{ color: 'white' }} /></IconButton>
+                </div>
+
+
 
             </Card >
         }
@@ -331,7 +365,7 @@ const Bunkmates = () => {
                                 value={fieldValues}
                                 InputProps={{
                                     endAdornment:
-                                        <Tooltip title={"Upload files here"}>
+                                        <Tooltip arrow title={"Upload files here"}>
                                             <IconButton sx={{ width: '30px', height: '30px', color: 'white' }}>
                                                 <label>
                                                     <input hidden style={{ display: 'none' }} multiple type="file" onChange={handleFileUpload} />
@@ -394,7 +428,7 @@ const Bunkmates = () => {
             <div style={{ display: 'flex', bottom: '10vh', justifyContent: 'center', position: 'absolute', }}>
                 {/* edit bunkmates request button */}
                 <ActionButton onClick={(e) => { handleRequestClick(); setCenter({ lat: userOwnData.idealLocation[0], lng: userOwnData.idealLocation[1] }); e.stopPropagation() }} bgColor={"black"} title={"Edit Bunkmate Request"} opacity='0.85' />
-                <Tooltip title={"Delete Request"}>
+                <Tooltip arrow title={"Delete Request"}>
                     {/* X buton to delete profiles */}
                     <div>
                         <ActionButton onClick={(e) => { deleteRequest().then(() => { userRequests.delete(id); setRerender(!rerender); e.stopPropagation() }); }} bgColor={"black"} title={"X"} opacity='0.85' />
@@ -445,7 +479,24 @@ const Bunkmates = () => {
                         onClick={() => { setMapProfileCard(null) }}
                     >
                         <Navbar chooseStyle={"glass"} />
-                        <SocialFeed />
+                        <section className="bunkamtes__social-feed" style={{ borderRadius: '50%', backgroundColor: 'black', position: 'absolute', top: '305px', height: '40px', width: '40px', right: '10px', }}>
+                            {
+                                displaySocial ?
+                                    <Tooltip arrow title="Close Socials Page">
+                                        <IconButton onClick={(e) => { setDisplaySocial(false); e.stopPropagation(); }}>
+                                            <TbSocialOff style={{ color: 'white', }} />
+                                        </IconButton>
+                                    </Tooltip>
+                                    :
+                                    <Tooltip arrow title="Show Socials Page">
+                                        <IconButton onClick={(e) => { setDisplaySocial(true); e.stopPropagation() }}>
+                                            <TbSocial style={{ color: 'white', }} />
+                                        </IconButton>
+                                    </Tooltip>
+
+                            }
+                        </section>
+                        {displaySocial ? <SocialFeed /> : null}
                         {/*
                         <div className="social-feed-container" style={socialFeedStyles.FeedContainer}>
                             <SocialFeed />

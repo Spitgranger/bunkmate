@@ -403,7 +403,7 @@ export function ActionButton(props) {
     alignItems: 'flex-start',
     flexDirection: 'column',
     opacity: props.opacity,
-    margin: '10px',
+    margin: props.margin ?? '10px',
   }
 
   const helperTextStyles = {
