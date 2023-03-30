@@ -2,7 +2,7 @@ import react, { useContext, useEffect, useRef, useState, memo, useMemo, useId } 
 import Navbar from "../../Components/Navbar";
 import { GoogleMap, useJsApiLoader, MarkerF, OverlayView, OVERLAY_MOUSE_TARGET, OverlayViewF, MapContext } from "@react-google-maps/api";
 import mapStyles from '../../data/mapStyles.json'
-import { Button, Grid, Paper, TextField, Card, Typography, CardActionArea, CardMedia, CardContent, CardActions, IconButton, Tooltip, CircularProgress, Divider } from "@mui/material/"
+import { Input, Button, Grid, Paper, TextField, Card, Typography, CardActionArea, CardMedia, CardContent, CardActions, IconButton, Tooltip, CircularProgress, Divider } from "@mui/material/"
 import "./Styles/Bunkmates.css"
 import PlacesAutocomplete from './Components/PlacesAutocomplete';
 import mapCardData from "../../data/mapCardData"
@@ -23,6 +23,7 @@ import { useNavigate } from "react-router";
 import CustomMapMarker from './Components/MapMarker'
 import Avatar from "@mui/material/Avatar";
 import { IoReturnUpBack } from "react-icons/io5";
+import { BsPaperclip } from "react-icons/bs";
 
 
 
@@ -67,7 +68,7 @@ const Bunkmates = () => {
 
     const socialFeedStyles = {
         FeedContainer: {
-            borderRadius: '10px', backgroundColor: 'black', position: 'absolute', top: '115px', zIndex: '5', width: '400px', right: '75px', display: 'flex', alignItems: 'flex-start',
+            borderRadius: '10px', backgroundColor: 'black', position: 'absolute', top: '115px', zIndex: '6', width: '400px', right: '75px', display: 'flex', alignItems: 'flex-start',
         },
         Posts: {
             overflowY: 'scroll', borderRadius: '10px', flexDirection: 'column', position: 'absolute', height: '75vh', top: '215px', zIndex: '5', width: '400px', right: '75px'
@@ -205,7 +206,7 @@ const Bunkmates = () => {
             [
                 {
                     firstName: 'Christina',
-                    Avatar: userOwnData?.profile[0]?.picture,
+                    Avatar: "https://assets3.cbsnewsstatic.com/hub/i/r/2022/12/15/4decd348-d788-4774-b5a7-be53f05daf45/thumbnail/640x486/664038a6472a8c080a6d94d60ef45c85/ai1.png",
                     location: 'New York City',
                     postMessage: 'Looking for roommates in chicago illinois. Budget is 2600 dollars if anyone is interested please message and we will talk',
                     images: ["https://www.nobroker.in/blog/wp-content/uploads/2022/07/Modern-Bedroom-Design.jpg", "image2"],
@@ -216,7 +217,7 @@ const Bunkmates = () => {
                 },
                 {
                     firstName: 'Jesse',
-                    Avatar: userOwnData?.profile[0].picture,
+                    Avatar: 'https://www.realholidays.co.uk/wp-content/uploads/2018/10/Matt-Website-Profile-2-300x300-c-default.jpg',
                     location: 'Chicago',
                     postMessage: 'Hey everyone, I need some roommates now please. Im actively searching so please message me if youre interested, this is the place I had in mind: ',
                     images: ["https://www.nobroker.in/blog/wp-content/uploads/2022/07/Modern-Bedroom-Design.jpg", "image2"],
@@ -228,7 +229,7 @@ const Bunkmates = () => {
                 {
                     //modifiable field
                     firstName: 'Lauren',
-                    Avatar: userOwnData?.profile[0].picture,
+                    Avatar: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSezGOpQSyxqLHMV2AHhvfpW0ajntgm42b0Ew&usqp=CAU',
                     location: 'Chicago',
                     //modifiable field
                     postMessage: 'Hey everyone, I need some roommates now please. Im actively searching so please message me if youre interested, this is the place I had in mind: ',
@@ -248,26 +249,25 @@ const Bunkmates = () => {
         //append likes and comments to the userobject, plus postID
 
         const PostCard = ({ post }) => {
-            return <Card style={{ marginTop: '10px', flexDirection: 'column', borderRadius: '10px', backgroundColor: 'black', zIndex: '5', width: '400px', right: '75px', display: 'flex', alignItems: 'flex-start', }}>
+            return <Card style={{ marginTop: '10px', flexDirection: 'column', borderRadius: '10px', backgroundColor: 'black', zIndex: '5', width: '400px', right: '75px', display: 'flex', alignItems: 'flex-start', overflowY: 'hidden' }}>
                 <header style={{ display: 'flex', alignItems: 'center', width: '100%', }}>
                     <Avatar sx={{ width: '50px', height: '50px', margin: '20px', display: 'flex', justifyContent: 'flex-start' }} src={userOwnData?.profile[0]?.picture} className="Avatar" alt={`${userOwnData?.profile[0]?.firstName}'s Profile picture`} />
                     <div className="bunkmates__post-card__key-info">
                         <Typography style={{ color: 'white' }} variant="body1" color="text.primary">{post.firstName}</Typography>
                         {/* post.location should be an optional field*/}
-                        {post.location ?
-                            <Tooltip title={`View ${post.firstName}'s active request`}>
+                        {post.location
+                            ? <Tooltip title={`View ${post.firstName}'s active request`}>
                                 <Typography style={{ color: 'grey' }} variant="body2" color="text.secondary">{post.location}</Typography>
                             </Tooltip>
-                            :
-                            null
+                            : null
                         }
                     </div>
                 </header>
                 <CardContent>
-                    <Typography style={{ color: 'white' }} variant="body2" color="text.primary">{post.postMessage}</Typography>
+                    <Typography style={{ padding: '0px 8px 0px 8px', color: 'white' }} variant="body2" color="text.primary">{post.postMessage}</Typography>
                 </CardContent>
                 {/* Not working because the array is pushing an empty object to the end of the array*/}
-                <CardMedia component={"img"} image={post.images ? post?.images[0] : ""} sx={{ padding: '15px', borderRadius: '20px' }} />
+                <img component={"img"} src={post?.images ? post?.images[0] : ""} style={{ padding: '15px', borderRadius: '20px' }} />
 
             </Card >
         }
@@ -275,18 +275,37 @@ const Bunkmates = () => {
 
         const CreatePost = ({ statePostArray, setStatePostArray }) => {
 
-            const [fieldValues, setFieldvalues] = useState("")
+            const [fieldValues, setFieldvalues] = useState("");
+            const [uploadedFiles, setUploadedFiles] = useState("");
             const user = JSON.parse(localStorage.getItem('profile'))
+
+
+            const handleFileUpload = (e) => {
+                const file = e.target.files[0];
+                handleConversion(file, (result) => {
+                    setUploadedFiles(result);
+                });
+            }
+
+            //converts image to base64-encoded string
+            const handleConversion = (file, callback) => {
+                let reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = function () {
+                    callback(reader.result);
+                };
+                reader.onerror = function (error) {
+                };
+            }
+
 
             const handlePost = () => {
                 const firstName = userProfile.data.firstName
-                const Avatar = userProfile.data.picture
+                const avatar = userProfile.data.picture
                 const location = userOwnData?.address ?? "";
                 const postMessage = fieldValues
                 //hardcoded for now
-                /* ***BROKEN***
-                const images = ["https://www.cai-illinois.org/wp-content/uploads/2017/04/condo-building-imagepng.png", ""]
-                */
+                const images = [uploadedFiles, ""]
                 const postId = `post-id-${id}`
                 const profile = userOwnData.profile[0]
                 const userId = user.result._id
@@ -295,22 +314,32 @@ const Bunkmates = () => {
                 const comments = { 'UserId245': "I love the idea", 'UserId244': "I'm in the area" }
 
                 //hardcoded for now (images was removed)
-                statePostArray.unshift({ firstName, Avatar, location, postMessage, postId, profile, userId, likes, comments })
-                setStatePostArray([...statePostArray, fieldValues])
-
+                const newPost = { firstName, avatar, location, location, images, postMessage, postId, profile, userId, likes, comments }
+                setStatePostArray([newPost, ...statePostArray])
             }
 
             return (
                 <Card style={socialFeedStyles.FeedContainer}>
-                    <div style={{ width: '100%', display: 'flex', flexDirection: 'row' }}>
+                    <div style={{ width: '100%', display: 'flex', alignItems: 'center', flexDirection: 'row' }}>
                         <div>
                             <Avatar sx={{ width: '50px', height: '50px', margin: '20px', display: 'flex', justifyContent: 'flex-start' }} src={userOwnData?.profile[0]?.picture} className="Avatar" alt={`${userOwnData?.profile[0]?.firstName}'s Profile picture`} />
                         </div>
                         <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                            <TextField maxRows={4}
+                            <TextField maxRows={2}
                                 multiline
                                 onChange={(e) => setFieldvalues(e.target.value)}
                                 value={fieldValues}
+                                InputProps={{
+                                    endAdornment:
+                                        <Tooltip title={"Upload files here"}>
+                                            <IconButton sx={{ width: '30px', height: '30px', color: 'white' }}>
+                                                <label>
+                                                    <input hidden style={{ display: 'none' }} multiple type="file" onChange={handleFileUpload} />
+                                                    <BsPaperclip size={20} position="end" />
+                                                </label>
+                                            </IconButton>
+                                        </Tooltip>
+                                }}
                                 sx={{
                                     marginTop: '20px',
                                     marginBottom: '20px',
@@ -320,10 +349,10 @@ const Bunkmates = () => {
                                     }
                                 }
                                 } placeholder="Talk with others..." />
-                            <ActionButton onClick={handlePost} bgColor="black" hoverBgColor="rgb(67, 78, 91)" hoverColor="aqua" title="Post" borderRadius='7%' color="white" height='55px' />
+                            <ActionButton onClick={(e) => { handlePost(); e.stopPropagation() }} bgColor="black" hoverBgColor="rgb(67, 78, 91)" hoverColor="aqua" title="Post" borderRadius='7%' color="white" height='55px' />
                         </div>
                     </div>
-                </Card>
+                </Card >
             )
         }
 
