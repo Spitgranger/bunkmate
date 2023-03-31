@@ -209,7 +209,7 @@ const Bunkmates = () => {
             [
                 {
                     firstName: 'Christina',
-                    Avatar: "https://assets3.cbsnewsstatic.com/hub/i/r/2022/12/15/4decd348-d788-4774-b5a7-be53f05daf45/thumbnail/640x486/664038a6472a8c080a6d94d60ef45c85/ai1.png",
+                    avatar: "https://assets3.cbsnewsstatic.com/hub/i/r/2022/12/15/4decd348-d788-4774-b5a7-be53f05daf45/thumbnail/640x486/664038a6472a8c080a6d94d60ef45c85/ai1.png",
                     location: 'New York City',
                     postMessage: 'Looking for roommates in chicago illinois. Budget is 2600 dollars if anyone is interested please message and we will talk',
                     images: ["https://www.nobroker.in/blog/wp-content/uploads/2022/07/Modern-Bedroom-Design.jpg", "image2"],
@@ -220,7 +220,7 @@ const Bunkmates = () => {
                 },
                 {
                     firstName: 'Jesse',
-                    Avatar: 'https://www.realholidays.co.uk/wp-content/uploads/2018/10/Matt-Website-Profile-2-300x300-c-default.jpg',
+                    avatar: 'https://www.realholidays.co.uk/wp-content/uploads/2018/10/Matt-Website-Profile-2-300x300-c-default.jpg',
                     location: 'Chicago',
                     postMessage: 'Hey everyone, I need some roommates now please. Im actively searching so please message me if youre interested, this is the place I had in mind: ',
                     images: ["https://www.nobroker.in/blog/wp-content/uploads/2022/07/Modern-Bedroom-Design.jpg", "image2"],
@@ -232,7 +232,7 @@ const Bunkmates = () => {
                 {
                     //modifiable field
                     firstName: 'Lauren',
-                    Avatar: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSezGOpQSyxqLHMV2AHhvfpW0ajntgm42b0Ew&usqp=CAU',
+                    avatar: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSezGOpQSyxqLHMV2AHhvfpW0ajntgm42b0Ew&usqp=CAU',
                     location: 'Chicago',
                     //modifiable field
                     postMessage: 'Hey everyone, I need some roommates now please. Im actively searching so please message me if youre interested, this is the place I had in mind: ',
@@ -254,7 +254,7 @@ const Bunkmates = () => {
         const PostCard = ({ post }) => {
             return <Card style={{ marginTop: '10px', flexDirection: 'column', borderRadius: '10px', backgroundColor: 'black', zIndex: '5', width: '400px', right: '75px', display: 'flex', alignItems: 'flex-start', overflowY: 'hidden' }}>
                 <header style={{ display: 'flex', alignItems: 'center', width: '100%', }}>
-                    <Avatar sx={{ width: '50px', height: '50px', margin: '20px', display: 'flex', justifyContent: 'flex-start' }} src={userOwnData?.profile[0]?.picture} className="Avatar" alt={`${userOwnData?.profile[0]?.firstName}'s Profile picture`} />
+                    <Avatar sx={{ width: '50px', height: '50px', margin: '20px', display: 'flex', justifyContent: 'flex-start' }} src={post.avatar} className="Avatar" alt={`View ${post.firstName}'s profile`} />
                     <div className="bunkmates__post-card__key-info">
                         <Typography style={{ color: 'white' }} variant="body1" color="text.primary">{post.firstName}</Typography>
                         {/* post.location should be an optional field*/}
@@ -334,6 +334,7 @@ const Bunkmates = () => {
 
 
             const handlePost = () => {
+                console.log(userProfile)
                 const firstName = userProfile.data.firstName
                 const avatar = userProfile.data.picture
                 const location = userOwnData?.address ?? "";

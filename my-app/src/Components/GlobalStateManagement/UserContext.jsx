@@ -41,7 +41,7 @@ export default function MapProvider({ children }) {
   const profileHandleUpdate = async (profile) => {
     try {
       await deleteProfile()
-      return createProfile(profile) 
+      return createProfile(profile)
     } catch (error) {
       console.log(error)
     }

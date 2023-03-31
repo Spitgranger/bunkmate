@@ -219,7 +219,7 @@ const Profile = () => {
                 {bookmark
                   ?
                   <Tooltip arrow title="This profile has been saved!">
-                    <IconButton onClick={() => setBookmark(!bookmark)}>
+                    <IconButton onClick={(e) => setBookmark(!bookmark)}>
                       <BsBookmarksFill style={{ color: '#2ACDDD' }} />
                     </IconButton>
                   </Tooltip>

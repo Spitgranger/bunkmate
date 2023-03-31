@@ -13,14 +13,12 @@ export const AboutValidationContext = createContext(null)
 export const GlobalValidationContext = createContext(null)
 
 export default function ValidationProvider({ children }) {
-
   useEffect(() => {
     const handleProfile = async () => {
       const profile = await getProfile()
       return profile
     }
-
-    handleProfile().then((profile) => { setValues(profile.data) });
+    handleProfile().then((profile) => { setValues(profile.data); console.log(profile.data) });
   }, [])
 
 

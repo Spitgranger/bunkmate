@@ -64,13 +64,19 @@ function ProfileMakerForm({ forwardButton, backwardButton }) {
   };
 
   //get data from backend when the component first loads works
+
   useEffect(() => {
     handleProfile().then((profile) => setUserProfile(profile.data))
   }, []);
 
+
   const handleSubmit = (values) => {
     //if user already has a profile then update it else submit it
-    profileHandleUpdate(values)
+    if (userProfile) {
+      profileHandleUpdate(values).then(() => console.log('sf'))
+    } else {
+      profileHandleSubmit(values)
+    }
   }
 
   const actions = {
