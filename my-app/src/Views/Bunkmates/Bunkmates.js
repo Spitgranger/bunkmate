@@ -369,7 +369,7 @@ const Bunkmates = () => {
                                             <IconButton sx={{ width: '30px', height: '30px', color: 'white' }}>
                                                 <label>
                                                     <input hidden style={{ display: 'none' }} multiple type="file" onChange={handleFileUpload} />
-                                                    <BsPaperclip size={20} position="end" />
+                                                    <BsPaperclip style={{ cursor: 'pointer' }} size={20} position="end" />
                                                 </label>
                                             </IconButton>
                                         </Tooltip>
