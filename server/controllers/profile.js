@@ -49,9 +49,15 @@ export const getProfiles = async (req, res) => {
 export const deleteProfile = async (req, res) => {
     try {
         const profileUserId = req.userId;
-        const existingProfile = await Profile.find({ user: profileUserId });
-        await Profile.deleteOne({ _id: existingProfile._id });
-        res.status(204).json(`Profile for user ${profileUserId} deleted successfully`);
+        console.log(profileUserId)
+        const existingProfile = await Profile.findOne({ user: profileUserId });
+        if (existingProfile) {
+            await Profile.deleteOne({ _id: existingProfile._id });
+        } else {
+            res.status(404).json("No profile associated with this account");
+            return;
+        }
+        res.json(`Profile for user ${profileUserId} deleted successfully`).status(204);
     } catch (error) {
         console.log(error)
         res.json(error).status(500);
