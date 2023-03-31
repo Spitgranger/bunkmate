@@ -475,7 +475,7 @@ const Bunkmates = () => {
                         center={center}
                         zoom={15}
                         mapContainerStyle={{ width: "100%", height: "100vh" }}
-                        options={{ styles: mapStyles, streetViewControl: false }}
+                        options={{ styles: mapStyles, streetViewControl: false, mapTypeControl: false, }}
                         onClick={() => { setMapProfileCard(null) }}
                     >
                         <Navbar chooseStyle={"glass"} />
