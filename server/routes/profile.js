@@ -7,6 +7,6 @@ const router = express.Router();
 router.get('/', auth, getProfile);
 router.post('/', auth, createProfile);
 router.get('/:profiles', getProfiles);
-router.delete('/', deleteProfile);
+router.delete('/', auth, deleteProfile);
 
 export default router;  
