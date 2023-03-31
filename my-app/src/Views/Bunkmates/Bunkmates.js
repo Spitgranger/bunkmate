@@ -70,10 +70,10 @@ const Bunkmates = () => {
 
     const socialFeedStyles = {
         FeedContainer: {
-            borderRadius: '10px', backgroundColor: 'black', position: 'absolute', top: '115px', zIndex: '6', width: '400px', right: '75px', display: 'flex', alignItems: 'flex-start',
+            borderRadius: '10px', backgroundColor: 'black', position: 'absolute', top: '160px', zIndex: '6', width: '400px', right: 'left 60px', display: 'flex', alignItems: 'flex-start',
         },
         Posts: {
-            overflowY: 'scroll', borderRadius: '10px', flexDirection: 'column', position: 'absolute', height: '75vh', top: '215px', zIndex: '5', width: '400px', right: '75px'
+            overflowY: 'scroll', borderRadius: '10px', flexDirection: 'column', position: 'absolute', height: '75vh', top: '215px', zIndex: '5', width: '400px', left: '0px'
         }
     }
     const id = JSON.parse(localStorage.getItem("profile"))?.result?._id;
@@ -209,7 +209,7 @@ const Bunkmates = () => {
             [
                 {
                     firstName: 'Christina',
-                    avatar: "https://assets3.cbsnewsstatic.com/hub/i/r/2022/12/15/4decd348-d788-4774-b5a7-be53f05daf45/thumbnail/640x486/664038a6472a8c080a6d94d60ef45c85/ai1.png",
+                    avatar: "https://media.istockphoto.com/id/1311084168/photo/overjoyed-pretty-asian-woman-look-at-camera-with-sincere-laughter.jpg?b=1&s=170667a&w=0&k=20&c=XPuGhP9YyCWquTGT-tUFk6TwI-HZfOr1jNkehKQ17g0=",
                     location: 'New York City',
                     postMessage: 'Looking for roommates in chicago illinois. Budget is 2600 dollars if anyone is interested please message and we will talk',
                     images: ["https://www.nobroker.in/blog/wp-content/uploads/2022/07/Modern-Bedroom-Design.jpg", "image2"],
@@ -253,7 +253,7 @@ const Bunkmates = () => {
 
         const PostCard = ({ post }) => {
             return <Card style={{ marginTop: '10px', flexDirection: 'column', borderRadius: '10px', backgroundColor: 'black', zIndex: '5', width: '400px', right: '75px', display: 'flex', alignItems: 'flex-start', overflowY: 'hidden' }}>
-                <header style={{ display: 'flex', alignItems: 'center', width: '100%', }}>
+                <header style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
                     <Avatar sx={{ width: '50px', height: '50px', margin: '20px', display: 'flex', justifyContent: 'flex-start' }} src={post.avatar} className="Avatar" alt={`View ${post.firstName}'s profile`} />
                     <div className="bunkmates__post-card__key-info">
                         <Typography style={{ color: 'white' }} variant="body1" color="text.primary">{post.firstName}</Typography>
@@ -262,8 +262,7 @@ const Bunkmates = () => {
                             ? <Tooltip arrow title={`View ${post.firstName}'s active request`}>
                                 <Typography style={{ color: 'grey' }} variant="body2" color="text.secondary">{post.location}</Typography>
                             </Tooltip>
-                            : null
-                        }
+                            : null}
                     </div>
                 </header>
                 <CardContent>
@@ -357,7 +356,7 @@ const Bunkmates = () => {
                 <Card style={socialFeedStyles.FeedContainer}>
                     <div style={{ width: '100%', display: 'flex', alignItems: 'center', flexDirection: 'row' }}>
                         <div>
-                            <Avatar sx={{ width: '50px', height: '50px', margin: '20px', display: 'flex', justifyContent: 'flex-start' }} src={userOwnData?.profile[0]?.picture} className="Avatar" alt={`${userOwnData?.profile[0]?.firstName}'s Profile picture`} />
+                            <Avatar sx={{ width: '50px', height: '50px', margin: '10px 20px 10px 20px', display: 'flex', justifyContent: 'flex-start' }} src={userOwnData?.profile[0]?.picture} className="Avatar" alt={`${userOwnData?.profile[0]?.firstName}'s Profile picture`} />
                         </div>
                         <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                             <TextField maxRows={2}
@@ -376,8 +375,8 @@ const Bunkmates = () => {
                                         </Tooltip>
                                 }}
                                 sx={{
-                                    marginTop: '20px',
-                                    marginBottom: '20px',
+                                    marginTop: '10px',
+                                    marginBottom: '10px',
                                     "& .MuiInputBase-root": {
                                         color: 'white',
                                         backgroundColor: 'black',
