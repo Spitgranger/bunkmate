@@ -1,6 +1,6 @@
 import { createContext, useState } from "react";
 import CreateRequestForm from "../../Views/Bunkmates/Components/CreateRequestForm";
-import { createRequest, createProfile, updateRequest, deleteRequest, getProfiles } from "../../api";
+import { createRequest, createProfile, updateRequest, deleteRequest, getProfiles, deleteProfile } from "../../api";
 import { useNavigate } from "react-router";
 
 export const BunkmatesContext = createContext(null)
@@ -38,7 +38,14 @@ export default function MapProvider({ children }) {
     }
   }
 
-  let done = false;
+  const profileHandleUpdate = async (profile) => {
+    try {
+      await deleteProfile()
+      return createProfile(profile) 
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   const requestHandleUpdate = async (id, userRequestData) => {
     try {
@@ -75,9 +82,10 @@ export default function MapProvider({ children }) {
 
 
 
+
   return (
     <BunkmatesContext.Provider value={{ mapProfileCard, setMapProfileCard, center, setCenter, rerender, setRerender, click, setClick }}>
-      <BuildUserContext.Provider value={{ profileHandleSubmit, requestHandleSubmit, requestHandleUpdate, profileHandleRetrieval }}>
+      <BuildUserContext.Provider value={{ profileHandleSubmit, profileHandleUpdate, requestHandleSubmit, requestHandleUpdate, profileHandleRetrieval }}>
         {children}
       </BuildUserContext.Provider>
     </BunkmatesContext.Provider>

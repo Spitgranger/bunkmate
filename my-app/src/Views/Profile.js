@@ -98,11 +98,6 @@ const Profile = () => {
   }, [mapProfileCard])
 
 
-  const handleEditProfile = () => {
-    setMessage("Edit Your Profile")
-    setMode("profileMakerForm")
-    setIsOpen(true)
-  }
 
   //function to handle fetching the profile data from back end
   const handleLoad = async () => {
@@ -115,6 +110,11 @@ const Profile = () => {
     handleLoad().then((profile) => setProfile(profile.data)).finally(() => setLoading(null))
   }, []);
 
+  const handleEditProfile = () => {
+    setMessage("Edit Your Profile")
+    setMode("profileMakerForm")
+    setIsOpen(true)
+  }
 
 
 
