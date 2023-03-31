@@ -45,4 +45,16 @@ export const getProfiles = async (req, res) => {
         console.log(error)
     }
 }
+//controller to delete profile
+export const deleteProfile = async (req, res) => {
+    try {
+        const profileUserId = req.userId;
+        const existingProfile = await Profile.find({ user: profileUserId });
+        await Profile.deleteOne({ _id: existingProfile._id });
+        res.status(204).json(`Profile for user ${profileUserId} deleted successfully`);
+    } catch (error) {
+        console.log(error)
+        res.json(error).status(500);
+    }
+}
 
