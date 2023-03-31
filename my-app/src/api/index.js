@@ -24,6 +24,7 @@ export const signUp = (formData) => API.post('/users/signup', formData)
 
 export const createProfile = (formData) => API.post('/profile', formData);
 export const getProfile = () => API.get('/profile');
+//endpoint to delete profile
 export const deleteProfile = () => API.delete(`/profile`)
 
 //need to seperate each profile id by . when using getProfiles endpoint 
