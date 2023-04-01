@@ -32,6 +32,7 @@ import { BuildUserContext } from './GlobalStateManagement/UserContext';
 
 
 
+
 //styles
 const backButtonStyles = {
   display: 'flex',
@@ -71,6 +72,7 @@ function ProfileMakerForm({ forwardButton, backwardButton }) {
 
 
   const handleSubmit = (values) => {
+    //rerenders the useEffect which fetches info from backend in profile.js
     //if user already has a profile then update it else submit it
     if (userProfile) {
       profileHandleUpdate(values).then(() => console.log('sf'))

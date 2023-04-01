@@ -23,9 +23,10 @@ import { useNavigate } from "react-router";
 import CustomMapMarker from './Components/MapMarker'
 import Avatar from "@mui/material/Avatar";
 import { IoReturnUpBack } from "react-icons/io5";
-import { BsPaperclip, BsPinFill } from "react-icons/bs";
+import { BsPaperclip, BsPinFill, BsThreeDotsVertical } from "react-icons/bs";
 import { TbSocial, TbSocialOff } from "react-icons/tb";
-import { AiFillLike } from 'react-icons/ai'
+import { AiFillLike, AiFillEye } from 'react-icons/ai'
+import { GoComment } from 'react-icons/go'
 
 
 
@@ -70,10 +71,10 @@ const Bunkmates = () => {
 
     const socialFeedStyles = {
         FeedContainer: {
-            borderRadius: '10px', backgroundColor: 'black', position: 'absolute', top: '160px', zIndex: '6', width: '400px', right: 'left 60px', display: 'flex', alignItems: 'flex-start',
+            borderRadius: '10px', backgroundColor: 'black', position: 'absolute', top: '130px', zIndex: '6', width: '400px', right: 'left 60px', display: 'flex', alignItems: 'flex-start',
         },
         Posts: {
-            overflowY: 'scroll', borderRadius: '10px', flexDirection: 'column', position: 'absolute', height: '75vh', top: '215px', zIndex: '5', width: '400px', left: '0px'
+            overflowY: 'scroll', borderRadius: '10px', flexDirection: 'column', position: 'absolute', height: '75vh', top: '210px', zIndex: '5', width: '400px', left: '0px'
         }
     }
     const id = JSON.parse(localStorage.getItem("profile"))?.result?._id;
@@ -253,35 +254,46 @@ const Bunkmates = () => {
 
         const PostCard = ({ post }) => {
             return <Card style={{ marginTop: '10px', flexDirection: 'column', borderRadius: '10px', backgroundColor: 'black', zIndex: '5', width: '400px', right: '75px', display: 'flex', alignItems: 'flex-start', overflowY: 'hidden' }}>
-                <header style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
-                    <Avatar sx={{ width: '50px', height: '50px', margin: '20px', display: 'flex', justifyContent: 'flex-start' }} src={post.avatar} className="Avatar" alt={`View ${post.firstName}'s profile`} />
-                    <div className="bunkmates__post-card__key-info">
-                        <Typography style={{ color: 'white' }} variant="body1" color="text.primary">{post.firstName}</Typography>
-                        {/* post.location should be an optional field*/}
-                        {post.location
-                            ? <Tooltip arrow title={`View ${post.firstName}'s active request`}>
-                                <Typography style={{ color: 'grey' }} variant="body2" color="text.secondary">{post.location}</Typography>
-                            </Tooltip>
-                            : null}
+                <header style={{ display: 'flex', width: '100%', justifyContent: 'space-between', paddingRight: '20px' }}>
+                    <div className="bunkmates__header__subsection" style={{ display: 'flex', alignItems: 'center', width: '100%', }}>
+                        <Avatar sx={{ width: '50px', height: '50px', margin: '20px', display: 'flex', justifyContent: 'flex-start' }} src={post.avatar} className="Avatar" alt={`View ${post.firstName}'s profile`} />
+                        <div className="bunkmates__post-card__key-info">
+                            <Typography style={{ color: 'white' }} variant="body1" color="text.primary">{post.firstName}</Typography>
+                            {/* post.location should be an optional field*/}
+                            {post.location
+                                ? <Tooltip arrow title={`View ${post.firstName}'s active request`}>
+                                    <Typography style={{ color: 'grey' }} variant="body2" color="text.secondary">{post.location}</Typography>
+                                </Tooltip>
+                                : null}
+                        </div>
                     </div>
+                    <IconButton><BsThreeDotsVertical style={{ color: 'white', fontSize: '20px' }} /></IconButton>
                 </header>
                 <CardContent>
                     <Typography style={{ padding: '0px 8px 0px 8px', color: 'white' }} variant="body2" color="text.primary">{post.postMessage}</Typography>
                 </CardContent>
                 {/* Not working because the array is pushing an empty object to the end of the array*/}
                 <CardMedia component={"img"} image={post?.images ? post?.images[0] : ""} sx={{ padding: '15px', borderRadius: '20px' }} />
-                <div style={{ width: '100%', display: 'flex', padding: '0px 20px 0px 20px', justifyContent: 'space-around' }}>
-                    <IconButton><AiFillLike style={{ color: 'white' }} /></IconButton>
-                    <div style={{ padding: '10px' }}>
-                        <Divider orientation="vertical" sx={{ width: '100%', backgroundColor: 'grey', color: "white", height: '100%' }} />
+                <div style={{ width: '100%', display: 'flex', padding: '0px 20px 10px 20px', justifyContent: 'space-between' }}>
+                    <div style={{ display: 'flex', flexDirection: 'row' }}>
+                        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
+                            <IconButton><AiFillLike style={{ color: 'white', fontSize: '20px' }} /></IconButton>
+                            <Typography color="text.primary" variant="h6" sx={{ color: 'white' }}>0</Typography>
+                        </div>
+                        <div style={{ padding: '10px' }}>
+                            <Divider orientation="vertical" sx={{ width: '100%', backgroundColor: 'grey', color: "white", height: '100%' }} />
+                        </div>
+                        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
+                            <IconButton><GoComment style={{ color: 'white', fontSize: '20px' }} /></IconButton>
+                            <Typography color="text.primary" variant="h6" sx={{ color: 'white' }}>0</Typography>
+                        </div>
                     </div>
+                    {
+                        /* 
+
                     <TextField maxRows={2}
                         size="small"
                         multiline
-                        /*
-                        onChange={}
-                        value={}
-                        */
                         sx={{
                             "& .MuiInputBase-root": {
                                 color: 'white',
@@ -294,10 +306,11 @@ const Bunkmates = () => {
 
                         }
                         } placeholder="Comment..." />
-                    <div style={{ margin: '10px' }}>
-                        <Divider orientation="vertical" sx={{ backgroundColor: 'grey', color: "white", height: '100%' }} />
-                    </div>
-                    <IconButton><BsPinFill style={{ color: 'white' }} /></IconButton>
+
+
+                        */
+                    }
+                    <IconButton><BsPinFill style={{ color: 'white', fontSize: '20px' }} /></IconButton>
                 </div>
 
 
@@ -344,11 +357,14 @@ const Bunkmates = () => {
                 const profile = userOwnData.profile[0]
                 const userId = user.result._id
                 //hardcoded for now
-                const likes = 3
+                const likesCount = 3
+                const commentsCount = 5
+                const dateCreated = "06-09-2022"
+                const dateEdited = ""
                 const comments = { 'UserId245': "I love the idea", 'UserId244': "I'm in the area" }
 
                 //hardcoded for now (images was removed)
-                const newPost = { firstName, avatar, location, location, images, postMessage, postId, profile, userId, likes, comments }
+                const newPost = { dateCreated, dateEdited, firstName, avatar, location, location, images, postMessage, postId, profile, userId, likesCount, comments, commentsCount }
                 setStatePostArray([newPost, ...statePostArray])
             }
 

@@ -105,8 +105,8 @@ const Profile = () => {
     return profile;
   };
 
-  //get data from backend when the component first loads works
   useEffect(() => {
+    //get data from backend when the component first loads works
     handleLoad().then((profile) => setProfile(profile.data)).finally(() => setLoading(null))
   }, []);
 
@@ -225,7 +225,7 @@ const Profile = () => {
                   </Tooltip>
                   :
                   <Tooltip arrow title="Save this profile">
-                    <IconButton onClick={() => setBookmark(!bookmark)}>
+                    <IconButton onClick={(e) => setBookmark(!bookmark)}>
                       <BsBookmarks />
                     </IconButton>
                   </Tooltip>
