@@ -27,7 +27,6 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { Box } from '@mui/system';
 
 
-
 /*
 '@media (max-width: 1000px)':{
   backgroundColor: 'red'
@@ -73,6 +72,7 @@ const Profile = () => {
   const [userRequest, setUserRequest] = useState(null)
   const { setCenter } = useContext(BunkmatesContext)
   const [loading, setLoading] = useState(<CircularProgress size={50} />)
+  const { rerender, setRerender } = useContext(BunkmatesContext)
 
 
   //query localStorage whenever mapProfileCard changes (primarily used to update the state of the "view request button")
@@ -108,7 +108,7 @@ const Profile = () => {
   //get data from backend when the component first loads works
   useEffect(() => {
     handleLoad().then((profile) => setProfile(profile.data)).finally(() => setLoading(null))
-  }, []);
+  }, [rerender]);
 
   const handleEditProfile = () => {
     setMessage("Edit Your Profile")
