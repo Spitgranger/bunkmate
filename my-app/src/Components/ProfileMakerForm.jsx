@@ -23,14 +23,12 @@ import {
   PhoneValidationContext,
   AboutValidationContext,
   EmailValidationContext,
-
 } from './GlobalStateManagement/ValidationContext';
 
 import { SignInContext } from './GlobalStateManagement/SignInContext';
 import { formatContext } from './GlobalStateManagement/FormatContext';
 import { BuildUserContext } from './GlobalStateManagement/UserContext';
-
-
+import { BunkmatesContext } from './GlobalStateManagement/UserContext';
 
 
 //styles
@@ -53,6 +51,7 @@ function ProfileMakerForm({ forwardButton, backwardButton }) {
   const { calculateAge, capitalizedName } = useContext(formatContext)
   const { profileHandleSubmit, profileHandleUpdate } = useContext(BuildUserContext)
   const [userProfile, setUserProfile] = useState("")
+  const { rerender, setRerender } = useContext(BunkmatesContext)
 
   //function to handle fetching the profile data from back end
   const handleProfile = async () => {
@@ -75,9 +74,9 @@ function ProfileMakerForm({ forwardButton, backwardButton }) {
     //rerenders the useEffect which fetches info from backend in profile.js
     //if user already has a profile then update it else submit it
     if (userProfile) {
-      profileHandleUpdate(values).then(() => console.log('sf'))
+      profileHandleUpdate(values).then(() => { setRerender(!rerender) })
     } else {
-      profileHandleSubmit(values)
+      profileHandleSubmit(values).then(() => { setRerender(!rerender) })
     }
   }
 
