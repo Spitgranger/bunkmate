@@ -273,22 +273,29 @@ const Bunkmates = () => {
             //user's comments for a post
             const [userComment, setUserComment] = useState("")
 
-            const [otherProfiles, setOtherProfiles] = useState("")
+            const [otherProfiles, setOtherProfiles] = useState('')
 
             const { profileHandleRetrieval } = useContext(BuildUserContext)
 
             const handleGetProfiles = async () => {
                 const arrayUserId = allComments.map((comment) => { return (comment[0]) })
+                console.log(arrayUserId)
                 const profiles = await profileHandleRetrieval(arrayUserId.join('.'))
+                console.log(profiles)
                 return profiles
             }
+
+            console.log(allComments)
+
             useEffect(() => {
                 //store all the retrieved profiles in state
-                handleGetProfiles().then((profiles) => setOtherProfiles(profiles.data))
-            }, [allComments])
+                handleGetProfiles().then((profiles) => setOtherProfiles([...profiles.data]))
+            }, [userComment, allComments])
+            console.log(allComments)
 
             const mappedComments = () => {
                 //when the user comments
+                console.log(otherProfiles)
                 if (otherProfiles) {
                     return (
                         allComments.map((comment) => {
@@ -315,9 +322,14 @@ const Bunkmates = () => {
                             }
                         })
                     )
-                } else {
+                } else if (!allComments) {
+                    return ""
+                }
+                else {
                     return (
-                        <CircularProgress size={35} />
+                        <div style={{ display: "flex", width: '100%', justifyContent: 'center' }}>
+                            <CircularProgress size={35} />
+                        </div>
                     )
                 }
             }
@@ -468,7 +480,9 @@ const Bunkmates = () => {
                     {/* TODO view more button increases the number comments extracted from array by 5, with default number of comments shown being 5*/}
                     {showComments
 
-                        ? <CommentSection post={post} user={user} />
+                        ? <div style={{ width: '100%' }}>
+                            <CommentSection post={post} user={user} />
+                        </div>
                         : null
                     }
                 </Card >
@@ -522,7 +536,7 @@ const Bunkmates = () => {
                 //hardcoded for now
                 const dateEdited = ""
                 //hardcoded for now
-                const comments = []
+                const comments = ""
 
                 //hardcoded for now (images was removed)
                 const newPost = { dateCreated, firstName, avatar, location, images, postMessage, postId, profile, userId, likes, dateEdited, comments }
