@@ -22,11 +22,11 @@ import { RxTriangleDown } from "react-icons/rx"
 import { useNavigate } from "react-router";
 import CustomMapMarker from './Components/MapMarker'
 import Avatar from "@mui/material/Avatar";
-import { IoReturnUpBack } from "react-icons/io5";
+import { IoReturnUpBack, IoSend } from "react-icons/io5";
 import { BsPaperclip, BsPinFill, BsThreeDotsVertical } from "react-icons/bs";
 import { TbSocial, TbSocialOff } from "react-icons/tb";
 import { AiFillLike, AiFillEye } from 'react-icons/ai'
-import { GoComment } from 'react-icons/go'
+import { MdComment, MdCommentsDisabled } from 'react-icons/md'
 
 
 
@@ -69,12 +69,13 @@ export function MapProfile({ request }) {
 
 const Bunkmates = () => {
 
+
     const socialFeedStyles = {
         FeedContainer: {
-            borderRadius: '10px', backgroundColor: 'black', position: 'absolute', top: '130px', zIndex: '6', width: '400px', right: 'left 60px', display: 'flex', alignItems: 'flex-start',
+            borderRadius: '10px', backgroundColor: 'black', position: 'absolute', top: '130px', zIndex: '6', width: '400px', left: '10px', display: 'flex', alignItems: 'flex-start',
         },
         Posts: {
-            overflowY: 'scroll', borderRadius: '10px', flexDirection: 'column', position: 'absolute', height: '75vh', top: '210px', zIndex: '5', width: '400px', left: '0px'
+            overflowY: 'scroll', borderRadius: '10px', flexDirection: 'column', position: 'absolute', height: '75vh', top: '210px', zIndex: '5', width: '400px', left: '10px'
         }
     }
     const id = JSON.parse(localStorage.getItem("profile"))?.result?._id;
@@ -204,7 +205,6 @@ const Bunkmates = () => {
 
     function SocialFeed() {
         const id = useId()
-        //used to store values of posts
 
         const postArray =
             [
@@ -213,11 +213,13 @@ const Bunkmates = () => {
                     avatar: "https://media.istockphoto.com/id/1311084168/photo/overjoyed-pretty-asian-woman-look-at-camera-with-sincere-laughter.jpg?b=1&s=170667a&w=0&k=20&c=XPuGhP9YyCWquTGT-tUFk6TwI-HZfOr1jNkehKQ17g0=",
                     location: 'New York City',
                     postMessage: 'Looking for roommates in chicago illinois. Budget is 2600 dollars if anyone is interested please message and we will talk',
-                    images: ["https://www.nobroker.in/blog/wp-content/uploads/2022/07/Modern-Bedroom-Design.jpg", "image2"],
                     postId: `post-id-${id}`,
+                    dateCreated: "06-09-2022",
+                    dateEdited: '',
                     userId: `user-id-${id}`,
-                    likes: 3,
-                    comments: { 'UserId245': "I love the idea", 'UserId244': "I'm in the area" },
+                    likes: 2,
+                    profile: "Christina's profile",
+                    comments: [['642129a8955f2f754577b53c', "I'm in the area"]],
                 },
                 {
                     firstName: 'Jesse',
@@ -227,95 +229,250 @@ const Bunkmates = () => {
                     images: ["https://www.nobroker.in/blog/wp-content/uploads/2022/07/Modern-Bedroom-Design.jpg", "image2"],
                     postId: `post-id-${id}`,
                     userId: `user-id-${id}`,
-                    likes: 3,
-                    comments: { 'UserId245': "I love the idea", 'UserId244': "I'm in the area" },
+                    dateCreated: "02-09-2023",
+                    dateEdited: '02-10-2023',
+                    profile: "Jesse's profile",
+                    likes: 15,
+                    comments: [['64208036e62251477f44fcad', "I love the idea"], ['64207d361f5cb6b3f8dbcf75', "I'm in the area"], ['64207d361f5cb6b3f8dbcf75', "Message me, money isn't an issue"]],
                 },
                 {
-                    //modifiable field
-                    firstName: 'Lauren',
+                    //obtained from querying user profile using userID
                     avatar: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSezGOpQSyxqLHMV2AHhvfpW0ajntgm42b0Ew&usqp=CAU',
+                    //obtained from querying user profile using userID
+                    firstName: 'Lauren',
+                    //obtained from querying user profile using userID
+                    profile: "Lauren's profile",
+                    //obtained from request
                     location: 'Chicago',
-                    //modifiable field
+                    //rest of data is obtained from the post
                     postMessage: 'Hey everyone, I need some roommates now please. Im actively searching so please message me if youre interested, this is the place I had in mind: ',
-                    //modifiable field
                     images: ["https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Balcony_View.jpg/1200px-Balcony_View.jpg", "image2"],
                     postId: `post-id-${id}`,
                     userId: `user-id-${id}`,
+                    dateCreated: "06-02-2022",
+                    //this field is only filled if a post has been edited
+                    dateEdited: '',
                     //modifiable field
-                    likes: 3,
+                    likes: 324,
                     //modifiable field
-                    comments: { 'UserId245': "I love the idea", 'UserId244': "I'm in the area" },
+                    //each item within the array stores the userId as a key, and the values are the comments
+                    comments: [['64208a374215d240a8515fda', "The view is fantastic!!! I actually live nearby, message me if you're interested so we can meet up and grab some coffee!"], ['64208036e62251477f44fcad', "I love the idea"], ['64207d361f5cb6b3f8dbcf75', "I'm in the area"]],
                 },
             ]
 
         const [statePostArray, setStatePostArray] = useState(postArray)
-        //post / enter onclick onkeydown will gather the user's firstname, avatar, request (not sure yet), uploaded image 
-        //append likes and comments to the userobject, plus postID
 
-        const PostCard = ({ post }) => {
-            return <Card style={{ marginTop: '10px', flexDirection: 'column', borderRadius: '10px', backgroundColor: 'black', zIndex: '5', width: '400px', right: '75px', display: 'flex', alignItems: 'flex-start', overflowY: 'hidden' }}>
-                <header style={{ display: 'flex', width: '100%', justifyContent: 'space-between', paddingRight: '20px' }}>
-                    <div className="bunkmates__header__subsection" style={{ display: 'flex', alignItems: 'center', width: '100%', }}>
-                        <Avatar sx={{ width: '50px', height: '50px', margin: '20px', display: 'flex', justifyContent: 'flex-start' }} src={post.avatar} className="Avatar" alt={`View ${post.firstName}'s profile`} />
-                        <div className="bunkmates__post-card__key-info">
-                            <Typography style={{ color: 'white' }} variant="body1" color="text.primary">{post.firstName}</Typography>
-                            {/* post.location should be an optional field*/}
-                            {post.location
-                                ? <Tooltip arrow title={`View ${post.firstName}'s active request`}>
-                                    <Typography style={{ color: 'grey' }} variant="body2" color="text.secondary">{post.location}</Typography>
+
+
+
+
+        const CommentSection = ({ post, user }) => {
+
+            //all comments for a post stored in an array
+            const [allComments, setAllComments] = useState(post.comments)
+            //user's comments for a post
+            const [userComment, setUserComment] = useState("")
+
+            const [otherProfiles, setOtherProfiles] = useState("")
+
+            const { profileHandleRetrieval } = useContext(BuildUserContext)
+
+            const handleGetProfiles = async () => {
+                const arrayUserId = allComments.map((comment) => { return (comment[0]) })
+                const profiles = await profileHandleRetrieval(arrayUserId.join('.'))
+                return profiles
+            }
+            useEffect(() => {
+                //store all the retrieved profiles in state
+                handleGetProfiles().then((profiles) => setOtherProfiles(profiles.data))
+            }, [allComments])
+
+            const mappedComments = () => {
+                //when the user comments
+                if (otherProfiles) {
+                    return (
+                        allComments.map((comment) => {
+                            console.log(otherProfiles, comment[0])
+                            const searchValue = comment[0];
+                            const selectedItem = otherProfiles.find(item => {
+                                console.log(item.user, searchValue);
+                                return item.user === searchValue
+                            });
+                            if (selectedItem) {
+                                return (
+                                    <div style={{ boxSizing: 'content-box', display: 'flex', alignItems: 'flex-start', height: '100%' }}>
+                                        <CardMedia sx={{ display: 'flex', alignItems: 'flex-start', height: '100%', padding: '10px' }}>
+                                            <CardActionArea>
+                                                <Avatar sx={{ width: '35px', height: '35px', margin: '10px' }} src={selectedItem.picture} className="Avatar" alt={`${selectedItem.firstName}'s Profile picture`} />
+                                            </CardActionArea>
+                                        </CardMedia>
+                                        <CardContent sx={{ paddingBottom: "15px !important", paddingTop: '15px !important', padding: '0px', display: 'flex', flexDirection: 'column', }}>
+                                            <Typography variant="body1" color="text.primary" sx={{ color: 'white', width: '100%' }}> {selectedItem.firstName}</Typography >
+                                            <Typography variant="body2" color="text.secondary" sx={{ fontSize: "15px", color: '#b3b3b3', width: '100%' }}>{comment[1]}</Typography >
+                                        </CardContent>
+                                    </div >
+                                )
+                            }
+                        })
+                    )
+                } else {
+                    return (
+                        <CircularProgress size={35} />
+                    )
+                }
+            }
+
+
+            const handleUserComment = (e) => {
+                //event handler for storing user's own comment
+                setUserComment(e.target.value)
+            }
+
+
+            const handleCommentsChange = () => {
+                //event handler for replying to comments
+                setAllComments([[user.result._id, userComment], ...allComments])
+            }
+
+            console.log('rerendered')
+
+            return (
+                <>
+                    <div style={{ padding: '20px 20px 10px 20px', width: '100%' }}>
+                        <Divider light sx={{ backgroundColor: 'grey', width: '100%', }} />
+                    </div>
+                    <CardContent sx={{ padding: '0px 20px 0px 20px', width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                        <Avatar sx={{ width: '35px', height: '35px', margin: '10px' }} src={userOwnData?.profile[0]?.picture} className="Avatar" alt={`${userOwnData?.profile[0]?.firstName}'s Profile picture`} />
+                        {/* onChange event listener Causes entire component to rerender. Could cause problems later on */}
+                        <TextField maxRows={2}
+                            size="small"
+                            variant="standard"
+                            value={userComment}
+                            onChange={handleUserComment}
+                            fullWidth
+                            multiline
+                            InputProps={{
+                                endAdornment:
+                                    <IconButton onClick={handleCommentsChange} sx={{ width: '30px', height: '30px', color: 'white' }}>
+                                        <IoSend style={{ cursor: 'pointer' }} size={15} position="end" />
+                                    </IconButton>
+                            }}
+                            sx={{
+                                "& .MuiInputBase-root": {
+                                    color: 'white',
+                                    backgroundColor: 'black',
+                                },
+                                margin: '0px',
+                                padding: '0px'
+                            }}
+                            placeholder="Post a comment..." />
+                    </CardContent>
+                    <CardContent>
+                        {mappedComments(post, allComments)}
+                    </CardContent>
+                    <button style={{ display: 'flex', marginTop: '10px', alignItems: 'center', justifyContent: "center", padding: '10px', width: '100%', height: '30px', backgroundColor: 'black', border: '1px solid grey', borderRadius: '10px' }}>
+                        <Typography variant="body1" color="text.secondary" sx={{ color: 'white' }}>View More Comments</Typography>
+                    </button>
+                </>
+            )
+        }
+
+        const PostCard = ({ post, CommentSection, statePostArray, setStatePostArray }) => {
+
+            const user = JSON.parse(localStorage.getItem('profile'))
+            //store likes for a post
+            const [likes, setLikes] = useState(post.likes)
+            //controls like, unlike state
+            const [liked, setLiked] = useState(true)
+            //controls pinned, unpinned state
+            const [pinned, setPinned] = useState(false)
+            //controls show comments, hide comments state
+            const [showComments, setShowComments] = useState(false)
+
+            const handleLikeChange = () => {
+                //event handler for when the user likes a post
+                setLiked(!liked)
+                if (liked) {
+                    setLikes(post.likes + 1)
+                } else if (!liked) {
+                    setLikes(likes - 1)
+                }
+            }
+
+            const handleShowComments = () => {
+                //event handler for showing comments on click
+                setShowComments(!showComments)
+            }
+
+            const handlePinChange = () => {
+                //event hanlder for pinning a post
+                setPinned(!pinned)
+                //TODO logic to move pin to beginning of array
+            }
+
+
+
+            return (
+                <Card style={{ marginTop: '10px', flexDirection: 'column', borderRadius: '10px', backgroundColor: 'black', zIndex: '5', width: '400px', right: '75px', display: 'flex', alignItems: 'flex-start', overflowY: 'hidden' }}>
+                    <header style={{ display: 'flex', width: '100%', justifyContent: 'space-between', paddingRight: '20px' }}>
+                        <div className="bunkmates__header__subsection" style={{ display: 'flex', alignItems: 'center', width: '100%', }}>
+                            <Avatar sx={{ width: '50px', height: '50px', margin: '20px', }} src={post.avatar} className="Avatar" alt={`View ${post.firstName}'s profile`} />
+                            <div className="bunkmates__post-card__key-info">
+                                <Typography sx={{ color: 'white' }} variant="body1" color="text.primary">{post.firstName}</Typography>
+                                {/* post.location should be an optional field*/}
+                                {post.location
+                                    ?
+                                    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                                        <Tooltip arrow title={`View ${post.firstName}'s active request`}>
+                                            <Typography sx={{ color: '#9b9b9b' }} variant="body2" color="text.secondary">{post.location}</Typography>
+                                        </Tooltip>
+                                    </div>
+                                    : null}
+                            </div>
+                        </div>
+                        {user?.result?._id === post.userId
+                            ?
+                            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                <Tooltip arrow title="View more actions">
+                                    <IconButton style={{ color: 'white' }}><BsThreeDotsVertical style={{ color: 'white', fontSize: '20px' }} /></IconButton>
                                 </Tooltip>
-                                : null}
-                        </div>
-                    </div>
-                    <IconButton><BsThreeDotsVertical style={{ color: 'white', fontSize: '20px' }} /></IconButton>
-                </header>
-                <CardContent>
-                    <Typography style={{ padding: '0px 8px 0px 8px', color: 'white' }} variant="body2" color="text.primary">{post.postMessage}</Typography>
-                </CardContent>
-                {/* Not working because the array is pushing an empty object to the end of the array*/}
-                <CardMedia component={"img"} image={post?.images ? post?.images[0] : ""} sx={{ padding: '15px', borderRadius: '20px' }} />
-                <div style={{ width: '100%', display: 'flex', padding: '0px 20px 10px 20px', justifyContent: 'space-between' }}>
-                    <div style={{ display: 'flex', flexDirection: 'row' }}>
-                        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
-                            <IconButton><AiFillLike style={{ color: 'white', fontSize: '20px' }} /></IconButton>
-                            <Typography color="text.primary" variant="h6" sx={{ color: 'white' }}>0</Typography>
-                        </div>
-                        <div style={{ padding: '10px' }}>
-                            <Divider orientation="vertical" sx={{ width: '100%', backgroundColor: 'grey', color: "white", height: '100%' }} />
-                        </div>
-                        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
-                            <IconButton><GoComment style={{ color: 'white', fontSize: '20px' }} /></IconButton>
-                            <Typography color="text.primary" variant="h6" sx={{ color: 'white' }}>0</Typography>
-                        </div>
-                    </div>
-                    {
-                        /* 
-
-                    <TextField maxRows={2}
-                        size="small"
-                        multiline
-                        sx={{
-                            "& .MuiInputBase-root": {
-                                color: 'white',
-                                backgroundColor: 'black',
-                            },
-                            margin: '0px',
-                            padding: '0px'
-
-
-
+                            </div>
+                            : null
                         }
-                        } placeholder="Comment..." />
+                    </header>
+                    <CardContent sx={{ padding: "0px 10px 10px 10px" }}>
+                        <Typography sx={{ fontSize: "15px", padding: '0px 8px 0px 8px', color: 'white' }} variant="body2" color="text.primary">{post.postMessage}</Typography>
+                    </CardContent>
+                    {/* Not working because the array is pushing an empty object to the end of the array*/}
+                    {post.images ? <CardMedia component={"img"} image={post.images[0]} sx={{ padding: '15px', borderRadius: '20px' }} /> : null}
+                    <div style={{ width: '100%', display: 'flex', padding: '0px 20px 10px 20px', justifyContent: 'space-between' }}>
+                        <div style={{ display: 'flex', flexDirection: 'row' }}>
+                            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
+                                <IconButton style={{ color: 'white' }} onClick={handleLikeChange}><AiFillLike style={{ color: liked ? 'white' : 'aqua', fontSize: '20px' }} /></IconButton>
+                                <Typography color="text.primary" variant="h6" sx={{ color: 'white', fontSize: "16px" }}>{likes}</Typography>
+                            </div>
+                            <div style={{ padding: '10px' }}>
+                                <Divider orientation="vertical" sx={{ width: '100%', backgroundColor: 'grey', color: "white", height: '100%' }} />
+                            </div>
+                            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
+                                <IconButton style={{ color: "white" }} onClick={handleShowComments}>
+                                    {showComments
+                                        ? <MdCommentsDisabled style={{ color: 'white', fontSize: '20px' }} />
+                                        : <MdComment style={{ color: 'white', fontSize: '20px' }} />}
+                                </IconButton>
+                                <Typography color="text.primary" variant="h6" sx={{ color: 'white', fontSize: '16px' }}>{post.comments.length}</Typography>
+                            </div>
+                        </div>
+                        <IconButton style={{ color: 'white' }} onClick={handlePinChange}><BsPinFill style={{ color: pinned ? 'aqua' : 'white', fontSize: '20px' }} /></IconButton>
+                    </div>
+                    {/* TODO view more button increases the number comments extracted from array by 5, with default number of comments shown being 5*/}
+                    {showComments
 
-
-                        */
+                        ? <CommentSection post={post} user={user} />
+                        : null
                     }
-                    <IconButton><BsPinFill style={{ color: 'white', fontSize: '20px' }} /></IconButton>
-                </div>
-
-
-
-            </Card >
+                </Card >
+            )
         }
         console.log(userProfile)
 
@@ -323,7 +480,6 @@ const Bunkmates = () => {
 
             const [fieldValues, setFieldvalues] = useState("");
             const [uploadedFiles, setUploadedFiles] = useState("");
-            const user = JSON.parse(localStorage.getItem('profile'))
 
 
             const handleFileUpload = (e) => {
@@ -346,25 +502,30 @@ const Bunkmates = () => {
 
 
             const handlePost = () => {
-                console.log(userProfile)
+                const user = JSON.parse(localStorage.getItem('profile'))
+
                 const firstName = userProfile.data.firstName
                 const avatar = userProfile.data.picture
+                //if the user hasn't made a request then the address won't be shown
                 const location = userOwnData?.address ?? "";
+                //hardcoded for now
+                const dateCreated = "06-09-2022"
                 const postMessage = fieldValues
                 //hardcoded for now
                 const images = [uploadedFiles, ""]
                 const postId = `post-id-${id}`
+                const userId = user?.result?._id
                 const profile = userOwnData.profile[0]
-                const userId = user.result._id
+
                 //hardcoded for now
-                const likesCount = 3
-                const commentsCount = 5
-                const dateCreated = "06-09-2022"
+                const likes = 0
+                //hardcoded for now
                 const dateEdited = ""
-                const comments = { 'UserId245': "I love the idea", 'UserId244': "I'm in the area" }
+                //hardcoded for now
+                const comments = []
 
                 //hardcoded for now (images was removed)
-                const newPost = { dateCreated, dateEdited, firstName, avatar, location, location, images, postMessage, postId, profile, userId, likesCount, comments, commentsCount }
+                const newPost = { dateCreated, firstName, avatar, location, images, postMessage, postId, profile, userId, likes, dateEdited, comments }
                 setStatePostArray([newPost, ...statePostArray])
             }
 
@@ -372,11 +533,12 @@ const Bunkmates = () => {
                 <Card style={socialFeedStyles.FeedContainer}>
                     <div style={{ width: '100%', display: 'flex', alignItems: 'center', flexDirection: 'row' }}>
                         <div>
-                            <Avatar sx={{ width: '50px', height: '50px', margin: '10px 20px 10px 20px', display: 'flex', justifyContent: 'flex-start' }} src={userOwnData?.profile[0]?.picture} className="Avatar" alt={`${userOwnData?.profile[0]?.firstName}'s Profile picture`} />
+                            <Avatar sx={{ width: '50px', height: '50px', margin: '10px 20px 10px 20px' }} src={userOwnData?.profile[0]?.picture} className="Avatar" alt={`${userOwnData?.profile[0]?.firstName}'s Profile picture`} />
                         </div>
                         <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                             <TextField maxRows={2}
                                 multiline
+                                variant="standard"
                                 onChange={(e) => setFieldvalues(e.target.value)}
                                 value={fieldValues}
                                 InputProps={{
@@ -412,7 +574,7 @@ const Bunkmates = () => {
 
                 <CreatePost statePostArray={statePostArray} setStatePostArray={setStatePostArray} />
                 <div style={socialFeedStyles.Posts}>
-                    {statePostArray.map((post) => { return <PostCard post={post} /> })}
+                    {statePostArray.map((post) => { return <PostCard post={post} CommentSection={CommentSection} /> })}
                 </div>
 
             </>
@@ -527,7 +689,14 @@ const Bunkmates = () => {
                                     position={{ lat: request?.idealLocation[0], lng: request?.idealLocation[1] }}
                                     styles={{ background: 'DarkGray', color: 'white' }}
                                     mapPaneName={OVERLAY_MOUSE_TARGET}>
-                                    {<CustomMapMarker request={request} handleClick={handleProfileClickAsync} index={index} icon={<RxTriangleDown style={{ right: '15px', color: '#2ACDDD', position: 'absolute', top: '35px', fontSize: '30px' }} />} />}
+                                    {<CustomMapMarker
+                                        request={request}
+                                        handleClick={handleProfileClickAsync}
+                                        index={index}
+                                        icon={
+                                            <RxTriangleDown
+                                                style={{ right: '15px', color: '#2ACDDD', position: 'absolute', top: '35px', fontSize: '30px' }}
+                                            />} />}
                                     {/*<button style={{ padding: "2px" }} onClick={e => { handleProfileClick(e, index); e.stopPropagation()}}>{`$${profile.rentBudget}`}</button>*/}
                                 </OverlayViewF >)
                         })}
