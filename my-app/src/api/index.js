@@ -36,6 +36,9 @@ export const getListings = () => API.get("/posts");
 export const getChats = (chatData) => API.get(`/chats/${chatData.id}/${chatData.token}`);
 export const updateRequest = (id, formData) => API.patch(`/request/${id}`, formData);
 
+//endpoints for social media
+export const makePost = (formData) => API.post('/media', formData);
+
 
 
 

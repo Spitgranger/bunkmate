@@ -7,6 +7,7 @@ import userRoutes from './routes/users.js';
 import profileRoutes from './routes/profile.js';
 import requestRoutes from './routes/request.js';
 import chatRoutes from "./routes/chat.js";
+import mediaPostRoutes from "./routes/mediaPost.js"
 const app = express();
 dotenv.config();
 
@@ -17,6 +18,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/profile', profileRoutes);
 app.use('/api/request', requestRoutes);
 app.use('/api/chats', chatRoutes);
+app.use('/api/media', mediaPostRoutes);
 
 
 const PORT = process.env.PORT || 5000;

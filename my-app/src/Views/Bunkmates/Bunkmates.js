@@ -6,7 +6,7 @@ import { Input, Button, Grid, Paper, TextField, Card, Typography, CardActionArea
 import "./Styles/Bunkmates.css"
 import PlacesAutocomplete from './Components/PlacesAutocomplete';
 import mapCardData from "../../data/mapCardData"
-import { deleteRequest, getProfile } from '../../api'
+import { deleteRequest, getProfile, makePost } from '../../api'
 import SocialFeed from "../../Components/SocialFeed";
 import CreateRequestForm from './Components/CreateRequestForm'
 import { ActionButton } from "../../Components/Utils/Form";
@@ -528,6 +528,14 @@ const Bunkmates = () => {
                 const newPost = { dateCreated, firstName, avatar, location, images, postMessage, postId, profile, userId, likes, dateEdited, comments }
                 setStatePostArray([newPost, ...statePostArray])
             }
+            const handleSavePost = async () => {
+                const newPost = {
+                    comments: [],
+                    images: [uploadedFiles],
+                    message: fieldValues,
+                }
+                await makePost(newPost);
+            }
 
             return (
                 <Card style={socialFeedStyles.FeedContainer}>
@@ -561,7 +569,7 @@ const Bunkmates = () => {
                                     }
                                 }
                                 } placeholder="Talk with others..." />
-                            <ActionButton onClick={(e) => { handlePost(); e.stopPropagation() }} bgColor="black" hoverBgColor="rgb(67, 78, 91)" hoverColor="aqua" title="Post" borderRadius='7%' color="white" height='55px' />
+                            <ActionButton onClick={(e) => { handleSavePost(); e.stopPropagation() }} bgColor="black" hoverBgColor="rgb(67, 78, 91)" hoverColor="aqua" title="Post" borderRadius='7%' color="white" height='55px' />
                         </div>
                     </div>
                 </Card >
