@@ -39,6 +39,7 @@ export const updateRequest = (id, formData) => API.patch(`/request/${id}`, formD
 //endpoints for social media
 export const makePost = (formData) => API.post('/media', formData);
 export const getPost = () => API.get('/media');
+export const makeComment = (data, id) => API.patch(`/media/${id}/commentPost`, data);
 
 
 

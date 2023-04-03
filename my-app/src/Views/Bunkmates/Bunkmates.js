@@ -6,7 +6,7 @@ import { Input, Button, Grid, Paper, TextField, Card, Typography, CardActionArea
 import "./Styles/Bunkmates.css"
 import PlacesAutocomplete from './Components/PlacesAutocomplete';
 import mapCardData from "../../data/mapCardData"
-import { deleteRequest, getPost, getProfile, makePost } from '../../api'
+import { deleteRequest, getPost, getProfile, makeComment, makePost } from '../../api'
 import SocialFeed from "../../Components/SocialFeed";
 import CreateRequestForm from './Components/CreateRequestForm'
 import { ActionButton } from "../../Components/Utils/Form";
@@ -263,7 +263,7 @@ const Bunkmates = () => {
         const [statePostArray, setStatePostArray] = useState([])
         //on the initial render of the socials component, get the social post from the backend
         useEffect(() => {
-            getPost().then((result) => setStatePostArray(result.data));
+            getPost().then((result) => setStatePostArray(result.data.reverse()));
         }, [])
 
 
@@ -345,9 +345,10 @@ const Bunkmates = () => {
             }
 
 
-            const handleCommentsChange = () => {
+            const handleCommentsChange = async () => {
                 //event handler for replying to comments
-                setAllComments([[user.result._id, userComment], ...allComments])
+                await makeComment({ message: userComment }, post._id);
+                //setAllComments([[user.result._id, userComment], ...allComments])
             }
 
             console.log('rerendered')

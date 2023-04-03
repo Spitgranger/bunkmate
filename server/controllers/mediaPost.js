@@ -7,6 +7,7 @@ export const makePost = async (req, res) => {
         const reqData = req.body
         const userId = req.userId;
         const existingPost = await mediaPost.find({ "userId": userId });
+        //this is wrong lol. fix 
         if (existingPost === []) {
             res.status(409).json("User already has a post")
             return;
@@ -43,4 +44,14 @@ export const getPost = async (req, res) => {
             }
         }
     ]).then((result) => { res.status(200).json(result) })
+}
+
+export const makeComment = async (req, res) => {
+    const { id: _id } = req.params;
+    const user = req.userId
+    const data = req.body
+    const post = await mediaPost.findById(_id)
+    post.comments.push([user, data.message]);
+    const updatedPost = await mediaPost.findByIdAndUpdate(_id, post, { new: true });
+    res.json(updatedPost)
 }

@@ -7,11 +7,11 @@ const mediaPostSchema = mongoose.Schema({
     },
     images: {
         type: [String],
-        required: true,
+        required: false,
     },
     message: {
         type: String,
-        required: true,
+        required: false,
     },
     userId: {
         type: mongoose.Schema.Types.ObjectId,
@@ -23,7 +23,7 @@ const mediaPostSchema = mongoose.Schema({
         required: true
     },
     comments: {
-        type: [String],
+        type: [[String]],
         required: true,
     }
 })
