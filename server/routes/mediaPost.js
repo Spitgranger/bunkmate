@@ -5,6 +5,6 @@ import { makePost, getPost } from '../controllers/mediaPost.js';
 const router = express.Router();
 
 router.post('/', auth, makePost);
-router.get('/', getPost);
+router.get('/', auth, getPost);
 
 export default router;

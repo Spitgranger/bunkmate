@@ -6,7 +6,7 @@ import { Input, Button, Grid, Paper, TextField, Card, Typography, CardActionArea
 import "./Styles/Bunkmates.css"
 import PlacesAutocomplete from './Components/PlacesAutocomplete';
 import mapCardData from "../../data/mapCardData"
-import { deleteRequest, getProfile, makePost } from '../../api'
+import { deleteRequest, getPost, getProfile, makePost } from '../../api'
 import SocialFeed from "../../Components/SocialFeed";
 import CreateRequestForm from './Components/CreateRequestForm'
 import { ActionButton } from "../../Components/Utils/Form";
@@ -260,7 +260,11 @@ const Bunkmates = () => {
                 },
             ]
 
-        const [statePostArray, setStatePostArray] = useState(postArray)
+        const [statePostArray, setStatePostArray] = useState([])
+        //on the initial render of the socials component, get the social post from the backend
+        useEffect(() => {
+            getPost().then((result) => setStatePostArray(result.data));
+        }, [])
 
 
 
@@ -422,21 +426,21 @@ const Bunkmates = () => {
                 //TODO logic to move pin to beginning of array
             }
 
-
+            console.log(post.request[0].address)
 
             return (
                 <Card style={{ marginTop: '10px', flexDirection: 'column', borderRadius: '10px', backgroundColor: 'black', zIndex: '5', width: '400px', right: '75px', display: 'flex', alignItems: 'flex-start', overflowY: 'hidden' }}>
                     <header style={{ display: 'flex', width: '100%', justifyContent: 'space-between', paddingRight: '20px' }}>
                         <div className="bunkmates__header__subsection" style={{ display: 'flex', alignItems: 'center', width: '100%', }}>
-                            <Avatar sx={{ width: '50px', height: '50px', margin: '20px', }} src={post.avatar} className="Avatar" alt={`View ${post.firstName}'s profile`} />
+                            <Avatar sx={{ width: '50px', height: '50px', margin: '20px', }} src={post.profile[0].picture} className="Avatar" alt={`View ${post.profile[0].firstName}'s profile`} />
                             <div className="bunkmates__post-card__key-info">
-                                <Typography sx={{ color: 'white' }} variant="body1" color="text.primary">{post.firstName}</Typography>
+                                <Typography sx={{ color: 'white' }} variant="body1" color="text.primary">{post.profile[0].firstName}</Typography>
                                 {/* post.location should be an optional field*/}
-                                {post.location
+                                {post.request[0].address
                                     ?
                                     <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                                        <Tooltip arrow title={`View ${post.firstName}'s active request`}>
-                                            <Typography sx={{ color: '#9b9b9b' }} variant="body2" color="text.secondary">{post.location}</Typography>
+                                        <Tooltip arrow title={`View ${post.profile[0].firstName}'s active request`}>
+                                            <Typography sx={{ color: '#9b9b9b' }} variant="body2" color="text.secondary">{post.request[0].address}</Typography>
                                         </Tooltip>
                                     </div>
                                     : null}
@@ -453,7 +457,7 @@ const Bunkmates = () => {
                         }
                     </header>
                     <CardContent sx={{ padding: "0px 10px 10px 10px" }}>
-                        <Typography sx={{ fontSize: "15px", padding: '0px 8px 0px 8px', color: 'white' }} variant="body2" color="text.primary">{post.postMessage}</Typography>
+                        <Typography sx={{ fontSize: "15px", padding: '0px 8px 0px 8px', color: 'white' }} variant="body2" color="text.primary">{post.message}</Typography>
                     </CardContent>
                     {/* Not working because the array is pushing an empty object to the end of the array*/}
                     {post.images ? <CardMedia component={"img"} image={post.images[0]} sx={{ padding: '15px', borderRadius: '20px' }} /> : null}

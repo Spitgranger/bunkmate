@@ -22,6 +22,25 @@ export const makePost = async (req, res) => {
 }
 
 export const getPost = async (req, res) => {
-    const existingPosts = await mediaPost.find({});
-    res.status(200).json(existingPosts)
+    //const existingPosts = await mediaPost.find({});
+    mediaPost.aggregate([
+        {
+            $lookup:
+            {
+                from: "profiles",
+                localField: "userId",
+                foreignField: "user",
+                as: "profile",
+            }
+        },
+        {
+            $lookup:
+            {
+                from: "requests",
+                localField: "userId",
+                foreignField: "user",
+                as: "request",
+            }
+        }
+    ]).then((result) => { res.status(200).json(result) })
 }
