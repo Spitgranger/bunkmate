@@ -204,6 +204,7 @@ const Bunkmates = () => {
 
 
     function SocialFeed() {
+        console.log('sdfsdfdsf')
         const id = useId()
 
         const postArray =
