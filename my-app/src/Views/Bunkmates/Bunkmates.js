@@ -267,9 +267,6 @@ const Bunkmates = () => {
         }, [])
 
 
-
-
-
         const CommentSection = ({ post, user }) => {
 
             //all comments for a post stored in an array
@@ -278,6 +275,8 @@ const Bunkmates = () => {
             const [userComment, setUserComment] = useState("")
 
             const [commentSectionProfiles, setCommentSectionProfiles] = useState('')
+
+            const [render, setRender] = useState(false);
 
             const { profileHandleRetrieval } = useContext(BuildUserContext)
 
@@ -348,10 +347,9 @@ const Bunkmates = () => {
             const handleCommentsChange = async () => {
                 //event handler for replying to comments
                 await makeComment({ message: userComment }, post._id);
+                setRender(!render);
                 //setAllComments([[user.result._id, userComment], ...allComments])
             }
-
-            console.log('rerendered')
 
             return (
                 <>
@@ -427,7 +425,7 @@ const Bunkmates = () => {
                 //TODO logic to move pin to beginning of array
             }
 
-            console.log(post.request[0].address)
+            console.log(post?.request[0]?.address)
 
             return (
                 <Card style={{ marginTop: '10px', flexDirection: 'column', borderRadius: '10px', backgroundColor: 'black', zIndex: '5', width: '400px', right: '75px', display: 'flex', alignItems: 'flex-start', overflowY: 'hidden' }}>
@@ -437,11 +435,11 @@ const Bunkmates = () => {
                             <div className="bunkmates__post-card__key-info">
                                 <Typography sx={{ color: 'white' }} variant="body1" color="text.primary">{post.profile[0].firstName}</Typography>
                                 {/* post.location should be an optional field*/}
-                                {post.request[0].address
+                                {post?.request[0]?.address
                                     ?
                                     <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                                         <Tooltip arrow title={`View ${post.profile[0].firstName}'s active request`}>
-                                            <Typography sx={{ color: '#9b9b9b' }} variant="body2" color="text.secondary">{post.request[0].address}</Typography>
+                                            <Typography sx={{ color: '#9b9b9b' }} variant="body2" color="text.secondary">{post?.request[0]?.address}</Typography>
                                         </Tooltip>
                                     </div>
                                     : null}
