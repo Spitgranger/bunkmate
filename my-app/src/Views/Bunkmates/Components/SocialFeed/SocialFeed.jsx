@@ -9,8 +9,21 @@ import { ActionButton } from "../../../../Components/Utils/Form";
 import CreatePost from "./CreatePost";
 import PostCard from "./PostCard";
 
-export function SocialFeed({ userOwnData, userProfile }) {
 
+/*
+---Hierarchical Structure---
+
+socialFeed.jsx
+    |
+    -->CreatePost.jsx
+    |
+    -->PostCard.jsx
+        |
+        -->CommentSection.jsx
+*/
+
+export function SocialFeed({ userOwnData, userProfile }) {
+    console.log('social feed rerender')
     const socialFeedStyles = {
         FeedContainer: {
             borderRadius: '10px', backgroundColor: 'black', position: 'absolute', top: '130px', zIndex: '6', width: '400px', left: '10px', display: 'flex', alignItems: 'flex-start',
@@ -27,9 +40,15 @@ export function SocialFeed({ userOwnData, userProfile }) {
     return (
         <>
 
-            <CreatePost statePostArray={statePostArray} setStatePostArray={setStatePostArray} userOwnData={userOwnData} userProfile={userProfile} socialFeedStyles={socialFeedStyles} />
+            <CreatePost
+                statePostArray={statePostArray}
+                setStatePostArray={setStatePostArray}
+                userOwnData={userOwnData}
+                userProfile={userProfile}
+                socialFeedStyles={socialFeedStyles} />
+
             <div style={socialFeedStyles.Posts}>
-                {statePostArray.map((post) => { return <PostCard post={post} /> })}
+                {statePostArray.map((post) => { return <PostCard post={post} userOwnData={userOwnData} userProfile={userProfile} /> })}
             </div>
 
         </>

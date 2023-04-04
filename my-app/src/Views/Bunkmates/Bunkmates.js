@@ -22,7 +22,6 @@ import { useNavigate } from "react-router";
 import CustomMapMarker from './Components/Map/MapMarker'
 import { TbSocial, TbSocialOff } from "react-icons/tb";
 import { SocialFeed } from "./Components/SocialFeed/SocialFeed";
-import { IoReturnUpBack } from "react-icons/io5";
 
 
 
@@ -124,7 +123,6 @@ const Bunkmates = () => {
         setUserOwnData(userRequests.get(id));
     }, [rerender])
 
-    console.log(userProfile)
 
     useEffect(() => {
         //add same dependencies as the above

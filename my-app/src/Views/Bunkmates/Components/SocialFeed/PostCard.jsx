@@ -15,13 +15,12 @@ import { BsPinFill, BsThreeDotsVertical } from "react-icons/bs";
 import { MdComment, MdCommentsDisabled } from 'react-icons/md'
 
 
-export default function PostCard({ post, userOwnData, }) {
+export default function PostCard({ post, userOwnData, userProfile }) {
+
+    console.log(post)
 
     //all comments for a post stored in an array
     const [allComments, setAllComments] = useState(post.comments)
-    //the user's own comment
-    const [userComment, setUserComment] = useState("")
-
     const user = JSON.parse(localStorage.getItem('profile'))
     //store likes for a post
     const [likes, setLikes] = useState(post.likes)
@@ -115,11 +114,10 @@ export default function PostCard({ post, userOwnData, }) {
                     <CommentSection
                         post={post}
                         user={user}
+                        userOwnData={userOwnData}
+                        userProfile={userProfile}
                         allComments={allComments}
                         setAllComments={setAllComments}
-                        userOwnData={userOwnData}
-                        userComment={userComment}
-                        setUserComment={setUserComment}
                     />
                 </div>
                 : null

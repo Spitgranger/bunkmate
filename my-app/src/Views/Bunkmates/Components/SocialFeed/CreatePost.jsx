@@ -44,7 +44,6 @@ export default function CreatePost({ statePostArray, setStatePostArray, userOwnD
         };
     }
 
-
     const handlePost = () => {
         const user = JSON.parse(localStorage.getItem('profile'))
 
@@ -73,11 +72,12 @@ export default function CreatePost({ statePostArray, setStatePostArray, userOwnD
         setStatePostArray([newPost, ...statePostArray])
     }
 
+
     return (
         <Card style={socialFeedStyles.FeedContainer}>
             <div style={{ width: '100%', display: 'flex', alignItems: 'center', flexDirection: 'row' }}>
                 <div>
-                    <Avatar sx={{ width: '50px', height: '50px', margin: '10px 20px 10px 20px' }} src={userOwnData?.profile[0]?.picture} className="Avatar" alt={`${userOwnData?.profile[0]?.firstName}'s Profile picture`} />
+                    <Avatar sx={{ width: '50px', height: '50px', margin: '10px 20px 10px 20px' }} src={userOwnData?.profile[0]?.picture ?? userProfile?.data?.picture} className="Avatar" alt={`${userOwnData?.profile[0]?.firstName}'s Profile picture`} />
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                     <TextField maxRows={2}
@@ -105,7 +105,7 @@ export default function CreatePost({ statePostArray, setStatePostArray, userOwnD
                             }
                         }
                         } placeholder="Talk with others..." />
-                    <ActionButton onClick={(e) => { handlePost(); e.stopPropagation() }} bgColor="black" hoverBgColor="rgb(67, 78, 91)" hoverColor="aqua" title="Post" borderRadius='7%' color="white" height='55px' />
+                    <ActionButton onClick={(e) => { handlePost(); console.log('ssfsdfds'); e.stopPropagation() }} bgColor="black" hoverBgColor="rgb(67, 78, 91)" hoverColor="aqua" title="Post" borderRadius='7%' color="white" height='55px' />
                 </div>
             </div>
         </Card >
