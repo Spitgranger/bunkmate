@@ -425,7 +425,6 @@ const Bunkmates = () => {
                 //TODO logic to move pin to beginning of array
             }
 
-            console.log(post?.request[0]?.address)
 
             return (
                 <Card style={{ marginTop: '10px', flexDirection: 'column', borderRadius: '10px', backgroundColor: 'black', zIndex: '5', width: '400px', right: '75px', display: 'flex', alignItems: 'flex-start', overflowY: 'hidden' }}>
