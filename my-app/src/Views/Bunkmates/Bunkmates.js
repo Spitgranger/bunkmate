@@ -274,7 +274,7 @@ const Bunkmates = () => {
             //user's comments for a post
             const [userComment, setUserComment] = useState("")
 
-            const [otherProfiles, setOtherProfiles] = useState('')
+            const [commentSectionProfiles, setCommentSectionProfiles] = useState('')
 
             const { profileHandleRetrieval } = useContext(BuildUserContext)
 
@@ -290,19 +290,19 @@ const Bunkmates = () => {
 
             useEffect(() => {
                 //store all the retrieved profiles in state
-                handleGetProfiles().then((profiles) => setOtherProfiles([...profiles.data]))
+                handleGetProfiles().then((profiles) => setCommentSectionProfiles([...profiles.data]))
             }, [userComment, allComments])
             console.log(allComments)
 
             const mappedComments = () => {
                 //when the user comments
-                console.log(otherProfiles)
-                if (otherProfiles) {
+                console.log(commentSectionProfiles)
+                if (commentSectionProfiles) {
                     return (
                         allComments.map((comment) => {
-                            console.log(otherProfiles, comment[0])
+                            console.log(commentSectionProfiles, comment[0])
                             const searchValue = comment[0];
-                            const selectedItem = otherProfiles.find(item => {
+                            const selectedItem = commentSectionProfiles.find(item => {
                                 console.log(item.user, searchValue);
                                 return item.user === searchValue
                             });
