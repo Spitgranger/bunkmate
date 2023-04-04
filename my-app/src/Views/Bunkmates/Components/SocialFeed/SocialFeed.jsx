@@ -36,7 +36,6 @@ export function SocialFeed({ userOwnData, userProfile }) {
     //all posts stored in an array
     const [statePostArray, setStatePostArray] = useState(postArray)
 
-
     return (
         <>
 

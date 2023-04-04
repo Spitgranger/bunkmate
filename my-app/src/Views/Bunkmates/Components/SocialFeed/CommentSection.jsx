@@ -101,7 +101,7 @@ const ReplyCommentTextField = ({ allComments, setAllComments, user }) => {
 
 //All User comments in a post
 const MappedComments = ({ allComments, commentSectionProfiles }) => {
-    if (commentSectionProfiles) {
+    if (commentSectionProfiles && allComments) {
         return (
             allComments.map((comment) => {
                 console.log(commentSectionProfiles, comment[0])

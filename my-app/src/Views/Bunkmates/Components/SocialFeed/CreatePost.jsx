@@ -23,7 +23,8 @@ export default function CreatePost({ statePostArray, setStatePostArray, userOwnD
 
     const [fieldValues, setFieldvalues] = useState("");
     const [uploadedFiles, setUploadedFiles] = useState("");
-    const id = JSON.parse(localStorage.getItem("profile"))?.result?._id;
+    const user = JSON.parse(localStorage.getItem('profile'))
+    const id = user?.result?.id
 
 
     const handleFileUpload = (e) => {
@@ -44,8 +45,7 @@ export default function CreatePost({ statePostArray, setStatePostArray, userOwnD
         };
     }
 
-    const handlePost = () => {
-        const user = JSON.parse(localStorage.getItem('profile'))
+    const handlePost = ({ id, user, userProfile, uploadedFiles, userOwnData }) => {
 
         const firstName = userProfile.data.firstName
         const avatar = userProfile.data.picture
@@ -105,7 +105,7 @@ export default function CreatePost({ statePostArray, setStatePostArray, userOwnD
                             }
                         }
                         } placeholder="Talk with others..." />
-                    <ActionButton onClick={(e) => { handlePost(); console.log('ssfsdfds'); e.stopPropagation() }} bgColor="black" hoverBgColor="rgb(67, 78, 91)" hoverColor="aqua" title="Post" borderRadius='7%' color="white" height='55px' />
+                    <ActionButton onClick={() => handlePost({ id, user, userProfile, uploadedFiles, userOwnData })} bgColor="black" hoverBgColor="rgb(67, 78, 91)" hoverColor="aqua" title="Post" borderRadius='7%' color="white" height='55px' />
                 </div>
             </div>
         </Card >

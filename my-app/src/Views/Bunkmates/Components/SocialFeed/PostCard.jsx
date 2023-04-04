@@ -1,5 +1,5 @@
 import CommentSection from "./CommentSection";
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
     Card,
     Typography,
@@ -16,8 +16,6 @@ import { MdComment, MdCommentsDisabled } from 'react-icons/md'
 
 
 export default function PostCard({ post, userOwnData, userProfile }) {
-
-    console.log(post)
 
     //all comments for a post stored in an array
     const [allComments, setAllComments] = useState(post.comments)
@@ -40,6 +38,13 @@ export default function PostCard({ post, userOwnData, userProfile }) {
             setLikes(likes - 1)
         }
     }
+
+    //initialization of likes and comments count
+    useEffect(() => {
+        setLikes(post.likes)
+        setAllComments(post.comments)
+    }, [post])
+
 
     const handleShowComments = () => {
         //event handler for showing comments on click
@@ -90,7 +95,7 @@ export default function PostCard({ post, userOwnData, userProfile }) {
             <div style={{ width: '100%', display: 'flex', padding: '0px 20px 10px 20px', justifyContent: 'space-between' }}>
                 <div style={{ display: 'flex', flexDirection: 'row' }}>
                     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
-                        <IconButton style={{ color: 'white' }} onClick={handleLikeChange}><AiFillLike style={{ color: liked ? 'white' : 'aqua', fontSize: '20px' }} /></IconButton>
+                        <IconButton style={{ color: 'white' }} ><AiFillLike onClick={handleLikeChange} style={{ color: liked ? 'white' : 'aqua', fontSize: '20px' }} /></IconButton>
                         <Typography color="text.primary" variant="h6" sx={{ color: 'white', fontSize: "16px" }}>{likes}</Typography>
                     </div>
                     <div style={{ padding: '10px' }}>
