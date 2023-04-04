@@ -1,5 +1,5 @@
 import { createContext, useState } from "react";
-import CreateRequestForm from "../../Views/Bunkmates/Components/CreateRequestForm";
+import CreateRequestForm from "../../Views/Bunkmates/Components/Map/CreateRequestForm";
 import { createRequest, createProfile, updateRequest, deleteRequest, getProfiles, deleteProfile } from "../../api";
 import { useNavigate } from "react-router";
 

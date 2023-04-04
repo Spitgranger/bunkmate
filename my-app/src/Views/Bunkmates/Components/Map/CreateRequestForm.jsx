@@ -1,6 +1,6 @@
 //
 import { useState, useReducer, useContext, useEffect, useRef, useId, memo } from 'react'
-import { deleteRequest, getChats, getProfile } from '../../../api';
+import { deleteRequest, getChats, getProfile } from '../../../../api';
 import {
   FormSection,
   ActionButton,
@@ -9,26 +9,26 @@ import {
   DatePicker,
   DropDownMenu,
 
-} from '../../../Components/Utils/Form';
+} from '../../../../Components/Utils/Form';
 import { Typography, bottomNavigationActionClasses, setRef } from '@mui/material'
 import Slider from '@mui/material/Slider'
 import Box from '@mui/material/Box';
-import { savedListingsData, identityMenuItems } from '../../../data/SavedListingsData';
+import { savedListingsData, identityMenuItems } from '../../../../data/SavedListingsData';
 import { SavedListingItem } from './SavedListingItem';
-import { FormMultiLineInput } from '../../../Components/Utils/Form';
-import { AboutValidationContext } from '../../../Components/GlobalStateManagement/ValidationContext';
-import { MultipleSelectCheckmarks } from '../../../Components/Utils/Form';
+import { FormMultiLineInput } from '../../../../Components/Utils/Form';
+import { AboutValidationContext } from '../../../../Components/GlobalStateManagement/ValidationContext';
+import { MultipleSelectCheckmarks } from '../../../../Components/Utils/Form';
 import IconButton from '@mui/material/IconButton';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import { IoIosArrowBack } from 'react-icons/io'
-import { BuildUserContext } from '../../../Components/GlobalStateManagement/UserContext';
-import { chatClientContext } from '../../../Components/GlobalStateManagement/MessageContext';
-import { UploadFile } from '../../../Components/Utils/Form';
+import { BuildUserContext } from '../../../../Components/GlobalStateManagement/UserContext';
+import { chatClientContext } from '../../../../Components/GlobalStateManagement/MessageContext';
+import { UploadFile } from '../../../../Components/Utils/Form';
 import { MdUpload } from 'react-icons/md';
-import profiles from "../../../data/mapCardData"
-import { getListings } from '../../../api';
+import profiles from "../../../../data/mapCardData"
+import { getListings } from '../../../../api';
 import { useNavigate } from 'react-router';
-import { BunkmatesContext } from '../../../Components/GlobalStateManagement/UserContext';
+import { BunkmatesContext } from '../../../../Components/GlobalStateManagement/UserContext';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 
 //TODO

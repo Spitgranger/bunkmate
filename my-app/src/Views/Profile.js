@@ -7,7 +7,7 @@ import { ActionButton } from '../Components/Utils/Form';
 import Divider from '@mui/material/Divider'
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import Tooltip from "@mui/material/Tooltip";
-import { SavedListingItem } from './Bunkmates/Components/SavedListingItem';
+import { SavedListingItem } from './Bunkmates/Components/Map/SavedListingItem';
 import { HiMapPin } from 'react-icons/hi2'
 import './Profile.css'
 import { GoogleMap, useJsApiLoader, MarkerF, OverlayView, OVERLAY_MOUSE_TARGET, OVERLAY_LAYER, InfoWindow } from "@react-google-maps/api";

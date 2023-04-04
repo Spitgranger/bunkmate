@@ -7,8 +7,8 @@ import { GoogleMap, useJsApiLoader, MarkerF, OverlayView, OVERLAY_MOUSE_TARGET, 
 import { Button, Grid, Paper, TextField, Card, Typography, CardActionArea, CardMedia, CardContent, CardActions, IconButton } from "@mui/material/"
 import { TbMessages, TbMessagesOff } from 'react-icons/tb';
 import { useRef, useState, useContext } from 'react';
-import '../Styles/GroupMapCard.css'
-import { ActionButton } from '../../../Components/Utils/Form';
+import '../../Styles/GroupMapCard.css'
+import { ActionButton } from '../../../../Components/Utils/Form';
 
 
 function NestedMapCard({ profile }) {

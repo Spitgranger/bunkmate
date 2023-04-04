@@ -4,24 +4,24 @@ import { GoogleMap, useJsApiLoader, MarkerF, OverlayView, OVERLAY_MOUSE_TARGET, 
 import mapStyles from '../../data/mapStyles.json'
 import { Card, Typography, IconButton, Tooltip, CircularProgress, } from "@mui/material/"
 import "./Styles/Bunkmates.css"
-import PlacesAutocomplete from './Components/PlacesAutocomplete';
+import PlacesAutocomplete from "./Components/Map/PlacesAutocomplete";
 import mapCardData from "../../data/mapCardData"
 import { deleteRequest, getProfile } from '../../api'
-import CreateRequestForm from './Components/CreateRequestForm'
+import CreateRequestForm from './Components/Map/CreateRequestForm'
 import { ActionButton } from "../../Components/Utils/Form";
 import { chatClientContext } from "../../Components/GlobalStateManagement/MessageContext";
 import { SignInContext } from "../../Components/GlobalStateManagement/SignInContext";
-import SingleMapCard from './Components/SingleMapCard'
-import GroupMapCard from "./Components/GroupMapCard"
+import SingleMapCard from "./Components/Map/SingleMapCard"
+import GroupMapCard from "./Components/Map/GroupMapCard"
 import { getRequests } from "../../api";
 import { InfoWindow } from "@react-google-maps/api";
 import { borderRadius } from "@mui/system";
 import { BuildUserContext, BunkmatesContext } from "../../Components/GlobalStateManagement/UserContext";
 import { RxTriangleDown } from "react-icons/rx"
 import { useNavigate } from "react-router";
-import CustomMapMarker from './Components/MapMarker'
+import CustomMapMarker from './Components/Map/MapMarker'
 import { TbSocial, TbSocialOff } from "react-icons/tb";
-import { SocialFeed } from "./Components/SocialFeed";
+import { SocialFeed } from "./Components/SocialFeed/SocialFeed";
 import { IoReturnUpBack } from "react-icons/io5";
 
 
