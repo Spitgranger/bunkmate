@@ -104,7 +104,7 @@ const Bunkmates = () => {
     const [userOwnData, setUserOwnData] = useState("");
     //used to rerender useEffect in Bunkmates.js containing async functions that gets data from backend
     const { rerender, setRerender } = useContext(BunkmatesContext)
-    const [displaySocial, setDisplaySocial] = useState(true)
+    const [displaySocial, setDisplaySocial] = useState(false)
 
     useEffect(() => {
         //get profile data from backend 
