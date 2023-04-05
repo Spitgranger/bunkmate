@@ -1,5 +1,5 @@
 import { postArray } from "../../Data/PostArrayData"
-import { useState, useEffect, useContext } from 'react'
+import { useState, useEffect, useContext, memo } from 'react'
 import { BuildUserContext } from "../../../../Components/GlobalStateManagement/UserContext"
 import { IoSend } from "react-icons/io5";
 import { BsPaperclip, BsPinFill, BsThreeDotsVertical } from "react-icons/bs";
@@ -20,8 +20,8 @@ socialFeed.jsx
         |
         -->CommentSection.jsx
 */
-
-export function SocialFeed({ userOwnData, userProfile }) {
+//memoized to prevent parent component from rerendering child component
+export const SocialFeed = memo(({ userOwnData, userProfile }) => {
     console.log('social feed rerender')
     const Posts = {
         overflowY: 'scroll',
@@ -48,9 +48,17 @@ export function SocialFeed({ userOwnData, userProfile }) {
             />
 
             <div style={Posts}>
-                {statePostArray.map((post) => { return <PostCard post={post} userOwnData={userOwnData} userProfile={userProfile} /> })}
+                {statePostArray.map((post) => {
+                    return (
+                        <PostCard
+                            post={post}
+                            userOwnData={userOwnData}
+                            userProfile={userProfile}
+                        />
+                    )
+                })}
             </div>
 
         </>
     )
-}
+})

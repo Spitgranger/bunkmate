@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef, useState, memo, useMemo, useId } from "react";
+import React, { useContext, useEffect, useRef, useState, memo, useMemo, useId } from "react";
 import Navbar from "../../Components/Navbar";
 import { GoogleMap, useJsApiLoader, MarkerF, OverlayView, OVERLAY_MOUSE_TARGET, OverlayViewF, MapContext } from "@react-google-maps/api";
 import mapStyles from '../../data/mapStyles.json'
@@ -20,10 +20,6 @@ import CustomMapMarker from './Components/Map/MapMarker'
 import { TbSocial, TbSocialOff } from "react-icons/tb";
 import { SocialFeed } from "./Components/SocialFeed/SocialFeed";
 import { useGetUserData } from "./Hooks/useGetUserData";
-
-
-
-
 
 export function MapProfile({ request }) {
 
@@ -65,15 +61,38 @@ const Bunkmates = () => {
     const { localStorageData } = useContext(chatClientContext)
     //sign in context for when the user tries to create a bunkmate request without an account
     const { setIsOpen, setMessage, setMode } = useContext(SignInContext)
+    const { center, setCenter, mapProfileCard, setMapProfileCard, rerender, setRerender } = useContext(BunkmatesContext)
     //display, nodisplay of the create request page
     const [showRequest, setShowRequest] = useState(false);
     const [selected, setSelected] = useState(null);
-    const { center, setCenter, mapProfileCard, setMapProfileCard, rerender, setRerender } = useContext(BunkmatesContext)
     //if the user has a profile then set profileChecker to true else false
     //used to rerender useEffect in Bunkmates.js containing async functions that gets data from backend
     const [displaySocial, setDisplaySocial] = useState(true)
 
     const { loading, listingArray, userRequests, userProfile, userOwnData, isLoaded } = useGetUserData()
+
+    /*
+    const [universities, setUniversities] = useState([]);
+
+    useEffect(() => {
+
+        const service = new window.google.maps.places.PlacesService(mapRef.current);
+        const request = {
+            location: new window.google.maps.LatLng(37.7749, -122.4194), // San Francisco coordinates
+            radius: '5000',
+            type: ['university'],
+        };
+        console.log(request)
+        service.nearbySearch(request, (results, status) => {
+            if (status === window.google.maps.places.PlacesServiceStatus.OK) {
+                setUniversities(results);
+            }
+        });
+    }, [window]);
+
+    const mapRef = React.createRef();
+    console.log(universities)
+    */
 
 
     //THIS LOGIC ONLY WORKS FOR NOW PROBABLY CHANGE THE API ENDPOINT TO RETURN A BOOLEAN THAT IS EITHER TRUE OR FALSE
@@ -176,6 +195,9 @@ const Bunkmates = () => {
     };
     */
 
+
+
+
     return (
         <div>
             <div className="content-container">
@@ -212,6 +234,16 @@ const Bunkmates = () => {
 
                             }
                         </section>
+                        {/*
+                        {universities.map((university) => (
+                            <Marker
+                                key={university.id}
+                                lat={university.geometry.location.lat()}
+                                lng={university.geometry.location.lng()}
+                                text={university.name}
+                            />
+                        ))}
+                        */}
                         {displaySocial ? <SocialFeed userOwnData={userOwnData} userProfile={userProfile} /> : null}
                         {mapProfileCard ? mapProfileCard : null}
                         {selected && <MarkerF position={center} icon={"http://maps.google.com/mapfiles/ms/icons/blue.png"} />}
@@ -259,8 +291,13 @@ const Bunkmates = () => {
 export default Bunkmates;
 
 
+/*
+const Marker = ({ text }) => <div>{text}</div>;
+*/
+
 {/*
-                    return <MarkerF clickable={true} options={{
+                    return 
+                    <MarkerF clickable={true} options={{
                         icon: {
                             url: profile?.picture,
                             size: new window.google.maps.Size(50, 50),
