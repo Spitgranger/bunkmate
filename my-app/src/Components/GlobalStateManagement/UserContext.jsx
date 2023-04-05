@@ -2,6 +2,7 @@ import { createContext, useState } from "react";
 import CreateRequestForm from "../../Views/Bunkmates/Components/Map/CreateRequestForm";
 import { createRequest, createProfile, updateRequest, deleteRequest, getProfiles, deleteProfile } from "../../api";
 import { useNavigate } from "react-router";
+import { useJsApiLoader } from "@react-google-maps/api";
 
 export const BunkmatesContext = createContext(null)
 export const BuildUserContext = createContext(null)
@@ -9,6 +10,7 @@ export const BuildUserContext = createContext(null)
 export default function MapProvider({ children }) {
   const navigate = useNavigate()
 
+  const libraries = ["places"];
   //state management for what profile card is shown on the bunkmates page
   const [mapProfileCard, setMapProfileCard] = useState(null)
 
@@ -16,6 +18,11 @@ export default function MapProvider({ children }) {
   const [center, setCenter] = useState({ lat: 43.642075, lng: -79.385981 });
   //can be used to rerender components
   const [rerender, setRerender] = useState(false)
+  //evaluate whether map page has been loaded or not
+  const { isLoaded, loadError } = useJsApiLoader({
+    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
+    libraries: libraries,
+  })
   const [click, setClick] = useState(false);
 
   const requestHandleSubmit = async (formData) => {
@@ -84,7 +91,7 @@ export default function MapProvider({ children }) {
 
 
   return (
-    <BunkmatesContext.Provider value={{ mapProfileCard, setMapProfileCard, center, setCenter, rerender, setRerender, click, setClick }}>
+    <BunkmatesContext.Provider value={{ isLoaded, loadError, mapProfileCard, setMapProfileCard, center, setCenter, rerender, setRerender, click, setClick }}>
       <BuildUserContext.Provider value={{ profileHandleSubmit, profileHandleUpdate, requestHandleSubmit, requestHandleUpdate, profileHandleRetrieval }}>
         {children}
       </BuildUserContext.Provider>

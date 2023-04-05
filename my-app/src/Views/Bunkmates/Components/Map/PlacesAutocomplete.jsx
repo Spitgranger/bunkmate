@@ -16,6 +16,7 @@ const PlacesAutocomplete = (props) => {
             componentRestrictions: { country: "ca" },
         },
         debounce: 300,
+
     });
 
     const handleInput = (e) => {

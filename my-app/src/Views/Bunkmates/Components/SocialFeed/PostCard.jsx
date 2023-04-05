@@ -29,6 +29,18 @@ export default function PostCard({ post, userOwnData, userProfile }) {
     //controls show comments, hide comments state
     const [showComments, setShowComments] = useState(false)
 
+    const postStyles = {
+        postContainer: { marginTop: '10px', flexDirection: 'column', borderRadius: '10px', backgroundColor: 'black', zIndex: '5', width: '400px', right: '75px', display: 'flex', alignItems: 'flex-start', overflowY: 'hidden' },
+        postHeader: { display: 'flex', width: '100%', justifyContent: 'space-between', paddingRight: '20px' },
+        postHeaderSubSection: { display: 'flex', alignItems: 'center', width: '100%', },
+        userInfo: { display: 'flex', flexDirection: 'row', alignItems: 'center' },
+        socialFeedBack: { width: '100%', display: 'flex', padding: '0px 20px 10px 20px', justifyContent: 'space-between' },
+        likesContainer: { display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'row' },
+        likesButton: { color: liked ? 'white' : 'aqua', fontSize: '20px' },
+        divider: { width: '100%', backgroundColor: 'grey', color: "white", height: '100%' },
+        commentsContainer: { display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }
+    }
+
     const handleLikeChange = () => {
         //event handler for when the user likes a post
         setLiked(!liked)
@@ -60,16 +72,16 @@ export default function PostCard({ post, userOwnData, userProfile }) {
 
 
     return (
-        <Card style={{ marginTop: '10px', flexDirection: 'column', borderRadius: '10px', backgroundColor: 'black', zIndex: '5', width: '400px', right: '75px', display: 'flex', alignItems: 'flex-start', overflowY: 'hidden' }}>
-            <header style={{ display: 'flex', width: '100%', justifyContent: 'space-between', paddingRight: '20px' }}>
-                <div className="bunkmates__header__subsection" style={{ display: 'flex', alignItems: 'center', width: '100%', }}>
+        <Card style={postStyles.postContainer}>
+            <header style={postStyles.postHeader}>
+                <div className="bunkmates__header__subsection" style={postStyles.postHeaderSubSection}>
                     <Avatar sx={{ width: '50px', height: '50px', margin: '20px', }} src={post.avatar} className="Avatar" alt={`View ${post.firstName}'s profile`} />
                     <div className="bunkmates__post-card__key-info">
                         <Typography sx={{ color: 'white' }} variant="body1" color="text.primary">{post.firstName}</Typography>
                         {/* post.location should be an optional field*/}
                         {post.location
                             ?
-                            <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                            <div style={postStyles.userInfo}>
                                 <Tooltip arrow title={`View ${post.firstName}'s active request`}>
                                     <Typography sx={{ color: '#9b9b9b' }} variant="body2" color="text.secondary">{post.location}</Typography>
                                 </Tooltip>
@@ -92,16 +104,16 @@ export default function PostCard({ post, userOwnData, userProfile }) {
             </CardContent>
             {/* Not working because the array is pushing an empty object to the end of the array*/}
             {post.images ? <CardMedia component={"img"} image={post.images[0]} sx={{ padding: '15px', borderRadius: '20px' }} /> : null}
-            <div style={{ width: '100%', display: 'flex', padding: '0px 20px 10px 20px', justifyContent: 'space-between' }}>
+            <div style={postStyles.socialFeedBack}>
                 <div style={{ display: 'flex', flexDirection: 'row' }}>
-                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
-                        <IconButton style={{ color: 'white' }} ><AiFillLike onClick={handleLikeChange} style={{ color: liked ? 'white' : 'aqua', fontSize: '20px' }} /></IconButton>
+                    <div style={postStyles.likesContainer}>
+                        <IconButton style={{ color: 'white' }} ><AiFillLike onClick={handleLikeChange} style={postStyles.likesButton} /></IconButton>
                         <Typography color="text.primary" variant="h6" sx={{ color: 'white', fontSize: "16px" }}>{likes}</Typography>
                     </div>
                     <div style={{ padding: '10px' }}>
-                        <Divider orientation="vertical" sx={{ width: '100%', backgroundColor: 'grey', color: "white", height: '100%' }} />
+                        <Divider orientation="vertical" sx={postStyles.divider} />
                     </div>
-                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
+                    <div style={postStyles.commentsContainer}>
                         <IconButton style={{ color: "white" }} onClick={handleShowComments}>
                             {showComments
                                 ? <MdCommentsDisabled style={{ color: 'white', fontSize: '20px' }} />

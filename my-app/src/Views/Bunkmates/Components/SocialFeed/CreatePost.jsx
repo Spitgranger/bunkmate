@@ -19,7 +19,11 @@ import { ActionButton } from '../../../../Components/Utils/Form';
 
 
 
-export default function CreatePost({ statePostArray, setStatePostArray, userOwnData, userProfile, socialFeedStyles }) {
+export default function CreatePost({ statePostArray, setStatePostArray, userOwnData, userProfile }) {
+
+    const createPostStyles = {
+        borderRadius: '10px', backgroundColor: 'black', position: 'absolute', top: '130px', zIndex: '6', width: '400px', left: '10px', display: 'flex', alignItems: 'flex-start',
+    }
 
     const [fieldValues, setFieldvalues] = useState("");
     const [uploadedFiles, setUploadedFiles] = useState("");
@@ -74,7 +78,7 @@ export default function CreatePost({ statePostArray, setStatePostArray, userOwnD
 
 
     return (
-        <Card style={socialFeedStyles.FeedContainer}>
+        <Card style={createPostStyles}>
             <div style={{ width: '100%', display: 'flex', alignItems: 'center', flexDirection: 'row' }}>
                 <div>
                     <Avatar sx={{ width: '50px', height: '50px', margin: '10px 20px 10px 20px' }} src={userOwnData?.profile[0]?.picture ?? userProfile?.data?.picture} className="Avatar" alt={`${userOwnData?.profile[0]?.firstName}'s Profile picture`} />

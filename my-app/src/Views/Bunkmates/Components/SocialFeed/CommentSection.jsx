@@ -18,7 +18,23 @@ import { BuildUserContext } from '../../../../Components/GlobalStateManagement/U
 
 export default function CommentSection({ user, userOwnData, userProfile, allComments, setAllComments }) {
 
-    console.log('rerendered')
+    const commentSectionStyles = {
+        replyButton: { width: '30px', height: '30px', color: 'white' },
+        replyTextField: {
+            "& .MuiInputBase-root": {
+                color: 'white',
+                backgroundColor: 'black',
+            },
+            margin: '0px',
+            padding: '0px'
+        },
+        commentContainer: { boxSizing: 'content-box', display: 'flex', alignItems: 'flex-start', height: '100%' },
+        avatarContainer: { display: 'flex', alignItems: 'flex-start', height: '100%', padding: '10px' },
+        loadingContainer: { display: "flex", width: '100%', justifyContent: 'center' },
+        commentReplyInfoContainer: { paddingBottom: "15px !important", paddingTop: '15px !important', padding: '0px', display: 'flex', flexDirection: 'column' },
+        firstName: { color: 'white', width: '100%' },
+        commentMessage: { fontSize: "15px", color: '#b3b3b3', width: '100%' }
+    }
 
     //store all comments from a post
     const [commentSectionProfiles, setCommentSectionProfiles] = useState('')
@@ -44,10 +60,10 @@ export default function CommentSection({ user, userOwnData, userProfile, allComm
             <CardContent sx={{ padding: '0px 20px 0px 20px', width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                 <Avatar sx={{ width: '35px', height: '35px', margin: '10px' }} src={userOwnData?.profile[0]?.picture ?? userProfile?.data?.picture} className="Avatar" alt={`${userOwnData?.profile[0]?.firstName}'s Profile picture`} />
                 {/* onChange event listener Causes entire component to rerender. Could cause problems later on */}
-                <ReplyCommentTextField allComments={allComments} setAllComments={setAllComments} user={user} />
+                <ReplyCommentTextField commentSectionStyles={commentSectionStyles} allComments={allComments} setAllComments={setAllComments} user={user} />
             </CardContent>
             <CardContent>
-                <MappedComments allComments={allComments} commentSectionProfiles={commentSectionProfiles} />
+                <MappedComments commentSectionStyles={commentSectionStyles} allComments={allComments} commentSectionProfiles={commentSectionProfiles} />
             </CardContent>
 
             {/* TODO Add functionality to view more button
@@ -59,7 +75,7 @@ export default function CommentSection({ user, userOwnData, userProfile, allComm
     )
 }
 
-const ReplyCommentTextField = ({ allComments, setAllComments, user }) => {
+const ReplyCommentTextField = ({ allComments, setAllComments, user, commentSectionStyles, commentSectionProfiles }) => {
 
     //store the user's own comment
     const [userComment, setUserComment] = useState("")
@@ -83,24 +99,17 @@ const ReplyCommentTextField = ({ allComments, setAllComments, user }) => {
         multiline
         InputProps={{
             endAdornment:
-                <IconButton onClick={handleCommentsChange} sx={{ width: '30px', height: '30px', color: 'white' }}>
+                <IconButton onClick={handleCommentsChange} sx={commentSectionStyles.replyButton}>
                     <IoSend style={{ cursor: 'pointer' }} size={15} position="end" />
                 </IconButton>
         }}
-        sx={{
-            "& .MuiInputBase-root": {
-                color: 'white',
-                backgroundColor: 'black',
-            },
-            margin: '0px',
-            padding: '0px'
-        }}
+        sx={commentSectionStyles.replyTextField}
         placeholder="Post a comment..." />)
 
 }
 
 //All User comments in a post
-const MappedComments = ({ allComments, commentSectionProfiles }) => {
+const MappedComments = ({ allComments, commentSectionStyles, commentSectionProfiles }) => {
     if (commentSectionProfiles && allComments) {
         return (
             allComments.map((comment) => {
@@ -112,15 +121,15 @@ const MappedComments = ({ allComments, commentSectionProfiles }) => {
                 });
                 if (selectedItem) {
                     return (
-                        <div style={{ boxSizing: 'content-box', display: 'flex', alignItems: 'flex-start', height: '100%' }}>
-                            <CardMedia sx={{ display: 'flex', alignItems: 'flex-start', height: '100%', padding: '10px' }}>
+                        <div style={commentSectionStyles.commentContainer}>
+                            <CardMedia sx={commentSectionStyles.avatarContainer}>
                                 <CardActionArea>
-                                    <Avatar sx={{ width: '35px', height: '35px', margin: '10px' }} src={selectedItem.picture} className="Avatar" alt={`${selectedItem.firstName}'s Profile picture`} />
+                                    <Avatar sx={{}} src={selectedItem.picture} className="Avatar" alt={`${selectedItem.firstName}'s Profile picture`} />
                                 </CardActionArea>
                             </CardMedia>
-                            <CardContent sx={{ paddingBottom: "15px !important", paddingTop: '15px !important', padding: '0px', display: 'flex', flexDirection: 'column', }}>
-                                <Typography variant="body1" color="text.primary" sx={{ color: 'white', width: '100%' }}> {selectedItem.firstName}</Typography >
-                                <Typography variant="body2" color="text.secondary" sx={{ fontSize: "15px", color: '#b3b3b3', width: '100%' }}>{comment[1]}</Typography >
+                            <CardContent sx={commentSectionStyles.commentReplyInfoContainer}>
+                                <Typography variant="body1" color="text.primary" sx={commentSectionStyles.firstName}> {selectedItem.firstName}</Typography >
+                                <Typography variant="body2" color="text.secondary" sx={commentSectionStyles.commentMessage}>{comment[1]}</Typography >
                             </CardContent>
                         </div >
                     )
@@ -132,7 +141,7 @@ const MappedComments = ({ allComments, commentSectionProfiles }) => {
     }
     else {
         return (
-            <div style={{ display: "flex", width: '100%', justifyContent: 'center' }}>
+            <div style={commentSectionStyles.loadingContainer}>
                 <CircularProgress size={35} />
             </div>
         )
