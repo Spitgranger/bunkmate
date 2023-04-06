@@ -15,8 +15,9 @@ import { FiEye } from 'react-icons/fi'
 import styles from '../../Styles/GroupMapCard.css'
 import { MdVerified } from 'react-icons/md';
 import { BuildUserContext } from '../../../../Components/GlobalStateManagement/UserContext';
+import keyLocations from './KeyLocations';
 
-function GroupMapCard({ request, BunkmateInfo }) {
+function GroupMapCard({ request, BunkmateInfo, coordinates, setKeyLocationPins, setCenter, setMapProfileCard, setZoom }) {
 
     //subtract 1 because linkchats contains the user's own profile in the array
     const existingBunkmates = request?.linkChats?.length;
@@ -104,8 +105,8 @@ function GroupMapCard({ request, BunkmateInfo }) {
                                                     {messageIcon ? <TbMessagesOff /> : <TbMessages />}
                                                 </IconButton>
                                             </Tooltip>
-                                            <Tooltip title={"Pin This Profile"} arrow placement="left">
-                                                <IconButton onClick={() => { setShowProfile(!showProfile); }} style={{ right: '15px', top: '50px', position: 'absolute', padding: '2px', color: 'white' }}>
+                                            <Tooltip title={"Explore this area"} arrow placement="left">
+                                                <IconButton onClick={() => { keyLocations({ request, coordinates, setKeyLocationPins, setZoom, setCenter, setMapProfileCard }); }} style={{ right: '15px', top: '50px', position: 'absolute', padding: '2px', color: 'white' }}>
                                                     <HiMapPin style={{ color: 'white' }} />
                                                 </IconButton>
                                             </Tooltip>

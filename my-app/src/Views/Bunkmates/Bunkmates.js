@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useRef, useState, memo, useMemo, useId } from "react";
 import Navbar from "../../Components/Navbar";
-import { GoogleMap, useJsApiLoader, MarkerF, OverlayView, OVERLAY_MOUSE_TARGET, OverlayViewF, MapContext } from "@react-google-maps/api";
+import { GoogleMap, useJsApiLoader, MarkerF, OverlayView, OVERLAY_MOUSE_TARGET, OverlayViewF, MapContext, Polyline } from "@react-google-maps/api";
 import mapStyles from '../../data/mapStyles.json'
 import { Card, Typography, IconButton, Tooltip, CircularProgress, } from "@mui/material/"
 import "./Styles/Bunkmates.css"
@@ -20,13 +20,23 @@ import CustomMapMarker from './Components/Map/MapMarker'
 import { TbSocial, TbSocialOff } from "react-icons/tb";
 import { SocialFeed } from "./Components/SocialFeed/SocialFeed";
 import { useGetUserData } from "./Hooks/useGetUserData";
+import { RiMapPin5Fill } from 'react-icons/ri'
+import { FaGraduationCap } from 'react-icons/fa'
 
-export function MapProfile({ request }) {
+export function MapProfile({ request, setKeyLocationPins, setZoom, setCenter, setMapProfileCard }) {
 
     //determines whether to render single or group map card
+
+    //store the coordinates of the map pin that was clicked on
+    const [coordinates, setCoordinates] = useState('')
+
+    useEffect(() => {
+        setCoordinates({ lat: request.idealLocation[0], lng: request.idealLocation[1] })
+    }, [request])
+
+
+
     //as well as set bunkmate info at the bottom of the card
-
-
     function BunkmateInfo(props) {
         return (
             <div style={{ display: 'flex', flexFlow: 'row nowrap', alignItems: 'center' }} >
@@ -47,8 +57,24 @@ export function MapProfile({ request }) {
         <SingleMapCard profile={profile} BunkmateInfo={BunkmateInfo} />
         */
         request.request === "As myself"
-            ? <SingleMapCard BunkmateInfo={BunkmateInfo} request={request} />
-            : <GroupMapCard BunkmateInfo={BunkmateInfo} request={request} />
+            ? <SingleMapCard
+                BunkmateInfo={BunkmateInfo}
+                request={request}
+                setKeyLocationPins={setKeyLocationPins}
+                coordinates={coordinates}
+                setZoom={setZoom}
+                setCenter={setCenter}
+                setMapProfileCard={setMapProfileCard}
+            />
+            : <GroupMapCard
+                BunkmateInfo={BunkmateInfo}
+                request={request}
+                setKeyLocationPins={setKeyLocationPins}
+                coordinates={coordinates}
+                setZoom={setZoom}
+                setCenter={setCenter}
+                setMapProfileCard={setMapProfileCard}
+            />
 
     )
 }
@@ -67,32 +93,12 @@ const Bunkmates = () => {
     const [selected, setSelected] = useState(null);
     //if the user has a profile then set profileChecker to true else false
     //used to rerender useEffect in Bunkmates.js containing async functions that gets data from backend
-    const [displaySocial, setDisplaySocial] = useState(true)
-
+    const [displaySocial, setDisplaySocial] = useState(false)
     const { loading, listingArray, userRequests, userProfile, userOwnData, isLoaded } = useGetUserData()
-
-    /*
-    const [universities, setUniversities] = useState([]);
-
-    useEffect(() => {
-
-        const service = new window.google.maps.places.PlacesService(mapRef.current);
-        const request = {
-            location: new window.google.maps.LatLng(37.7749, -122.4194), // San Francisco coordinates
-            radius: '5000',
-            type: ['university'],
-        };
-        console.log(request)
-        service.nearbySearch(request, (results, status) => {
-            if (status === window.google.maps.places.PlacesServiceStatus.OK) {
-                setUniversities(results);
-            }
-        });
-    }, [window]);
-
-    const mapRef = React.createRef();
-    console.log(universities)
-    */
+    //store the key locations 
+    const [keyLocationPins, setKeyLocationPins] = useState('');
+    //state management for the zoom level of the map
+    const [zoom, setZoom] = useState(15)
 
 
     //THIS LOGIC ONLY WORKS FOR NOW PROBABLY CHANGE THE API ENDPOINT TO RETURN A BOOLEAN THAT IS EITHER TRUE OR FALSE
@@ -125,16 +131,12 @@ const Bunkmates = () => {
     }
 
 
-
-
-
     const handleProfileClickAsync = (e) => {
-        console.log('async', e?.currentTarget?.id)
         const request = userRequests.get(e?.currentTarget?.id)
-        setMapProfileCard(<MapProfile request={request} />)
+        //MapProfile decides houses logic for deciding whether to show single or group map card
+        setMapProfileCard(<MapProfile request={request} setKeyLocationPins={setKeyLocationPins} setCenter={setCenter} setZoom={setZoom} setMapProfileCard={setMapProfileCard} />)
+        //store the coordinates of the pin that was clicked on
     }
-
-
 
 
 
@@ -194,7 +196,22 @@ const Bunkmates = () => {
         }
     };
     */
+    function debounce(func, delay) {
+        let timerId;
+        return function (...args) {
+            if (timerId) {
+                clearTimeout(timerId);
+            }
+            timerId = setTimeout(() => {
+                func.apply(this, args);
+            }, delay);
+        };
+    }
 
+
+    const handleZoomChange = debounce((newZoomLevel) => {
+        setZoom(newZoomLevel);
+    }, 500);
 
 
 
@@ -210,12 +227,18 @@ const Bunkmates = () => {
                 }
                 <div className="map-container">
                     <GoogleMap
+                        id="map"
                         center={center}
-                        zoom={15}
+                        zoom={zoom}
+                        onZoomChanged={(newZoomLevel) => handleZoomChange(newZoomLevel)}
                         mapContainerStyle={{ width: "100%", height: "100vh" }}
-                        options={{ styles: mapStyles, streetViewControl: false, mapTypeControl: false, }}
+                        options={{
+                            styles: mapStyles,
+                            streetViewControl: false, mapTypeControl: false,
+                        }}
                         onClick={() => { setMapProfileCard(null) }}
                     >
+                        <div id="results" />
                         <Navbar chooseStyle={"glass"} />
                         <section className="bunkamtes__social-feed" style={{ borderRadius: '50%', backgroundColor: 'black', position: 'absolute', top: '305px', height: '40px', width: '40px', right: '10px', }}>
                             {
@@ -234,15 +257,44 @@ const Bunkmates = () => {
 
                             }
                         </section>
+                        {keyLocationPins ? keyLocationPins.map((location) => {
+                            console.log(location)
+                            return (
+                                <>
+                                    <OverlayViewF
+                                        key={location.place_id}
+                                        position={{ lat: location.geometry.location.lat(), lng: location.geometry.location.lng() }}
+                                        styles={{ background: 'DarkGray', color: 'white' }}
+                                        mapPaneName={OVERLAY_MOUSE_TARGET}>
+                                        <IconButton>
+                                            <FaGraduationCap color="white" size="17" style={{ position: 'absolute', right: '-4px' }} />
+                                            <RiMapPin5Fill color="#24AEC0" size="35" />
+                                        </IconButton>
+                                    </OverlayViewF >
+                                    {/*
+
+                                    <MarkerF
+                                        draggable={true}
+                                        clickable={true}
+                                        position={{
+                                            lat: location.geometry.location.lat(),
+                                            lng: location.geometry.location.lng()
+                                        }}
+                                    >
+                                        {location.name}
+                                    </MarkerF>
+                                    */}
+
+                                </>
+                            )
+                        }) : null}
                         {/*
-                        {universities.map((university) => (
                             <Marker
                                 key={university.id}
                                 lat={university.geometry.location.lat()}
                                 lng={university.geometry.location.lng()}
                                 text={university.name}
                             />
-                        ))}
                         */}
                         {displaySocial ? <SocialFeed userOwnData={userOwnData} userProfile={userProfile} /> : null}
                         {mapProfileCard ? mapProfileCard : null}
@@ -263,7 +315,8 @@ const Bunkmates = () => {
                                                 style={{ right: '15px', color: '#2ACDDD', position: 'absolute', top: '35px', fontSize: '30px' }}
                                             />} />}
                                     {/*<button style={{ padding: "2px" }} onClick={e => { handleProfileClick(e, index); e.stopPropagation()}}>{`$${profile.rentBudget}`}</button>*/}
-                                </OverlayViewF >)
+                                </OverlayViewF >
+                            )
                         })}
 
                     </GoogleMap >
@@ -297,7 +350,8 @@ const Marker = ({ text }) => <div>{text}</div>;
 
 {/*
                     return 
-                    <MarkerF clickable={true} options={{
+                    <MarkerF draggable={true} clickable={true} 
+                    options={{
                         icon: {
                             url: profile?.picture,
                             size: new window.google.maps.Size(50, 50),

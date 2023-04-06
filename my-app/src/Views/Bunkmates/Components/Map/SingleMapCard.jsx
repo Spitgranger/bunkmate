@@ -7,15 +7,18 @@ import { GoogleMap, useJsApiLoader, MarkerF, OverlayView, OVERLAY_MOUSE_TARGET, 
 import { Button, Grid, Paper, TextField, Card, Typography, CardActionArea, CardMedia, CardContent, CardActions, IconButton } from "@mui/material/"
 import { ActionButton } from '../../../../Components/Utils/Form';
 import { TbMessages, TbMessagesOff } from 'react-icons/tb';
-import { useRef, useState, useContext } from 'react';
+import { useRef, useState, useContext, useEffect } from 'react';
 import { InfoWindowF } from '@react-google-maps/api';
 import { MdVerified } from 'react-icons/md';
+import KeyLocations from './KeyLocations';
 import { formatContext } from '../../../../Components/GlobalStateManagement/FormatContext';
 
 
-function SingleMapCard({ BunkmateInfo, request }) {
+function SingleMapCard({ BunkmateInfo, request, coordinates, setKeyLocationPins, setZoom, setCenter, setMapProfileCard }) {
     const [messageButton, setMessageButton] = useState(false)
     const { capitalizedName, calculateAge } = useContext(formatContext)
+
+
 
     return (
         <InfoWindowF mapPaneName={"overlayMouseTarget"} position={{ lat: request?.idealLocation[0], lng: request?.idealLocation[1] }}>
@@ -49,8 +52,8 @@ function SingleMapCard({ BunkmateInfo, request }) {
                                             </Typography >
                                         </div>
                                         <div className="button-container" style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                                            <Tooltip title={"Pin This Profile"} arrow placement="bottom">
-                                                <IconButton >
+                                            <Tooltip title={"Explore this area"} arrow placement="bottom">
+                                                <IconButton onClick={() => { KeyLocations({ setKeyLocationPins, coordinates, setZoom, setCenter, setMapProfileCard, request }); }}>
                                                     <HiMapPin />
                                                 </IconButton>
                                             </Tooltip>
