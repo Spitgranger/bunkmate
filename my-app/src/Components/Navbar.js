@@ -16,6 +16,7 @@ import decode from 'jwt-decode';
 import { getProfile } from '../api';
 import { SignInContext } from './GlobalStateManagement/SignInContext';
 import { formatContext } from './GlobalStateManagement/FormatContext';
+import debounce from 'lodash/debounce';
 
 function Navbar({ chooseStyle }) {
 
@@ -63,14 +64,20 @@ function Navbar({ chooseStyle }) {
     const [userProfile, setUserProfile] = useState("")
 
     //get data from backend
+
+    //get data from backend when the component first loads works
     const handleProfile = async () => {
         const profile = await getProfile();
         return profile
     }
-    //get data from backend when the component first loads works
+
+    const debouncedHandleProfile = debounce(async () => {
+        return await handleProfile;
+    }, 1000, { leading: true });
+
     useEffect(() => {
         if (user) {
-            handleProfile().then((profile) => setUserProfile(profile.data)).catch(() => {
+            debouncedHandleProfile().then((profile) => setUserProfile(profile.data)).catch(() => {
                 setMessage("Get Matched With Bunkmates!");
                 setMode('profileMakerForm');
                 setIsOpen(true)
