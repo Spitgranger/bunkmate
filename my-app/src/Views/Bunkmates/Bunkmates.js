@@ -104,7 +104,12 @@ const Bunkmates = () => {
     const [userOwnData, setUserOwnData] = useState("");
     //used to rerender useEffect in Bunkmates.js containing async functions that gets data from backend
     const { rerender, setRerender } = useContext(BunkmatesContext)
-    const [displaySocial, setDisplaySocial] = useState(false)
+    const [displaySocial, setDisplaySocial] = useState(true)
+    const [statePostArray, setStatePostArray] = useState([])
+
+    useEffect(() => {
+        getPost().then((result) => setStatePostArray(result.data.reverse()));
+    }, [])
 
     useEffect(() => {
         //get profile data from backend 
@@ -137,8 +142,6 @@ const Bunkmates = () => {
         setUserOwnData(userRequests.get(id));
     }, [rerender])
 
-    console.log(userProfile)
-
     useEffect(() => {
         //add same dependencies as the above
         setUserOwnData(userRequests.get(id));
@@ -151,8 +154,6 @@ const Bunkmates = () => {
             setCenter({ lat: userOwnData.idealLocation[0], lng: userOwnData.idealLocation[1] })
         }
     }, [userOwnData])
-
-
 
     //THIS LOGIC ONLY WORKS FOR NOW PROBABLY CHANGE THE API ENDPOINT TO RETURN A BOOLEAN THAT IS EITHER TRUE OR FALSE
     //contains the user's own data
@@ -190,7 +191,7 @@ const Bunkmates = () => {
 
 
     const handleProfileClickAsync = (e) => {
-        console.log('async', e?.currentTarget?.id)
+        //console.log('async', e?.currentTarget?.id)
         const request = userRequests.get(e?.currentTarget?.id)
         setMapProfileCard(<MapProfile request={request} />)
     }
@@ -203,7 +204,8 @@ const Bunkmates = () => {
     */
 
 
-    function SocialFeed() {
+    function SocialFeed(props) {
+        console.log("fuck")
         const id = useId()
 
         const postArray =
@@ -260,11 +262,9 @@ const Bunkmates = () => {
                 },
             ]
 
-        const [statePostArray, setStatePostArray] = useState([])
+
         //on the initial render of the socials component, get the social post from the backend
-        useEffect(() => {
-            getPost().then((result) => setStatePostArray(result.data.reverse()));
-        }, [])
+
 
 
         const CommentSection = ({ post, user }) => {
@@ -490,7 +490,7 @@ const Bunkmates = () => {
                 </Card >
             )
         }
-        console.log(userProfile)
+        //console.log(userProfile)
 
         const CreatePost = ({ statePostArray, setStatePostArray }) => {
 
@@ -596,7 +596,7 @@ const Bunkmates = () => {
         return (
             <>
 
-                <CreatePost statePostArray={statePostArray} setStatePostArray={setStatePostArray} />
+                <CreatePost statePostArray={props.statePostArray} setStatePostArray={setStatePostArray} />
                 <div style={socialFeedStyles.Posts}>
                     {statePostArray.map((post) => { return <PostCard post={post} CommentSection={CommentSection} /> })}
                 </div>
@@ -698,7 +698,7 @@ const Bunkmates = () => {
 
                             }
                         </section>
-                        {displaySocial ? <SocialFeed /> : null}
+                        {displaySocial ? <SocialFeed statePostArray={statePostArray} /> : null}
                         {/*
                         <div className="social-feed-container" style={socialFeedStyles.FeedContainer}>
                             <SocialFeed />

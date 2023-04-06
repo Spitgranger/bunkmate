@@ -28,7 +28,7 @@ function Navbar({ chooseStyle }) {
         //check if the page is the currently active page, if so then highlight it
         const fullPath = useResolvedPath(to)
         const isActive = useMatch({ path: fullPath.pathname, end: true })
-        console.log(fullPath)
+        //console.log(fullPath)
         return (
             <Link to={to} className={isActive ? `${navStyle}CurrentPage` : ""} {...props}>
                 {page}
@@ -172,7 +172,7 @@ function Navbar({ chooseStyle }) {
         )
     }
 
-    console.log(user);
+    // console.log(user);
 
     return (
         <nav className={`${navStyle}Bar`}>
