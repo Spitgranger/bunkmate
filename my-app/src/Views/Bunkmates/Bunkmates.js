@@ -16,12 +16,10 @@ import { deleteRequest } from '../../api'
 import { BuildUserContext, BunkmatesContext } from "../../Components/GlobalStateManagement/UserContext";
 import { RxTriangleDown } from "react-icons/rx"
 import { useNavigate } from "react-router";
-import CustomMapMarker from './Components/Map/MapMarker'
+import { MapRequestMarker, MapEducationMarker } from './Components/Map/MapMarker'
 import { TbSocial, TbSocialOff } from "react-icons/tb";
 import { SocialFeed } from "./Components/SocialFeed/SocialFeed";
 import { useGetUserData } from "./Hooks/useGetUserData";
-import { RiMapPin5Fill } from 'react-icons/ri'
-import { FaGraduationCap } from 'react-icons/fa'
 
 export function MapProfile({ request, setKeyLocationPins, setZoom, setCenter, setMapProfileCard }) {
 
@@ -81,6 +79,7 @@ export function MapProfile({ request, setKeyLocationPins, setZoom, setCenter, se
 
 
 const Bunkmates = () => {
+
 
     const id = JSON.parse(localStorage.getItem("profile"))?.result?._id;
     //retrieve local storage data
@@ -266,10 +265,7 @@ const Bunkmates = () => {
                                         position={{ lat: location.geometry.location.lat(), lng: location.geometry.location.lng() }}
                                         styles={{ background: 'DarkGray', color: 'white' }}
                                         mapPaneName={OVERLAY_MOUSE_TARGET}>
-                                        <IconButton>
-                                            <FaGraduationCap color="white" size="17" style={{ position: 'absolute', right: '-4px' }} />
-                                            <RiMapPin5Fill color="#24AEC0" size="35" />
-                                        </IconButton>
+                                        <MapEducationMarker />
                                     </OverlayViewF >
                                     {/*
 
@@ -306,7 +302,7 @@ const Bunkmates = () => {
                                     position={{ lat: request?.idealLocation[0], lng: request?.idealLocation[1] }}
                                     styles={{ background: 'DarkGray', color: 'white' }}
                                     mapPaneName={OVERLAY_MOUSE_TARGET}>
-                                    {<CustomMapMarker
+                                    {<MapRequestMarker
                                         request={request}
                                         handleClick={handleProfileClickAsync}
                                         index={index}
@@ -314,7 +310,6 @@ const Bunkmates = () => {
                                             <RxTriangleDown
                                                 style={{ right: '15px', color: '#2ACDDD', position: 'absolute', top: '35px', fontSize: '30px' }}
                                             />} />}
-                                    {/*<button style={{ padding: "2px" }} onClick={e => { handleProfileClick(e, index); e.stopPropagation()}}>{`$${profile.rentBudget}`}</button>*/}
                                 </OverlayViewF >
                             )
                         })}

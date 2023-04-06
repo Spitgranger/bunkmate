@@ -1,6 +1,9 @@
 import { Typography } from "@mui/material";
+import { RiMapPin5Fill } from 'react-icons/ri'
+import { FaGraduationCap } from 'react-icons/fa'
+import { IconButton } from "@mui/material";
 
-function MapMarker(props) {
+export function MapRequestMarker(props) {
     //if the user requests as their selves the marker background will be black and the border will be aqua
     //if the user requests as a group the marker will be completely aqua
     return (
@@ -21,4 +24,12 @@ function MapMarker(props) {
             </div >
     )
 }
-export default MapMarker
+
+export function MapEducationMarker() {
+    return (
+        <IconButton>
+            <FaGraduationCap color="white" size="17" style={{ position: 'absolute', right: '16px', bottom: '18.5px' }} />
+            <RiMapPin5Fill color="#24AEC0" size="35" />
+        </IconButton>
+    )
+}

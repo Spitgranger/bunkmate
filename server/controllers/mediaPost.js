@@ -32,6 +32,16 @@ export const getPost = async (req, res) => {
                 localField: "userId",
                 foreignField: "user",
                 as: "profile",
+            },
+        },
+        {
+            $project:
+            {
+                "profile.firstName": 1,
+                "profile.picture": 1,
+                "userId": 1,
+                "message": 1,
+                "comments": 1,
             }
         },
         {
@@ -41,6 +51,17 @@ export const getPost = async (req, res) => {
                 localField: "userId",
                 foreignField: "user",
                 as: "request",
+            }
+        },
+        {
+            $project:
+            {
+                "profile.firstName": 1,
+                "profile.picture": 1,
+                "userId": 1,
+                "message": 1,
+                "comments": 1,
+                "request.address": 1,
             }
         }
     ]).then((result) => { res.status(200).json(result) })

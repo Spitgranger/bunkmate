@@ -22,7 +22,10 @@ import { ActionButton } from '../../../../Components/Utils/Form';
 export default function CreatePost({ statePostArray, setStatePostArray, userOwnData, userProfile }) {
 
     const createPostStyles = {
-        borderRadius: '10px', backgroundColor: 'black', position: 'absolute', top: '130px', zIndex: '6', width: '400px', left: '10px', display: 'flex', alignItems: 'flex-start',
+        container: { borderRadius: '10px', backgroundColor: 'black', position: 'absolute', top: '130px', zIndex: '6', width: '400px', left: '10px', display: 'flex', alignItems: 'flex-start' },
+        avatar: { width: '50px', height: '50px', margin: '10px 20px 10px 20px' },
+        innerContainer: { width: '100%', display: 'flex', alignItems: 'center', flexDirection: 'row' }
+
     }
 
     const [fieldValues, setFieldvalues] = useState("");
@@ -78,10 +81,10 @@ export default function CreatePost({ statePostArray, setStatePostArray, userOwnD
 
 
     return (
-        <Card style={createPostStyles}>
-            <div style={{ width: '100%', display: 'flex', alignItems: 'center', flexDirection: 'row' }}>
+        <Card style={createPostStyles.container}>
+            <div style={createPostStyles.innerContainer}>
                 <div>
-                    <Avatar sx={{ width: '50px', height: '50px', margin: '10px 20px 10px 20px' }} src={userOwnData?.profile[0]?.picture ?? userProfile?.data?.picture} className="Avatar" alt={`${userOwnData?.profile[0]?.firstName}'s Profile picture`} />
+                    <Avatar sx={createPostStyles.avatar} src={userOwnData?.profile[0]?.picture ?? userProfile?.data?.picture} className="Avatar" alt={`${userOwnData?.profile[0]?.firstName}'s Profile picture`} />
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                     <TextField maxRows={2}
