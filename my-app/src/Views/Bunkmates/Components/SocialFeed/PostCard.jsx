@@ -17,7 +17,7 @@ import { deletePost } from "../../../../api";
 
 
 export default function PostCard({ post, userOwnData, userProfile, setStatePostArray, statePostArray }) {
-
+    console.log(post)
     //all comments for a post stored in an array
     const [allComments, setAllComments] = useState(post.comments)
     const user = JSON.parse(localStorage.getItem('profile'))
@@ -34,7 +34,7 @@ export default function PostCard({ post, userOwnData, userProfile, setStatePostA
         postContainer: { marginTop: '10px', flexDirection: 'column', borderRadius: '10px', backgroundColor: 'black', zIndex: '5', width: '400px', right: '75px', display: 'flex', alignItems: 'flex-start', overflowY: 'hidden' },
         postHeader: { display: 'flex', width: '100%', justifyContent: 'space-between', paddingRight: '20px' },
         postHeaderSubSection: { display: 'flex', alignItems: 'center', width: '100%', },
-        userInfo: { display: 'flex', flexDirection: 'row', alignItems: 'center' },
+        userInfo: { maxWidth: '255px', display: 'flex', flexDirection: 'row', alignItems: 'center' },
         socialFeedBack: { width: '100%', display: 'flex', padding: '0px 20px 10px 20px', justifyContent: 'space-between' },
         likesContainer: { display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'row' },
         likesButton: { color: liked ? 'white' : 'aqua', fontSize: '20px' },
@@ -54,7 +54,13 @@ export default function PostCard({ post, userOwnData, userProfile, setStatePostA
 
     //initialization of likes and comments count
     useEffect(() => {
-        setLikes(post.likes)
+        if (post.likes === 0) {
+            //BUG: shown the userid instead of number of likes on posts that aren't my own
+            setLikes(0)
+        } else {
+            setLikes(post.likes)
+
+        }
         setAllComments(post.comments)
     }, [post])
 
@@ -90,7 +96,7 @@ export default function PostCard({ post, userOwnData, userProfile, setStatePostA
                             ?
                             <div style={postStyles.userInfo}>
                                 <Tooltip arrow title={`View ${post.profile[0].firstName}'s active request`}>
-                                    <Typography sx={{ color: '#9b9b9b' }} variant="body2" color="text.secondary">{post.request[0].address}</Typography>
+                                    <Typography sx={{ color: '#9b9b9b' }} variant="body2" color="text.secondary" noWrap>{post.request[0].address}</Typography>
                                 </Tooltip>
                             </div>
                             : null}

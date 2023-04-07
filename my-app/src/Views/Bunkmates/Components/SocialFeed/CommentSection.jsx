@@ -124,7 +124,7 @@ const ReplyCommentTextField = ({ allComments, setAllComments, user, commentSecti
 
 //All User comments in a post
 const MappedComments = ({ allComments, commentSectionStyles, commentSectionProfiles }) => {
-    if (commentSectionProfiles && allComments) {
+    if (commentSectionProfiles && allComments.length !== 0) {
         return (
             allComments.map((comment) => {
                 console.log(commentSectionProfiles, comment[0])
@@ -150,7 +150,7 @@ const MappedComments = ({ allComments, commentSectionStyles, commentSectionProfi
                 }
             })
         )
-    } else if (!allComments) {
+    } else if (allComments.length === 0) {
         return ""
     }
     else {

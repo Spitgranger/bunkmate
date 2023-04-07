@@ -21,6 +21,8 @@ import { TbSocial, TbSocialOff } from "react-icons/tb";
 import { SocialFeed } from "./Components/SocialFeed/SocialFeed";
 import { useGetUserData } from "./Hooks/useGetUserData";
 import { getPost } from "../../api";
+import { KeyLocationDetails } from "./Components/Map/KeyLocations";
+
 
 export function MapProfile({ request, setKeyLocationPins, setZoom, setCenter, setMapProfileCard }) {
 
@@ -97,6 +99,7 @@ const Bunkmates = () => {
     const { loading, listingArray, userRequests, userProfile, userOwnData, isLoaded, } = useGetUserData()
     //store the key locations 
     const [keyLocationPins, setKeyLocationPins] = useState('');
+    //store the key locations data
     //state management for the zoom level of the map
     const [zoom, setZoom] = useState(15)
 
@@ -220,27 +223,8 @@ const Bunkmates = () => {
         setZoom(newZoomLevel);
     }, 500);
 
-    function KeyLocationDetails() {
-        const locationDetails = {
-            container: { borderRadius: '10px', backgroundColor: 'black', position: 'absolute', top: '130px', zIndex: '6', width: '400px', right: '60px', display: 'flex', alignItems: 'flex-start' },
-            postHeader: { display: 'flex', width: '100%', padding: '15px 0px 15px 15px', flexDirection: 'column' },
-        }
 
-        return (
-            <Card sx={locationDetails.container}>
-                <CardContent sx={locationDetails.postHeader}>
-                    <Typography variant="h5" color="text.primary" sx={{ color: 'white', fontWeight: '700', zIndex: 4 }} align="top">Convenience Stores</Typography>
-                    <Typography variant="h6" color="text.primary" sx={{ color: 'white', fontSize: '18px', zIndex: 4 }} align="bottom">Erin Mills Town Center</Typography>
-                    <Typography variant="h6" color="text.secondary" sx={{ color: 'grey', fontSize: '16px', zIndex: 4 }} align="bottom">748 The Queensway | 0.57 km</Typography>
-                </CardContent>
-                <div>
-                    <div style={{ background: 'linear-gradient(to right, rgba(255,255,255,0), rgba(255, 255, 255, 0.5) 50%)', width: '200px', height: '125px', backgroundColor: 'black', position: 'absolute', zIndex: '3', opacity: '0.9', right: '0px' }}></div>
-                    <CardMedia sx={{ width: '200px', height: "125px", position: 'absolute', zIndex: '2', right: '0px' }} image="https://cdn.skyrisecities.com/sites/default/files/images/projects/8535/8535-24865.jpg" />
-                </div>
-            </Card>
-        )
-
-    }
+    console.log('bunkamtes')
 
 
 
@@ -286,26 +270,7 @@ const Bunkmates = () => {
 
                             }
                         </section>
-                        {keyLocationPins ? keyLocationPins.map((location) => {
-                            console.log(location)
-                            return (
-                                <OverlayViewF
-                                    key={location.place_id}
-                                    position={{ lat: location.geometry.location.lat(), lng: location.geometry.location.lng() }}
-                                    styles={{ background: 'DarkGray', color: 'white' }}
-                                    mapPaneName={OVERLAY_MOUSE_TARGET}>
-                                    <MapEducationMarker />
-                                </OverlayViewF >
-                            )
-                        }) : null}
-                        {/*
-                            <Marker
-                                key={university.id}
-                                lat={university.geometry.location.lat()}
-                                lng={university.geometry.location.lng()}
-                                text={university.name}
-                            />
-                        */}
+                        <KeyLocations keyLocationPins={keyLocationPins} />
                         {displaySocial ? <SocialFeed userOwnData={userOwnData} userProfile={userProfile} statePostArray={statePostArray} setStatePostArray={setStatePostArray} /> : null}
                         {mapProfileCard ? mapProfileCard : null}
                         {selected && <MarkerF position={center} icon={"http://maps.google.com/mapfiles/ms/icons/blue.png"} />}
@@ -353,37 +318,25 @@ const Bunkmates = () => {
 export default Bunkmates;
 
 
-/*
-const Marker = ({ text }) => <div>{text}</div>;
-*/
+function KeyLocations({ keyLocationPins }) {
 
-{/*
-                    return 
-                    <MarkerF draggable={true} clickable={true} 
-                    options={{
-                        icon: {
-                            url: profile?.picture,
-                            size: new window.google.maps.Size(50, 50),
-                            anchor: new window.google.maps.Point(25, 25),
-                        }, label: {
-                            text: `$${profile?.rentBudget}`,
-                            color: 'white',
-                        }, shape: "MarkerShapeCircle",
-                    }
-                    } onClick={e => handleProfileClick(e, index)} key={index} position={{ lat: profile?.idealLocation[0], lng: profile?.idealLocation[1] }} >{profile?.rentBudget}</MarkerF>;
-                */}
+    const [keyLocationData, setKeyLocationData] = useState('');
+    //THIS MAKES TOO MANY REQUESTS, NEED TO FIX SOON
 
-
-
-{/*
-                                    <MarkerF
-                                        draggable={true}
-                                        clickable={true}
-                                        position={{
-                                            lat: location.geometry.location.lat(),
-                                            lng: location.geometry.location.lng()
-                                        }}
-                                    >
-                                        {location.name}
-                                    </MarkerF>
-                                    */}
+    return (
+        <>
+            <KeyLocationDetails keyLocationData={keyLocationData} />
+            {keyLocationPins ? keyLocationPins.map((location) => {
+                return (
+                    <OverlayViewF
+                        key={location.place_id}
+                        position={{ lat: location.geometry.location.lat(), lng: location.geometry.location.lng() }}
+                        styles={{ background: 'DarkGray', color: 'white' }}
+                        mapPaneName={OVERLAY_MOUSE_TARGET}>
+                        <MapEducationMarker location={location} setKeyLocationData={setKeyLocationData} />
+                    </OverlayViewF >
+                )
+            }) : null}
+        </>
+    )
+}

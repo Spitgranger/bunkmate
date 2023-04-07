@@ -1,4 +1,8 @@
-import mapStyles from '../../../../data/mapStyles.json'
+import { Card, Typography, IconButton, Tooltip, CircularProgress, CardMedia, CardContent } from "@mui/material/"
+import { formatContext } from "../../../../Components/GlobalStateManagement/FormatContext";
+import { useContext } from "react";
+
+
 const KeyLocations = ({ setKeyLocationPins, coordinates, setZoom, setCenter, setMapProfileCard, request }) => {
 
 
@@ -80,6 +84,37 @@ const KeyLocations = ({ setKeyLocationPins, coordinates, setZoom, setCenter, set
 }
 
 
-
-
 export default KeyLocations
+
+
+export function KeyLocationDetails({ keyLocationData }) {
+
+  const { capitalizedName } = useContext(formatContext);
+
+  const locationDetails = {
+    container: { borderRadius: '10px', backgroundColor: 'black', position: 'absolute', top: '130px', zIndex: '6', width: '400px', right: '60px', display: 'flex', alignItems: 'flex-start' },
+    postHeader: { display: 'flex', width: '100%', padding: '15px 0px 15px 15px', flexDirection: 'column', position: 'absolute' },
+  }
+
+  if (keyLocationData) {
+    return (
+      <Card sx={locationDetails.container}>
+        <CardContent sx={locationDetails.postHeader}>
+          <Typography variant="h5" color="text.primary" sx={{ color: 'white', fontWeight: '700', zIndex: 4 }} align="top">{capitalizedName(keyLocationData.types[0])} | 0.57 km</Typography>
+          <Typography noWrap variant="h6" color="text.primary" sx={{ color: 'white', fontSize: '18px', zIndex: 4 }} align="bottom">{keyLocationData.name}</Typography>
+          <Typography noWrap variant="h6" color="text.secondary" sx={{ color: 'grey', fontSize: '16px', zIndex: 4 }} align="bottom">{keyLocationData.vicinity} </Typography>
+        </CardContent>
+        <div>
+          <div style={{ width: '400px', display: 'flex', justifyContent: 'flex-end' }}>
+            <div className="img-gradient" >
+              <img style={{ width: '200px', height: '125px', }} src={keyLocationData.photos ? keyLocationData.photos[0].getUrl() : ""} />
+            </div>
+          </div>
+        </div>
+      </Card>
+    )
+  } else {
+    return ""
+  }
+
+}
