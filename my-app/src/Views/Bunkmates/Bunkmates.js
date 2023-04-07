@@ -20,6 +20,7 @@ import { MapRequestMarker, MapEducationMarker } from './Components/Map/MapMarker
 import { TbSocial, TbSocialOff } from "react-icons/tb";
 import { SocialFeed } from "./Components/SocialFeed/SocialFeed";
 import { useGetUserData } from "./Hooks/useGetUserData";
+import { getPost } from "../../api";
 
 export function MapProfile({ request, setKeyLocationPins, setZoom, setCenter, setMapProfileCard }) {
 
@@ -93,11 +94,17 @@ const Bunkmates = () => {
     //if the user has a profile then set profileChecker to true else false
     //used to rerender useEffect in Bunkmates.js containing async functions that gets data from backend
     const [displaySocial, setDisplaySocial] = useState(false)
-    const { loading, listingArray, userRequests, userProfile, userOwnData, isLoaded } = useGetUserData()
+    const { loading, listingArray, userRequests, userProfile, userOwnData, isLoaded, } = useGetUserData()
     //store the key locations 
     const [keyLocationPins, setKeyLocationPins] = useState('');
     //state management for the zoom level of the map
     const [zoom, setZoom] = useState(15)
+
+    const [statePostArray, setStatePostArray] = useState([])
+    //get Social feed informations
+    useEffect(() => {
+        getPost().then((result) => setStatePostArray(result.data.reverse()));
+    }, [])
 
 
     //THIS LOGIC ONLY WORKS FOR NOW PROBABLY CHANGE THE API ENDPOINT TO RETURN A BOOLEAN THAT IS EITHER TRUE OR FALSE
@@ -292,7 +299,7 @@ const Bunkmates = () => {
                                 text={university.name}
                             />
                         */}
-                        {displaySocial ? <SocialFeed userOwnData={userOwnData} userProfile={userProfile} /> : null}
+                        {displaySocial ? <SocialFeed userOwnData={userOwnData} userProfile={userProfile} statePostArray={statePostArray} setStatePostArray={setStatePostArray} /> : null}
                         {mapProfileCard ? mapProfileCard : null}
                         {selected && <MarkerF position={center} icon={"http://maps.google.com/mapfiles/ms/icons/blue.png"} />}
                         {listingArray.map((request, index) => {

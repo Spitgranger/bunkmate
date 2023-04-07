@@ -8,6 +8,7 @@ import { MdComment, MdCommentsDisabled } from 'react-icons/md'
 import { ActionButton } from "../../../../Components/Utils/Form";
 import CreatePost from "./CreatePost";
 import PostCard from "./PostCard";
+import { useGetUserData } from "../../Hooks/useGetUserData";
 
 /*
 ---Hierarchical Structure---
@@ -21,7 +22,7 @@ socialFeed.jsx
         -->CommentSection.jsx
 */
 //memoized to prevent parent component from rerendering child component
-export const SocialFeed = memo(({ userOwnData, userProfile }) => {
+export const SocialFeed = memo(({ userOwnData, userProfile, statePostArray, setStatePostArray }) => {
     console.log('social feed rerender')
     const Posts = {
         overflowY: 'scroll',
@@ -36,7 +37,6 @@ export const SocialFeed = memo(({ userOwnData, userProfile }) => {
     }
 
     //all posts stored in an array
-    const [statePostArray, setStatePostArray] = useState(postArray)
 
     return (
         <>
@@ -54,6 +54,8 @@ export const SocialFeed = memo(({ userOwnData, userProfile }) => {
                             post={post}
                             userOwnData={userOwnData}
                             userProfile={userProfile}
+                            statePostArray={statePostArray}
+                            setStatePostArray={setStatePostArray}
                         />
                     )
                 })}
