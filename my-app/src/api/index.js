@@ -17,7 +17,7 @@ export const fetchPostsBySearch = (searchQuery) => API.get(`/posts/search?search
 export const createPost = (newPost) => API.post('/posts', newPost);
 export const updatePost = (id, updatedPost) => API.patch(`/posts/${id}`, updatedPost)
 //export const deletePost = (id) => API.delete(`/posts/${id}`)
-export const likePost = (id) => API.patch(`/posts/${id}/likePost`)
+//export const likePost = (id) => API.patch(`/posts/${id}/likePost`)
 
 export const signIn = (formData) => API.post('/users/signin', formData)
 export const signUp = (formData) => API.post('/users/signup', formData)
@@ -40,6 +40,7 @@ export const updateRequest = (id, formData) => API.patch(`/request/${id}`, formD
 export const makePost = (formData) => API.post('/media', formData);
 export const getPost = () => API.get('/media');
 export const makeComment = (data, id) => API.patch(`/media/${id}/commentPost`, data);
+export const likePost = (id) => API.patch(`/media/${id}/likepost`);
 export const deletePost = (id) => API.delete(`/media/${id}`);
 
 
