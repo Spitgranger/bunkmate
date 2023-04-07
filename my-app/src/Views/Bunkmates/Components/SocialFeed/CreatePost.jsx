@@ -15,6 +15,9 @@ import {
 } from "@mui/material/"
 import { BsPaperclip } from 'react-icons/bs';
 import { ActionButton } from '../../../../Components/Utils/Form';
+import { makePost } from '../../../../api';
+//import { setServers } from 'dns';
+import { getPost } from '../../../../api';
 
 
 
@@ -79,6 +82,15 @@ export default function CreatePost({ statePostArray, setStatePostArray, userOwnD
         setStatePostArray([newPost, ...statePostArray])
     }
 
+    const handleSavePost = async () => {
+        const newPost = {
+            comments: [],
+            images: [uploadedFiles],
+            message: fieldValues,
+        }
+        await makePost(newPost);
+    }
+
 
     return (
         <Card style={createPostStyles.container}>
@@ -112,7 +124,7 @@ export default function CreatePost({ statePostArray, setStatePostArray, userOwnD
                             }
                         }
                         } placeholder="Talk with others..." />
-                    <ActionButton onClick={() => handlePost({ id, user, userProfile, uploadedFiles, userOwnData })} bgColor="black" hoverBgColor="rgb(67, 78, 91)" hoverColor="aqua" title="Post" borderRadius='7%' color="white" height='55px' />
+                    <ActionButton onClick={() => handleSavePost().then(() => getPost().then((posts) => { setStatePostArray(posts.data.reverse()) }))/*handlePost({ id, user, userProfile, uploadedFiles, userOwnData })*/} bgColor="black" hoverBgColor="rgb(67, 78, 91)" hoverColor="aqua" title="Post" borderRadius='7%' color="white" height='55px' />
                 </div>
             </div>
         </Card >

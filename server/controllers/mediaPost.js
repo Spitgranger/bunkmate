@@ -18,7 +18,7 @@ export const makePost = async (req, res) => {
 
     } catch (error) {
         console.log(error)
-        res.status(500).json("Server Error has Occured")
+        res.status(500).json("Server Error has Occured");
     }
 }
 
@@ -42,6 +42,8 @@ export const getPost = async (req, res) => {
                 "userId": 1,
                 "message": 1,
                 "comments": 1,
+                "images": 1,
+                "likes": 1,
             }
         },
         {
@@ -62,17 +64,36 @@ export const getPost = async (req, res) => {
                 "message": 1,
                 "comments": 1,
                 "request.address": 1,
+                "images": 1,
+                "likes": 1,
             }
         }
-    ]).then((result) => { res.status(200).json(result) })
+    ]).then((result) => { res.status(200).json(result) });
 }
 
 export const makeComment = async (req, res) => {
     const { id: _id } = req.params;
-    const user = req.userId
-    const data = req.body
-    const post = await mediaPost.findById(_id)
+    const user = req.userId;
+    const data = req.body;
+    const post = await mediaPost.findById(_id);
     post.comments.push([user, data.message]);
     const updatedPost = await mediaPost.findByIdAndUpdate(_id, post, { new: true });
-    res.json(updatedPost)
+    res.json(updatedPost);
+}
+
+export const deletePost = async (req, res) => {
+    try {
+        const { id: _id } = req.params;
+        const user = req.userId;
+        const post = await mediaPost.findById(_id);
+        if (String(post.userId) !== String(user)) {
+            return res.status(403);
+        }
+        await mediaPost.findByIdAndDelete(post._id);
+        res.status(200).json({ message: "Post deleted sucessfully" });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: error.message });
+    }
+
 }

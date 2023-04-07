@@ -13,9 +13,10 @@ import {
 import { AiFillLike } from "react-icons/ai";
 import { BsPinFill, BsThreeDotsVertical } from "react-icons/bs";
 import { MdComment, MdCommentsDisabled } from 'react-icons/md'
+import { deletePost } from "../../../../api";
 
 
-export default function PostCard({ post, userOwnData, userProfile }) {
+export default function PostCard({ post, userOwnData, userProfile, setStatePostArray, statePostArray }) {
 
     //all comments for a post stored in an array
     const [allComments, setAllComments] = useState(post.comments)
@@ -69,21 +70,27 @@ export default function PostCard({ post, userOwnData, userProfile }) {
         //TODO logic to move pin to beginning of array
     }
 
+    //function to handle deletetion of post
+    const handleDeletePost = async (id) => {
+        await deletePost(id);
+        setStatePostArray(statePostArray.filter((element) => element._id !== id))
+    }
+
 
 
     return (
         <Card style={postStyles.postContainer}>
             <header style={postStyles.postHeader}>
                 <div className="bunkmates__header__subsection" style={postStyles.postHeaderSubSection}>
-                    <Avatar sx={{ width: '50px', height: '50px', margin: '20px', }} src={post.avatar} className="Avatar" alt={`View ${post.firstName}'s profile`} />
+                    <Avatar sx={{ width: '50px', height: '50px', margin: '20px', }} src={post.profile[0].picture} className="Avatar" alt={`View ${post.profile[0].firstName}'s profile`} />
                     <div className="bunkmates__post-card__key-info">
-                        <Typography sx={{ color: 'white' }} variant="body1" color="text.primary">{post.firstName}</Typography>
+                        <Typography sx={{ color: 'white' }} variant="body1" color="text.primary">{post.profile[0].firstName}</Typography>
                         {/* post.location should be an optional field*/}
-                        {post.location
+                        {post.request[0]?.address
                             ?
                             <div style={postStyles.userInfo}>
-                                <Tooltip arrow title={`View ${post.firstName}'s active request`}>
-                                    <Typography sx={{ color: '#9b9b9b' }} variant="body2" color="text.secondary">{post.location}</Typography>
+                                <Tooltip arrow title={`View ${post.profile[0].firstName}'s active request`}>
+                                    <Typography sx={{ color: '#9b9b9b' }} variant="body2" color="text.secondary">{post.request[0].address}</Typography>
                                 </Tooltip>
                             </div>
                             : null}
@@ -93,14 +100,14 @@ export default function PostCard({ post, userOwnData, userProfile }) {
                     ?
                     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                         <Tooltip arrow title="View more actions">
-                            <IconButton style={{ color: 'white' }}><BsThreeDotsVertical style={{ color: 'white', fontSize: '20px' }} /></IconButton>
+                            <IconButton style={{ color: 'white' }}><BsThreeDotsVertical style={{ color: 'white', fontSize: '20px' }} onClick={() => { handleDeletePost(post._id) }} /></IconButton>
                         </Tooltip>
                     </div>
                     : null
                 }
             </header>
             <CardContent sx={{ padding: "0px 10px 10px 10px" }}>
-                <Typography sx={{ fontSize: "15px", padding: '0px 8px 0px 8px', color: 'white' }} variant="body2" color="text.primary">{post.postMessage}</Typography>
+                <Typography sx={{ fontSize: "15px", padding: '0px 8px 0px 8px', color: 'white' }} variant="body2" color="text.primary">{post.message}</Typography>
             </CardContent>
             {/* Not working because the array is pushing an empty object to the end of the array*/}
             {post.images ? <CardMedia component={"img"} image={post.images[0]} sx={{ padding: '15px', borderRadius: '20px' }} /> : null}
@@ -135,6 +142,7 @@ export default function PostCard({ post, userOwnData, userProfile }) {
                         userProfile={userProfile}
                         allComments={allComments}
                         setAllComments={setAllComments}
+                        setStatePostArray={setStatePostArray}
                     />
                 </div>
                 : null

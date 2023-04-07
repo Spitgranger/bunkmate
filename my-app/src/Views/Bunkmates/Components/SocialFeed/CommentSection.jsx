@@ -15,8 +15,9 @@ import {
 } from "@mui/material/"
 import { IoSend } from 'react-icons/io5'
 import { BuildUserContext } from '../../../../Components/GlobalStateManagement/UserContext'
+import { makeComment, getPost } from '../../../../api'
 
-export default function CommentSection({ user, userOwnData, userProfile, allComments, setAllComments }) {
+export default function CommentSection({ user, userOwnData, userProfile, allComments, setAllComments, post, setStatePostArray }) {
 
     const commentSectionStyles = {
         replyButton: { width: '30px', height: '30px', color: 'white' },
@@ -52,6 +53,8 @@ export default function CommentSection({ user, userOwnData, userProfile, allComm
         handleGetProfiles().then((profiles) => setCommentSectionProfiles([...profiles.data]))
     }, [allComments])
 
+
+
     return (
         <>
             <div style={{ padding: '20px 20px 10px 20px', width: '100%' }}>
@@ -60,7 +63,7 @@ export default function CommentSection({ user, userOwnData, userProfile, allComm
             <CardContent sx={{ padding: '0px 20px 0px 20px', width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                 <Avatar sx={{ width: '35px', height: '35px', margin: '10px' }} src={userOwnData?.profile[0]?.picture ?? userProfile?.data?.picture} className="Avatar" alt={`${userOwnData?.profile[0]?.firstName}'s Profile picture`} />
                 {/* onChange event listener Causes entire component to rerender. Could cause problems later on */}
-                <ReplyCommentTextField commentSectionStyles={commentSectionStyles} allComments={allComments} setAllComments={setAllComments} user={user} />
+                <ReplyCommentTextField commentSectionStyles={commentSectionStyles} allComments={allComments} setAllComments={setAllComments} user={user} post={post} />
             </CardContent>
             <CardContent>
                 <MappedComments commentSectionStyles={commentSectionStyles} allComments={allComments} commentSectionProfiles={commentSectionProfiles} />
@@ -75,7 +78,7 @@ export default function CommentSection({ user, userOwnData, userProfile, allComm
     )
 }
 
-const ReplyCommentTextField = ({ allComments, setAllComments, user, commentSectionStyles, commentSectionProfiles }) => {
+const ReplyCommentTextField = ({ allComments, setAllComments, user, commentSectionStyles, commentSectionProfiles, post }) => {
 
     //store the user's own comment
     const [userComment, setUserComment] = useState("")
@@ -86,9 +89,20 @@ const ReplyCommentTextField = ({ allComments, setAllComments, user, commentSecti
     }
 
     //event handler for submitting comments
+    /*
     const handleCommentsChange = () => {
         setAllComments([[user.result._id, userComment], ...allComments])
     }
+    */
+
+    const handleCommentsChange = async () => {
+        //event handler for replying to comments
+        await makeComment({ message: userComment }, post._id);
+        setAllComments([[user.result._id, userComment], ...allComments]);
+
+        //setAllComments([[user.result._id, userComment], ...allComments])
+    }
+
 
     return (<TextField maxRows={2}
         size="small"
