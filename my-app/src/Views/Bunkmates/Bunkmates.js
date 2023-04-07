@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useRef, useState, memo, useMemo, useId } 
 import Navbar from "../../Components/Navbar";
 import { GoogleMap, useJsApiLoader, MarkerF, OverlayView, OVERLAY_MOUSE_TARGET, OverlayViewF, MapContext, Polyline } from "@react-google-maps/api";
 import mapStyles from '../../data/mapStyles.json'
-import { Card, Typography, IconButton, Tooltip, CircularProgress, } from "@mui/material/"
+import { Card, Typography, IconButton, Tooltip, CircularProgress, CardMedia, CardContent } from "@mui/material/"
 import "./Styles/Bunkmates.css"
 import PlacesAutocomplete from "./Components/Map/PlacesAutocomplete";
 import mapCardData from "../../data/mapCardData"
@@ -196,6 +196,7 @@ const Bunkmates = () => {
     };
     */
     function debounce(func, delay) {
+        //delay the zooming in and out of the map to allow time for tiles to render properly
         let timerId;
         return function (...args) {
             if (timerId) {
@@ -211,6 +212,28 @@ const Bunkmates = () => {
     const handleZoomChange = debounce((newZoomLevel) => {
         setZoom(newZoomLevel);
     }, 500);
+
+    function KeyLocationDetails() {
+        const locationDetails = {
+            container: { borderRadius: '10px', backgroundColor: 'black', position: 'absolute', top: '130px', zIndex: '6', width: '400px', right: '60px', display: 'flex', alignItems: 'flex-start' },
+            postHeader: { display: 'flex', width: '100%', padding: '15px 0px 15px 15px', flexDirection: 'column' },
+        }
+
+        return (
+            <Card sx={locationDetails.container}>
+                <CardContent sx={locationDetails.postHeader}>
+                    <Typography variant="h5" color="text.primary" sx={{ color: 'white', fontWeight: '700', zIndex: 4 }} align="top">Convenience Stores</Typography>
+                    <Typography variant="h6" color="text.primary" sx={{ color: 'white', fontSize: '18px', zIndex: 4 }} align="bottom">Erin Mills Town Center</Typography>
+                    <Typography variant="h6" color="text.secondary" sx={{ color: 'grey', fontSize: '16px', zIndex: 4 }} align="bottom">748 The Queensway | 0.57 km</Typography>
+                </CardContent>
+                <div>
+                    <div style={{ background: 'linear-gradient(to right, rgba(255,255,255,0), rgba(255, 255, 255, 0.5) 50%)', width: '200px', height: '125px', backgroundColor: 'black', position: 'absolute', zIndex: '3', opacity: '0.9', right: '0px' }}></div>
+                    <CardMedia sx={{ width: '200px', height: "125px", position: 'absolute', zIndex: '2', right: '0px' }} image="https://cdn.skyrisecities.com/sites/default/files/images/projects/8535/8535-24865.jpg" />
+                </div>
+            </Card>
+        )
+
+    }
 
 
 
@@ -259,39 +282,16 @@ const Bunkmates = () => {
                         {keyLocationPins ? keyLocationPins.map((location) => {
                             console.log(location)
                             return (
-                                <>
-                                    <OverlayViewF
-                                        key={location.place_id}
-                                        position={{ lat: location.geometry.location.lat(), lng: location.geometry.location.lng() }}
-                                        styles={{ background: 'DarkGray', color: 'white' }}
-                                        mapPaneName={OVERLAY_MOUSE_TARGET}>
-                                        <MapEducationMarker />
-                                    </OverlayViewF >
-                                    {/*
-
-                                    <MarkerF
-                                        draggable={true}
-                                        clickable={true}
-                                        position={{
-                                            lat: location.geometry.location.lat(),
-                                            lng: location.geometry.location.lng()
-                                        }}
-                                    >
-                                        {location.name}
-                                    </MarkerF>
-                                    */}
-
-                                </>
+                                <OverlayViewF
+                                    key={location.place_id}
+                                    position={{ lat: location.geometry.location.lat(), lng: location.geometry.location.lng() }}
+                                    styles={{ background: 'DarkGray', color: 'white' }}
+                                    mapPaneName={OVERLAY_MOUSE_TARGET}>
+                                    <MapEducationMarker />
+                                </OverlayViewF >
                             )
                         }) : null}
-                        {/*
-                            <Marker
-                                key={university.id}
-                                lat={university.geometry.location.lat()}
-                                lng={university.geometry.location.lng()}
-                                text={university.name}
-                            />
-                        */}
+                        <KeyLocationDetails />
                         {displaySocial ? <SocialFeed userOwnData={userOwnData} userProfile={userProfile} /> : null}
                         {mapProfileCard ? mapProfileCard : null}
                         {selected && <MarkerF position={center} icon={"http://maps.google.com/mapfiles/ms/icons/blue.png"} />}
@@ -358,3 +358,18 @@ const Marker = ({ text }) => <div>{text}</div>;
                     }
                     } onClick={e => handleProfileClick(e, index)} key={index} position={{ lat: profile?.idealLocation[0], lng: profile?.idealLocation[1] }} >{profile?.rentBudget}</MarkerF>;
                 */}
+
+
+
+{/*
+                                    <MarkerF
+                                        draggable={true}
+                                        clickable={true}
+                                        position={{
+                                            lat: location.geometry.location.lat(),
+                                            lng: location.geometry.location.lng()
+                                        }}
+                                    >
+                                        {location.name}
+                                    </MarkerF>
+                                    */}
