@@ -13,7 +13,7 @@ const KeyLocations = ({ setKeyLocationPins, coordinates, setZoom, setCenter, set
   const placesRequest = {
     location: new window.google.maps.LatLng(coordinates),
     radius: '500',
-    types: ['store'],
+    types: ['school'],
   };
 
   const container = document.getElementById('results');
@@ -100,9 +100,8 @@ export function KeyLocationDetails({ keyLocationData }) {
     return (
       <Card sx={locationDetails.container}>
         <CardContent sx={locationDetails.postHeader}>
-          <Typography variant="h5" color="text.primary" sx={{ color: 'white', fontWeight: '700', zIndex: 4 }} align="top">{capitalizedName(keyLocationData.types[0])} | 0.57 km</Typography>
-          <Typography noWrap variant="h6" color="text.primary" sx={{ color: 'white', fontSize: '18px', zIndex: 4 }} align="bottom">{keyLocationData.name}</Typography>
-          <Typography noWrap variant="h6" color="text.secondary" sx={{ color: 'grey', fontSize: '16px', zIndex: 4 }} align="bottom">{keyLocationData.vicinity} </Typography>
+          <Typography noWrap variant="h5" color="text.primary" sx={{ color: 'white', fontWeight: '700', zIndex: 4 }} align="bottom">{keyLocationData.name}</Typography>
+          <Typography noWrap variant="h5" color="text.secondary" sx={{ color: 'grey', fontSize: '18px', zIndex: 4 }} align="bottom">{keyLocationData.vicinity} </Typography>
         </CardContent>
         <div>
           <div style={{ width: '400px', display: 'flex', justifyContent: 'flex-end' }}>
