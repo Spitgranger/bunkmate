@@ -29,8 +29,8 @@ export default function CommentSection({ user, userOwnData, userProfile, allComm
             margin: '0px',
             padding: '0px'
         },
-        commentContainer: { boxSizing: 'content-box', display: 'flex', alignItems: 'flex-start', height: '100%' },
-        avatarContainer: { display: 'flex', alignItems: 'flex-start', height: '100%', padding: '10px' },
+        commentContainer: { boxSizing: 'content-box', display: 'flex', alignItems: 'flex-start', height: '100%', },
+        avatarContainer: { display: 'flex', alignItems: 'flex-start', height: '100%', padding: '10px', margin: '10px' },
         loadingContainer: { display: "flex", width: '100%', justifyContent: 'center' },
         commentReplyInfoContainer: { paddingBottom: "15px !important", paddingTop: '15px !important', padding: '0px', display: 'flex', flexDirection: 'column' },
         firstName: { color: 'white', width: '100%' },
