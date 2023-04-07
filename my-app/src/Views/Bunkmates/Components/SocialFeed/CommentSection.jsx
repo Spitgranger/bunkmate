@@ -16,8 +16,9 @@ import {
 import { IoSend } from 'react-icons/io5'
 import { BuildUserContext } from '../../../../Components/GlobalStateManagement/UserContext'
 import { makeComment, getPost } from '../../../../api'
+import { BsThreeDotsVertical } from "react-icons/bs";
 
-export default function CommentSection({ user, userOwnData, userProfile, allComments, setAllComments, post, setStatePostArray }) {
+export default function CommentSection({ user, userOwnData, userProfile, allComments, setAllComments, post }) {
 
     const commentSectionStyles = {
         replyButton: { width: '30px', height: '30px', color: 'white' },
@@ -32,8 +33,8 @@ export default function CommentSection({ user, userOwnData, userProfile, allComm
         commentContainer: { boxSizing: 'content-box', display: 'flex', alignItems: 'flex-start', height: '100%', },
         avatarContainer: { display: 'flex', alignItems: 'flex-start', height: '100%', padding: '10px', margin: '10px' },
         loadingContainer: { display: "flex", width: '100%', justifyContent: 'center' },
-        commentReplyInfoContainer: { paddingBottom: "15px !important", paddingTop: '15px !important', padding: '0px', display: 'flex', flexDirection: 'column' },
-        firstName: { color: 'white', width: '100%' },
+        commentReplyInfoContainer: { paddingBottom: "15px !important", paddingTop: '15px !important', padding: '0px', display: 'flex', flexDirection: 'column', width: '280px', overflow: 'hidden' },
+        firstName: { color: 'white', width: '100%', flexDirection: 'row', display: 'flex', justifyContent: 'space-between', alignItems: 'center' },
         commentMessage: { fontSize: "15px", color: '#b3b3b3', width: '100%' }
     }
 
@@ -66,7 +67,7 @@ export default function CommentSection({ user, userOwnData, userProfile, allComm
                 <ReplyCommentTextField commentSectionStyles={commentSectionStyles} allComments={allComments} setAllComments={setAllComments} user={user} post={post} />
             </CardContent>
             <CardContent>
-                <MappedComments commentSectionStyles={commentSectionStyles} allComments={allComments} commentSectionProfiles={commentSectionProfiles} />
+                <MappedComments post={post} user={user} commentSectionStyles={commentSectionStyles} allComments={allComments} commentSectionProfiles={commentSectionProfiles} />
             </CardContent>
 
             {/* TODO Add functionality to view more button
@@ -123,7 +124,7 @@ const ReplyCommentTextField = ({ allComments, setAllComments, user, commentSecti
 }
 
 //All User comments in a post
-const MappedComments = ({ allComments, commentSectionStyles, commentSectionProfiles }) => {
+const MappedComments = ({ post, allComments, commentSectionStyles, commentSectionProfiles, user }) => {
     if (commentSectionProfiles && allComments.length !== 0) {
         return (
             allComments.map((comment) => {
@@ -134,6 +135,7 @@ const MappedComments = ({ allComments, commentSectionStyles, commentSectionProfi
                     return item.user === searchValue
                 });
                 if (selectedItem) {
+                    console.log(post, user)
                     return (
                         <div style={commentSectionStyles.commentContainer}>
                             <CardMedia sx={commentSectionStyles.avatarContainer}>
@@ -142,7 +144,10 @@ const MappedComments = ({ allComments, commentSectionStyles, commentSectionProfi
                                 </CardActionArea>
                             </CardMedia>
                             <CardContent sx={commentSectionStyles.commentReplyInfoContainer}>
-                                <Typography variant="body1" color="text.primary" sx={commentSectionStyles.firstName}> {selectedItem.firstName}</Typography >
+                                <Typography variant="body1" color="text.primary" sx={commentSectionStyles.firstName}>
+                                    {selectedItem.firstName}
+                                    {user.result._id === comment[0] ? <IconButton sx={{ color: 'white' }}><BsThreeDotsVertical style={{ color: 'white', fontSize: '17px' }} /></IconButton> : ""}
+                                </Typography >
                                 <Typography variant="body2" color="text.secondary" sx={commentSectionStyles.commentMessage}>{comment[1]}</Typography >
                             </CardContent>
                         </div >
