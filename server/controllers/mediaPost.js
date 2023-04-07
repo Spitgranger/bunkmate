@@ -72,13 +72,41 @@ export const getPost = async (req, res) => {
 }
 
 export const makeComment = async (req, res) => {
-    const { id: _id } = req.params;
-    const user = req.userId;
-    const data = req.body;
-    const post = await mediaPost.findById(_id);
-    post.comments.push([user, data.message]);
-    const updatedPost = await mediaPost.findByIdAndUpdate(_id, post, { new: true });
-    res.json(updatedPost);
+    try {
+        const { id: _id } = req.params;
+        const user = req.userId;
+        const data = req.body;
+        const post = await mediaPost.findById(_id);
+        post.comments.push([user, data.message]);
+        const updatedPost = await mediaPost.findByIdAndUpdate(_id, post, { new: true });
+        res.json(updatedPost);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: error.message });
+    }
+
+}
+
+export const likePost = async (req, res) => {
+    try {
+        const { id: _id } = req.params;
+        const userId = req.userId;
+        const post = await mediaPost.findById(_id);
+        const index = post.likes.findIndex((_id) => String(_id) === String(userId));
+        if (index === -1) {
+            //like
+            post.likes.push(req.userId);
+        } else {
+            //unlinke
+            post.likes = post.likes.filter((_id) => String(_id) !== String(userId))
+        }
+        const updatedPost = await mediaPost.findByIdAndUpdate(_id, post, { new: true });
+        res.status(200).json(updatedPost);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: error.message });
+    }
+
 }
 
 export const deletePost = async (req, res) => {

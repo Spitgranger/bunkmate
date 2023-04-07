@@ -13,7 +13,7 @@ import {
 import { AiFillLike } from "react-icons/ai";
 import { BsPinFill, BsThreeDotsVertical } from "react-icons/bs";
 import { MdComment, MdCommentsDisabled } from 'react-icons/md'
-import { deletePost } from "../../../../api";
+import { deletePost, likePost } from "../../../../api";
 
 
 export default function PostCard({ post, userOwnData, userProfile, setStatePostArray, statePostArray }) {
@@ -42,22 +42,29 @@ export default function PostCard({ post, userOwnData, userProfile, setStatePostA
         commentsContainer: { display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }
     }
 
-    const handleLikeChange = () => {
+    const handleLikeChange = async (id) => {
         //event handler for when the user likes a post
-        setLiked(!liked)
-        if (liked) {
-            setLikes(post.likes + 1)
-        } else if (!liked) {
-            setLikes(likes - 1)
+        await likePost(id);
+        if (likes.findIndex((id) => String(id) === String(user.result?._id)) === -1) {
+            setLikes((prev) => [...prev, user.result._id]);
+        } else {
+            setLikes((prev) => prev.filter((id) => String(id) !== String(user.result._id)));
         }
     }
-
+    useEffect(() => {
+        try {
+            likes.findIndex((id) => String(id) === String(user.result?._id)) === -1 ? setLiked(true) : setLiked(false);
+        } catch {
+            console.log("PROP NOT FINISHED PASSING DOWN!")
+        }
+    }, [likes])
     //initialization of likes and comments count
+    /*
     useEffect(() => {
         setLikes(post.likes)
         setAllComments(post.comments)
     }, [post])
-
+    */
 
     const handleShowComments = () => {
         //event handler for showing comments on click
@@ -114,8 +121,8 @@ export default function PostCard({ post, userOwnData, userProfile, setStatePostA
             <div style={postStyles.socialFeedBack}>
                 <div style={{ display: 'flex', flexDirection: 'row' }}>
                     <div style={postStyles.likesContainer}>
-                        <IconButton style={{ color: 'white' }} ><AiFillLike onClick={handleLikeChange} style={postStyles.likesButton} /></IconButton>
-                        <Typography color="text.primary" variant="h6" sx={{ color: 'white', fontSize: "16px" }}>{likes}</Typography>
+                        <IconButton style={{ color: 'white' }} ><AiFillLike onClick={() => { handleLikeChange(post._id) }} style={postStyles.likesButton} /></IconButton>
+                        <Typography color="text.primary" variant="h6" sx={{ color: 'white', fontSize: "16px" }}>{likes.length}</Typography>
                     </div>
                     <div style={{ padding: '10px' }}>
                         <Divider orientation="vertical" sx={postStyles.divider} />
