@@ -15,7 +15,7 @@ import {
 } from "@mui/material/"
 import { IoSend } from 'react-icons/io5'
 import { BuildUserContext } from '../../../../Components/GlobalStateManagement/UserContext'
-import { makeComment, getPost } from '../../../../api'
+import { makeComment, getPost, deleteComment } from '../../../../api'
 import { BsThreeDotsVertical } from "react-icons/bs";
 
 export default function CommentSection({ user, userOwnData, userProfile, allComments, setAllComments, post }) {
@@ -44,7 +44,8 @@ export default function CommentSection({ user, userOwnData, userProfile, allComm
     const { profileHandleRetrieval } = useContext(BuildUserContext)
 
     const handleGetProfiles = async () => {
-        const arrayUserId = allComments.map((comment) => { return (comment[0]) })
+        //this is not good, should remove duplicate profiles to speed up performance
+        const arrayUserId = allComments.map((comment) => { return comment.userId })
         const profiles = await profileHandleRetrieval(arrayUserId.join('.'))
         return profiles
     }
@@ -53,6 +54,12 @@ export default function CommentSection({ user, userOwnData, userProfile, allComm
     useEffect(() => {
         handleGetProfiles().then((profiles) => setCommentSectionProfiles([...profiles.data]))
     }, [allComments])
+
+    //to delete a user's comment
+    const handleDeleteComment = async (id) => {
+        await deleteComment(id);
+        setAllComments(allComments.filter((comment) => comment._id !== id));
+    }
 
 
 
@@ -67,7 +74,7 @@ export default function CommentSection({ user, userOwnData, userProfile, allComm
                 <ReplyCommentTextField commentSectionStyles={commentSectionStyles} allComments={allComments} setAllComments={setAllComments} user={user} post={post} />
             </CardContent>
             <CardContent>
-                <MappedComments post={post} user={user} commentSectionStyles={commentSectionStyles} allComments={allComments} commentSectionProfiles={commentSectionProfiles} />
+                <MappedComments post={post} user={user} commentSectionStyles={commentSectionStyles} allComments={allComments} commentSectionProfiles={commentSectionProfiles} handleDeleteComment={handleDeleteComment} />
             </CardContent>
 
             {/* TODO Add functionality to view more button
@@ -99,10 +106,11 @@ const ReplyCommentTextField = ({ allComments, setAllComments, user, commentSecti
     const handleCommentsChange = async () => {
         //event handler for replying to comments
         await makeComment({ message: userComment }, post._id);
-        setAllComments([[user.result._id, userComment], ...allComments]);
+        setAllComments([{ userId: user.result._id, message: userComment }, ...allComments]);
 
         //setAllComments([[user.result._id, userComment], ...allComments])
     }
+
 
 
     return (<TextField maxRows={2}
@@ -124,18 +132,18 @@ const ReplyCommentTextField = ({ allComments, setAllComments, user, commentSecti
 }
 
 //All User comments in a post
-const MappedComments = ({ post, allComments, commentSectionStyles, commentSectionProfiles, user }) => {
+const MappedComments = ({ post, allComments, commentSectionStyles, commentSectionProfiles, user, handleDeleteComment }) => {
     if (commentSectionProfiles && allComments.length !== 0) {
         return (
             allComments.map((comment) => {
-                console.log(commentSectionProfiles, comment[0])
-                const searchValue = comment[0];
+                //console.log(commentSectionProfiles, comment[0])
+                const searchValue = comment.userId;
                 const selectedItem = commentSectionProfiles.find(item => {
-                    console.log(item.user, searchValue);
+                    //console.log(item.user, searchValue);
                     return item.user === searchValue
                 });
                 if (selectedItem) {
-                    console.log(post, user)
+                    //console.log(post, user)
                     return (
                         <div style={commentSectionStyles.commentContainer}>
                             <CardMedia sx={commentSectionStyles.avatarContainer}>
@@ -146,9 +154,9 @@ const MappedComments = ({ post, allComments, commentSectionStyles, commentSectio
                             <CardContent sx={commentSectionStyles.commentReplyInfoContainer}>
                                 <Typography variant="body1" color="text.primary" sx={commentSectionStyles.firstName}>
                                     {selectedItem.firstName}
-                                    {user.result._id === comment[0] ? <IconButton sx={{ color: 'white' }}><BsThreeDotsVertical style={{ color: 'white', fontSize: '17px' }} /></IconButton> : ""}
+                                    {user.result._id === comment.userId ? <IconButton sx={{ color: 'white' }} onClick={() => { handleDeleteComment(comment._id) }}><BsThreeDotsVertical style={{ color: 'white', fontSize: '17px' }} /></IconButton> : ""}
                                 </Typography >
-                                <Typography variant="body2" color="text.secondary" sx={commentSectionStyles.commentMessage}>{comment[1]}</Typography >
+                                <Typography variant="body2" color="text.secondary" sx={commentSectionStyles.commentMessage}>{comment.message}</Typography >
                             </CardContent>
                         </div >
                     )

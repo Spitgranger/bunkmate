@@ -23,7 +23,7 @@ const mediaPostSchema = mongoose.Schema({
         required: true
     },
     comments: {
-        type: [[String]],
+        type: [mongoose.SchemaTypes.ObjectId],
         required: true,
     }
 })

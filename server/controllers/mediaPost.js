@@ -1,4 +1,5 @@
 import mediaPost from "../models/mediaPost.js";
+import mediaPostComment from "../models/mediaPostComment.js";
 import Profile from "../models/profile.js";
 import User from "../models/user.js";
 
@@ -62,10 +63,18 @@ export const getPost = async (req, res) => {
                 "profile.picture": 1,
                 "userId": 1,
                 "message": 1,
-                "comments": 1,
                 "request.address": 1,
                 "images": 1,
                 "likes": 1,
+            }
+        },
+        {
+            $lookup:
+            {
+                from: "mediapostcomments",
+                localField: "_id",
+                foreignField: "mediaPost",
+                as: "comments"
             }
         }
     ]).then((result) => { res.status(200).json(result) });
@@ -77,7 +86,8 @@ export const makeComment = async (req, res) => {
         const user = req.userId;
         const data = req.body;
         const post = await mediaPost.findById(_id);
-        post.comments.push([user, data.message]);
+        const comment = await mediaPostComment.create({ dateCreated: new Date(), message: data.message, userId: user, mediaPost: post._id });
+        //post.comments.push(comment._id);
         const updatedPost = await mediaPost.findByIdAndUpdate(_id, post, { new: true });
         res.json(updatedPost);
     } catch (error) {
@@ -124,4 +134,20 @@ export const deletePost = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 
+}
+
+export const deleteComment = async (req, res) => {
+    try {
+        const { id: _id } = req.params;
+        const user = req.userId;
+        const comment = await mediaPostComment.findById(_id);
+        if (String(comment.userId) !== String(user)) {
+            return res.status(403).send('Cannot delete comments that you have not made');
+        }
+        await mediaPostComment.findByIdAndDelete(comment._id);
+        res.status(200).json({ message: "Comment Deleted sucessfully" });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: error.message });
+    }
 }

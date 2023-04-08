@@ -42,6 +42,7 @@ export const getPost = () => API.get('/media');
 export const makeComment = (data, id) => API.patch(`/media/${id}/commentPost`, data);
 export const likePost = (id) => API.patch(`/media/${id}/likepost`);
 export const deletePost = (id) => API.delete(`/media/${id}`);
+export const deleteComment = (id) => API.delete(`/media/${id}/comment`);
 
 
 
