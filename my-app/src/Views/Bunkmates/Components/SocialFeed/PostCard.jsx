@@ -58,19 +58,12 @@ export default function PostCard({ post, userOwnData, userProfile, setStatePostA
             console.log("PROP NOT FINISHED PASSING DOWN!")
         }
     }, [likes])
-    //initialization of likes and comments count
-    /*
-    useEffect(() => {
-        if (post.likes === 0) {
-            //BUG: shown the userid instead of number of likes on posts that aren't my own
-            setLikes(0)
-        } else {
-            setLikes(post.likes)
 
-        }
+    //initialization of likes and comments count
+    useEffect(() => {
+        setLikes(post.likes)
         setAllComments(post.comments)
     }, [post])
-    */
 
     const handleShowComments = () => {
         setShowComments(!showComments)

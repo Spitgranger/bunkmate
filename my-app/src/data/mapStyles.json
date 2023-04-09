@@ -24,6 +24,15 @@
         ]
     },
     {
+        "featureType": "administrative",
+        "elementType": "geometry",
+        "stylers": [
+            {
+                "visibility": "off"
+            }
+        ]
+    },
+    {
         "featureType": "administrative.country",
         "elementType": "geometry.stroke",
         "stylers": [
@@ -70,19 +79,18 @@
     },
     {
         "featureType": "poi",
-        "elementType": "geometry",
         "stylers": [
             {
-                "color": "#283d6a"
+                "visibility": "off"
             }
         ]
     },
     {
         "featureType": "poi",
-        "elementType": "labels.text",
+        "elementType": "geometry",
         "stylers": [
             {
-                "visibility": "off"
+                "color": "#283d6a"
             }
         ]
     },
@@ -101,14 +109,6 @@
         "stylers": [
             {
                 "color": "#1d2c4d"
-            }
-        ]
-    },
-    {
-        "featureType": "poi.business",
-        "stylers": [
-            {
-                "visibility": "off"
             }
         ]
     },
