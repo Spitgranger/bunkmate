@@ -105,6 +105,7 @@ const ReplyCommentTextField = ({ allComments, setAllComments, user, commentSecti
     }
     */
 
+
     const handleCommentsChange = async () => {
         //event handler for replying to comments
         const response = await makeComment({ message: userComment }, post._id);
@@ -136,6 +137,50 @@ const ReplyCommentTextField = ({ allComments, setAllComments, user, commentSecti
 
 //All User comments in a post
 const MappedComments = ({ allComments, commentSectionStyles, commentSectionProfiles, user, handleDeleteComment }) => {
+
+
+    console.log("Mapped Comments rerender")
+
+    //calculates the last time the message was sent
+    const updateMessageTime = (comment) => {
+        const dateString = comment?.dateCreated;
+        const now = new Date();
+        //when user makes a brand new comment, the dateCreated field hasn't been created in the backend. Therefore we substitue dateCreated with the current time
+        const date = new Date(dateString ?? now);
+
+        const millisecondsDifference = now.getTime() - date.getTime(); //milliseconds
+        const secondsDifference = Math.round(millisecondsDifference / 1000); //seconds
+        const minutesDifference = Math.round(millisecondsDifference / 60000); //minutes
+        const hoursDifference = Math.round(millisecondsDifference / 3600000); //hours
+        const daysDifference = Math.round(millisecondsDifference / 86400000); //days
+        const timeValues = { millisecondsDifference, secondsDifference, minutesDifference, hoursDifference, daysDifference }
+        return (displayTime(timeValues, comment?.message));
+    };
+
+
+    //decides whether to show seconds, minutes hours or days 
+    const displayTime = (timeValues, lastMessage) => {
+        //If there is no message history return empty string
+        if (!lastMessage) {
+            return ("")
+        }
+        switch (true) {
+            case (timeValues.millisecondsDifference < 60000)://if less than 60 seconds passed display seconds
+                return `${timeValues.secondsDifference}s`
+            case (timeValues.millisecondsDifference >= 60000 && timeValues.millisecondsDifference <= 3600000)://if more than a minute passed and less than an hour display minutes
+                return `${timeValues.minutesDifference}m`
+            case (timeValues.millisecondsDifference > 3600000 && timeValues.millisecondsDifference <= 86400000)://if more than an hour passed and less 24 hours display hours
+                return `${timeValues.hoursDifference}h`
+            case (timeValues.millisecondsDifference > 86400000)://if more than 24 hours passed then display days
+                return `${timeValues.daysDifference}d`
+            default:
+                return `${timeValues.minutesDifference}m`
+        }
+    }
+
+
+
+
     if (commentSectionProfiles && allComments.length !== 0) {
         return (
             allComments.map((comment) => {
@@ -145,21 +190,21 @@ const MappedComments = ({ allComments, commentSectionStyles, commentSectionProfi
                     //console.log(item.user, searchValue);
                     return item.user === searchValue
                 });
-                console.log(comment)
+                const timeCreated = updateMessageTime(comment);
                 if (selectedItem) {
                     //console.log(post, user)
                     return (
                         <div style={commentSectionStyles.commentContainer}>
                             <CardMedia sx={commentSectionStyles.avatarContainer}>
                                 <CardActionArea>
-                                    <Avatar sx={{}} src={selectedItem.picture} className="Avatar" alt={`${selectedItem.firstName}'s Profile picture`} />
+                                    <Avatar src={selectedItem.picture} className="Avatar" alt={`${selectedItem.firstName}'s Profile picture`} />
                                 </CardActionArea>
                             </CardMedia>
                             <CardContent sx={commentSectionStyles.commentReplyInfoContainer}>
                                 <Typography variant="body1" color="text.primary" sx={commentSectionStyles.firstRow}>
                                     <div style={commentSectionStyles.firstName}>
                                         {selectedItem.firstName}
-                                        <div style={commentSectionStyles.lastActive}>3h</div>
+                                        <div style={commentSectionStyles.lastActive}>{timeCreated}</div>
                                     </div>
                                     {user.result._id === comment.userId ? <IconButton sx={{ color: 'white' }} onClick={() => { handleDeleteComment(comment._id) }}><BsThreeDotsVertical style={{ color: 'white', fontSize: '17px' }} /></IconButton> : ""}
                                 </Typography >

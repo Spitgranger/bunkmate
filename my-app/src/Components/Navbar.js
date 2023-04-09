@@ -1,4 +1,5 @@
 import logo from './Assets/logo.svg';
+import bunkmate_logo from './Assets/bunkmate_logo.png'
 import './Navbar.css';
 import { Link, useResolvedPath, useMatch } from 'react-router-dom';
 import RenderWhich from '../Views/SignIn';
@@ -171,9 +172,9 @@ const Navbar = memo(({ chooseStyle }) => {
     return (
         <nav className={`${navStyle}Bar`}>
             <Tooltip title={"Return Home"}>
-                <div>
+                <div style={{ width: '300px' }}>
                     <CheckActive to="/" page={
-                        <img src={logo} className="App-logo" alt="logo" />}>
+                        <img src={bunkmate_logo} className="App-logo" alt="logo" />}>
                     </CheckActive>
                 </div>
             </Tooltip>

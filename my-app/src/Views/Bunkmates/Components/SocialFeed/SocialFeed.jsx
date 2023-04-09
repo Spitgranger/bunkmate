@@ -32,8 +32,8 @@ export const SocialFeed = memo(({ userOwnData, userProfile, statePostArray, setS
         height: '75vh',
         top: '210px',
         zIndex: '5',
-        width: '400px',
-        left: '10px'
+        width: '405px',
+        left: '10px',
     }
 
     //all posts stored in an array

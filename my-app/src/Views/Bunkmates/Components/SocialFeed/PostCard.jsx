@@ -73,7 +73,6 @@ export default function PostCard({ post, userOwnData, userProfile, setStatePostA
     */
 
     const handleShowComments = () => {
-        //event handler for showing comments on click
         setShowComments(!showComments)
     }
 

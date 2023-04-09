@@ -234,8 +234,7 @@ const Bunkmates = () => {
                             styles: mapStyles,
                             streetViewControl: false, mapTypeControl: false,
                         }}
-                        onClick={() => { setMapProfileCard(null) }}
-                    >
+                        onClick={() => { setMapProfileCard(null) }}>
                         <div id="results" />
                         <Navbar chooseStyle={"glass"} />
                         <section className="bunkamtes__social-feed" style={{ borderRadius: '50%', backgroundColor: 'black', position: 'absolute', top: '255px', height: '40px', width: '40px', right: '10px', }}>
