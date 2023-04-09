@@ -1,11 +1,12 @@
-import { Card, Typography, IconButton, Tooltip, CircularProgress, CardMedia, CardContent } from "@mui/material/"
-import { formatContext } from "../../../../Components/GlobalStateManagement/FormatContext";
-import { useContext } from "react";
+import { Card, Typography, CardContent } from "@mui/material/"
+import { useState } from "react";
+import { OVERLAY_MOUSE_TARGET, OverlayViewF } from "@react-google-maps/api";
+import { MapEducationMarker } from "./MapMarkers";
 
+//Retrieve Key Locations 
+export default function RetrieveKeyLocations({ setKeyLocationPins, coordinates, setZoom, setCenter, setMapProfileCard, request }) {
 
-const KeyLocations = ({ setKeyLocationPins, coordinates, setZoom, setCenter, setMapProfileCard, request }) => {
-
-
+  //retrieve locations data from google maps api
   console.log('keyLocations rerendered')
 
 
@@ -30,17 +31,6 @@ const KeyLocations = ({ setKeyLocationPins, coordinates, setZoom, setCenter, set
   })
   */
 
-  /*
-  var directionsService = new window.google.maps.DirectionsService();
-  var directionsRenderer = new window.google.maps.DirectionsRenderer();
-  var chicago = new window.google.maps.LatLng(41.850033, -87.6500523);
-  var mapOptions = {
-    zoom: 7,
-    center: chicago
-  }
-  var map = new window.google.maps.Map(document.getElementById('map'), mapOptions);
-  directionsRenderer.setMap(map);
-  */
 
 
   function callback(results, status) {
@@ -62,7 +52,19 @@ const KeyLocations = ({ setKeyLocationPins, coordinates, setZoom, setCenter, set
     }
   }
 
+  /*
   //Did not work as expected
+  //google maps directions
+  var directionsService = new window.google.maps.DirectionsService();
+  var directionsRenderer = new window.google.maps.DirectionsRenderer();
+  var chicago = new window.google.maps.LatLng(41.850033, -87.6500523);
+  var mapOptions = {
+    zoom: 7,
+    center: chicago
+  }
+  var map = new window.google.maps.Map(document.getElementById('map'), mapOptions);
+  directionsRenderer.setMap(map);
+  */
   /*
   function calcRoute({ lat, lng }) {
     var start = coordinates
@@ -84,29 +86,30 @@ const KeyLocations = ({ setKeyLocationPins, coordinates, setZoom, setCenter, set
 }
 
 
-export default KeyLocations
 
+//Displays the name and address of the establishment in a card
+export function KeyLocationInfoCard({ keyLocationData }) {
 
-export function KeyLocationDetails({ keyLocationData }) {
-
-  const { capitalizedName } = useContext(formatContext);
 
   const locationDetails = {
-    container: { borderRadius: '10px', backgroundColor: 'black', position: 'absolute', top: '130px', zIndex: '6', width: '400px', right: '60px', display: 'flex', alignItems: 'flex-start' },
-    postHeader: { display: 'flex', width: '100%', padding: '15px 0px 15px 15px', flexDirection: 'column', position: 'absolute' },
+    container: { width: '400px', height: '125px', borderRadius: '10px', backgroundColor: 'black', position: 'absolute', top: '130px', zIndex: '6', right: '60px', display: 'flex', alignItems: 'flex-start' },
+    postHeader: { width: '400px', display: 'flex', width: '100%', padding: '15px', flexDirection: 'column', position: 'absolute' },
+    imgContainer: { width: '400px', display: 'flex', justifyContent: 'flex-end' }
   }
 
   if (keyLocationData) {
     return (
-      <Card sx={locationDetails.container}>
-        <CardContent sx={locationDetails.postHeader}>
-          <Typography noWrap variant="h5" color="text.primary" sx={{ color: 'white', fontWeight: '700', zIndex: 4 }} align="bottom">{keyLocationData.name}</Typography>
-          <Typography noWrap variant="h5" color="text.secondary" sx={{ color: 'grey', fontSize: '18px', zIndex: 4 }} align="bottom">{keyLocationData.vicinity} </Typography>
-        </CardContent>
+      <Card sx={locationDetails.container}> <CardContent sx={locationDetails.postHeader}>
+        <Typography noWrap variant="h5" color="text.primary" sx={{ color: 'white', fontWeight: '700', zIndex: 4, width: '370px', padding: '10px' }} align="bottom">{keyLocationData.name}</Typography>
+        <Typography noWrap variant="h5" color="text.secondary" sx={{ color: 'grey', fontSize: '18px', zIndex: 4, width: '370px', padding: '0px 10px 0px 10px' }} align="bottom">{keyLocationData.vicinity} </Typography>
+      </CardContent>
         <div>
-          <div style={{ width: '400px', display: 'flex', justifyContent: 'flex-end' }}>
+          <div style={locationDetails.imgContainer}>
+            {/* See css file more styling*/}
             <div className="img-gradient" >
-              <img style={{ width: '200px', height: '125px', }} src={keyLocationData.photos ? keyLocationData.photos[0].getUrl() : ""} />
+              {keyLocationData.photos ?
+                <img style={{ width: '200px', height: '125px', }} src={keyLocationData.photos[0].getUrl()} />
+                : ""}
             </div>
           </div>
         </div>
@@ -116,4 +119,30 @@ export function KeyLocationDetails({ keyLocationData }) {
     return ""
   }
 
+}
+
+
+//Displays markers on the map of the nearby key locations
+export function KeyLocationsMarkers({ keyLocationPins }) {
+
+  //Stores key location data
+  const [keyLocationData, setKeyLocationData] = useState('');
+  //THIS MAKES TOO MANY REQUESTS WHEN FETCHING PHOTO URLS, NEED TO FIX SOON
+
+  return (
+    <>
+      <KeyLocationInfoCard keyLocationData={keyLocationData} />
+      {keyLocationPins ? keyLocationPins.map((location) => {
+        return (
+          <OverlayViewF
+            key={location.place_id}
+            position={{ lat: location.geometry.location.lat(), lng: location.geometry.location.lng() }}
+            styles={{ background: 'DarkGray', color: 'white', }}
+            mapPaneName={OVERLAY_MOUSE_TARGET}>
+            <MapEducationMarker location={location} setKeyLocationData={setKeyLocationData} />
+          </OverlayViewF >
+        )
+      }) : null}
+    </>
+  )
 }

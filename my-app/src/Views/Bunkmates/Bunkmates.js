@@ -16,12 +16,12 @@ import { deleteRequest } from '../../api'
 import { BuildUserContext, BunkmatesContext } from "../../Components/GlobalStateManagement/UserContext";
 import { RxTriangleDown } from "react-icons/rx"
 import { useNavigate } from "react-router";
-import { MapRequestMarker, MapEducationMarker } from './Components/Map/MapMarker'
+import { MapRequestMarker } from './Components/Map/MapMarkers'
 import { TbSocial, TbSocialOff } from "react-icons/tb";
 import { SocialFeed } from "./Components/SocialFeed/SocialFeed";
 import { useGetUserData } from "./Hooks/useGetUserData";
 import { getPost } from "../../api";
-import { KeyLocationDetails } from "./Components/Map/KeyLocations";
+import { KeyLocationsMarkers } from "./Components/Map/KeyLocations";
 
 
 export function MapProfile({ request, setKeyLocationPins, setZoom, setCenter, setMapProfileCard }) {
@@ -89,7 +89,7 @@ const Bunkmates = () => {
     const { localStorageData } = useContext(chatClientContext)
     //sign in context for when the user tries to create a bunkmate request without an account
     const { setIsOpen, setMessage, setMode } = useContext(SignInContext)
-    const { center, setCenter, mapProfileCard, setMapProfileCard, rerender, setRerender } = useContext(BunkmatesContext)
+    const { center, setCenter, mapProfileCard, setMapProfileCard, rerender, setRerender, zoom, setZoom, keyLocationPins, setKeyLocationPins } = useContext(BunkmatesContext)
     //display, nodisplay of the create request page
     const [showRequest, setShowRequest] = useState(false);
     const [selected, setSelected] = useState(null);
@@ -97,16 +97,12 @@ const Bunkmates = () => {
     //used to rerender useEffect in Bunkmates.js containing async functions that gets data from backend
     const [displaySocial, setDisplaySocial] = useState(false)
     const { loading, listingArray, userRequests, userProfile, userOwnData, isLoaded, } = useGetUserData()
-    //store the key locations 
-    const [keyLocationPins, setKeyLocationPins] = useState('');
-    //store the key locations data
-    //state management for the zoom level of the map
-    const [zoom, setZoom] = useState(15)
 
     const [statePostArray, setStatePostArray] = useState([])
     //get Social feed informations
     useEffect(() => {
         getPost().then((result) => setStatePostArray(result.data.reverse()));
+        setZoom(15)
     }, [])
 
 
@@ -192,21 +188,9 @@ const Bunkmates = () => {
         )
     }
 
-    /*
-    const markerOptions = ({ profile }) => {
-        return {
-            icon: {
-                url: 'https://static.vecteezy.com/system/resources/previews/006/828/456/original/bright-smiley-face-emoji-expression-free-vector.jpg',
-                size: new window.google.maps.Size(50, 50),
-                anchor: new window.google.maps.Point(25, 25)
-            }, label: {
-                text: `${userOwnData.rentBudget}`,
-            }
-        }
-    };
-    */
+
+    //delay the zooming in and out of the map to allow time for tiles to render properly
     function debounce(func, delay) {
-        //delay the zooming in and out of the map to allow time for tiles to render properly
         let timerId;
         return function (...args) {
             if (timerId) {
@@ -231,13 +215,14 @@ const Bunkmates = () => {
     return (
         <div>
             <div className="content-container">
-                {
+
+                {/*
                     mapProfileCard
                         ? null
                         : <div className="search-bar-container" style={{ height: '200px', top: '19vh', position: 'absolute', display: 'flex', justifyContent: 'center' }}>
                             <PlacesAutocomplete setSelected={setSelected} setCenter={setCenter} />
                         </div>
-                }
+                */}
                 <div className="map-container">
                     <GoogleMap
                         id="map"
@@ -253,7 +238,7 @@ const Bunkmates = () => {
                     >
                         <div id="results" />
                         <Navbar chooseStyle={"glass"} />
-                        <section className="bunkamtes__social-feed" style={{ borderRadius: '50%', backgroundColor: 'black', position: 'absolute', top: '305px', height: '40px', width: '40px', right: '10px', }}>
+                        <section className="bunkamtes__social-feed" style={{ borderRadius: '50%', backgroundColor: 'black', position: 'absolute', top: '255px', height: '40px', width: '40px', right: '10px', }}>
                             {
                                 displaySocial ?
                                     <Tooltip arrow title="Close Socials Page">
@@ -270,9 +255,9 @@ const Bunkmates = () => {
 
                             }
                         </section>
-                        <KeyLocations keyLocationPins={keyLocationPins} />
+                        <KeyLocationsMarkers keyLocationPins={keyLocationPins} />
                         {displaySocial ? <SocialFeed userOwnData={userOwnData} userProfile={userProfile} statePostArray={statePostArray} setStatePostArray={setStatePostArray} /> : null}
-                        {mapProfileCard ? mapProfileCard : null}
+                        {mapProfileCard ?? null}
                         {selected && <MarkerF position={center} icon={"http://maps.google.com/mapfiles/ms/icons/blue.png"} />}
                         {listingArray.map((request, index) => {
                             return (
@@ -317,26 +302,16 @@ const Bunkmates = () => {
 
 export default Bunkmates;
 
-
-function KeyLocations({ keyLocationPins }) {
-
-    const [keyLocationData, setKeyLocationData] = useState('');
-    //THIS MAKES TOO MANY REQUESTS, NEED TO FIX SOON
-
-    return (
-        <>
-            <KeyLocationDetails keyLocationData={keyLocationData} />
-            {keyLocationPins ? keyLocationPins.map((location) => {
-                return (
-                    <OverlayViewF
-                        key={location.place_id}
-                        position={{ lat: location.geometry.location.lat(), lng: location.geometry.location.lng() }}
-                        styles={{ background: 'DarkGray', color: 'white' }}
-                        mapPaneName={OVERLAY_MOUSE_TARGET}>
-                        <MapEducationMarker location={location} setKeyLocationData={setKeyLocationData} />
-                    </OverlayViewF >
-                )
-            }) : null}
-        </>
-    )
-}
+/*
+const markerOptions = ({ profile }) => {
+    return {
+        icon: {
+            url: 'https://static.vecteezy.com/system/resources/previews/006/828/456/original/bright-smiley-face-emoji-expression-free-vector.jpg',
+            size: new window.google.maps.Size(50, 50),
+            anchor: new window.google.maps.Point(25, 25)
+        }, label: {
+            text: `${userOwnData.rentBudget}`,
+        }
+    }
+};
+*/

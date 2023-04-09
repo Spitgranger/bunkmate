@@ -34,8 +34,10 @@ export default function CommentSection({ user, userOwnData, userProfile, allComm
         avatarContainer: { display: 'flex', alignItems: 'flex-start', height: '100%', padding: '10px', margin: '10px' },
         loadingContainer: { display: "flex", width: '100%', justifyContent: 'center' },
         commentReplyInfoContainer: { paddingBottom: "15px !important", paddingTop: '15px !important', padding: '0px', display: 'flex', flexDirection: 'column', width: '280px', overflow: 'hidden' },
-        firstName: { color: 'white', width: '100%', flexDirection: 'row', display: 'flex', justifyContent: 'space-between', alignItems: 'center' },
-        commentMessage: { fontSize: "15px", color: '#b3b3b3', width: '100%' }
+        firstRow: { color: 'white', width: '100%', flexDirection: 'row', display: 'flex', justifyContent: 'space-between', alignItems: 'center' },
+        firstName: { flexDirection: 'row', whiteSpace: 'nowrap', display: 'flex', alignItems: 'center' },
+        commentMessage: { fontSize: "15px", color: '#b3b3b3', width: '100%' },
+        lastActive: { color: 'grey', fontSize: '12px', padding: '10px' }
     }
 
     //store all comments from a post
@@ -132,7 +134,7 @@ const ReplyCommentTextField = ({ allComments, setAllComments, user, commentSecti
 }
 
 //All User comments in a post
-const MappedComments = ({ post, allComments, commentSectionStyles, commentSectionProfiles, user, handleDeleteComment }) => {
+const MappedComments = ({ allComments, commentSectionStyles, commentSectionProfiles, user, handleDeleteComment }) => {
     if (commentSectionProfiles && allComments.length !== 0) {
         return (
             allComments.map((comment) => {
@@ -142,6 +144,7 @@ const MappedComments = ({ post, allComments, commentSectionStyles, commentSectio
                     //console.log(item.user, searchValue);
                     return item.user === searchValue
                 });
+                console.log(comment)
                 if (selectedItem) {
                     //console.log(post, user)
                     return (
@@ -152,11 +155,18 @@ const MappedComments = ({ post, allComments, commentSectionStyles, commentSectio
                                 </CardActionArea>
                             </CardMedia>
                             <CardContent sx={commentSectionStyles.commentReplyInfoContainer}>
-                                <Typography variant="body1" color="text.primary" sx={commentSectionStyles.firstName}>
-                                    {selectedItem.firstName}
+                                <Typography variant="body1" color="text.primary" sx={commentSectionStyles.firstRow}>
+                                    <div style={commentSectionStyles.firstName}>
+                                        {selectedItem.firstName}
+                                        <div style={commentSectionStyles.lastActive}>3h</div>
+                                    </div>
                                     {user.result._id === comment.userId ? <IconButton sx={{ color: 'white' }} onClick={() => { handleDeleteComment(comment._id) }}><BsThreeDotsVertical style={{ color: 'white', fontSize: '17px' }} /></IconButton> : ""}
                                 </Typography >
-                                <Typography variant="body2" color="text.secondary" sx={commentSectionStyles.commentMessage}>{comment.message}</Typography >
+                                <div style={{ width: '250px', overflow: 'hidden' }}>
+                                    <Typography variant="body2" color="text.secondary" sx={commentSectionStyles.commentMessage}>
+                                        {comment.message}
+                                    </Typography >
+                                </div>
                             </CardContent>
                         </div >
                     )

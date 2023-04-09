@@ -1,6 +1,5 @@
 import { createContext, useState } from "react";
-import CreateRequestForm from "../../Views/Bunkmates/Components/Map/CreateRequestForm";
-import { createRequest, createProfile, updateRequest, deleteRequest, getProfiles, deleteProfile } from "../../api";
+import { createRequest, createProfile, deleteRequest, getProfiles, deleteProfile } from "../../api";
 import { useNavigate } from "react-router";
 import { useJsApiLoader } from "@react-google-maps/api";
 
@@ -8,7 +7,6 @@ export const BunkmatesContext = createContext(null)
 export const BuildUserContext = createContext(null)
 
 export default function MapProvider({ children }) {
-  const navigate = useNavigate()
 
   const libraries = ["places"];
   //state management for what profile card is shown on the bunkmates page
@@ -24,6 +22,10 @@ export default function MapProvider({ children }) {
     libraries: libraries,
   })
   const [click, setClick] = useState(false);
+  //state management for the zoom level of the map
+  const [zoom, setZoom] = useState(15)
+  //store the key locations 
+  const [keyLocationPins, setKeyLocationPins] = useState('');
 
   const requestHandleSubmit = async (formData) => {
     //record values in backend
@@ -91,7 +93,7 @@ export default function MapProvider({ children }) {
 
 
   return (
-    <BunkmatesContext.Provider value={{ isLoaded, loadError, mapProfileCard, setMapProfileCard, center, setCenter, rerender, setRerender, click, setClick }}>
+    <BunkmatesContext.Provider value={{ isLoaded, loadError, mapProfileCard, setMapProfileCard, center, setCenter, rerender, setRerender, click, setClick, zoom, setZoom, keyLocationPins, setKeyLocationPins }}>
       <BuildUserContext.Provider value={{ profileHandleSubmit, profileHandleUpdate, requestHandleSubmit, requestHandleUpdate, profileHandleRetrieval }}>
         {children}
       </BuildUserContext.Provider>
