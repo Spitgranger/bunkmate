@@ -89,7 +89,7 @@ export const makeComment = async (req, res) => {
         const comment = await mediaPostComment.create({ dateCreated: new Date(), message: data.message, userId: user, mediaPost: post._id });
         //post.comments.push(comment._id);
         const updatedPost = await mediaPost.findByIdAndUpdate(_id, post, { new: true });
-        res.json(updatedPost);
+        res.json(comment);
     } catch (error) {
         console.log(error);
         res.status(500).json({ message: error.message });

@@ -105,8 +105,9 @@ const ReplyCommentTextField = ({ allComments, setAllComments, user, commentSecti
 
     const handleCommentsChange = async () => {
         //event handler for replying to comments
-        await makeComment({ message: userComment }, post._id);
-        setAllComments([{ userId: user.result._id, message: userComment }, ...allComments]);
+        const response = await makeComment({ message: userComment }, post._id);
+        console.log(response);
+        setAllComments([{ _id: response.data._id, userId: user.result._id, message: userComment }, ...allComments]);
 
         //setAllComments([[user.result._id, userComment], ...allComments])
     }
