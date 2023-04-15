@@ -93,7 +93,7 @@ export default function MapProvider({ children }) {
 
 
   return (
-    <BunkmatesContext.Provider value={{ isLoaded, loadError, mapProfileCard, setMapProfileCard, center, setCenter, rerender, setRerender, click, setClick, zoom, setZoom, keyLocationPins, setKeyLocationPins }}>
+    <BunkmatesContext.Provider value={{ isLoaded, loadError, mapProfileCard, setMapProfileCard, center, setCenter, rerender, setRerender, click, setClick, zoom, setZoom, keyLocationPins, setKeyLocationPins, }}>
       <BuildUserContext.Provider value={{ profileHandleSubmit, profileHandleUpdate, requestHandleSubmit, requestHandleUpdate, profileHandleRetrieval }}>
         {children}
       </BuildUserContext.Provider>

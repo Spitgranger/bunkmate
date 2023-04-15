@@ -85,7 +85,7 @@ const FirstPageForm = ({ groupChat, dispatch, state, actions, handleEmptyStringV
     {/* belongs below*/}
     < LineBox flex={true} CssTextField={[
       <MultipleSelectCheckmarks value={state?.firstPageValues?.groupTags} helperText="Optional" title="Group tags" onChange={(e) => handleEmptyStringValidation(e.target.value, 'groupTags', 'firstPageValues')} menuItems={['Non Smokers', 'Have Pets', "Have Jobs", 'Students', 'Have Children', 'LGBTQ Friendly', 'Cannabis Friendly']} />,
-      <DropDownMenu required={true} value={chatMenuItems[index]} onChange={(e) => { console.log(e.explicitOriginalTarget.attributes.index.value); handleEmptyStringValidation(groupChat[e.explicitOriginalTarget.attributes.index.value].ids, 'linkChats', 'firstPageValues'); setIndex(e.explicitOriginalTarget.attributes.index.value) }} label="Link Chats" menuItem={chatMenuItems} />,
+      <DropDownMenu helperText={"Link your bunkmates"} required={true} value={chatMenuItems[index]} onChange={(e) => { console.log(e.explicitOriginalTarget.attributes.index.value); handleEmptyStringValidation(groupChat[e.explicitOriginalTarget.attributes.index.value].ids, 'linkChats', 'firstPageValues'); setIndex(e.explicitOriginalTarget.attributes.index.value) }} label="Link Chats" menuItem={chatMenuItems} />,
     ]} />
     <LineBox flex={true} CssTextField={[
       <UploadFile helperText="Optional: Supported Files: jpg, jpeg, png" helperTextPos="85%" width="100%" height="40px" type="file" message="Upload Group Photo" accept={["image/jpg", "image/jpeg", "image/png"]} endIcon={<CameraAltIcon sx={{ color: "aqua" }} />} handleFileUpload={handleFileUpload} />,

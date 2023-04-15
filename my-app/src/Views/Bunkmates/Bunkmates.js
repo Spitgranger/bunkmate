@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useRef, useState, memo, useMemo, useId } 
 import Navbar from "../../Components/Navbar";
 import { GoogleMap, useJsApiLoader, MarkerF, OverlayView, OVERLAY_MOUSE_TARGET, OverlayViewF, MapContext, Polyline } from "@react-google-maps/api";
 import mapStyles from '../../data/mapStyles.json'
-import { Card, Typography, IconButton, Tooltip, CircularProgress, CardMedia, CardContent } from "@mui/material/"
+import { Card, Typography, IconButton, Tooltip, CircularProgress, CardMedia, CardContent, CardActionArea } from "@mui/material/"
 import "./Styles/Bunkmates.css"
 import PlacesAutocomplete from "./Components/Map/PlacesAutocomplete";
 import mapCardData from "../../data/mapCardData"
@@ -22,9 +22,10 @@ import { SocialFeed } from "./Components/SocialFeed/SocialFeed";
 import { useGetUserData } from "./Hooks/useGetUserData";
 import { getPost } from "../../api";
 import { KeyLocationsMarkers } from "./Components/Map/KeyLocations";
+import { Link } from "react-router-dom";
+import { formatContext } from "../../Components/GlobalStateManagement/FormatContext";
 
-
-export function MapProfile({ request, setKeyLocationPins, setZoom, setCenter, setMapProfileCard }) {
+export function MapProfile({ request, setKeyLocationPins, setZoom, setCenter, setMapProfileCard, HandleViewOtherProfile }) {
 
     //determines whether to render single or group map card
 
@@ -51,8 +52,6 @@ export function MapProfile({ request, setKeyLocationPins, setZoom, setCenter, se
         );
     }
 
-
-
     return (
         /*
         <SingleMapCard profile={profile} BunkmateInfo={BunkmateInfo} />
@@ -66,6 +65,7 @@ export function MapProfile({ request, setKeyLocationPins, setZoom, setCenter, se
                 setZoom={setZoom}
                 setCenter={setCenter}
                 setMapProfileCard={setMapProfileCard}
+                HandleViewOtherProfile={HandleViewOtherProfile}
             />
             : <GroupMapCard
                 BunkmateInfo={BunkmateInfo}
@@ -75,8 +75,8 @@ export function MapProfile({ request, setKeyLocationPins, setZoom, setCenter, se
                 setZoom={setZoom}
                 setCenter={setCenter}
                 setMapProfileCard={setMapProfileCard}
+                HandleViewOtherProfile={HandleViewOtherProfile}
             />
-
     )
 }
 
@@ -97,6 +97,8 @@ const Bunkmates = () => {
     //used to rerender useEffect in Bunkmates.js containing async functions that gets data from backend
     const [displaySocial, setDisplaySocial] = useState(false)
     const { loading, listingArray, userRequests, userProfile, userOwnData, isLoaded, } = useGetUserData()
+    const { capitalizedName } = useContext(formatContext)
+
 
     const [statePostArray, setStatePostArray] = useState([])
     //get Social feed informations
@@ -139,9 +141,35 @@ const Bunkmates = () => {
     const handleProfileClickAsync = (e) => {
         const request = userRequests.get(e?.currentTarget?.id)
         //MapProfile decides houses logic for deciding whether to show single or group map card
-        setMapProfileCard(<MapProfile request={request} setKeyLocationPins={setKeyLocationPins} setCenter={setCenter} setZoom={setZoom} setMapProfileCard={setMapProfileCard} />)
+        setMapProfileCard(
+            <MapProfile
+                request={request}
+                setKeyLocationPins={setKeyLocationPins}
+                setCenter={setCenter}
+                setZoom={setZoom}
+                setMapProfileCard={setMapProfileCard}
+                HandleViewOtherProfile={HandleViewOtherProfile}
+            />)
         //store the coordinates of the pin that was clicked on
     }
+
+
+    //stores the request data in global state while navigating to otherprofile page
+    const HandleViewOtherProfile = ({ request, content }) => {
+        //request is referencing user's request, profiles, and posts to make nested map card profile viewer, createPost and postCard compatible as well
+        return (
+            <Tooltip title={`View ${capitalizedName(request.firstName ?? request.profile[0].firstName)}'s profile`} arrow>
+                <Link
+                    to={"/otherprofile"}
+                    state={request}
+                    style={{ textDecoration: 'none' }}
+                >
+                    {content}
+                </Link>
+            </Tooltip>
+        )
+    }
+
 
 
 
@@ -237,7 +265,7 @@ const Bunkmates = () => {
                         onClick={() => { setMapProfileCard(null) }}>
                         <div id="results" />
                         <Navbar chooseStyle={"glass"} />
-                        <section className="bunkamtes__social-feed" style={{ borderRadius: '50%', backgroundColor: 'black', position: 'absolute', top: '255px', height: '40px', width: '40px', right: '10px', }}>
+                        <section className="bunkamtes__social-feed" style={{ borderRadius: '50%', backgroundColor: 'black', position: 'absolute', top: '275px', height: '40px', width: '40px', right: '10px', }}>
                             {
                                 displaySocial ?
                                     <Tooltip arrow title="Close Socials Page">
@@ -255,7 +283,7 @@ const Bunkmates = () => {
                             }
                         </section>
                         <KeyLocationsMarkers keyLocationPins={keyLocationPins} />
-                        {displaySocial ? <SocialFeed userOwnData={userOwnData} userProfile={userProfile} statePostArray={statePostArray} setStatePostArray={setStatePostArray} /> : null}
+                        {displaySocial ? <SocialFeed userOwnData={userOwnData} userProfile={userProfile} statePostArray={statePostArray} setStatePostArray={setStatePostArray} HandleViewOtherProfile={HandleViewOtherProfile} /> : null}
                         {mapProfileCard ?? null}
                         {selected && <MarkerF position={center} icon={"http://maps.google.com/mapfiles/ms/icons/blue.png"} />}
                         {listingArray.map((request, index) => {

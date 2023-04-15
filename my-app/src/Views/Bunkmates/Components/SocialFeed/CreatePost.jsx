@@ -22,7 +22,7 @@ import { getPost } from '../../../../api';
 
 
 
-export default function CreatePost({ statePostArray, setStatePostArray, userOwnData, userProfile }) {
+export default function CreatePost({ statePostArray, setStatePostArray, userOwnData, userProfile, HandleViewOtherProfile }) {
 
     const createPostStyles = {
         container: { borderRadius: '10px', backgroundColor: 'black', position: 'absolute', top: '130px', zIndex: '6', width: '400px', left: '10px', display: 'flex', alignItems: 'flex-start' },
@@ -95,9 +95,11 @@ export default function CreatePost({ statePostArray, setStatePostArray, userOwnD
     return (
         <Card style={createPostStyles.container}>
             <div style={createPostStyles.innerContainer}>
-                <div>
-                    <Avatar sx={createPostStyles.avatar} src={userOwnData?.profile[0]?.picture ?? userProfile?.data?.picture} className="Avatar" alt={`${userOwnData?.profile[0]?.firstName}'s Profile picture`} />
-                </div>
+                <HandleViewOtherProfile request={userOwnData} content={
+                    <CardActionArea sx={{ color: 'black' }}>
+                        <Avatar sx={createPostStyles.avatar} src={userOwnData?.profile[0]?.picture ?? userProfile?.data?.picture} className="Avatar" alt={`${userOwnData?.profile[0]?.firstName}'s Profile picture`} />
+                    </CardActionArea>
+                } />
                 <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                     <TextField maxRows={2}
                         multiline
@@ -109,7 +111,7 @@ export default function CreatePost({ statePostArray, setStatePostArray, userOwnD
                                 <Tooltip arrow title={"Upload files here"}>
                                     <IconButton sx={{ width: '30px', height: '30px', color: 'white' }}>
                                         <label>
-                                            <input hidden style={{ display: 'none' }} multiple type="file" onChange={handleFileUpload} />
+                                            <input hidden style={{ display: 'none' }} multiple type="file" onChange={handleFileUpload} accept={"image/png, image/gif, image/jpeg"} />
                                             <BsPaperclip style={{ cursor: 'pointer' }} size={20} position="end" />
                                         </label>
                                     </IconButton>

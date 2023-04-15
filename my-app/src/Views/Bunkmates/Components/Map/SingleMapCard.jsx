@@ -14,11 +14,13 @@ import KeyLocations from './KeyLocations';
 import { formatContext } from '../../../../Components/GlobalStateManagement/FormatContext';
 
 
-function SingleMapCard({ BunkmateInfo, request, coordinates, setKeyLocationPins, setZoom, setCenter, setMapProfileCard }) {
+function SingleMapCard({ HandleViewOtherProfile, BunkmateInfo, request, coordinates, setKeyLocationPins, setZoom, setCenter, setMapProfileCard }) {
+
     const [messageButton, setMessageButton] = useState(false)
     const { capitalizedName, calculateAge } = useContext(formatContext)
 
 
+    console.log(request)
 
     return (
         <InfoWindowF mapPaneName={"overlayMouseTarget"} position={{ lat: request?.idealLocation[0], lng: request?.idealLocation[1] }}>
@@ -27,8 +29,9 @@ function SingleMapCard({ BunkmateInfo, request, coordinates, setKeyLocationPins,
                     <div className="profile-info" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                         <header style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', }}>
                             <div style={{ width: '100%', display: 'flex', flexDirection: 'row', padding: '5px' }}>
-                                <Tooltip title={`View ${capitalizedName(request.profile[0].firstName)}'s profile`} arrow>
-                                    <CardActionArea style={{ width: '125px' }}>
+
+                                <HandleViewOtherProfile request={request} content={
+                                    <CardActionArea sx={{ width: '125px', color: "black" }}>
                                         <CardMedia
                                             component="img"
                                             image={request.profile[0].picture}
@@ -36,7 +39,7 @@ function SingleMapCard({ BunkmateInfo, request, coordinates, setKeyLocationPins,
                                             sx={{ width: '125px', height: '125px', borderRadius: '5%', }}
                                         />
                                     </CardActionArea>
-                                </Tooltip>
+                                } />
                                 <CardContent style={{ width: '100%', padding: '0px 15px 0px 15px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                                     <div className="card-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                         <div className="first-name">

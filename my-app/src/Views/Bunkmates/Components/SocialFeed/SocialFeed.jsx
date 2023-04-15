@@ -1,14 +1,6 @@
-import { postArray } from "../../Data/PostArrayData"
-import { useState, useEffect, useContext, memo } from 'react'
-import { BuildUserContext } from "../../../../Components/GlobalStateManagement/UserContext"
-import { IoSend } from "react-icons/io5";
-import { BsPaperclip, BsPinFill, BsThreeDotsVertical } from "react-icons/bs";
-import { AiFillLike, AiFillEye } from 'react-icons/ai'
-import { MdComment, MdCommentsDisabled } from 'react-icons/md'
-import { ActionButton } from "../../../../Components/Utils/Form";
+import { memo } from 'react'
 import CreatePost from "./CreatePost";
 import PostCard from "./PostCard";
-import { useGetUserData } from "../../Hooks/useGetUserData";
 
 /*
 ---Hierarchical Structure---
@@ -22,7 +14,7 @@ socialFeed.jsx
         -->CommentSection.jsx
 */
 //memoized to prevent parent component from rerendering child component
-export const SocialFeed = memo(({ userOwnData, userProfile, statePostArray, setStatePostArray }) => {
+export const SocialFeed = memo(({ userOwnData, userProfile, statePostArray, setStatePostArray, HandleViewOtherProfile }) => {
     console.log('social feed rerender')
     const Posts = {
         overflowY: 'scroll',
@@ -45,6 +37,7 @@ export const SocialFeed = memo(({ userOwnData, userProfile, statePostArray, setS
                 setStatePostArray={setStatePostArray}
                 userOwnData={userOwnData}
                 userProfile={userProfile}
+                HandleViewOtherProfile={HandleViewOtherProfile}
             />
 
             <div style={Posts}>
@@ -56,6 +49,7 @@ export const SocialFeed = memo(({ userOwnData, userProfile, statePostArray, setS
                             userProfile={userProfile}
                             statePostArray={statePostArray}
                             setStatePostArray={setStatePostArray}
+                            HandleViewOtherProfile={HandleViewOtherProfile}
                         />
                     )
                 })}

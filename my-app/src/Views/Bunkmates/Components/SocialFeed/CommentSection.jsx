@@ -18,7 +18,7 @@ import { BuildUserContext } from '../../../../Components/GlobalStateManagement/U
 import { makeComment, getPost, deleteComment } from '../../../../api'
 import { BsThreeDotsVertical } from "react-icons/bs";
 
-export default function CommentSection({ user, userOwnData, userProfile, allComments, setAllComments, post }) {
+export default function CommentSection({ user, userOwnData, userProfile, allComments, setAllComments, post, HandleViewOtherProfile }) {
 
     const commentSectionStyles = {
         replyButton: { width: '30px', height: '30px', color: 'white' },
@@ -71,12 +71,16 @@ export default function CommentSection({ user, userOwnData, userProfile, allComm
                 <Divider light sx={{ backgroundColor: 'grey', width: '100%', }} />
             </div>
             <CardContent sx={{ padding: '0px 20px 0px 20px', width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                <Avatar sx={{ width: '35px', height: '35px', margin: '10px' }} src={userOwnData?.profile[0]?.picture ?? userProfile?.data?.picture} className="Avatar" alt={`${userOwnData?.profile[0]?.firstName}'s Profile picture`} />
+                <HandleViewOtherProfile request={userOwnData} content={
+                    <CardActionArea sx={{ color: 'black', width: '35px', height: '35px', margin: '15px', }}>
+                        <Avatar sx={{ width: '35px', height: '35px' }} src={userOwnData?.profile[0]?.picture ?? userProfile?.data?.picture} className="Avatar" alt={`${userOwnData?.profile[0]?.firstName}'s Profile picture`} />
+                    </CardActionArea>
+                } />
                 {/* onChange event listener Causes entire component to rerender. Could cause problems later on */}
                 <ReplyCommentTextField commentSectionStyles={commentSectionStyles} allComments={allComments} setAllComments={setAllComments} user={user} post={post} />
             </CardContent>
             <CardContent>
-                <MappedComments post={post} user={user} commentSectionStyles={commentSectionStyles} allComments={allComments} commentSectionProfiles={commentSectionProfiles} handleDeleteComment={handleDeleteComment} />
+                <MappedComments post={post} user={user} commentSectionStyles={commentSectionStyles} allComments={allComments} commentSectionProfiles={commentSectionProfiles} handleDeleteComment={handleDeleteComment} HandleViewOtherProfile={HandleViewOtherProfile} />
             </CardContent>
 
             {/* TODO Add functionality to view more button
@@ -88,7 +92,7 @@ export default function CommentSection({ user, userOwnData, userProfile, allComm
     )
 }
 
-const ReplyCommentTextField = ({ allComments, setAllComments, user, commentSectionStyles, commentSectionProfiles, post }) => {
+const ReplyCommentTextField = ({ allComments, setAllComments, user, commentSectionStyles, post }) => {
 
     //store the user's own comment
     const [userComment, setUserComment] = useState("")
@@ -136,7 +140,7 @@ const ReplyCommentTextField = ({ allComments, setAllComments, user, commentSecti
 }
 
 //All User comments in a post
-const MappedComments = ({ allComments, commentSectionStyles, commentSectionProfiles, user, handleDeleteComment }) => {
+const MappedComments = ({ allComments, commentSectionStyles, commentSectionProfiles, user, handleDeleteComment, HandleViewOtherProfile }) => {
 
 
     console.log("Mapped Comments rerender")
@@ -196,9 +200,10 @@ const MappedComments = ({ allComments, commentSectionStyles, commentSectionProfi
                     return (
                         <div style={commentSectionStyles.commentContainer}>
                             <CardMedia sx={commentSectionStyles.avatarContainer}>
-                                <CardActionArea>
-                                    <Avatar src={selectedItem.picture} className="Avatar" alt={`${selectedItem.firstName}'s Profile picture`} />
-                                </CardActionArea>
+                                <HandleViewOtherProfile request={selectedItem} content={
+                                    <CardActionArea sx={{ color: 'black' }}>
+                                        <Avatar src={selectedItem.picture} className="Avatar" alt={`${selectedItem.firstName}'s Profile picture`} />
+                                    </CardActionArea>} />
                             </CardMedia>
                             <CardContent sx={commentSectionStyles.commentReplyInfoContainer}>
                                 <Typography variant="body1" color="text.primary" sx={commentSectionStyles.firstRow}>

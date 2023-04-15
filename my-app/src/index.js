@@ -10,12 +10,13 @@ import Error from './Error';
 import Error404 from './Error404'
 import Bunkmates from './Views/Bunkmates/Bunkmates';
 import Messages from './Views/Messages/Messages'
-import Profile from './Views/Profile';
+import Profile from './Views/MyProfile';
 import SignInProvider from './Components/GlobalStateManagement/SignInContext';
 import ValidationProvider from './Components/GlobalStateManagement/ValidationContext';
 import MessageProvider from './Components/GlobalStateManagement/MessageContext';
 import FormatProvider from './Components/GlobalStateManagement/FormatContext';
 import MapProvider from './Components/GlobalStateManagement/UserContext'
+import { OtherProfile } from './Views/OtherProfile';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 const router = createBrowserRouter([
@@ -92,6 +93,22 @@ const router = createBrowserRouter([
             <SignInProvider>
               <ValidationProvider>
                 <Messages />
+              </ValidationProvider>
+            </SignInProvider>
+          </MessageProvider>
+        </MapProvider>
+      </FormatProvider>,
+    errorElement: <Error />
+  },
+  {
+    path: '/otherprofile',
+    element:
+      <FormatProvider>
+        <MapProvider>
+          <MessageProvider>
+            <SignInProvider>
+              <ValidationProvider>
+                <OtherProfile />
               </ValidationProvider>
             </SignInProvider>
           </MessageProvider>

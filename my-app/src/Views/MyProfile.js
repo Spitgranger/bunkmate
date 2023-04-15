@@ -29,7 +29,7 @@ import { Box } from '@mui/system';
   backgroundColor: 'red'
 }
 */
-//This is the component that handles the user profile, displaying the user details and other things.
+//This is the component that handles the user's own profile, displaying the user details and other things.
 
 
 const Profile = () => {
@@ -153,8 +153,6 @@ const Profile = () => {
 
 
     //if the user has an active request then open bunkmates page then center and open up their map profile card
-    setCenter({ lat: userRequest.idealLocation[0], lng: userRequest.idealLocation[1] })
-    setZoom(15)
     setMapProfileCard(
       <MapProfile
         request={userRequest}
@@ -239,25 +237,6 @@ const Profile = () => {
                     <BsPencil />
                   </IconButton>
                 </Tooltip>
-                <Tooltip title={`Message ${capitalizedName(profile.firstName)}`}>
-                  <IconButton>
-                    <BiMessageDetail />
-                  </IconButton>
-                </Tooltip>
-                {bookmark
-                  ?
-                  <Tooltip arrow title="This profile has been saved!">
-                    <IconButton onClick={(e) => setBookmark(!bookmark)}>
-                      <BsBookmarksFill style={{ color: '#2ACDDD' }} />
-                    </IconButton>
-                  </Tooltip>
-                  :
-                  <Tooltip arrow title="Save this profile">
-                    <IconButton onClick={(e) => setBookmark(!bookmark)}>
-                      <BsBookmarks />
-                    </IconButton>
-                  </Tooltip>
-                }
               </div>
             </header>
             <Divider sx={pageStyles.divider} textAlign='left'>Biography</Divider>

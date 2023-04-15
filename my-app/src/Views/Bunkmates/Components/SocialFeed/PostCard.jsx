@@ -9,6 +9,7 @@ import {
     Tooltip,
     Divider,
     Avatar,
+    CardActionArea,
 } from "@mui/material/"
 import { AiFillLike } from "react-icons/ai";
 import { BsPinFill, BsThreeDotsVertical } from "react-icons/bs";
@@ -16,7 +17,9 @@ import { MdComment, MdCommentsDisabled } from 'react-icons/md'
 import { deletePost, likePost } from "../../../../api";
 
 
-export default function PostCard({ post, userOwnData, userProfile, setStatePostArray, statePostArray }) {
+export default function PostCard({ post, userOwnData, userProfile, setStatePostArray, statePostArray, HandleViewOtherProfile }) {
+
+    console.log('postcard rerender')
     console.log(post)
     //all comments for a post stored in an array
     const [allComments, setAllComments] = useState(post.comments)
@@ -81,13 +84,16 @@ export default function PostCard({ post, userOwnData, userProfile, setStatePostA
         setStatePostArray(statePostArray.filter((element) => element._id !== id))
     }
 
-
+    console.log(post)
 
     return (
         <Card style={postStyles.postContainer}>
             <header style={postStyles.postHeader}>
                 <div className="bunkmates__header__subsection" style={postStyles.postHeaderSubSection}>
-                    <Avatar sx={{ width: '50px', height: '50px', margin: '20px', }} src={post.profile[0].picture} className="Avatar" alt={`View ${post.profile[0].firstName}'s profile`} />
+                    <HandleViewOtherProfile request={post} content={
+                        <CardActionArea sx={{ color: 'black', width: '50px', height: '50px', margin: '20px', }}>
+                            <Avatar sx={{ width: '50px', height: '50px' }} src={post.profile[0].picture} className="Avatar" alt={`View ${post.profile[0].firstName}'s profile`} />
+                        </CardActionArea>} />
                     <div className="bunkmates__post-card__key-info">
                         <Typography sx={{ color: 'white' }} variant="body1" color="text.primary">{post.profile[0].firstName}</Typography>
                         {/* post.location should be an optional field*/}
@@ -148,6 +154,7 @@ export default function PostCard({ post, userOwnData, userProfile, setStatePostA
                         allComments={allComments}
                         setAllComments={setAllComments}
                         setStatePostArray={setStatePostArray}
+                        HandleViewOtherProfile={HandleViewOtherProfile}
                     />
                 </div>
                 : null

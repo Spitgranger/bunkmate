@@ -17,7 +17,7 @@ import { MdVerified } from 'react-icons/md';
 import { BuildUserContext } from '../../../../Components/GlobalStateManagement/UserContext';
 import keyLocations from './KeyLocations';
 
-function GroupMapCard({ request, BunkmateInfo, coordinates, setKeyLocationPins, setCenter, setMapProfileCard, setZoom }) {
+function GroupMapCard({ request, BunkmateInfo, coordinates, setKeyLocationPins, setCenter, setMapProfileCard, setZoom, HandleViewOtherProfile }) {
 
     //subtract 1 because linkchats contains the user's own profile in the array
     const existingBunkmates = request?.linkChats?.length;
@@ -70,7 +70,7 @@ function GroupMapCard({ request, BunkmateInfo, coordinates, setKeyLocationPins, 
                             <header style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', }}>
                                 <div style={{ width: '100%', display: 'flex', flexDirection: 'column', padding: '5px' }}>
                                     {/* onclick will show first peron's profile in the array can also click the eye button to view profiles*/}
-                                    <CardActionArea style={{ borderTopLeftRadius: '1%', borderTopRightRadius: '1%' }} onMouseEnter={handleEnterActionArea} onMouseLeave={handleLeaveActionArea}>
+                                    <div style={{ borderTopLeftRadius: '1%', borderTopRightRadius: '1%' }} onMouseEnter={handleEnterActionArea} onMouseLeave={handleLeaveActionArea}>
                                         <CardMedia
                                             component="img"
                                             image={request.groupPhoto ?? request.profile[0].picture}
@@ -78,7 +78,7 @@ function GroupMapCard({ request, BunkmateInfo, coordinates, setKeyLocationPins, 
                                             //16:9 aspect ratio
                                             sx={{ width: '330px', height: '330px', borderTopLeftRadius: '2%', borderTopRightRadius: '2%' }}
                                         />
-                                    </CardActionArea>
+                                    </div>
 
                                     <CardContent style={{ transition: '0.5s', top: '227px', backgroundColor: 'black', opacity: [opacity], position: 'absolute', width: '330px', padding: '15px 15px 15px 15px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', }} >
                                         <div className="card-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -187,7 +187,7 @@ function GroupMapCard({ request, BunkmateInfo, coordinates, setKeyLocationPins, 
                     showProfile ?
                         <>
                             < div className="nested-card" style={{ height: '688px', width: 420, margin: '20px', overflowY: "scroll" }}>
-                                {otherProfiles.map((otherProfile) => { return <NestedMapCard profile={otherProfile} /> })}
+                                {otherProfiles.map((otherProfile) => { return <NestedMapCard profile={otherProfile} HandleViewOtherProfile={HandleViewOtherProfile} /> })}
                             </div >
                         </>
                         : null

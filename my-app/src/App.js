@@ -302,8 +302,6 @@ function App() {
           {keyinfo.map((info, i) => (
             <Post key={i} {...info} />
           ))}
-
-
         </section>
         {/* TODO */}
         <section className="map">
