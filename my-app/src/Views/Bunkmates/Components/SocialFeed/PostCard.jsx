@@ -17,7 +17,7 @@ import { MdComment, MdCommentsDisabled } from 'react-icons/md'
 import { deletePost, likePost } from "../../../../api";
 
 
-export default function PostCard({ post, userOwnData, userProfile, setStatePostArray, statePostArray, HandleViewOtherProfile }) {
+export const PostCard = ({ post, userOwnData, userProfile, setStatePostArray, statePostArray, HandleViewOtherProfile }) => {
 
     console.log('postcard rerender')
     console.log(post)
@@ -162,3 +162,5 @@ export default function PostCard({ post, userOwnData, userProfile, setStatePostA
         </Card >
     )
 }
+
+export default PostCard
