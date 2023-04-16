@@ -1,27 +1,26 @@
-import React, { useEffect, useState, useContext, memo } from 'react';
-import { formatContext } from '../Components/GlobalStateManagement/FormatContext';
-import Navbar from '../Components/Navbar';
-import { getProfile, getRequests } from '../api';
-import { SignInContext } from '../Components/GlobalStateManagement/SignInContext';
-import { ActionButton } from '../Components/Utils/Form';
-import Divider from '@mui/material/Divider'
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
-import Tooltip from "@mui/material/Tooltip";
-import { SavedListingItem } from './Bunkmates/Components/Map/SavedListingItem';
-import { HiMapPin } from 'react-icons/hi2'
+import React, { useEffect, useState, useContext } from 'react';
 import './Profile.css'
-import { CardHeader, Avatar, Button, Grid, Paper, TextField, Card, Typography, CardActionArea, CardMedia, CardContent, CardActions, IconButton } from "@mui/material/"
-import { ValuesObjectContext } from '../Components/GlobalStateManagement/ValidationContext';
-import { GrInstagram, GrFacebook, GrLinkedin, GrTwitter } from 'react-icons/gr'
-import { MdVerified, MdPets, MdCleaningServices } from 'react-icons/md';
-import { BsBookmarks, BsBookmarksFill, BsFillClockFill, BsInfinity, BsBriefcaseFill, BsPencil, BsAlarmFill, BsPen } from 'react-icons/bs';
-import { FaBook, FaSmoking, FaCannabis, FaWineGlassAlt, FaRegHandshake, FaDog } from 'react-icons/fa'
-import { BiMessageDetail } from 'react-icons/bi'
+import Navbar from '../Components/Navbar';
+import { formatContext } from '../Components/GlobalStateManagement/FormatContext';
+import { SignInContext } from '../Components/GlobalStateManagement/SignInContext';
+import { BunkmatesContext } from '../Components/GlobalStateManagement/BunkmatesContext';
+
+import { getProfile, getRequests } from '../api';
+import { ActionButton } from '../Components/Utils/Form';
 import { Link } from 'react-router-dom';
-import { BunkmatesContext } from '../Components/GlobalStateManagement/UserContext';
 import { MapProfile } from './Bunkmates/Bunkmates';
+
+import Divider from '@mui/material/Divider'
+import Tooltip from "@mui/material/Tooltip";
 import CircularProgress from '@mui/material/CircularProgress';
+import { Card, CardHeader, Typography, CardMedia, CardContent, IconButton } from "@mui/material/"
 import { Box } from '@mui/system';
+import { MdVerified, MdPets, MdCleaningServices } from 'react-icons/md';
+import { BsFillClockFill, BsInfinity, BsBriefcaseFill, BsPencil, BsAlarmFill, BsPen } from 'react-icons/bs';
+import { FaBook, FaSmoking, FaCannabis, FaWineGlassAlt, FaRegHandshake, FaDog } from 'react-icons/fa'
+import { GrInstagram, GrFacebook, GrLinkedin, GrTwitter } from 'react-icons/gr'
+import { HiMapPin } from 'react-icons/hi2'
+
 
 
 /*
@@ -57,17 +56,14 @@ const Profile = () => {
 
   const { capitalizedName, calculateAge } = useContext(formatContext);
   const { setIsOpen, setMode, setMessage } = useContext(SignInContext);
-  const { rerender, setMapProfileCard, setZoom, setKeyLocationPins } = useContext(BunkmatesContext)
-  const { values } = useContext(ValuesObjectContext);
+  const { rerender, setMapProfileCard, setZoom, setKeyLocationPins, HandleViewOtherProfile } = useContext(BunkmatesContext)
   //state to manage the profile data retrieved from the backend
   const [profile, setProfile] = useState("");
-  //state to manage the bookmark icon that is shown
-  const [bookmark, setBookmark] = useState(false);
   //state management just for the requestbutton
   const [requestButtonMessage, setRequestButtonMessage] = useState("Inactive")
   const [showIcon, setShowIcon] = useState(false)
   const [textColor, setTextColor] = useState('red')
-  const [userRequest, setUserRequest] = useState("")
+  const [userOwnRequest, setUserOwnRequest] = useState("")
   const { setCenter } = useContext(BunkmatesContext)
   const [isProfileLoading, setIsProfileLoading] = useState(true)
   const [isRequestLoading, setIsRequestLoading] = useState(true)
@@ -89,7 +85,7 @@ const Profile = () => {
           requestDict[user.user] = user;
         });
       const userOwnId = requestDict[userId]
-      setUserRequest(userOwnId);
+      setUserOwnRequest(userOwnId);
     }).finally(() => setIsRequestLoading(false));
 
   }, [])
@@ -151,22 +147,26 @@ const Profile = () => {
 
   function HandleViewRequest() {
 
+    //NOTE: must set zoom else bunkmates page will be grey
+    setZoom(15)
 
     //if the user has an active request then open bunkmates page then center and open up their map profile card
     setMapProfileCard(
       <MapProfile
-        request={userRequest}
+        request={userOwnRequest}
         setKeyLocationPins={setKeyLocationPins}
         setCenter={setCenter}
         setZoom={setZoom}
         setMapProfileCard={setMapProfileCard}
+        HandleViewOtherProfile={HandleViewOtherProfile}
       />)
+
   }
 
   function DisplayActiveRequest() {
     if (isRequestLoading) {
       return <div><CircularProgress size={50} sx={{ padding: '10px' }} /></div>
-    } else if (userRequest && !isRequestLoading) {
+    } else if (userOwnRequest && !isRequestLoading) {
       return (
         <Tooltip arrow title={`${capitalizedName(profile.firstName)} has an active request`}>
           <Link
@@ -177,7 +177,7 @@ const Profile = () => {
           </Link>
         </Tooltip>
       )
-    } else if (!userRequest && !isRequestLoading) {
+    } else if (!userOwnRequest && !isRequestLoading) {
       return (
         <Tooltip arrow title={'Making a request will let people know you are actively looking for bunkmates and will make your profile more visible'}>
           <Link

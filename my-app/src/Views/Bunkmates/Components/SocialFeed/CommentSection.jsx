@@ -1,21 +1,8 @@
 import { useState, useEffect, useContext } from 'react'
-import {
-    TextField,
-    Card,
-    Typography,
-    CardActionArea,
-    CardMedia,
-    CardContent,
-    CardActions,
-    IconButton,
-    Tooltip,
-    CircularProgress,
-    Divider,
-    Avatar,
-} from "@mui/material/"
+import { TextField, Typography, CardActionArea, CardMedia, CardContent, IconButton, CircularProgress, Divider, Avatar, } from "@mui/material/"
+import { makeComment, deleteComment } from '../../../../api'
+import { UserDataContext } from '../../../../Components/GlobalStateManagement/UserDataContext';
 import { IoSend } from 'react-icons/io5'
-import { BuildUserContext } from '../../../../Components/GlobalStateManagement/UserContext'
-import { makeComment, getPost, deleteComment } from '../../../../api'
 import { BsThreeDotsVertical } from "react-icons/bs";
 
 export default function CommentSection({ user, userOwnData, userProfile, allComments, setAllComments, post, HandleViewOtherProfile }) {
@@ -43,7 +30,7 @@ export default function CommentSection({ user, userOwnData, userProfile, allComm
     //store all comments from a post
     const [commentSectionProfiles, setCommentSectionProfiles] = useState('')
 
-    const { profileHandleRetrieval } = useContext(BuildUserContext)
+    const { profileHandleRetrieval } = useContext(UserDataContext)
 
     const handleGetProfiles = async () => {
         //this is not good, should remove duplicate profiles to speed up performance
@@ -71,7 +58,7 @@ export default function CommentSection({ user, userOwnData, userProfile, allComm
                 <Divider light sx={{ backgroundColor: 'grey', width: '100%', }} />
             </div>
             <CardContent sx={{ padding: '0px 20px 0px 20px', width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                <HandleViewOtherProfile request={userOwnData} content={
+                <HandleViewOtherProfile data={userOwnData} content={
                     <CardActionArea sx={{ color: 'black', width: '35px', height: '35px', margin: '15px', }}>
                         <Avatar sx={{ width: '35px', height: '35px' }} src={userOwnData?.profile[0]?.picture ?? userProfile?.data?.picture} className="Avatar" alt={`${userOwnData?.profile[0]?.firstName}'s Profile picture`} />
                     </CardActionArea>
@@ -200,7 +187,7 @@ const MappedComments = ({ allComments, commentSectionStyles, commentSectionProfi
                     return (
                         <div style={commentSectionStyles.commentContainer}>
                             <CardMedia sx={commentSectionStyles.avatarContainer}>
-                                <HandleViewOtherProfile request={selectedItem} content={
+                                <HandleViewOtherProfile data={selectedItem} content={
                                     <CardActionArea sx={{ color: 'black' }}>
                                         <Avatar src={selectedItem.picture} className="Avatar" alt={`${selectedItem.firstName}'s Profile picture`} />
                                     </CardActionArea>} />

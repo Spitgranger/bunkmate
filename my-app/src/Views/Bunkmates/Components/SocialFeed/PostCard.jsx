@@ -90,7 +90,7 @@ export default function PostCard({ post, userOwnData, userProfile, setStatePostA
         <Card style={postStyles.postContainer}>
             <header style={postStyles.postHeader}>
                 <div className="bunkmates__header__subsection" style={postStyles.postHeaderSubSection}>
-                    <HandleViewOtherProfile request={post} content={
+                    <HandleViewOtherProfile data={post} content={
                         <CardActionArea sx={{ color: 'black', width: '50px', height: '50px', margin: '20px', }}>
                             <Avatar sx={{ width: '50px', height: '50px' }} src={post.profile[0].picture} className="Avatar" alt={`View ${post.profile[0].firstName}'s profile`} />
                         </CardActionArea>} />

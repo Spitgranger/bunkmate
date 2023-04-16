@@ -1,28 +1,26 @@
-import React, { useEffect, useState, useContext, memo } from 'react';
-import { formatContext } from '../Components/GlobalStateManagement/FormatContext';
-import Navbar from '../Components/Navbar';
-import { getProfile, getRequests } from '../api';
-import { SignInContext } from '../Components/GlobalStateManagement/SignInContext';
-import { ActionButton } from '../Components/Utils/Form';
-import Divider from '@mui/material/Divider'
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
-import Tooltip from "@mui/material/Tooltip";
-import { SavedListingItem } from './Bunkmates/Components/Map/SavedListingItem';
-import { HiMapPin } from 'react-icons/hi2'
+import React, { useEffect, useState, useContext } from 'react';
 import './Profile.css'
-import { CardHeader, Avatar, Button, Grid, Paper, TextField, Card, Typography, CardActionArea, CardMedia, CardContent, CardActions, IconButton } from "@mui/material/"
+import Navbar from '../Components/Navbar';
+import { formatContext } from '../Components/GlobalStateManagement/FormatContext';
+import { SignInContext } from '../Components/GlobalStateManagement/SignInContext';
+import { BunkmatesContext } from '../Components/GlobalStateManagement/BunkmatesContext';
+import { UserDataContext } from '../Components/GlobalStateManagement/UserDataContext';
 import { ValuesObjectContext } from '../Components/GlobalStateManagement/ValidationContext';
+import { ActionButton } from '../Components/Utils/Form';
+import { Box } from '@mui/system';
+import Divider from '@mui/material/Divider'
+import Tooltip from "@mui/material/Tooltip";
+import { CardHeader, Card, Typography, CardMedia, CardContent, IconButton } from "@mui/material/"
+import { HiMapPin } from 'react-icons/hi2'
 import { GrInstagram, GrFacebook, GrLinkedin, GrTwitter } from 'react-icons/gr'
-import { MdVerified, MdPets, MdCleaningServices } from 'react-icons/md';
-import { BsBookmarks, BsBookmarksFill, BsFillClockFill, BsInfinity, BsBriefcaseFill, BsPencil, BsAlarmFill, BsPen } from 'react-icons/bs';
-import { FaBook, FaSmoking, FaCannabis, FaWineGlassAlt, FaRegHandshake, FaDog } from 'react-icons/fa'
 import { BiMessageDetail } from 'react-icons/bi'
-import { Link } from 'react-router-dom';
-import { BunkmatesContext, BuildUserContext } from '../Components/GlobalStateManagement/UserContext';
+import { MdVerified, MdPets, MdCleaningServices } from 'react-icons/md';
+import { FaBook, FaSmoking, FaCannabis, FaWineGlassAlt, FaRegHandshake, FaDog } from 'react-icons/fa'
+import { BsBookmarks, BsBookmarksFill, BsFillClockFill, BsInfinity, BsBriefcaseFill, BsAlarmFill } from 'react-icons/bs';
 import { MapProfile } from './Bunkmates/Bunkmates';
 import CircularProgress from '@mui/material/CircularProgress';
-import { Box } from '@mui/system';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
+import { getRequests } from '../api';
 
 
 /*
@@ -57,9 +55,7 @@ export function OtherProfile() {
   };
 
   const { capitalizedName, calculateAge } = useContext(formatContext);
-  const { setIsOpen, setMode, setMessage } = useContext(SignInContext);
-  const { rerender, setMapProfileCard, setZoom, setKeyLocationPins } = useContext(BunkmatesContext)
-  const { values } = useContext(ValuesObjectContext);
+  const { rerender, setZoom, mapProfileCard, setMapProfileCard, setKeyLocationPins, HandleViewOtherProfile } = useContext(BunkmatesContext)
   //state to manage the profile data retrieved from the backend
   const [profile, setProfile] = useState("");
   //state to manage the bookmark icon that is shown
@@ -70,24 +66,49 @@ export function OtherProfile() {
   const [textColor, setTextColor] = useState('red')
   const { setCenter } = useContext(BunkmatesContext)
   const [isProfileLoading, setIsProfileLoading] = useState(true)
+  const [isRequestLoading, setIsRequestLoading] = useState(true)
 
-  const { profileHandleRetrieval } = useContext(BuildUserContext)
+  const { profileHandleRetrieval } = useContext(UserDataContext)
+  const [data, setData] = useState("");
   const [request, setRequest] = useState("");
 
   //get other user's request to extract userId
   const { state } = useLocation();
+  const userId = state.user ?? state.userId
   //use userId to query the profile of the user
   const [otherProfile, setOtherProfile] = useState("")
+
   const handleGetProfiles = async () => {
     //state contains user id found in userProfile, userOwnData, and post
-    const UserId = state.user ?? state.userId
-    setRequest(state)
-    const profiles = await profileHandleRetrieval(UserId)
+    setData(state)
+    const profiles = await profileHandleRetrieval(userId)
     return profiles
   }
   useEffect(() => {
     handleGetProfiles().then((profiles) => setOtherProfile(profiles.data[0])).finally(() => setIsProfileLoading(""))
   }, [rerender])
+
+  //query localStorage whenever mapProfileCard changes (primarily used to update the state of the "view request button")
+  useEffect(() => {
+    //get request data from backend
+    async function handleRequest() {
+      const request = await getRequests();
+      return request
+    }
+
+    //store user request data
+    handleRequest().then((request) => {
+      const requestDict = {}
+      request.data.map(
+        (user) => {
+          requestDict[user.user] = user;
+        });
+      const userOwnId = requestDict[userId]
+      setRequest(userOwnId);
+    }).finally(() => setIsRequestLoading(false));
+
+  }, [])
+
 
 
   const Fields = ({ iconStart, fieldTitle, fieldValue, primaryStyles, bodyStyles }) => {
@@ -111,20 +132,11 @@ export function OtherProfile() {
 
   }
 
-  function handleMouseEnter() {
-    setRequestButtonMessage('Make a request');
-    setShowIcon(true);
-    setTextColor("aqua")
-  }
-
-  function handleMouseLeave() {
-    setRequestButtonMessage('Inactive');
-    setShowIcon(false);
-    setTextColor("red")
-  }
-
   function HandleViewRequest() {
 
+    setZoom(15)
+    //don't need to setMapProfileCard here because it was already opened to navigate to the otherprofile page and was stored in global state
+    setCenter({ lat: request.idealLocation[0], lng: request.idealLocation[1] })
     setMapProfileCard(
       <MapProfile
         request={request}
@@ -132,11 +144,17 @@ export function OtherProfile() {
         setCenter={setCenter}
         setZoom={setZoom}
         setMapProfileCard={setMapProfileCard}
+        HandleViewOtherProfile={HandleViewOtherProfile}
       />)
+    //if the user has an active request then open bunkmates page then center and open up their map profile card
+
   }
 
   function DisplayActiveRequest() {
-    if (request) {
+
+    if (isRequestLoading) {
+      return <div><CircularProgress size={50} sx={{ padding: '10px' }} /></div>
+    } else if (request && !isRequestLoading) {
       return (
         <Tooltip arrow title={`${capitalizedName(otherProfile.firstName)} has an active request`}>
           <Link
@@ -144,18 +162,6 @@ export function OtherProfile() {
             onClick={HandleViewRequest}
             style={{ textDecoration: 'none' }}>
             <ActionButton startIcon={<HiMapPin />} height="30px" title={"View Request"} />
-          </Link>
-        </Tooltip>
-      )
-    } else if (!request) {
-      return (
-        <Tooltip arrow title={'Making a request will let people know you are actively looking for bunkmates and will make your profile more visible'}>
-          <Link
-            to="/bunkmates"
-            style={{ textDecoration: 'none' }}
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}>
-            <ActionButton bgColor={'black'} color={textColor} startIcon={showIcon ? <HiMapPin /> : ""} height="30px" title={requestButtonMessage} />
           </Link>
         </Tooltip>
       )
@@ -203,13 +209,13 @@ export function OtherProfile() {
                 {bookmark
                   ?
                   <Tooltip arrow title="This profile has been saved!">
-                    <IconButton onClick={(e) => setBookmark(!bookmark)}>
+                    <IconButton onClick={() => setBookmark(!bookmark)}>
                       <BsBookmarksFill style={{ color: '#2ACDDD' }} />
                     </IconButton>
                   </Tooltip>
                   :
                   <Tooltip arrow title="Save this profile">
-                    <IconButton onClick={(e) => setBookmark(!bookmark)}>
+                    <IconButton onClick={() => setBookmark(!bookmark)}>
                       <BsBookmarks />
                     </IconButton>
                   </Tooltip>

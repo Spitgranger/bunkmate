@@ -4,8 +4,6 @@ import { GoogleMap, useJsApiLoader, MarkerF, OverlayView, OVERLAY_MOUSE_TARGET, 
 import mapStyles from '../../data/mapStyles.json'
 import { Card, Typography, IconButton, Tooltip, CircularProgress, CardMedia, CardContent, CardActionArea } from "@mui/material/"
 import "./Styles/Bunkmates.css"
-import PlacesAutocomplete from "./Components/Map/PlacesAutocomplete";
-import mapCardData from "../../data/mapCardData"
 import CreateRequestForm from './Components/Map/CreateRequestForm'
 import { ActionButton } from "../../Components/Utils/Form";
 import { chatClientContext } from "../../Components/GlobalStateManagement/MessageContext";
@@ -13,16 +11,14 @@ import { SignInContext } from "../../Components/GlobalStateManagement/SignInCont
 import SingleMapCard from "./Components/Map/SingleMapCard"
 import GroupMapCard from "./Components/Map/GroupMapCard"
 import { deleteRequest } from '../../api'
-import { BuildUserContext, BunkmatesContext } from "../../Components/GlobalStateManagement/UserContext";
+import { BunkmatesContext } from "../../Components/GlobalStateManagement/BunkmatesContext";
 import { RxTriangleDown } from "react-icons/rx"
-import { useNavigate } from "react-router";
 import { MapRequestMarker } from './Components/Map/MapMarkers'
 import { TbSocial, TbSocialOff } from "react-icons/tb";
 import { SocialFeed } from "./Components/SocialFeed/SocialFeed";
 import { useGetUserData } from "./Hooks/useGetUserData";
 import { getPost } from "../../api";
 import { KeyLocationsMarkers } from "./Components/Map/KeyLocations";
-import { Link } from "react-router-dom";
 import { formatContext } from "../../Components/GlobalStateManagement/FormatContext";
 
 export function MapProfile({ request, setKeyLocationPins, setZoom, setCenter, setMapProfileCard, HandleViewOtherProfile }) {
@@ -83,13 +79,12 @@ export function MapProfile({ request, setKeyLocationPins, setZoom, setCenter, se
 
 const Bunkmates = () => {
 
-
     const id = JSON.parse(localStorage.getItem("profile"))?.result?._id;
     //retrieve local storage data
     const { localStorageData } = useContext(chatClientContext)
     //sign in context for when the user tries to create a bunkmate request without an account
     const { setIsOpen, setMessage, setMode } = useContext(SignInContext)
-    const { center, setCenter, mapProfileCard, setMapProfileCard, rerender, setRerender, zoom, setZoom, keyLocationPins, setKeyLocationPins } = useContext(BunkmatesContext)
+    const { center, setCenter, mapProfileCard, setMapProfileCard, rerender, setRerender, zoom, setZoom, keyLocationPins, setKeyLocationPins, HandleViewOtherProfile } = useContext(BunkmatesContext)
     //display, nodisplay of the create request page
     const [showRequest, setShowRequest] = useState(false);
     const [selected, setSelected] = useState(null);
@@ -104,7 +99,9 @@ const Bunkmates = () => {
     //get Social feed informations
     useEffect(() => {
         getPost().then((result) => setStatePostArray(result.data.reverse()));
-        setZoom(15)
+        if (!zoom) {
+            setZoom(15)
+        }
     }, [])
 
 
@@ -154,21 +151,6 @@ const Bunkmates = () => {
     }
 
 
-    //stores the request data in global state while navigating to otherprofile page
-    const HandleViewOtherProfile = ({ request, content }) => {
-        //request is referencing user's request, profiles, and posts to make nested map card profile viewer, createPost and postCard compatible as well
-        return (
-            <Tooltip title={`View ${capitalizedName(request.firstName ?? request.profile[0].firstName)}'s profile`} arrow>
-                <Link
-                    to={"/otherprofile"}
-                    state={request}
-                    style={{ textDecoration: 'none' }}
-                >
-                    {content}
-                </Link>
-            </Tooltip>
-        )
-    }
 
 
 

@@ -1,21 +1,16 @@
-import Divider from '@mui/material/Divider'
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
-import Tooltip from "@mui/material/Tooltip";
-import { SavedListingItem } from './SavedListingItem';
-import { HiMapPin } from 'react-icons/hi2'
-import { GoogleMap, useJsApiLoader, MarkerF, OverlayView, OVERLAY_MOUSE_TARGET, OVERLAY_LAYER, InfoWindow } from "@react-google-maps/api";
-import { Button, Grid, Paper, TextField, Card, Typography, CardActionArea, CardMedia, CardContent, CardActions, IconButton } from "@mui/material/"
-import { ActionButton } from '../../../../Components/Utils/Form';
 import { useState, useContext, useEffect } from 'react';
+import Divider from '@mui/material/Divider'
+import Tooltip from "@mui/material/Tooltip";
+import { Card, Typography, CardActionArea, CardMedia, CardContent, IconButton } from "@mui/material/"
+import { HiMapPin } from 'react-icons/hi2'
+import { FiEye, FiEyeOff } from 'react-icons/fi'
+import { MdVerified } from 'react-icons/md';
 import { TbMessages, TbMessagesOff } from 'react-icons/tb';
+import { SavedListingItem } from './SavedListingItem';
 import NestedMapCard from './NestedMapCard';
 import { InfoWindowF } from '@react-google-maps/api';
-import { FiEyeOff } from 'react-icons/fi'
-import { FiEye } from 'react-icons/fi'
-import styles from '../../Styles/GroupMapCard.css'
-import { MdVerified } from 'react-icons/md';
-import { BuildUserContext } from '../../../../Components/GlobalStateManagement/UserContext';
 import keyLocations from './KeyLocations';
+import { UserDataContext } from '../../../../Components/GlobalStateManagement/UserDataContext';
 
 function GroupMapCard({ request, BunkmateInfo, coordinates, setKeyLocationPins, setCenter, setMapProfileCard, setZoom, HandleViewOtherProfile }) {
 
@@ -30,7 +25,7 @@ function GroupMapCard({ request, BunkmateInfo, coordinates, setKeyLocationPins, 
     const [eyeIcon, setEyeIcon] = useState(false)
     //state management for card opacity
     const [opacity, setOpacity] = useState(0.8)
-    const { profileHandleRetrieval } = useContext(BuildUserContext)
+    const { profileHandleRetrieval } = useContext(UserDataContext)
     //state management for other profiles
     const [otherProfiles, setOtherProfiles] = useState([])
     const [showProfile, setShowProfile] = useState(false)
@@ -187,7 +182,7 @@ function GroupMapCard({ request, BunkmateInfo, coordinates, setKeyLocationPins, 
                     showProfile ?
                         <>
                             < div className="nested-card" style={{ height: '688px', width: 420, margin: '20px', overflowY: "scroll" }}>
-                                {otherProfiles.map((otherProfile) => { return <NestedMapCard profile={otherProfile} HandleViewOtherProfile={HandleViewOtherProfile} /> })}
+                                {otherProfiles.map((otherProfile) => { return <NestedMapCard profile={otherProfile} request={request} HandleViewOtherProfile={HandleViewOtherProfile} /> })}
                             </div >
                         </>
                         : null

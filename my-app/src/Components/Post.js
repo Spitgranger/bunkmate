@@ -100,7 +100,7 @@ export default function Post(info) {
         </div>
         <div className="keyInfo">
           <div style={{ padding: '10px' }}>
-            <Typography color="text.primary" variant="h4" style={{ fontWeight: 500, fontSize: '30px', }} >${info.price}</Typography>
+            <Typography color="text.primary" variant="h4" style={{ fontWeight: 600, fontSize: '30px', }} >${info.price}</Typography>
             <Typography color="text.secondary" variant="h6" >{info.address}</Typography>
             <Typography color="text.primary" variant="h6" style={{ fontSize: '17px' }}> Baths: {info.num_bathrooms} | Beds: {info.num_bedrooms}</Typography>
             <Typography color="text.primary" variant="h6" style={{ fontSize: '17px' }}>Available: {info.date_available}</Typography>

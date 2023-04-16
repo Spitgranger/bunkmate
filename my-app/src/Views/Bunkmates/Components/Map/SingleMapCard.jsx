@@ -30,7 +30,7 @@ function SingleMapCard({ HandleViewOtherProfile, BunkmateInfo, request, coordina
                         <header style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', }}>
                             <div style={{ width: '100%', display: 'flex', flexDirection: 'row', padding: '5px' }}>
 
-                                <HandleViewOtherProfile request={request} content={
+                                <HandleViewOtherProfile data={request ?? ""} content={
                                     <CardActionArea sx={{ width: '125px', color: "black" }}>
                                         <CardMedia
                                             component="img"

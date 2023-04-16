@@ -11,7 +11,7 @@ import '../../Styles/GroupMapCard.css'
 import { ActionButton } from '../../../../Components/Utils/Form';
 
 
-function NestedMapCard({ profile, HandleViewOtherProfile }) {
+function NestedMapCard({ profile, request, HandleViewOtherProfile }) {
 
     console.log(profile)
     return (
@@ -20,7 +20,7 @@ function NestedMapCard({ profile, HandleViewOtherProfile }) {
                 <div className="profile-info" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                     <header style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', }}>
                         <div style={{ width: '100%', display: 'flex', flexDirection: 'row', padding: '5px' }}>
-                            <HandleViewOtherProfile request={profile} content={
+                            <HandleViewOtherProfile data={profile} content={
                                 <CardActionArea style={{ width: '125px', color: "black" }}> <CardMedia
                                     component="img"
                                     image={profile?.picture}

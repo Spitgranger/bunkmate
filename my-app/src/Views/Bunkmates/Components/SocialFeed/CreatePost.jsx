@@ -95,7 +95,7 @@ export default function CreatePost({ statePostArray, setStatePostArray, userOwnD
     return (
         <Card style={createPostStyles.container}>
             <div style={createPostStyles.innerContainer}>
-                <HandleViewOtherProfile request={userOwnData} content={
+                <HandleViewOtherProfile data={userOwnData} content={
                     <CardActionArea sx={{ color: 'black' }}>
                         <Avatar sx={createPostStyles.avatar} src={userOwnData?.profile[0]?.picture ?? userProfile?.data?.picture} className="Avatar" alt={`${userOwnData?.profile[0]?.firstName}'s Profile picture`} />
                     </CardActionArea>

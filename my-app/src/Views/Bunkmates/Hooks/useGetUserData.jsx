@@ -1,6 +1,6 @@
-import { getRequests, getProfile } from "../../../api";
-import { BunkmatesContext } from "../../../Components/GlobalStateManagement/UserContext";
 import { useState, useEffect, useContext } from 'react'
+import { getRequests, getProfile } from "../../../api";
+import { BunkmatesContext } from "../../../Components/GlobalStateManagement/BunkmatesContext";
 
 export const useGetUserData = () => {
 

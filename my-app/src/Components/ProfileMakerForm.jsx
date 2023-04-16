@@ -27,8 +27,8 @@ import {
 
 import { SignInContext } from './GlobalStateManagement/SignInContext';
 import { formatContext } from './GlobalStateManagement/FormatContext';
-import { BuildUserContext } from './GlobalStateManagement/UserContext';
-import { BunkmatesContext } from './GlobalStateManagement/UserContext';
+import { UserDataContext } from './GlobalStateManagement/UserDataContext';
+import { BunkmatesContext } from './GlobalStateManagement/BunkmatesContext';
 
 
 //styles
@@ -49,7 +49,7 @@ function ProfileMakerForm({ forwardButton, backwardButton }) {
   const { aboutError, aboutHelperText, handleAboutValidation } = useContext(AboutValidationContext)
   const { isOpen, setIsOpen } = useContext(SignInContext)
   const { calculateAge, capitalizedName } = useContext(formatContext)
-  const { profileHandleSubmit, profileHandleUpdate } = useContext(BuildUserContext)
+  const { profileHandleSubmit, profileHandleUpdate } = useContext(UserDataContext)
   const [userProfile, setUserProfile] = useState("")
   const { rerender, setRerender } = useContext(BunkmatesContext)
 
