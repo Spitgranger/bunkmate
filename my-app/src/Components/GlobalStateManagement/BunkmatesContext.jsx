@@ -53,7 +53,24 @@ export default function BunkmatesProvider({ children }) {
 
 
   return (
-    <BunkmatesContext.Provider value={{ HandleViewOtherProfile, isLoaded, loadError, mapProfileCard, setMapProfileCard, center, setCenter, rerender, setRerender, click, setClick, zoom, setZoom, keyLocationPins, setKeyLocationPins, }}>
+    <BunkmatesContext.Provider
+      value={{
+        HandleViewOtherProfile,
+        isLoaded,
+        loadError,
+        mapProfileCard,
+        setMapProfileCard,
+        center,
+        setCenter,
+        rerender,
+        setRerender,
+        click,
+        setClick,
+        zoom,
+        setZoom,
+        keyLocationPins,
+        setKeyLocationPins,
+      }}>
       {children}
     </BunkmatesContext.Provider>
   )

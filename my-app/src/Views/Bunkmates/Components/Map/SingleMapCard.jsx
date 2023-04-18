@@ -10,11 +10,11 @@ import { TbMessages, TbMessagesOff } from 'react-icons/tb';
 import { useRef, useState, useContext, useEffect } from 'react';
 import { InfoWindowF } from '@react-google-maps/api';
 import { MdVerified } from 'react-icons/md';
-import KeyLocations from './KeyLocations';
+import RetrieveKeyLocations from './KeyLocations';
 import { formatContext } from '../../../../Components/GlobalStateManagement/FormatContext';
 
 
-function SingleMapCard({ HandleViewOtherProfile, BunkmateInfo, request, coordinates, setKeyLocationPins, setZoom, setCenter, setMapProfileCard }) {
+function SingleMapCard({ HandleViewOtherProfile, BunkmateInfo, request, coordinates, setKeyLocationPins, setZoom, center, setCenter, setMapProfileCard, }) {
 
     const [messageButton, setMessageButton] = useState(false)
     const { capitalizedName, calculateAge } = useContext(formatContext)
@@ -56,7 +56,7 @@ function SingleMapCard({ HandleViewOtherProfile, BunkmateInfo, request, coordina
                                         </div>
                                         <div className="button-container" style={{ display: 'flex', justifyContent: 'flex-end' }}>
                                             <Tooltip title={"Explore this area"} arrow placement="bottom">
-                                                <IconButton onClick={() => { KeyLocations({ setKeyLocationPins, coordinates, setZoom, setCenter, setMapProfileCard, request }); }}>
+                                                <IconButton onClick={() => { RetrieveKeyLocations({ setKeyLocationPins, coordinates, setZoom, center, setCenter, setMapProfileCard, request }); }}>
                                                     <HiMapPin />
                                                 </IconButton>
                                             </Tooltip>

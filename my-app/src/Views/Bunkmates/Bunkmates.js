@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useRef, useState, memo, useMemo, useId } from "react";
 import Navbar from "../../Components/Navbar";
-import { GoogleMap, useJsApiLoader, MarkerF, OverlayView, OVERLAY_MOUSE_TARGET, OverlayViewF, MapContext, Polyline } from "@react-google-maps/api";
+import { GoogleMap, useJsApiLoader, MarkerF, OverlayView, OVERLAY_MOUSE_TARGET, OverlayViewF, MapContext, Polyline, DirectionsService } from "@react-google-maps/api";
 import mapStyles from '../../data/mapStyles.json'
 import { Card, Typography, IconButton, Tooltip, CircularProgress, CardMedia, CardContent, CardActionArea } from "@mui/material/"
 import "./Styles/Bunkmates.css"
@@ -21,7 +21,7 @@ import { getPost } from "../../api";
 import { KeyLocationsMarkers } from "./Components/Map/KeyLocations";
 import { formatContext } from "../../Components/GlobalStateManagement/FormatContext";
 
-export function MapProfile({ request, setKeyLocationPins, setZoom, setCenter, setMapProfileCard, HandleViewOtherProfile }) {
+export function MapProfile({ request, setKeyLocationPins, setZoom, center, setCenter, setMapProfileCard, HandleViewOtherProfile, }) {
 
     //determines whether to render single or group map card
 
@@ -59,6 +59,7 @@ export function MapProfile({ request, setKeyLocationPins, setZoom, setCenter, se
                 setKeyLocationPins={setKeyLocationPins}
                 coordinates={coordinates}
                 setZoom={setZoom}
+                center={center}
                 setCenter={setCenter}
                 setMapProfileCard={setMapProfileCard}
                 HandleViewOtherProfile={HandleViewOtherProfile}
@@ -69,6 +70,7 @@ export function MapProfile({ request, setKeyLocationPins, setZoom, setCenter, se
                 setKeyLocationPins={setKeyLocationPins}
                 coordinates={coordinates}
                 setZoom={setZoom}
+                center={center}
                 setCenter={setCenter}
                 setMapProfileCard={setMapProfileCard}
                 HandleViewOtherProfile={HandleViewOtherProfile}
@@ -84,7 +86,8 @@ const Bunkmates = () => {
     const { localStorageData } = useContext(chatClientContext)
     //sign in context for when the user tries to create a bunkmate request without an account
     const { setIsOpen, setMessage, setMode } = useContext(SignInContext)
-    const { center, setCenter, mapProfileCard, setMapProfileCard, rerender, setRerender, zoom, setZoom, keyLocationPins, setKeyLocationPins, HandleViewOtherProfile } = useContext(BunkmatesContext)
+    const { center, setCenter, mapProfileCard, setMapProfileCard, rerender, setRerender, zoom, setZoom, keyLocationPins, setKeyLocationPins, HandleViewOtherProfile, } = useContext(BunkmatesContext)
+
     //display, nodisplay of the create request page
     const [showRequest, setShowRequest] = useState(false);
     const [selected, setSelected] = useState(null);
@@ -142,6 +145,7 @@ const Bunkmates = () => {
             <MapProfile
                 request={request}
                 setKeyLocationPins={setKeyLocationPins}
+                center={center}
                 setCenter={setCenter}
                 setZoom={setZoom}
                 setMapProfileCard={setMapProfileCard}
@@ -264,7 +268,7 @@ const Bunkmates = () => {
 
                             }
                         </section>
-                        <KeyLocationsMarkers keyLocationPins={keyLocationPins} />
+                        <KeyLocationsMarkers keyLocationPins={keyLocationPins} center={center} />
                         {displaySocial ? <SocialFeed userOwnData={userOwnData} userProfile={userProfile} statePostArray={statePostArray} setStatePostArray={setStatePostArray} HandleViewOtherProfile={HandleViewOtherProfile} /> : null}
                         {mapProfileCard ?? null}
                         {selected && <MarkerF position={center} icon={"http://maps.google.com/mapfiles/ms/icons/blue.png"} />}

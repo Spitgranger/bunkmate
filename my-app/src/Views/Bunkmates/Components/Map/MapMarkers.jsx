@@ -25,14 +25,9 @@ export function MapRequestMarker(props) {
     )
 }
 
-export function MapEducationMarker({ location, setKeyLocationData, }) {
-
-    const handleStorePlaceData = ({ location, setKeyLocationData }) => {
-        setKeyLocationData(location)
-    }
-
+export function MapEducationMarker({ onMouseEnter }) {
     return (
-        <IconButton sx={{ color: "grey" }} onMouseEnter={() => handleStorePlaceData({ location, setKeyLocationData })}>
+        <IconButton sx={{ color: "grey" }} onMouseEnter={onMouseEnter}>
             <FaGraduationCap color="white" size="17" style={{ position: 'absolute', right: '16px', bottom: '18.5px' }} />
             <RiMapPin5Fill color="#24AEC0" size="35" />
         </IconButton>
