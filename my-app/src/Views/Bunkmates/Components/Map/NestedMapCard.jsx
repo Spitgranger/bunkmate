@@ -7,28 +7,28 @@ import { GoogleMap, useJsApiLoader, MarkerF, OverlayView, OVERLAY_MOUSE_TARGET, 
 import { Button, Grid, Paper, TextField, Card, Typography, CardActionArea, CardMedia, CardContent, CardActions, IconButton } from "@mui/material/"
 import { TbMessages, TbMessagesOff } from 'react-icons/tb';
 import { useRef, useState, useContext } from 'react';
-import '../Styles/GroupMapCard.css'
-import { ActionButton } from '../../../Components/Utils/Form';
+import '../../Styles/GroupMapCard.css'
+import { ActionButton } from '../../../../Components/Utils/Form';
 
 
-function NestedMapCard({ profile }) {
+function NestedMapCard({ profile, request, HandleViewOtherProfile }) {
 
+    console.log(profile)
     return (
         <Card sx={{ margin: '10px', width: '100%', zIndex: "2", opacity: '0.9' }} onClick={e => e.stopPropagation()}>
             <div style={{ flexDirection: 'column', padding: '15px', display: 'flex', justifyContent: 'flex-start' }}>
                 <div className="profile-info" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                     <header style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', }}>
                         <div style={{ width: '100%', display: 'flex', flexDirection: 'row', padding: '5px' }}>
-                            <Tooltip title={`View ${profile?.firstName}'s profile`} arrow>
-                                <CardActionArea style={{ width: '125px' }}>
-                                    <CardMedia
-                                        component="img"
-                                        image={profile?.picture}
-                                        alt="profile picture"
-                                        sx={{ width: '125px', height: '125px', borderRadius: '5%', }}
-                                    />
+                            <HandleViewOtherProfile data={profile} content={
+                                <CardActionArea style={{ width: '125px', color: "black" }}> <CardMedia
+                                    component="img"
+                                    image={profile?.picture}
+                                    alt="profile picture"
+                                    sx={{ width: '125px', height: '125px', borderRadius: '5%', }}
+                                />
                                 </CardActionArea>
-                            </Tooltip>
+                            } />
                             <CardContent style={{ width: '100%', padding: '0px 15px 0px 15px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                                 <div className="card-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                     <div className="first-name">

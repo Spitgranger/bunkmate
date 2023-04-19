@@ -23,13 +23,12 @@ import {
   PhoneValidationContext,
   AboutValidationContext,
   EmailValidationContext,
-
 } from './GlobalStateManagement/ValidationContext';
 
 import { SignInContext } from './GlobalStateManagement/SignInContext';
 import { formatContext } from './GlobalStateManagement/FormatContext';
-import { BuildUserContext } from './GlobalStateManagement/BunkmatesContext';
-
+import { UserDataContext } from './GlobalStateManagement/UserDataContext';
+import { BunkmatesContext } from './GlobalStateManagement/BunkmatesContext';
 
 
 //styles
@@ -50,7 +49,36 @@ function ProfileMakerForm({ forwardButton, backwardButton }) {
   const { aboutError, aboutHelperText, handleAboutValidation } = useContext(AboutValidationContext)
   const { isOpen, setIsOpen } = useContext(SignInContext)
   const { calculateAge, capitalizedName } = useContext(formatContext)
-  const { profileHandleSubmit } = useContext(BuildUserContext)
+  const { profileHandleSubmit, profileHandleUpdate } = useContext(UserDataContext)
+  const [userProfile, setUserProfile] = useState("")
+  const { rerender, setRerender } = useContext(BunkmatesContext)
+
+  //function to handle fetching the profile data from back end
+  const handleProfile = async () => {
+    try {
+      const profile = await getProfile();
+      return profile;
+    } catch (error) {
+      console.log(error)
+    }
+  };
+
+  //get data from backend when the component first loads works
+
+  useEffect(() => {
+    handleProfile().then((profile) => setUserProfile(profile.data))
+  }, []);
+
+
+  const handleSubmit = (values) => {
+    //rerenders the useEffect which fetches info from backend in profile.js
+    //if user already has a profile then update it else submit it
+    if (userProfile) {
+      profileHandleUpdate(values).then(() => { setRerender(!rerender) })
+    } else {
+      profileHandleSubmit(values).then(() => { setRerender(!rerender) })
+    }
+  }
 
   const actions = {
     checkGlobalError: "check_global_error",
@@ -278,7 +306,7 @@ function ProfileMakerForm({ forwardButton, backwardButton }) {
 
 
 
-    <ActionButton disabled={state.globalError} fontSize="15px" width="100%" onClick={() => { profileHandleSubmit(state?.values); handleClose(); localStorage.setItem("page1", JSON.stringify(values)); }} type="submit" title="SUBMIT" endIcon={<IoChevronForward color="aqua" />} />
+    <ActionButton disabled={state.globalError} fontSize="15px" width="100%" onClick={() => { handleSubmit(state?.values); handleClose(); localStorage.setItem("page1", JSON.stringify(values)); }} type="submit" title="SUBMIT" endIcon={<IoChevronForward color="aqua" />} />
   </>)
 }
 

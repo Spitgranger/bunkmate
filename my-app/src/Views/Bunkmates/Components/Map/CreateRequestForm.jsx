@@ -1,6 +1,6 @@
 //
-import { useState, useReducer, useContext, useEffect, useRef, useId, memo } from 'react'
-import { deleteRequest, getChats, getProfile } from '../../../api';
+import { useState, useReducer, useContext, useEffect, useRef } from 'react'
+import { getListings, getChats, getProfile } from '../../../../api';
 import {
   FormSection,
   ActionButton,
@@ -8,28 +8,23 @@ import {
   FormSingleLineInput,
   DatePicker,
   DropDownMenu,
+  FormMultiLineInput,
+  MultipleSelectCheckmarks,
+  UploadFile,
+} from '../../../../Components/Utils/Form';
+import { SavedListingItem } from './SavedListingItem';
+import { identityMenuItems } from '../../../../data/SavedListingsData';
+import { AboutValidationContext } from '../../../../Components/GlobalStateManagement/ValidationContext';
+import { UserDataContext } from '../../../../Components/GlobalStateManagement/UserDataContext';
+import { BunkmatesContext } from '../../../../Components/GlobalStateManagement/BunkmatesContext';
 
-} from '../../../Components/Utils/Form';
-import { Typography, bottomNavigationActionClasses, setRef } from '@mui/material'
+import { Typography } from '@mui/material'
 import Slider from '@mui/material/Slider'
 import Box from '@mui/material/Box';
-import { savedListingsData, identityMenuItems } from '../../../data/SavedListingsData';
-import { SavedListingItem } from './SavedListingItem';
-import { FormMultiLineInput } from '../../../Components/Utils/Form';
-import { AboutValidationContext } from '../../../Components/GlobalStateManagement/ValidationContext';
-import { MultipleSelectCheckmarks } from '../../../Components/Utils/Form';
+import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import IconButton from '@mui/material/IconButton';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import { IoIosArrowBack } from 'react-icons/io'
-import { BuildUserContext } from '../../../Components/GlobalStateManagement/BunkmatesContext';
-import { chatClientContext } from '../../../Components/GlobalStateManagement/MessageContext';
-import { UploadFile } from '../../../Components/Utils/Form';
-import { MdUpload } from 'react-icons/md';
-import profiles from "../../../data/mapCardData"
-import { getListings } from '../../../api';
-import { useNavigate } from 'react-router';
-import { BunkmatesContext } from '../../../Components/GlobalStateManagement/BunkmatesContext';
-import CameraAltIcon from '@mui/icons-material/CameraAlt';
 
 //TODO
 //Convert from hard coded array index to directly storing address in values #FINISHED
@@ -57,7 +52,8 @@ const FirstPageForm = ({ groupChat, dispatch, state, actions, handleEmptyStringV
     //dispatch function that adds channelIdStorage as a payload
   }
 
-  const chatMenuItems = groupChat.map((item) => { return item.usernames })
+  //an empty array is evaluated as truthy which is why ternary operator needed here
+  const chatMenuItems = groupChat ? groupChat.map((item) => { return item.usernames }) : ""
 
   //special handle event function just to file uploads
   const handleFileUpload = (e) => {
@@ -84,7 +80,7 @@ const FirstPageForm = ({ groupChat, dispatch, state, actions, handleEmptyStringV
     {/* belongs below*/}
     < LineBox flex={true} CssTextField={[
       <MultipleSelectCheckmarks value={state?.firstPageValues?.groupTags} helperText="Optional" title="Group tags" onChange={(e) => handleEmptyStringValidation(e.target.value, 'groupTags', 'firstPageValues')} menuItems={['Non Smokers', 'Have Pets', "Have Jobs", 'Students', 'Have Children', 'LGBTQ Friendly', 'Cannabis Friendly']} />,
-      <DropDownMenu required={true} value={chatMenuItems[index]} onChange={(e) => { console.log(e.explicitOriginalTarget.attributes.index.value); handleEmptyStringValidation(groupChat[e.explicitOriginalTarget.attributes.index.value].ids, 'linkChats', 'firstPageValues'); setIndex(e.explicitOriginalTarget.attributes.index.value) }} label="Link Chats" menuItem={chatMenuItems} />,
+      <DropDownMenu helperText={"Link your bunkmates"} required={true} value={chatMenuItems[index]} onChange={(e) => { console.log(e.explicitOriginalTarget.attributes.index.value); handleEmptyStringValidation(groupChat[e.explicitOriginalTarget.attributes.index.value].ids, 'linkChats', 'firstPageValues'); setIndex(e.explicitOriginalTarget.attributes.index.value) }} label="Link Chats" menuItem={chatMenuItems} />,
     ]} />
     <LineBox flex={true} CssTextField={[
       <UploadFile helperText="Optional: Supported Files: jpg, jpeg, png" helperTextPos="85%" width="100%" height="40px" type="file" message="Upload Group Photo" accept={["image/jpg", "image/jpeg", "image/png"]} endIcon={<CameraAltIcon sx={{ color: "aqua" }} />} handleFileUpload={handleFileUpload} />,
@@ -99,7 +95,7 @@ const FirstPageForm = ({ groupChat, dispatch, state, actions, handleEmptyStringV
 const SecondPageForm = ({ handleEmptyStringValidation, state, dispatch, actions, labelTitle, props, listingsDataHashMap, listingsHashMap, }) => {
 
   //store user request data
-  const { requestHandleSubmit, requestHandleUpdate } = useContext(BuildUserContext)
+  const { requestHandleSubmit, requestHandleUpdate } = useContext(UserDataContext)
   //used to rerender useEffect in Bunkmates.js containing async functions that gets data from backend
   const { rerender, setRerender } = useContext(BunkmatesContext)
   const { click, setClick } = useContext(BunkmatesContext);
@@ -271,8 +267,6 @@ const SecondPageForm = ({ handleEmptyStringValidation, state, dispatch, actions,
 
 //Within a modal window
 function CreateRequestForm(props) {
-  const { GetClientInfo, localStorageData } = useContext(chatClientContext)
-  /*const { values, setValue } = useContext(ValuesObjectContext)*/
   //state management of listing array index
   //show or hide the body fields
   const [showSecondPage, setShowSecondPage] = useState(false)
@@ -281,7 +275,7 @@ function CreateRequestForm(props) {
   //show or hide the back button
   const [showButton, setShowButton] = useState("")
   //controls the title of the create request form
-  const [formTitle, setFormTitle] = useState("Create a Bunkmate Request")
+  const [formTitle, setFormTitle] = useState("Create Bunkmate Request")
   //controls the title of the label on the rent budget field
   const [labelTitle, setLabelTitle] = useState("My Rent Budget")
   //store user profile data
@@ -291,7 +285,6 @@ function CreateRequestForm(props) {
   //state managemnt for listing in mind field
   const [listingsHashMap, setListingsHashMap] = useState(new Map());
   const [listingsDataHashMap, setListingsDataHashMap] = useState(new Map());
-  const [chatHash, setChatHash] = useState(new Map());
 
   /* useState hook for managing the upload file ui state 
   (placed in parent hook to preserve state when switching between components occupying
@@ -518,7 +511,7 @@ function CreateRequestForm(props) {
   //handle back click so you can change who you want to request as
   const handleBack = () => {
     if (!userSecondPageRequest) {
-      setFormTitle("Create a Bunkmate Request")
+      setFormTitle("Create Bunkmate Request")
       /*
       if (state?.firstPageValues?.request === "As myself" || state?.firstPageValues?.request === "") {
         dispatch({ type: actions.checkValues, payload: "", name: "request", page: 'firstPageValues' })
@@ -627,44 +620,3 @@ function CreateRequestForm(props) {
 }
 
 export default CreateRequestForm;
-
-
-
-
-/*
-  const instantiateChatClient = async () => {
-    //to record channel names and id in state
-    const chatClient = await GetClientInfo();
-    console.log(chatClient)
- 
-    const filter = { type: 'messaging', members: { $in: [localStorageData?.result?._id] } };
-    const sort = [{ last_message_at: -1 }];
- 
-    const channels = await chatClient?.queryChannels(filter, sort, {
-      watch: true, // this is the default
-      state: true,
-    });
- 
-    console.log(channels)
- 
-    const channelNames = []
-    const channelId = []
-    console.log(channelId)
- 
-    channels.map((channel) => {
-      if (channel.data.name !== undefined && channel.data.name !== "Bunkmate Support" && channel.data.name !== "Support Team") {
-        if (Array.isArray(channel.data.name)) {
-          channelNames.push((channel.data.name).join('  '))
-          channelId.push((channel.cid))
-        } else {
-          channelNames.push(channel.data.name)
-          channelId.push((channel.cid))
-        }
-      }
-    })
- 
- 
-    setGroupChat([channelNames, channelId])
- 
-  }
-  */

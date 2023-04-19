@@ -6,6 +6,7 @@ import { IoIosArrowDropleftCircle } from 'react-icons/io'
 import { BsFillCircleFill } from 'react-icons/bs'
 import Modal from "./Utils/Modal";
 import { useState } from "react"
+import { Typography } from "@mui/material"
 
 export function Bookmark() {
 
@@ -98,22 +99,22 @@ export default function Post(info) {
           </div>
         </div>
         <div className="keyInfo">
-          <h2>${info.price}</h2>
-          <h4>{info.address}</h4>
-          <h5>| Baths: {info.num_bathrooms} | Beds: {info.num_bedrooms} | Roomates: {info.num_roomates} |</h5>
-
-          <h5>Available After: {info.date_available}</h5>
+          <div style={{ padding: '10px' }}>
+            <Typography color="text.primary" variant="h4" style={{ fontWeight: 600, fontSize: '30px', }} >${info.price}</Typography>
+            <Typography color="text.secondary" variant="h6" >{info.address}</Typography>
+            <Typography color="text.primary" variant="h6" style={{ fontSize: '17px' }}> Baths: {info.num_bathrooms} | Beds: {info.num_bedrooms}</Typography>
+            <Typography color="text.primary" variant="h6" style={{ fontSize: '17px' }}>Available: {info.date_available}</Typography>
+          </div>
           <label id="message" >
             <button onClick={() => setMessage(true)} style={{ display: "none" }}></button>
-            <h3>Message</h3>
-            <Modal modalMessage="Message" open={message} onClose={() => setMessage(false)}>
-            </Modal>
+            <h3>Contact</h3>
+            <Modal modalMessage="Contact" open={message} onClose={() => setMessage(false)} />
           </label>
         </div>
       </div>
       <div className="Ammenities">
         {info.tags?.map((tag, i) => {
-          return (<div id="tags" key={i}>{tag}</div>);
+          return (<Typography variant="h6" id="tags" key={i}>{tag}</Typography>);
         })
         }
       </div>

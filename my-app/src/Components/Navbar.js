@@ -1,9 +1,10 @@
 import logo from './Assets/logo.svg';
+import bunkmate_logo from './Assets/bunkmate_logo.png'
 import './Navbar.css';
 import { Link, useResolvedPath, useMatch } from 'react-router-dom';
 import RenderWhich from '../Views/SignIn';
 import { Avatar, Typography, Button, Menu, MenuItem, Divider, Tooltip, IconButton, ListItemIcon } from '@mui/material';
-import { useState, useId, useContext, useEffect } from 'react';
+import { useState, useId, useContext, useEffect, memo } from 'react';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import LoginIcon from '@mui/icons-material/Login';
 import LogoutIcon from '@mui/icons-material/Logout';
@@ -17,7 +18,9 @@ import { getProfile } from '../api';
 import { SignInContext } from './GlobalStateManagement/SignInContext';
 import { formatContext } from './GlobalStateManagement/FormatContext';
 
-function Navbar({ chooseStyle }) {
+const Navbar = memo(({ chooseStyle }) => {
+
+    console.log('navbar rerender')
 
     const id = useId()
     const [navStyle, setNavStyle] = useState("nav")
@@ -27,7 +30,6 @@ function Navbar({ chooseStyle }) {
         //check if the page is the currently active page, if so then highlight it
         const fullPath = useResolvedPath(to)
         const isActive = useMatch({ path: fullPath.pathname, end: true })
-        console.log(fullPath)
         return (
             <Link to={to} className={isActive ? `${navStyle}CurrentPage` : ""} {...props}>
                 {page}
@@ -170,9 +172,9 @@ function Navbar({ chooseStyle }) {
     return (
         <nav className={`${navStyle}Bar`}>
             <Tooltip title={"Return Home"}>
-                <div>
+                <div style={{ width: '300px' }}>
                     <CheckActive to="/" page={
-                        <img src={logo} className="App-logo" alt="logo" />}>
+                        <img src={bunkmate_logo} className="App-logo" alt="logo" />}>
                     </CheckActive>
                 </div>
             </Tooltip>
@@ -249,6 +251,6 @@ function Navbar({ chooseStyle }) {
             </ul >
         </nav >
     );
-}
+})
 
 export default Navbar;

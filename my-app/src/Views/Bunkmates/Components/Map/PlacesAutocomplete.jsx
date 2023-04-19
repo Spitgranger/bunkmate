@@ -16,6 +16,7 @@ const PlacesAutocomplete = (props) => {
             componentRestrictions: { country: "ca" },
         },
         debounce: 300,
+
     });
 
     const handleInput = (e) => {
@@ -64,7 +65,7 @@ const PlacesAutocomplete = (props) => {
                 onChange={handleInput}
                 variant="filled"
                 disabled={!ready}
-                placeholder="Search for bunkmates..."
+                placeholder="Travel to a new location..."
                 sx={{
                     boxSizing: 'border-box',
                     width: '100%',

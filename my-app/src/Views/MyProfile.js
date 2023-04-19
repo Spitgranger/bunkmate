@@ -1,30 +1,25 @@
-import React, { useRef, useEffect, useState, useContext } from 'react';
-import { formatContext } from '../Components/GlobalStateManagement/FormatContext';
-import Navbar from '../Components/Navbar';
-import { getProfile, getRequests } from '../api';
-import { SignInContext } from '../Components/GlobalStateManagement/SignInContext';
-import { ActionButton } from '../Components/Utils/Form';
-import Divider from '@mui/material/Divider'
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
-import Tooltip from "@mui/material/Tooltip";
-import { SavedListingItem } from './Bunkmates/Components/SavedListingItem';
-import { HiMapPin } from 'react-icons/hi2'
+import React, { useEffect, useState, useContext } from 'react';
 import './Profile.css'
-import { GoogleMap, useJsApiLoader, MarkerF, OverlayView, OVERLAY_MOUSE_TARGET, OVERLAY_LAYER, InfoWindow } from "@react-google-maps/api";
-import { CardHeader, Avatar, Button, Grid, Paper, TextField, Card, Typography, CardActionArea, CardMedia, CardContent, CardActions, IconButton } from "@mui/material/"
-import { TbMessages, TbMessagesOff } from 'react-icons/tb';
-import { InfoWindowF } from '@react-google-maps/api';
-import { ValuesObjectContext } from '../Components/GlobalStateManagement/ValidationContext';
-import { GrInstagram, GrFacebook, GrLinkedin, GrTwitter } from 'react-icons/gr'
-import { MdVerified, MdPets, MdCleaningServices } from 'react-icons/md';
-import { BsBookmarks, BsBookmarksFill, BsFillClockFill, BsInfinity, BsBriefcaseFill, BsPencil, BsAlarmFill, BsPen } from 'react-icons/bs';
-import { FaBook, FaSmoking, FaCannabis, FaWineGlassAlt, FaRegHandshake, FaDog } from 'react-icons/fa'
-import { BiMessageDetail } from 'react-icons/bi'
-import { Link } from 'react-router-dom';
+import Navbar from '../Components/Navbar';
+import { formatContext } from '../Components/GlobalStateManagement/FormatContext';
+import { SignInContext } from '../Components/GlobalStateManagement/SignInContext';
 import { BunkmatesContext } from '../Components/GlobalStateManagement/BunkmatesContext';
+
+import { getProfile, getRequests } from '../api';
+import { ActionButton } from '../Components/Utils/Form';
+import { Link } from 'react-router-dom';
 import { MapProfile } from './Bunkmates/Bunkmates';
+
+import Divider from '@mui/material/Divider'
+import Tooltip from "@mui/material/Tooltip";
 import CircularProgress from '@mui/material/CircularProgress';
+import { Card, CardHeader, Typography, CardMedia, CardContent, IconButton } from "@mui/material/"
 import { Box } from '@mui/system';
+import { MdVerified, MdPets, MdCleaningServices } from 'react-icons/md';
+import { BsFillClockFill, BsInfinity, BsBriefcaseFill, BsPencil, BsAlarmFill, BsPen } from 'react-icons/bs';
+import { FaBook, FaSmoking, FaCannabis, FaWineGlassAlt, FaRegHandshake, FaDog } from 'react-icons/fa'
+import { GrInstagram, GrFacebook, GrLinkedin, GrTwitter } from 'react-icons/gr'
+import { HiMapPin } from 'react-icons/hi2'
 
 
 
@@ -33,10 +28,11 @@ import { Box } from '@mui/system';
   backgroundColor: 'red'
 }
 */
-//This is the component that handles the user profile, displaying the user details and other things.
+//This is the component that handles the user's own profile, displaying the user details and other things.
 
 
 const Profile = () => {
+  console.log("Profile rerender")
 
   const pageStyles = {
     page: { display: 'flex', justifyContent: 'center', alignItems: 'flex-end', height: '100%' },
@@ -60,20 +56,17 @@ const Profile = () => {
 
   const { capitalizedName, calculateAge } = useContext(formatContext);
   const { setIsOpen, setMode, setMessage } = useContext(SignInContext);
-  const { values } = useContext(ValuesObjectContext);
+  const { rerender, setMapProfileCard, setZoom, setKeyLocationPins, HandleViewOtherProfile } = useContext(BunkmatesContext)
   //state to manage the profile data retrieved from the backend
   const [profile, setProfile] = useState("");
-  //state to manage the bookmark icon that is shown
-  const [bookmark, setBookmark] = useState(false);
   //state management just for the requestbutton
   const [requestButtonMessage, setRequestButtonMessage] = useState("Inactive")
-  const [showIcon, setShowIcon] = useState(null)
+  const [showIcon, setShowIcon] = useState(false)
   const [textColor, setTextColor] = useState('red')
-  const { mapProfileCard, setMapProfileCard } = useContext(BunkmatesContext)
-  const [userRequest, setUserRequest] = useState(null)
+  const [userOwnRequest, setUserOwnRequest] = useState("")
   const { setCenter } = useContext(BunkmatesContext)
-  const [loading, setLoading] = useState(<CircularProgress size={50} />)
-
+  const [isProfileLoading, setIsProfileLoading] = useState(true)
+  const [isRequestLoading, setIsRequestLoading] = useState(true)
 
   //query localStorage whenever mapProfileCard changes (primarily used to update the state of the "view request button")
   useEffect(() => {
@@ -92,17 +85,12 @@ const Profile = () => {
           requestDict[user.user] = user;
         });
       const userOwnId = requestDict[userId]
-      setUserRequest(userOwnId);
-    });
+      setUserOwnRequest(userOwnId);
+    }).finally(() => setIsRequestLoading(false));
 
-  }, [mapProfileCard])
+  }, [])
 
 
-  const handleEditProfile = () => {
-    setMessage("Edit Your Profile")
-    setMode("profileMakerForm")
-    setIsOpen(true)
-  }
 
   //function to handle fetching the profile data from back end
   const handleLoad = async () => {
@@ -110,11 +98,16 @@ const Profile = () => {
     return profile;
   };
 
-  //get data from backend when the component first loads works
   useEffect(() => {
-    handleLoad().then((profile) => setProfile(profile.data)).finally(() => setLoading(null))
-  }, []);
+    //get data from backend when the component first loads works
+    handleLoad().then((profile) => setProfile(profile.data)).finally(() => setIsProfileLoading(""))
+  }, [rerender]);
 
+  const handleEditProfile = () => {
+    setMessage("Edit Your Profile")
+    setMode("profileMakerForm")
+    setIsOpen(true)
+  }
 
 
 
@@ -142,22 +135,63 @@ const Profile = () => {
 
   function handleMouseEnter() {
     setRequestButtonMessage('Make a request');
-    setShowIcon(<HiMapPin />);
+    setShowIcon(true);
     setTextColor("aqua")
   }
 
   function handleMouseLeave() {
     setRequestButtonMessage('Inactive');
-    setShowIcon(null);
+    setShowIcon(false);
     setTextColor("red")
   }
 
-  const handleViewRequest = () => {
-    setCenter({ lat: userRequest.idealLocation[0], lng: userRequest.idealLocation[1] })
-    setMapProfileCard(<MapProfile profile={userRequest.profile[0]} request={userRequest} />)
+  function HandleViewRequest() {
+
+    //NOTE: must set zoom else bunkmates page will be grey
+    setZoom(15)
+
+    //if the user has an active request then open bunkmates page then center and open up their map profile card
+    setMapProfileCard(
+      <MapProfile
+        request={userOwnRequest}
+        setKeyLocationPins={setKeyLocationPins}
+        setCenter={setCenter}
+        setZoom={setZoom}
+        setMapProfileCard={setMapProfileCard}
+        HandleViewOtherProfile={HandleViewOtherProfile}
+      />)
+
   }
 
-  console.log(userRequest)
+  function DisplayActiveRequest() {
+    if (isRequestLoading) {
+      return <div><CircularProgress size={50} sx={{ padding: '10px' }} /></div>
+    } else if (userOwnRequest && !isRequestLoading) {
+      return (
+        <Tooltip arrow title={`${capitalizedName(profile.firstName)} has an active request`}>
+          <Link
+            to="/bunkmates"
+            onClick={HandleViewRequest}
+            style={{ textDecoration: 'none' }}>
+            <ActionButton startIcon={<HiMapPin />} height="30px" title={"View Request"} />
+          </Link>
+        </Tooltip>
+      )
+    } else if (!userOwnRequest && !isRequestLoading) {
+      return (
+        <Tooltip arrow title={'Making a request will let people know you are actively looking for bunkmates and will make your profile more visible'}>
+          <Link
+            to="/bunkmates"
+            style={{ textDecoration: 'none' }}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}>
+            <ActionButton bgColor={'black'} color={textColor} startIcon={showIcon ? <HiMapPin /> : ""} height="30px" title={requestButtonMessage} />
+          </Link>
+        </Tooltip>
+      )
+    }
+  }
+
 
   //if profile true and loading indicator false
   //display profile page
@@ -167,7 +201,7 @@ const Profile = () => {
   //display loading indicator
   //}
 
-  if (profile && !loading) {
+  if (profile && !isProfileLoading) {
     return (
       <div style={pageStyles.page}>
         <div style={{ height: '9vh' }} />
@@ -195,42 +229,14 @@ const Profile = () => {
                 <CardHeader sx={pageStyles.cardHeader} titleTypographyProps={pageStyles.name} subheader={profile.email} color="text.primary" title={[capitalizedName(profile.firstName), <MdVerified style={{ color: '#2ACDDD', margin: '5px' }} />]} />
               </Tooltip>
               <div style={pageStyles.actionCenter}>
-                {userRequest
-                  ?
-                  <Tooltip arrow title={`${capitalizedName(profile.firstName)} has an active request`}>
-                    <Link to="/bunkmates" onClick={handleViewRequest} style={{ textDecoration: 'none' }}><ActionButton startIcon={<HiMapPin />} height="30px" title={"View Request"} /></Link>
-                  </Tooltip>
-                  :
-                  <Tooltip arrow title={'Making a request will let people know you are actively looking for bunkmates and will make your profile more visible'}>
-                    <Link to="/bunkmates" style={{ textDecoration: 'none' }} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}><ActionButton bgColor={'black'} color={textColor} startIcon={showIcon} height="30px" title={requestButtonMessage} /></Link>
-                  </Tooltip>
 
+                <DisplayActiveRequest />
 
-                }
                 <Tooltip title={`Edit your profile`}>
                   <IconButton onClick={handleEditProfile}>
                     <BsPencil />
                   </IconButton>
                 </Tooltip>
-                <Tooltip title={`Message ${capitalizedName(profile.firstName)}`}>
-                  <IconButton>
-                    <BiMessageDetail />
-                  </IconButton>
-                </Tooltip>
-                {bookmark
-                  ?
-                  <Tooltip arrow title="This profile has been saved!">
-                    <IconButton onClick={() => setBookmark(!bookmark)}>
-                      <BsBookmarksFill style={{ color: '#2ACDDD' }} />
-                    </IconButton>
-                  </Tooltip>
-                  :
-                  <Tooltip arrow title="Save this profile">
-                    <IconButton onClick={() => setBookmark(!bookmark)}>
-                      <BsBookmarks />
-                    </IconButton>
-                  </Tooltip>
-                }
               </div>
             </header>
             <Divider sx={pageStyles.divider} textAlign='left'>Biography</Divider>
@@ -284,7 +290,7 @@ const Profile = () => {
     )
 
   }
-  else if (!profile && !loading) {
+  else if (!profile && !isProfileLoading) {
     return (
       <div className='page-container'>
         <div style={{ height: '9vh' }} />
@@ -296,7 +302,7 @@ const Profile = () => {
     )
   } else {
     return (
-      <Box style={pageStyles.loadingUi}>{loading}</Box>)
+      <Box style={pageStyles.loadingUi}><CircularProgress size={50} /></Box>)
   }
 };
 

@@ -10,109 +10,141 @@ import Error from './Error';
 import Error404 from './Error404'
 import Bunkmates from './Views/Bunkmates/Bunkmates';
 import Messages from './Views/Messages/Messages'
-import Profile from './Views/Profile';
+import Profile from './Views/MyProfile';
 import SignInProvider from './Components/GlobalStateManagement/SignInContext';
 import ValidationProvider from './Components/GlobalStateManagement/ValidationContext';
 import MessageProvider from './Components/GlobalStateManagement/MessageContext';
 import FormatProvider from './Components/GlobalStateManagement/FormatContext';
-import MapProvider from './Components/GlobalStateManagement/BunkmatesContext'
+import BunkmateProvider from './Components/GlobalStateManagement/BunkmatesContext'
+import UserDataProvider from './Components/GlobalStateManagement/UserDataContext'
+import { OtherProfile } from './Views/OtherProfile';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 const router = createBrowserRouter([
   {
     path: "/",
     element:
-      <MapProvider>
-        <FormatProvider>
-          <MessageProvider>
-            <SignInProvider>
-              <ValidationProvider>
-                <App />
-              </ValidationProvider>
-            </SignInProvider>
-          </MessageProvider>
-        </FormatProvider>
-      </MapProvider>,
+      <BunkmateProvider>
+        <UserDataProvider>
+          <FormatProvider>
+            <MessageProvider>
+              <SignInProvider>
+                <ValidationProvider>
+                  <App />
+                </ValidationProvider>
+              </SignInProvider>
+            </MessageProvider>
+          </FormatProvider>
+        </UserDataProvider>
+      </BunkmateProvider>,
     errorElement: <Error />,
   },
   {
     path: "/profile",
     element:
-      <MapProvider>
-        <FormatProvider>
-          <MessageProvider>
-            <SignInProvider>
-              <ValidationProvider>
-                <Profile />
-              </ValidationProvider>
-            </SignInProvider>
-          </MessageProvider>
-        </FormatProvider>
-      </MapProvider>,
+      <BunkmateProvider>
+        <UserDataProvider>
+          <FormatProvider>
+            <MessageProvider>
+              <SignInProvider>
+                <ValidationProvider>
+                  <Profile />
+                </ValidationProvider>
+              </SignInProvider>
+            </MessageProvider>
+          </FormatProvider>
+        </UserDataProvider>
+      </BunkmateProvider>,
     errorElement: <Error />,
   },
   {
     path: "/apply_to_listings",
     element:
-      <MapProvider>
-        <FormatProvider>
-          <MessageProvider>
-            <SignInProvider>
-              <ValidationProvider>
-                <ApplyToListings />
-              </ValidationProvider>
-            </SignInProvider>
-          </MessageProvider>
-        </FormatProvider>
-      </MapProvider>,
+      <BunkmateProvider>
+        <UserDataProvider>
+          <FormatProvider>
+            <MessageProvider>
+              <SignInProvider>
+                <ValidationProvider>
+                  <ApplyToListings />
+                </ValidationProvider>
+              </SignInProvider>
+            </MessageProvider>
+          </FormatProvider>
+        </UserDataProvider>
+      </BunkmateProvider>,
     errorElement: <Error />,
   },
   {
     path: '/bunkmates',
     element:
-      <MapProvider>
-        <FormatProvider>
-          <MessageProvider>
-            <SignInProvider>
-              <ValidationProvider>
-                <Bunkmates />
-              </ValidationProvider>
-            </SignInProvider>
-          </MessageProvider>
-        </FormatProvider>
-      </MapProvider>,
+      <BunkmateProvider>
+        <UserDataProvider>
+          <FormatProvider>
+            <MessageProvider>
+              <SignInProvider>
+                <ValidationProvider>
+                  <Bunkmates />
+                </ValidationProvider>
+              </SignInProvider>
+            </MessageProvider>
+          </FormatProvider>
+        </UserDataProvider>
+      </BunkmateProvider>,
     errorElement: <Error />
   },
   {
     path: '/messages',
     element:
-      <FormatProvider>
-        <MapProvider>
-          <MessageProvider>
-            <SignInProvider>
-              <ValidationProvider>
-                <Messages />
-              </ValidationProvider>
-            </SignInProvider>
-          </MessageProvider>
-        </MapProvider>
-      </FormatProvider>,
+      <BunkmateProvider>
+        <UserDataProvider>
+          <FormatProvider>
+            <MessageProvider>
+              <SignInProvider>
+                <ValidationProvider>
+                  <Messages />
+                </ValidationProvider>
+              </SignInProvider>
+            </MessageProvider>
+          </FormatProvider>
+        </UserDataProvider>
+      </BunkmateProvider>,
+    errorElement: <Error />
+  },
+  {
+    path: '/otherprofile',
+    element:
+      <BunkmateProvider>
+        <UserDataProvider>
+          <FormatProvider>
+            <MessageProvider>
+              <SignInProvider>
+                <ValidationProvider>
+                  <OtherProfile />
+                </ValidationProvider>
+              </SignInProvider>
+            </MessageProvider>
+          </FormatProvider>
+        </UserDataProvider>
+      </BunkmateProvider>,
     errorElement: <Error />
   },
   {
     path: '*',
     element:
-      <MapProvider>
-        <FormatProvider>
-          <MessageProvider>
-            <SignInProvider>
-              <ValidationProvider>
-                <Error404 />
-              </ValidationProvider>
-            </SignInProvider>
-          </MessageProvider>
-        </FormatProvider>
-      </MapProvider >,
+      <BunkmateProvider>
+        <UserDataProvider>
+          <FormatProvider>
+            <MessageProvider>
+              <SignInProvider>
+                <ValidationProvider>
+                  <Error404 />
+                </ValidationProvider>
+              </SignInProvider>
+            </MessageProvider>
+          </FormatProvider>
+        </UserDataProvider>
+      </BunkmateProvider>,
   },
 
 ]);

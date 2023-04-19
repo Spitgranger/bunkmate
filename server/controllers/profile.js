@@ -22,7 +22,7 @@ export const createProfile = async (req, res) => {
 
 export const getProfile = async (req, res) => {
     try {
-        const profile = await Profile.findOne({ user: req.userId }).select("about address age birthday cannabis city cleanliness credit drinking education email employment firstName gender havePets lastName occupation phone picture province sleepSchedule smoking tolerateGuests toleratePets");
+        const profile = await Profile.findOne({ user: req.userId }).select("country about address age birthday cannabis city cleanliness credit drinking education email employment firstName gender havePets lastName occupation phone picture province sleepSchedule smoking tolerateGuests toleratePets");
         if (profile) {
             res.status(200).json(profile);
         } else {
@@ -43,6 +43,24 @@ export const getProfiles = async (req, res) => {
     } catch (error) {
         res.status(404).json(error)
         console.log(error)
+    }
+}
+//controller to delete profile
+export const deleteProfile = async (req, res) => {
+    try {
+        const profileUserId = req.userId;
+        console.log(profileUserId)
+        const existingProfile = await Profile.findOne({ user: profileUserId });
+        if (existingProfile) {
+            await Profile.deleteOne({ _id: existingProfile._id });
+        } else {
+            res.status(404).json("No profile associated with this account");
+            return;
+        }
+        res.json(`Profile for user ${profileUserId} deleted successfully`).status(204);
+    } catch (error) {
+        console.log(error)
+        res.json(error).status(500);
     }
 }
 

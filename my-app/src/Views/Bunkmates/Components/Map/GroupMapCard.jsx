@@ -1,22 +1,18 @@
-import Divider from '@mui/material/Divider'
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
-import Tooltip from "@mui/material/Tooltip";
-import { SavedListingItem } from './SavedListingItem';
-import { HiMapPin } from 'react-icons/hi2'
-import { GoogleMap, useJsApiLoader, MarkerF, OverlayView, OVERLAY_MOUSE_TARGET, OVERLAY_LAYER, InfoWindow } from "@react-google-maps/api";
-import { Button, Grid, Paper, TextField, Card, Typography, CardActionArea, CardMedia, CardContent, CardActions, IconButton } from "@mui/material/"
-import { ActionButton } from '../../../Components/Utils/Form';
 import { useState, useContext, useEffect } from 'react';
+import Divider from '@mui/material/Divider'
+import Tooltip from "@mui/material/Tooltip";
+import { Card, Typography, CardActionArea, CardMedia, CardContent, IconButton } from "@mui/material/"
+import { HiMapPin } from 'react-icons/hi2'
+import { FiEye, FiEyeOff } from 'react-icons/fi'
+import { MdVerified } from 'react-icons/md';
 import { TbMessages, TbMessagesOff } from 'react-icons/tb';
+import { SavedListingItem } from './SavedListingItem';
 import NestedMapCard from './NestedMapCard';
 import { InfoWindowF } from '@react-google-maps/api';
-import { FiEyeOff } from 'react-icons/fi'
-import { FiEye } from 'react-icons/fi'
-import styles from '../Styles/GroupMapCard.css'
-import { MdVerified } from 'react-icons/md';
-import { BuildUserContext } from '../../../Components/GlobalStateManagement/BunkmatesContext';
+import { UserDataContext } from '../../../../Components/GlobalStateManagement/UserDataContext';
+import RetrieveKeyLocations from './KeyLocations';
 
-function GroupMapCard({ request, BunkmateInfo }) {
+function GroupMapCard({ request, BunkmateInfo, coordinates, setKeyLocationPins, center, setCenter, setMapProfileCard, setZoom, HandleViewOtherProfile, }) {
 
     //subtract 1 because linkchats contains the user's own profile in the array
     const existingBunkmates = request?.linkChats?.length;
@@ -29,7 +25,7 @@ function GroupMapCard({ request, BunkmateInfo }) {
     const [eyeIcon, setEyeIcon] = useState(false)
     //state management for card opacity
     const [opacity, setOpacity] = useState(0.8)
-    const { profileHandleRetrieval } = useContext(BuildUserContext)
+    const { profileHandleRetrieval } = useContext(UserDataContext)
     //state management for other profiles
     const [otherProfiles, setOtherProfiles] = useState([])
     const [showProfile, setShowProfile] = useState(false)
@@ -69,21 +65,21 @@ function GroupMapCard({ request, BunkmateInfo }) {
                             <header style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', }}>
                                 <div style={{ width: '100%', display: 'flex', flexDirection: 'column', padding: '5px' }}>
                                     {/* onclick will show first peron's profile in the array can also click the eye button to view profiles*/}
-                                    <CardActionArea style={{ borderTopLeftRadius: '5%', borderTopRightRadius: '5%' }} onMouseEnter={handleEnterActionArea} onMouseLeave={handleLeaveActionArea}>
+                                    <div style={{ borderTopLeftRadius: '1%', borderTopRightRadius: '1%' }} onMouseEnter={handleEnterActionArea} onMouseLeave={handleLeaveActionArea}>
                                         <CardMedia
                                             component="img"
                                             image={request.groupPhoto ?? request.profile[0].picture}
                                             alt="profile photo"
                                             //16:9 aspect ratio
-                                            sx={{ width: '330px', height: '330px', borderTopLeftRadius: '5%', borderTopRightRadius: '5%' }}
+                                            sx={{ width: '330px', height: '330px', borderTopLeftRadius: '2%', borderTopRightRadius: '2%' }}
                                         />
-                                    </CardActionArea>
+                                    </div>
 
                                     <CardContent style={{ transition: '0.5s', top: '227px', backgroundColor: 'black', opacity: [opacity], position: 'absolute', width: '330px', padding: '15px 15px 15px 15px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', }} >
                                         <div className="card-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                             <div className="first-name">
                                                 <Typography variant="h5" color="text.primary" noWrap style={{ color: 'white', maxWidth: '300px', fontSize: "25px", fontWeight: 500, display: 'flex', alignItems: 'center' }}>
-                                                    {`${request.profile[0].firstName} 's Group`}
+                                                    {`${request.profile[0].firstName}'s Group`}
                                                     < div className="display-verified" style={{ padding: '5px' }}>
                                                         {/*TODO: If all profiles are verified through premium subscription then checkmark*/}
                                                         {
@@ -94,7 +90,7 @@ function GroupMapCard({ request, BunkmateInfo }) {
                                                     </div >
                                                 </Typography >
                                             </div >
-                                            <Tooltip title={eyeIcon ? "Close Profiles" :"View All Profiles"} arrow placement="left">
+                                            <Tooltip title={eyeIcon ? "Close Profiles" : "View All Profiles"} arrow placement="left">
                                                 <IconButton onClick={handleEyeButtonChange} style={{ padding: '2px', color: 'white' }}>
                                                     {eyeIcon ? <FiEyeOff /> : <FiEye />}
                                                 </IconButton>
@@ -104,8 +100,8 @@ function GroupMapCard({ request, BunkmateInfo }) {
                                                     {messageIcon ? <TbMessagesOff /> : <TbMessages />}
                                                 </IconButton>
                                             </Tooltip>
-                                            <Tooltip title={"Pin This Profile"} arrow placement="left">
-                                                <IconButton onClick={() => { setShowProfile(!showProfile); }} style={{ right: '15px', top: '50px', position: 'absolute', padding: '2px', color: 'white' }}>
+                                            <Tooltip title={"Explore this area"} arrow placement="left">
+                                                <IconButton onClick={() => { RetrieveKeyLocations({ request, coordinates, setKeyLocationPins, setZoom, center, setCenter, setMapProfileCard, }); }} style={{ right: '15px', top: '50px', position: 'absolute', padding: '2px', color: 'white' }}>
                                                     <HiMapPin style={{ color: 'white' }} />
                                                 </IconButton>
                                             </Tooltip>
@@ -186,7 +182,7 @@ function GroupMapCard({ request, BunkmateInfo }) {
                     showProfile ?
                         <>
                             < div className="nested-card" style={{ height: '688px', width: 420, margin: '20px', overflowY: "scroll" }}>
-                                {otherProfiles.map((otherProfile) => { return <NestedMapCard profile={otherProfile} /> })}
+                                {otherProfiles.map((otherProfile) => { return <NestedMapCard profile={otherProfile} request={request} HandleViewOtherProfile={HandleViewOtherProfile} /> })}
                             </div >
                         </>
                         : null
