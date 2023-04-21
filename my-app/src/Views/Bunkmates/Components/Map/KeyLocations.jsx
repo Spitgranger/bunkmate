@@ -1,4 +1,4 @@
-import { Card, Typography, CardContent, Tooltip } from "@mui/material/"
+import { Card, Typography, CardContent, Tooltip, IconButton } from "@mui/material/"
 import { useEffect, useState } from "react";
 import { OVERLAY_MOUSE_TARGET, OverlayViewF, DistanceMatrixService } from "@react-google-maps/api";
 import { MapEducationMarker } from "./MapMarkers";
@@ -7,6 +7,7 @@ import Divider from "@mui/material/Divider";
 import { RxTriangleLeft, RxTriangleRight } from "react-icons/rx";
 import { BsFillCarFrontFill } from "react-icons/bs";
 import { BiCycling } from "react-icons/bi"
+import { RiCloseCircleFill } from "react-icons/ri";
 
 //Retrieve Key Locations 
 export default function RetrieveKeyLocations({ setKeyLocationPins, coordinates, setZoom, setCenter, setMapProfileCard, request, }) {
@@ -120,10 +121,14 @@ export function KeyLocationsMarkers({ keyLocationPins, center }) {
   const [keyLocationData, setKeyLocationData] = useState('');
   //THIS MAKES TOO MANY REQUESTS WHEN FETCHING PHOTO URLS, NEED TO FIX SOON
 
+  //clicking the x button in keylocationinfocard closes the infocard
+  const handleHideData = () => {
+    setKeyLocationData(null)
+  }
 
   return (
     <>
-      <KeyLocationInfoCard keyLocationData={keyLocationData} center={center} />
+      <KeyLocationInfoCard keyLocationData={keyLocationData} center={center} onClick={handleHideData} />
       {keyLocationPins ? keyLocationPins.map((locationData) => {
 
         const handleShowData = () => {
@@ -147,7 +152,7 @@ export function KeyLocationsMarkers({ keyLocationPins, center }) {
 
 //Displays the name and address of the establishment in a card
 //Child Component of KeyLocationsMarkers 
-export function KeyLocationInfoCard({ keyLocationData, center }) {
+export function KeyLocationInfoCard({ keyLocationData, center, onClick }) {
 
   const [distance, setDistance] = useState('');
   const [duration, setDuration] = useState('');
@@ -191,8 +196,8 @@ export function KeyLocationInfoCard({ keyLocationData, center }) {
 
     return (
       <Card sx={locationDetails.container}> <CardContent sx={locationDetails.postHeader}>
-        <Typography noWrap variant="h5" color="text.primary" sx={{ color: 'white', fontWeight: '700', zIndex: 4, width: '370px', padding: '5px 10px 5px 10px' }} align="left">{keyLocationData.name}</Typography>
-        <Typography noWrap variant="h5" color="text.secondary" sx={{ color: 'grey', fontSize: '18px', zIndex: 4, width: '370px', padding: '0px 10px 0px 10px' }} align="left">{keyLocationData.vicinity} </Typography>
+        <Typography noWrap variant="h5" color="text.primary" sx={{ color: 'white', fontWeight: '700', zIndex: 4, width: '250px', padding: '5px 10px 5px 10px' }} align="left">{keyLocationData.name}</Typography>
+        <Typography noWrap variant="h5" color="text.secondary" sx={{ color: 'grey', fontSize: '18px', zIndex: 4, width: '250px', padding: '0px 10px 0px 10px' }} align="left">{keyLocationData.vicinity} </Typography>
         <div style={{ display: 'flex', justifyContent: 'flex-start', width: '100%' }}>
           <Typography noWrap variant="h5" color="text.primary" sx={{ color: 'white', fontSize: '18px', zIndex: 4, padding: '0px 5px 0px 5px', display: 'flex', alignItems: 'center' }} align="left">
             <Tooltip arrow title="Previous Travel Mode">
@@ -231,8 +236,13 @@ export function KeyLocationInfoCard({ keyLocationData, center }) {
           <div style={locationDetails.imgContainer}>
             {/* See css file more styling*/}
             <div className="img-gradient" >
-              {keyLocationData.photos ?
-                <img style={{ width: '200px', height: '125px', }} src={keyLocationData.photos[0].getUrl()} />
+              <div style={{ zIndex: 1, position: 'absolute', right: '0px', width: '100%', display: 'flex', justifyContent: 'flex-end' }}>
+                <IconButton onClick={onClick}>
+                  <RiCloseCircleFill size={30} style={{ color: 'white', }} />
+                </IconButton>
+              </div>
+              {keyLocationData.photos
+                ? <img style={{ width: '200px', height: '125px', }} src={keyLocationData.photos[0].getUrl()} />
                 : ""}
             </div>
           </div>
