@@ -19,8 +19,10 @@ function SingleMapCard({ HandleViewOtherProfile, BunkmateInfo, request, coordina
     const [messageButton, setMessageButton] = useState(false)
     const { capitalizedName, calculateAge } = useContext(formatContext)
 
-
-    console.log(request)
+    const [showEstablishment, setShowEstablishment] = useState(false)
+    const handleShowEstablishment = () => {
+        setShowEstablishment(true)
+    }
 
     return (
         <InfoWindowF mapPaneName={"overlayMouseTarget"} position={{ lat: request?.idealLocation[0], lng: request?.idealLocation[1] }}>
@@ -56,12 +58,13 @@ function SingleMapCard({ HandleViewOtherProfile, BunkmateInfo, request, coordina
                                         </div>
                                         <div className="button-container" style={{ display: 'flex', justifyContent: 'flex-end' }}>
                                             <Tooltip title={"Explore this area"} arrow placement="bottom">
-                                                <IconButton onClick={() => { RetrieveKeyLocations({ setKeyLocationPins, coordinates, setZoom, center, setCenter, setMapProfileCard, request }); }}>
+                                                <IconButton onClick={handleShowEstablishment}>
+                                                    {showEstablishment ? <RetrieveKeyLocations setKeyLocationPins={setKeyLocationPins} coordinates={coordinates} setZoom={setZoom} center={center} setCenter={setCenter} setMapProfileCard={setMapProfileCard} request={request} /> : ""}
                                                     <HiMapPin />
                                                 </IconButton>
                                             </Tooltip>
                                             <Tooltip title={"Message this group"} arrow placement="bottom">
-                                                <IconButton onClick={() => setMessageButton(!messageButton)} >
+                                                <IconButton onClick={() => { setMessageButton(!messageButton) }} >
                                                     {messageButton ? <TbMessagesOff /> : <TbMessages />}
                                                 </IconButton>
                                             </Tooltip>

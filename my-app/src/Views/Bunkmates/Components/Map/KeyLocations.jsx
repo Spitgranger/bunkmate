@@ -10,7 +10,7 @@ import { BiCycling } from "react-icons/bi"
 import { RiCloseCircleFill } from "react-icons/ri";
 
 //Retrieve Key Locations 
-export default function RetrieveKeyLocations({ setKeyLocationPins, coordinates, setZoom, setCenter, setMapProfileCard, request, }) {
+export default function RetrieveKeyLocations({ setKeyLocationPins, coordinates, setZoom, setCenter, setMapProfileCard, request }) {
 
   /*
   ---Hierarchical Structure---
@@ -20,12 +20,13 @@ export default function RetrieveKeyLocations({ setKeyLocationPins, coordinates, 
       -->RetrieveKeyLocations.jsx
   */
 
+
   console.log('keyLocations rerendered')
 
   const placesRequest = {
     location: new window.google.maps.LatLng(coordinates),
     radius: '1000',
-    types: ['store'],
+    types: ['university'],
   };
 
   const container = document.getElementById('results');
@@ -166,7 +167,7 @@ export function KeyLocationInfoCard({ keyLocationData, center, onClick }) {
   ]
 
   const handleIncrementCount = () => {
-    if (travelMode < 3) {
+    if (travelMode < travelModes.length - 1) {
       setTravelMode(travelMode + 1)
     } else {
       setTravelMode(0)
@@ -177,7 +178,7 @@ export function KeyLocationInfoCard({ keyLocationData, center, onClick }) {
     if (travelMode > 0) {
       setTravelMode(travelMode - 1)
     } else {
-      setTravelMode(3)
+      setTravelMode(travelModes.length - 1)
     }
   }
 
