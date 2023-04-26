@@ -17,6 +17,7 @@ import { MdComment, MdCommentsDisabled } from 'react-icons/md'
 import { deletePost, likePost, getRequests } from "../../../../api";
 import { BunkmatesContext } from "../../../../Components/GlobalStateManagement/BunkmatesContext";
 import { MapProfile } from "../../Bunkmates";
+import { CircularProgress } from "@mui/material/";
 
 export const PostCard = ({ post, userOwnData, userProfile, setStatePostArray, statePostArray, HandleViewOtherProfile }) => {
 
@@ -36,6 +37,7 @@ export const PostCard = ({ post, userOwnData, userProfile, setStatePostArray, st
 
     const [userOwnRequest, setUserOwnRequest] = useState("")
     const { setMapProfileCard, setKeyLocationPins, setCenter, setZoom } = useContext(BunkmatesContext)
+    const [isRequestLoading, setIsRequestLoading] = useState(true);
 
     const postStyles = {
         postContainer: { marginTop: '10px', flexDirection: 'column', borderRadius: '10px', backgroundColor: 'black', zIndex: '5', width: '400px', right: '75px', display: 'flex', alignItems: 'flex-start', overflowY: 'hidden' },
@@ -66,13 +68,12 @@ export const PostCard = ({ post, userOwnData, userProfile, setStatePostArray, st
                 (user) => {
                     requestDict[user.user] = user;
                 });
+
             const userOwnId = requestDict[userId]
             setUserOwnRequest(userOwnId);
-        });
+        }).finally(() => setIsRequestLoading(false));
 
     }, [])
-
-    console.log(userOwnRequest)
 
 
     const handleLikeChange = async (id) => {
@@ -114,17 +115,39 @@ export const PostCard = ({ post, userOwnData, userProfile, setStatePostArray, st
         setStatePostArray(statePostArray.filter((element) => element._id !== id))
     }
 
+    //clickable link underneath the user's name that will show their active request
     const handleViewRequest = () => {
-        setMapProfileCard(
-            <MapProfile
-                request={userOwnRequest}
-                setKeyLocationPins={setKeyLocationPins}
-                setCenter={setCenter}
-                setZoom={setZoom}
-                setMapProfileCard={setMapProfileCard}
-                HandleViewOtherProfile={HandleViewOtherProfile}
-            />)
+        if (userOwnRequest) {
+            setMapProfileCard(
+                <MapProfile
+                    request={userOwnRequest}
+                    setKeyLocationPins={setKeyLocationPins}
+                    setCenter={setCenter}
+                    setZoom={setZoom}
+                    setMapProfileCard={setMapProfileCard}
+                    HandleViewOtherProfile={HandleViewOtherProfile}
+                />)
+        }
     }
+
+    //only display a loading indicator for posts that actually have an active request
+    const DisplayClickableLink = () => {
+        if (post?.request[0]?.address && !isRequestLoading) {
+            return (
+                <div style={postStyles.userInfo}>
+                    <Tooltip arrow title={`View ${post.profile[0].firstName}'s active request`}>
+                        <Typography sx={{ color: '#9b9b9b', cursor: 'pointer' }} variant="body2" color="text.secondary" noWrap onClick={handleViewRequest}>{post.request[0].address}</Typography>
+                    </Tooltip>
+                </div>)
+        } else if (!post?.request[0]?.address && !isRequestLoading) {
+            return ("")
+        } else if (post?.request[0]?.address && isRequestLoading) {
+            return (<CircularProgress size={20}/>)
+        }
+
+    }
+
+
 
     console.log(post)
 
@@ -139,14 +162,7 @@ export const PostCard = ({ post, userOwnData, userProfile, setStatePostArray, st
                     <div className="bunkmates__post-card__key-info">
                         <Typography sx={{ color: 'white' }} variant="body1" color="text.primary">{post.profile[0].firstName}</Typography>
                         {/* post.location should be an optional field*/}
-                        {post.request[0]?.address
-                            ?
-                            <div style={postStyles.userInfo}>
-                                <Tooltip arrow title={`View ${post.profile[0].firstName}'s active request`}>
-                                    <Typography sx={{ color: '#9b9b9b', cursor: 'pointer' }} variant="body2" color="text.secondary" noWrap onClick={handleViewRequest}>{post.request[0].address}</Typography>
-                                </Tooltip>
-                            </div>
-                            : ""}
+                        <DisplayClickableLink />
                     </div>
                 </div>
                 {user?.result?._id === post.userId

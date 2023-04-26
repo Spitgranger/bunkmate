@@ -63,7 +63,7 @@ function SingleMapCard({ HandleViewOtherProfile, BunkmateInfo, request, coordina
                                                     <HiMapPin />
                                                 </IconButton>
                                             </Tooltip>
-                                            <Tooltip title={"Message this group"} arrow placement="bottom">
+                                            <Tooltip title={"Message this person"} arrow placement="bottom">
                                                 <IconButton onClick={() => { setMessageButton(!messageButton) }} >
                                                     {messageButton ? <TbMessagesOff /> : <TbMessages />}
                                                 </IconButton>

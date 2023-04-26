@@ -161,7 +161,7 @@ const Bunkmates = () => {
 
     function BunkmateRequestPage() {
         return (
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', top: '35vh', position: 'absolute', maxWidth: '500px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', top: '30vh', position: 'absolute', maxWidth: '500px' }}>
                 <Card variant="outlined" className="create-request-container" sx={{ padding: '20px', borderRadius: '10px', opacity: 0.9 }}>
                     <CreateRequestForm userRequest={userOwnData} onClick={handleRequestClick} />
                 </Card>

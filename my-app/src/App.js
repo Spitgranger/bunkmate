@@ -28,6 +28,18 @@ function App() {
       ],
       date_available: "Jan 8th 2023",
       listing_img: [Apartment, Apartment2, Room, Room2],
+      listing_details: {
+        developerName: 'Marshalls Place Condos',
+        address: "81 Bay Street Toronto Ontario",
+        priceRange: [1150, 2500],
+        sqftRange: [486, 2523],
+        overview: "Marshall Place Condos is located in beautiful Toronto, Ontario.Strategically established near Interstates 71, 77, 90, and 480, we are easily accessible from anywhere in the state.We are in proximity to an abundance of fine dining, superb shopping, and thrilling entertainment.Parents will be excited to learn we are zoned for the prestigious Cleveland Metropolitan School District. Choose from spacious one, two, and three bedroom floor plans for rent.Enjoy fully- equipped kitchens, spacious closets, expansive windows, and vaulted ceilings. We offer residents a lifestyle of comfort and convenience.Be sure to bring home your pets as we are a pet- friendly community. Marshall Place offers stellar community amenities that are sure to impress.Enjoy working out in our fitness center or relax at the community space.Our welcoming community provides something for everyone.Schedule a tour today and discover why our address is among the most desired in Cleveland, OH.",
+        units: [
+          { interiorLayoutImage: 'https://i.pinimg.com/170x/20/1a/05/201a057fe462c3b77c1efbcf4b8e8e12.jpg', title: 'Rophan Studio', price: 1450, beds: 0, baths: 1, sqft: 526, dateAvailable: 'July 24th', type: 'Studio', numUnitsAvailable: 32 },
+          { interiorLayoutImage: 'https://www.houseplanshelper.com/images/how-to-read-floor-plans-full-floor-plan.jpg', title: 'Grava Single Bed', price: 1150, beds: 1, baths: 1, sqft: 486, dateAvailable: 'July 18th', type: 'Single Bed', numUnitsAvailable: 22 },
+          { interiorLayoutImage: 'https://assets-news.housing.com/news/wp-content/uploads/2022/01/29113344/Home-plan-Know-how-to-read-a-floor-plan-or-house-plan-drawing-06.jpg', title: 'Tampa Double Bed', price: 1850, beds: 2, baths: 2, sqft: 786, dateAvailable: 'August 18th', type: 'Double Bed', numUnitsAvailable: 62 },
+        ]
+      }
     },
     {
       profile: "2",

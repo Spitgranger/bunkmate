@@ -73,7 +73,7 @@ export default function RetrieveKeyLocations({ setKeyLocationPins, coordinates, 
 
 
   /*
-  //Did not work as expected
+  //might use later
   //google maps directions
   var directionsService = new window.google.maps.DirectionsService();
   var directionsRenderer = new window.google.maps.DirectionsRenderer();
@@ -197,7 +197,7 @@ export function KeyLocationInfoCard({ keyLocationData, center, onClick }) {
 
     return (
       <Card sx={locationDetails.container}> <CardContent sx={locationDetails.postHeader}>
-        <Typography noWrap variant="h5" color="text.primary" sx={{ color: 'white', fontWeight: '700', zIndex: 4, width: '250px', padding: '5px 10px 5px 10px' }} align="left">{keyLocationData.name}</Typography>
+        <Typography noWrap variant="h5" color="text.primary" sx={{ color: 'white', fontWeight: '700', zIndex: 4, width: '350px', padding: '5px 10px 5px 10px' }} align="left">{keyLocationData.name}</Typography>
         <Typography noWrap variant="h5" color="text.secondary" sx={{ color: 'grey', fontSize: '18px', zIndex: 4, width: '250px', padding: '0px 10px 0px 10px' }} align="left">{keyLocationData.vicinity} </Typography>
         <div style={{ display: 'flex', justifyContent: 'flex-start', width: '100%' }}>
           <Typography noWrap variant="h5" color="text.primary" sx={{ color: 'white', fontSize: '18px', zIndex: 4, padding: '0px 5px 0px 5px', display: 'flex', alignItems: 'center' }} align="left">

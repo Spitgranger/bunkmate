@@ -402,6 +402,7 @@ export function ActionButton(props) {
     display: 'flex',
     alignItems: 'flex-start',
     flexDirection: 'column',
+    width: props.containerWidth,
     opacity: props.opacity,
     margin: props.margin ?? '10px',
   }

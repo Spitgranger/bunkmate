@@ -7,6 +7,7 @@ import { BsFillCircleFill } from 'react-icons/bs'
 import Modal from "./Utils/Modal";
 import { useState } from "react"
 import { Typography } from "@mui/material"
+import ListingViewer from "./ListingViewer"
 
 export function Bookmark() {
 
@@ -37,16 +38,25 @@ export default function Post(info) {
 
 
   const [image, setImage] = useState(0); //image scroll state
-  const [message, setMessage] = useState(false); //image scroll state
+  const [viewDetails, setViewDetails] = useState(false); //image scroll state
 
-  function handleForwardClick() {
+  const handleForwardClick = () => {
     return setImage(count => (count + 1 === info.listing_img.length) ? 0 : count + 1)
   }
 
-  function handleBackwardClick() {
+  const handleBackwardClick = () => {
     return setImage(count => (count - 1 === -1) ? info.listing_img.length - 1 : count - 1)
-
   }
+
+  const handleViewDetails = () => {
+    if (info.listing_details) {
+      return setViewDetails(true)
+    } else {
+      return ""
+    }
+  }
+
+
 
   return (
     <div className="listing">
@@ -72,7 +82,7 @@ export default function Post(info) {
                 type="button"
                 onClick={handleForwardClick} >
               </button>
-              < IoIosArrowDroprightCircle size={30} color={"white"} />
+              <IoIosArrowDroprightCircle size={30} color={"white"} />
             </label>
             <label className="slide">
               {[...Array(info.listing_img.length)].map((slide, i) => {
@@ -106,9 +116,9 @@ export default function Post(info) {
             <Typography color="text.primary" variant="h6" style={{ fontSize: '17px' }}>Available: {info.date_available}</Typography>
           </div>
           <label id="message" >
-            <button onClick={() => setMessage(true)} style={{ display: "none" }}></button>
-            <h3>Contact</h3>
-            <Modal modalMessage="Contact" open={message} onClose={() => setMessage(false)} />
+            <button onClick={handleViewDetails} style={{ display: "none" }}></button>
+            <h3>View Details</h3>
+            <Modal flexibleContainer open={viewDetails} onClose={() => setViewDetails(false)} content={<ListingViewer data={info} />} />
           </label>
         </div>
       </div>
