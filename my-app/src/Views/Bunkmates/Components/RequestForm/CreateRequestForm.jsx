@@ -12,7 +12,7 @@ import {
   MultipleSelectCheckmarks,
   UploadFile,
 } from '../../../../Components/Utils/Form';
-import { SavedListingItem } from './SavedListingItem';
+import { SavedListingItem } from '../Map/SavedListingItem';
 import { identityMenuItems } from '../../../../data/SavedListingsData';
 import { AboutValidationContext } from '../../../../Components/GlobalStateManagement/ValidationContext';
 import { UserDataContext } from '../../../../Components/GlobalStateManagement/UserDataContext';

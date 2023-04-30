@@ -18,6 +18,8 @@ import FormatProvider from './Components/GlobalStateManagement/FormatContext';
 import BunkmateProvider from './Components/GlobalStateManagement/BunkmatesContext'
 import UserDataProvider from './Components/GlobalStateManagement/UserDataContext'
 import { OtherProfile } from './Views/OtherProfile';
+import { Provider } from 'react-redux';
+import store from './Store/index';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 const router = createBrowserRouter([
@@ -30,7 +32,9 @@ const router = createBrowserRouter([
             <MessageProvider>
               <SignInProvider>
                 <ValidationProvider>
-                  <App />
+                  <Provider store={store}>
+                    <App />
+                  </Provider>
                 </ValidationProvider>
               </SignInProvider>
             </MessageProvider>
@@ -48,7 +52,9 @@ const router = createBrowserRouter([
             <MessageProvider>
               <SignInProvider>
                 <ValidationProvider>
-                  <Profile />
+                  <Provider store={store}>
+                    <Profile />
+                  </Provider>
                 </ValidationProvider>
               </SignInProvider>
             </MessageProvider>
@@ -66,7 +72,9 @@ const router = createBrowserRouter([
             <MessageProvider>
               <SignInProvider>
                 <ValidationProvider>
-                  <ApplyToListings />
+                  <Provider store={store}>
+                    <ApplyToListings />
+                  </Provider>
                 </ValidationProvider>
               </SignInProvider>
             </MessageProvider>
@@ -84,7 +92,9 @@ const router = createBrowserRouter([
             <MessageProvider>
               <SignInProvider>
                 <ValidationProvider>
-                  <Bunkmates />
+                  <Provider store={store}>
+                    <Bunkmates />
+                  </Provider>
                 </ValidationProvider>
               </SignInProvider>
             </MessageProvider>
@@ -102,7 +112,9 @@ const router = createBrowserRouter([
             <MessageProvider>
               <SignInProvider>
                 <ValidationProvider>
-                  <Messages />
+                  <Provider store={store}>
+                    <Messages />
+                  </Provider>
                 </ValidationProvider>
               </SignInProvider>
             </MessageProvider>
@@ -120,7 +132,9 @@ const router = createBrowserRouter([
             <MessageProvider>
               <SignInProvider>
                 <ValidationProvider>
-                  <OtherProfile />
+                  <Provider store={store}>
+                    <OtherProfile />
+                  </Provider>
                 </ValidationProvider>
               </SignInProvider>
             </MessageProvider>
@@ -138,7 +152,9 @@ const router = createBrowserRouter([
             <MessageProvider>
               <SignInProvider>
                 <ValidationProvider>
-                  <Error404 />
+                  <Provider store={store}>
+                    <Error404 />
+                  </Provider>
                 </ValidationProvider>
               </SignInProvider>
             </MessageProvider>

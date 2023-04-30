@@ -4,7 +4,7 @@ import { GoogleMap, useJsApiLoader, MarkerF, OverlayView, OVERLAY_MOUSE_TARGET, 
 import mapStyles from '../../data/mapStyles.json'
 import { Card, Typography, IconButton, Tooltip, CircularProgress, CardMedia, CardContent, CardActionArea } from "@mui/material/"
 import "./Styles/Bunkmates.css"
-import CreateRequestForm from './Components/Map/CreateRequestForm'
+import CreateRequestForm from './Components/RequestForm/CreateRequestForm'
 import { ActionButton } from "../../Components/Utils/Form";
 import { chatClientContext } from "../../Components/GlobalStateManagement/MessageContext";
 import { SignInContext } from "../../Components/GlobalStateManagement/SignInContext";
@@ -20,6 +20,10 @@ import { useGetUserData } from "./Hooks/useGetUserData";
 import { getPost } from "../../api";
 import { KeyLocationsMarkers } from "./Components/Map/KeyLocations";
 import { formatContext } from "../../Components/GlobalStateManagement/FormatContext";
+import { useDispatch, useSelector } from 'react-redux'
+import { showSocialFeed } from "../../Reducers/Bunkmates/SocialFeed.jsx/SocialReducer";
+import { showRequestForm } from "../../Reducers/Bunkmates/RequestForm/RequestReducer";
+
 
 export function MapProfile({ request, setKeyLocationPins, setZoom, center, setCenter, setMapProfileCard, HandleViewOtherProfile, }) {
 
@@ -81,6 +85,10 @@ export function MapProfile({ request, setKeyLocationPins, setZoom, center, setCe
 
 const Bunkmates = () => {
 
+    const dispatch = useDispatch();
+    const socialFeed = useSelector(state => state.bunkmates.socialFeed.socialFeed);
+    const requestForm = useSelector(state => state.bunkmates.requestForm.requestForm)
+
     const id = JSON.parse(localStorage.getItem("profile"))?.result?._id;
     //retrieve local storage data
     const { localStorageData } = useContext(chatClientContext)
@@ -88,12 +96,10 @@ const Bunkmates = () => {
     const { setIsOpen, setMessage, setMode } = useContext(SignInContext)
     const { center, setCenter, mapProfileCard, setMapProfileCard, rerender, setRerender, zoom, setZoom, keyLocationPins, setKeyLocationPins, HandleViewOtherProfile, } = useContext(BunkmatesContext)
 
-    //display, nodisplay of the create request page
-    const [showRequest, setShowRequest] = useState(false);
+    //state places autocomplete
     const [selected, setSelected] = useState(null);
     //if the user has a profile then set profileChecker to true else false
     //used to rerender useEffect in Bunkmates.js containing async functions that gets data from backend
-    const [displaySocial, setDisplaySocial] = useState(false)
     const { loading, listingArray, userRequests, userProfile, userOwnData, isLoaded, } = useGetUserData()
     const { capitalizedName } = useContext(formatContext)
 
@@ -133,7 +139,7 @@ const Bunkmates = () => {
             setIsOpen(true)
             //if user is logged in and has an existing profile then show them the request page
         } else if (localStorageData && userProfile) {
-            setShowRequest(!showRequest)
+            dispatch(showRequestForm(!requestForm))
         }
     }
 
@@ -224,6 +230,16 @@ const Bunkmates = () => {
 
     console.log('bunkamtes')
 
+    const handleDisplaySocials = (e) => {
+        dispatch(showSocialFeed(true));
+        e.stopPropagation();
+    }
+
+    const handleHideSocials = (e) => {
+        dispatch(showSocialFeed(false));
+        e.stopPropagation();
+    }
+
 
 
     return (
@@ -253,15 +269,15 @@ const Bunkmates = () => {
                         <Navbar chooseStyle={"glass"} />
                         <section className="bunkamtes__social-feed" style={{ borderRadius: '50%', backgroundColor: 'black', position: 'absolute', top: '275px', height: '40px', width: '40px', right: '10px', }}>
                             {
-                                displaySocial ?
+                                socialFeed ?
                                     <Tooltip arrow title="Close Socials Page">
-                                        <IconButton onClick={(e) => { setDisplaySocial(false); e.stopPropagation(); }}>
+                                        <IconButton onClick={handleHideSocials}>
                                             <TbSocialOff style={{ color: 'white', }} />
                                         </IconButton>
                                     </Tooltip>
                                     :
                                     <Tooltip arrow title="Show Socials Page">
-                                        <IconButton onClick={(e) => { setDisplaySocial(true); e.stopPropagation() }}>
+                                        <IconButton onClick={handleDisplaySocials}>
                                             <TbSocial style={{ color: 'white', }} />
                                         </IconButton>
                                     </Tooltip>
@@ -269,7 +285,7 @@ const Bunkmates = () => {
                             }
                         </section>
                         <KeyLocationsMarkers keyLocationPins={keyLocationPins} center={center} />
-                        {displaySocial ? <SocialFeed userOwnData={userOwnData} userProfile={userProfile} statePostArray={statePostArray} setStatePostArray={setStatePostArray} HandleViewOtherProfile={HandleViewOtherProfile} /> : null}
+                        {socialFeed ? <SocialFeed userOwnData={userOwnData} userProfile={userProfile} statePostArray={statePostArray} setStatePostArray={setStatePostArray} HandleViewOtherProfile={HandleViewOtherProfile} /> : null}
                         {mapProfileCard ?? null}
                         {selected && <MarkerF position={center} icon={"http://maps.google.com/mapfiles/ms/icons/blue.png"} />}
                         {listingArray.map((request, index) => {
@@ -298,7 +314,7 @@ const Bunkmates = () => {
                     mapProfileCard
                         ? null
                         //if the user has clicked on the button show the request page else show the button
-                        : <>{showRequest
+                        : <>{requestForm
                             ? <BunkmateRequestPage />
                             : loading
                                 ? <LoadingUi />
