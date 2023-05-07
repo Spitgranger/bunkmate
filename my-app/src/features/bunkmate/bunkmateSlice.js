@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { getRequests } from "../../api";
 
 //Some non serializable values are stored in the redux store eg. mapProfileCard, should fix this to avoid errors in the future.
+//initial state for the bunkmate reducer, stores the mapProfileCard, current google map center, rerender, click, 
 const initialState = {
     mapProfileCard: null,
     center: { lat: 43.642075, lng: -79.385981 },
@@ -45,6 +46,7 @@ const bunkmateSlice = createSlice({
         setZoom: (state, action) => {
             state.zoom = action.payload;
         },
+        //action to update keylocationpins, payload is 
         setKeyLocationPins: (state, action) => {
             state.keyLocationPins = action.payload;
         }
