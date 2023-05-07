@@ -20,7 +20,7 @@ import UserDataProvider from './Components/GlobalStateManagement/UserDataContext
 import { OtherProfile } from './Views/OtherProfile';
 import { Provider } from 'react-redux';
 import ListingDetails from './Components/ListingDetails'
-import store from './store/index'
+import store from './Store/index'
 import { configureStore, applyMiddleware, compose } from 'redux'
 import thunk from 'redux-thunk'
 
