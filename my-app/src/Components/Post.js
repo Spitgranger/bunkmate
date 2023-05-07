@@ -8,6 +8,8 @@ import Modal from "./Utils/Modal";
 import { useState } from "react"
 import { Typography } from "@mui/material"
 import ListingViewer from "./ListingViewer"
+import ListingDetails from "./ListingDetails"
+import { Link } from "react-router-dom"
 
 export function Bookmark() {
 
@@ -48,6 +50,7 @@ export default function Post(info) {
     return setImage(count => (count - 1 === -1) ? info.listing_img.length - 1 : count - 1)
   }
 
+  /*
   const handleViewDetails = () => {
     if (info.listing_details) {
       return setViewDetails(true)
@@ -55,6 +58,8 @@ export default function Post(info) {
       return ""
     }
   }
+  */
+
 
 
 
@@ -116,9 +121,13 @@ export default function Post(info) {
             <Typography color="text.primary" variant="h6" style={{ fontSize: '17px' }}>Available: {info.date_available}</Typography>
           </div>
           <label id="message" >
-            <button onClick={handleViewDetails} style={{ display: "none" }}></button>
-            <h3>View Details</h3>
-            <Modal flexibleContainer open={viewDetails} onClose={() => setViewDetails(false)} content={<ListingViewer data={info} />} />
+            <Link to={"/listingdetails"} state={info} style={{ textDecoration: 'none', color: 'white' }}>
+              <button style={{ display: "none" }}></button>
+              <h3>View Details</h3>
+            </Link>
+            {/*
+            <Modal flexibleContainer open={viewDetails} onClose={() => setViewDetails(false)} content={<ListingViewer data={info} />} cardTitle={"Property Details"} />
+            */}
           </label>
         </div>
       </div>

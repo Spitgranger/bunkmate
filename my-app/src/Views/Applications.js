@@ -1,9 +1,9 @@
-import './ApplyToListings.css';
+import './Applications.css';
 import Navbar from '../Components/Navbar';
 import UploadsForm from '../Components/UploadsForm'
 import { useState, createContext } from 'react'
 
-function ApplyToListings() {
+function Applications() {
 
   /* sets the subpage of the form that you're on 
   also controls progress bar*/
@@ -25,4 +25,4 @@ function ApplyToListings() {
     </>
   )
 }
-export default ApplyToListings;
+export default Applications;

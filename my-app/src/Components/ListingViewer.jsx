@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { CardMedia, CardContent, Typography, CardActionArea, Divider } from "@mui/material"
+import { Avatar, CardMedia, CardContent, Typography, CardActionArea, Divider } from "@mui/material"
 import { ActionButton } from "./Utils/Form"
 import { Link } from "react-router-dom"
 
@@ -16,16 +16,50 @@ function ListingViewer({ data }) {
     //state management for text overflow elipsis
     const [textOverflowElipsis, setTextOverflowElipsis] = useState("...")
 
+    const UnitDetails = () => {
+        return (
+            <>
+                <CardContent sx={{ display: 'flex', flexDirection: 'row', height: '100px', justifyContent: 'space-around', width: '100%', padding: '0px 20px 0px 20px' }}>
+                    <Typography color="text.primary" sx={{ margin: '5px', fontSize: '17px', fontWeight: '600' }}>Unit</Typography>
+                    <Divider orientation="vertical" />
+                    <Typography color="text.primary" sx={{ margin: '5px', fontSize: '17px', fontWeight: '600' }}>Price</Typography>
+                    <Divider orientation="vertical" />
+                    <Typography color="text.primary" sx={{ margin: '5px', fontSize: '17px', fontWeight: '600' }}>Date Available</Typography>
+                </CardContent>
+                <CardContent sx={{ display: 'flex', flexDirection: 'row', height: '100px', justifyContent: 'space-around', width: '100%', padding: '0px 20px 0px 20px' }}>
+                    <Typography sx={{ margin: '5px', display: 'flex', justifyContent: 'left', width: '100%' }}>Unit 405</Typography>
+                    <Typography sx={{ margin: '5px', display: 'flex', justifyContent: 'left', width: '100%' }}>$2600</Typography>
+                    <Typography sx={{ margin: '5px', display: 'flex', justifyContent: 'left', width: '100%' }}>June 10 2023</Typography>
+                </CardContent>
+                <CardContent sx={{ display: 'flex', flexDirection: 'row', height: '100px', justifyContent: 'space-around', width: '100%', padding: '0px 20px 0px 20px' }}>
+                    <Typography sx={{ margin: '5px', display: 'flex', justifyContent: 'left', width: '100%' }}>Unit 406</Typography>
+                    <Typography sx={{ margin: '5px', display: 'flex', justifyContent: 'left', width: '100%' }}>$2800</Typography>
+                    <Typography sx={{ margin: '5px', display: 'flex', justifyContent: 'left', width: '100%' }}>June 21 2023</Typography>
+                </CardContent>
+                <CardContent sx={{ display: 'flex', flexDirection: 'row', height: '100px', justifyContent: 'space-around', width: '100%', padding: '0px 20px 0px 20px' }}>
+                    <Typography sx={{ margin: '5px', display: 'flex', justifyContent: 'left', width: '100%' }}>Unit 407</Typography>
+                    <Typography sx={{ margin: '5px', display: 'flex', justifyContent: 'left', width: '100%' }}>$2620</Typography>
+                    <Typography sx={{ margin: '5px', display: 'flex', justifyContent: 'left', width: '100%' }}>June 21 2023</Typography>
+                </CardContent>
+            </>
+        )
+    }
 
     //UI component for units in the property
     const Unit = ({ unitData }) => {
+        const [unitDetails, setUnitDetails] = useState(false)
+
+        const handleShowUnitDetails = () => {
+            setUnitDetails(!unitDetails)
+        }
+
         return (
             <>
-                <CardActionArea style={{ borderRadius: '10px', padding: '10px', width: '100%', display: 'flex', justifyContent: 'flex-start' }}>
+                <CardActionArea style={{ borderRadius: '10px', padding: '10px', width: '100%', display: 'flex', justifyContent: 'flex-start' }} onClick={handleShowUnitDetails}>
                     <CardMedia sx={{ width: "30%", height: '100%', borderRadius: '5%' }} component="img" image={unitData.interiorLayoutImage}></CardMedia>
                     <CardContent sx={{ width: '70%', display: 'flex', flexDirection: 'column', justifyContent: 'space-around', height: '100px', padding: '0px 10px 0px 10px !important' }}>
                         <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%' }}>
-                            <Typography color="text.primary" sx={{ fontWeight: 600, paddingRight: '2px', }}>
+                            <Typography color="text.primary" sx={{ fontWeight: 600, paddingRight: '2px', fontSize: '18px' }}>
                                 {unitData.title}
                             </Typography>
                             <Typography color="text.secondary" sx={{ fontWeight: 600, paddingLeft: '2px' }}>
@@ -58,12 +92,14 @@ function ListingViewer({ data }) {
                         </Typography>
                     </CardContent>
                 </CardActionArea>
+                {unitDetails ? <UnitDetails /> : ""}
                 <div style={{ width: '100%', padding: '10px' }}>
                     <Divider sx={{ width: '100%' }} />
                 </div>
             </>
         )
     }
+
 
     //Used on initial render to determine if view more functionality is needed
     const Overview = () => {
@@ -103,7 +139,8 @@ function ListingViewer({ data }) {
                         {data.listing_img.slice(1).map((image) => (
                             <CardActionArea sx={{ borderRadius: '5%', maxWidth: '31%', margin: '1%' }}>
                                 <CardMedia component="img" image={image} sx={{ borderRadius: '2%' }} />
-                            </CardActionArea>))}
+                            </CardActionArea>
+                        ))}
                     </div>
                 </div>
             </CardContent>
@@ -122,7 +159,7 @@ function ListingViewer({ data }) {
                 </Typography>
                 <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
                     <Link
-                        to={"/apply_to_listings"}
+                        to={"/applications"}
                         style={{ textDecoration: 'none', width: '50%', margin: '0px 10px 0px 10px' }}
                     >
                         <ActionButton title="Apply Now" containerWidth="100%" />
@@ -130,10 +167,28 @@ function ListingViewer({ data }) {
                     <ActionButton title="Book a Tour" containerWidth="50%" />
                 </div>
                 <div style={{ margin: '10px', width: '100%', display: 'flex', alignItems: 'flex-start', flexDirection: 'column', overflowY: 'scroll' }}>
+
                     <Typography color="text.primary" variant="h5" sx={{ padding: '10px 0px 10px 0px ', fontWeight: 600 }} >
                         Overview
                     </Typography>
                     <Typography color="text.secondary" sx={{ padding: '5px' }}>
+
+                        <CardContent sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', margin: '10px 0px 10px 0px', padding: '10px 0px 10px 0px !important' }}>
+                            <Avatar sx={{ width: '65px', height: '65px', margin: '0px 20px 0px 10px' }} src={'https://thumbs.dreamstime.com/b/b-letter-boutique-logo-design-159417325.jpg'} />
+                            <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                                <Typography color="text.primary" variant="h6" sx={{ fontWeight: 700, fontSize: '17px' }}>
+                                    Marshalls Place
+                                </Typography>
+                                <Typography color="text.secondary" variant="h6" sx={{ fontWeight: 700, fontSize: '15px' }}>
+                                    4753 Stewart Street Indianapolis
+                                </Typography>
+                                <Typography color="text.secondary" variant="h6" sx={{ fontWeight: 700, fontSize: '15px' }}>
+                                    +1 (647) 451 4523
+                                </Typography>
+
+                            </div>
+                        </CardContent>
+
                         <Overview />
                     </Typography>
                     {overflow
