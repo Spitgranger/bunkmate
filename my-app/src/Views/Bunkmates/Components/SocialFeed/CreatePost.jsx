@@ -18,11 +18,12 @@ import { ActionButton } from '../../../../Components/Utils/Form';
 import { makePost } from '../../../../api';
 //import { setServers } from 'dns';
 import { getPost } from '../../../../api';
+import HandleViewOtherProfile from '../Map/HandleViewOtherProfile';
 
 
 
 
-export default function CreatePost({ statePostArray, setStatePostArray, userOwnData, userProfile, HandleViewOtherProfile }) {
+export default function CreatePost({ statePostArray, setStatePostArray, userOwnData, userProfile }) {
 
     const createPostStyles = {
         container: { borderRadius: '10px', backgroundColor: 'black', position: 'absolute', top: '130px', zIndex: '6', width: '400px', left: '10px', display: 'flex', alignItems: 'flex-start' },
