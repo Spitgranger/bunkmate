@@ -1,8 +1,23 @@
+import { useEffect, useState } from "react"
 import { CardMedia, CardContent, Typography, CardActionArea, Divider } from "@mui/material"
 import { ActionButton } from "./Utils/Form"
+import { Link } from "react-router-dom"
 
 function ListingViewer({ data }) {
 
+
+    const maxCharacterLength = 300
+    //state management for how many characters of the overview is seen at any given time
+    const [overViewLength, setOverViewLength] = useState(maxCharacterLength)
+    //View more / View Less State
+    const [viewMore, setViewMore] = useState(false)
+    //state management for checking if the character count is over the limit
+    const [overflow, setOverflow] = useState(false)
+    //state management for text overflow elipsis
+    const [textOverflowElipsis, setTextOverflowElipsis] = useState("...")
+
+
+    //UI component for units in the property
     const Unit = ({ unitData }) => {
         return (
             <>
@@ -50,17 +65,44 @@ function ListingViewer({ data }) {
         )
     }
 
+    //Used on initial render to determine if view more functionality is needed
+    const Overview = () => {
+        if (data.listing_details.overview.length <= maxCharacterLength) {
+            setOverflow(false)
+            return (data.listing_details.overview)
+        } else if (data.listing_details.overview.length > maxCharacterLength) {
+            setOverflow(true)
+            return (data.listing_details.overview.substring(0, overViewLength) + textOverflowElipsis)
+        }
+    }
+
+
+    //state management for view more button
+    const handleViewMore = () => {
+        setViewMore(!viewMore)
+    }
+
+    useEffect(() => {
+        if (viewMore) {
+            setOverViewLength(data.listing_details.overview.length)
+            setTextOverflowElipsis("")
+        } else if (!viewMore) {
+            setOverViewLength(300)
+            setTextOverflowElipsis("...")
+        }
+    }, [handleViewMore])
+
     return (
         <div style={{ display: 'flex', justifyContent: 'center', flexDirection: "row", width: '65vw', height: '80vh', overflowY: 'scroll' }}>
             <CardContent style={{ display: 'flex', width: '60%', flexDirection: 'column', margin: '10px', overflowY: 'scroll' }}>
                 <CardActionArea sx={{ borderRadius: '5%', }}>
-                    <CardMedia component="img" image={data.listing_img[0]} sx={{ borderRadius: "5%" }} />
+                    <CardMedia component="img" image={data.listing_img[0]} sx={{ borderRadius: "2%" }} />
                 </CardActionArea>
                 <div style={{ display: 'flex', flexFlow: "row wrap", justifyContent: 'center', padding: '10px' }}>
                     <div style={{ display: 'flex', flexFlow: 'row wrap' }}>
-                        {data.listing_img.map((image) => (
+                        {data.listing_img.slice(1).map((image) => (
                             <CardActionArea sx={{ borderRadius: '5%', maxWidth: '31%', margin: '1%' }}>
-                                <CardMedia component="img" image={image} sx={{ borderRadius: '5%' }} />
+                                <CardMedia component="img" image={image} sx={{ borderRadius: '2%' }} />
                             </CardActionArea>))}
                     </div>
                 </div>
@@ -79,7 +121,12 @@ function ListingViewer({ data }) {
                     {`${data.listing_details.sqftRange[0]} - ${data.listing_details.sqftRange[1]} Sqft`}
                 </Typography>
                 <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
-                    <ActionButton title="Apply Now" containerWidth="50%" />
+                    <Link
+                        to={"/apply_to_listings"}
+                        style={{ textDecoration: 'none', width: '50%', margin: '0px 10px 0px 10px' }}
+                    >
+                        <ActionButton title="Apply Now" containerWidth="100%" />
+                    </Link>
                     <ActionButton title="Book a Tour" containerWidth="50%" />
                 </div>
                 <div style={{ margin: '10px', width: '100%', display: 'flex', alignItems: 'flex-start', flexDirection: 'column', overflowY: 'scroll' }}>
@@ -87,11 +134,13 @@ function ListingViewer({ data }) {
                         Overview
                     </Typography>
                     <Typography color="text.secondary" sx={{ padding: '5px' }}>
-                        {data.listing_details.overview}
+                        <Overview />
                     </Typography>
-                    <div style={{ width: '100%' }}>
-                        <Divider sx={{ color: "grey" }}>View Less</Divider>
-                    </div>
+                    {overflow
+                        ? <div style={{ width: '100%' }}>
+                            <Divider sx={{ color: "grey", cursor: 'pointer' }} onClick={handleViewMore}>{viewMore ? "View Less" : "View More"}</Divider>
+                        </div>
+                        : ""}
                     <Typography color="text.primary" variant="h5" sx={{ padding: '10px 0px 10px 0px ', fontWeight: 600 }} >
                         Units
                     </Typography>
