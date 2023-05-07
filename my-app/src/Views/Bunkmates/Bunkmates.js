@@ -20,9 +20,6 @@ import { useGetUserData } from "./Hooks/useGetUserData";
 import { getPost } from "../../api";
 import { KeyLocationsMarkers } from "./Components/Map/KeyLocations";
 import { formatContext } from "../../Components/GlobalStateManagement/FormatContext";
-import { useDispatch, useSelector } from 'react-redux'
-import { showSocialFeed } from "../../Reducers/Bunkmates/SocialFeed.jsx/SocialReducer";
-import { showRequestForm } from "../../Reducers/Bunkmates/RequestForm/RequestReducer";
 
 
 export function MapProfile({ request, setKeyLocationPins, setZoom, center, setCenter, setMapProfileCard, HandleViewOtherProfile, }) {
@@ -85,9 +82,11 @@ export function MapProfile({ request, setKeyLocationPins, setZoom, center, setCe
 
 const Bunkmates = () => {
 
-    const dispatch = useDispatch();
-    const socialFeed = useSelector(state => state.bunkmates.socialFeed.socialFeed);
-    const requestForm = useSelector(state => state.bunkmates.requestForm.requestForm)
+    // const dispatch = useDispatch();
+    // const socialFeed = useSelector(state => state.bunkmates.socialFeed.socialFeed);
+    // const requestForm = useSelector(state => state.bunkmates.requestForm.requestForm)
+    const [socialFeed, setSocialFeed] = useState(false);
+    const [requestForm, setRequestForm] = useState(false);
 
     const id = JSON.parse(localStorage.getItem("profile"))?.result?._id;
     //retrieve local storage data
@@ -139,7 +138,7 @@ const Bunkmates = () => {
             setIsOpen(true)
             //if user is logged in and has an existing profile then show them the request page
         } else if (localStorageData && userProfile) {
-            dispatch(showRequestForm(!requestForm))
+            //dispatch(showRequestForm(!requestForm))
         }
     }
 
@@ -231,12 +230,14 @@ const Bunkmates = () => {
     console.log('bunkamtes')
 
     const handleDisplaySocials = (e) => {
-        dispatch(showSocialFeed(true));
+        setSocialFeed(!socialFeed);
+        //dispatch(showSocialFeed(true));
         e.stopPropagation();
     }
 
     const handleHideSocials = (e) => {
-        dispatch(showSocialFeed(false));
+        setSocialFeed(!socialFeed);
+        // dispatch(showSocialFeed(false));
         e.stopPropagation();
     }
 

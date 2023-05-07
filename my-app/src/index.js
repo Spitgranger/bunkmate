@@ -4,7 +4,7 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import CreatePost from './Views/CreatePost';
+//import CreatePost from './Views/CreatePost';
 import ApplyToListings from './Views/ApplyToListings';
 import Error from './Error';
 import Error404 from './Error404'
@@ -19,7 +19,9 @@ import BunkmateProvider from './Components/GlobalStateManagement/BunkmatesContex
 import UserDataProvider from './Components/GlobalStateManagement/UserDataContext'
 import { OtherProfile } from './Views/OtherProfile';
 import { Provider } from 'react-redux';
-import store from './Store/index';
+import store from './store/index'
+import { configureStore, applyMiddleware, compose } from 'redux'
+import thunk from 'redux-thunk'
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 const router = createBrowserRouter([

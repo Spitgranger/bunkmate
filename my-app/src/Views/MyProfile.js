@@ -20,6 +20,10 @@ import { BsFillClockFill, BsInfinity, BsBriefcaseFill, BsPencil, BsAlarmFill, Bs
 import { FaBook, FaSmoking, FaCannabis, FaWineGlassAlt, FaRegHandshake, FaDog } from 'react-icons/fa'
 import { GrInstagram, GrFacebook, GrLinkedin, GrTwitter } from 'react-icons/gr'
 import { HiMapPin } from 'react-icons/hi2'
+import store from '../store/index'
+//redux
+import { fetchProfile } from '../features/profile/profileSlice'
+import { useSelector } from 'react-redux';
 
 
 
@@ -33,6 +37,7 @@ import { HiMapPin } from 'react-icons/hi2'
 
 const Profile = () => {
   console.log("Profile rerender")
+  const profileData = useSelector((state) => state.profile);
 
   const pageStyles = {
     page: { display: 'flex', justifyContent: 'center', alignItems: 'flex-end', height: '100%' },
@@ -58,7 +63,7 @@ const Profile = () => {
   const { setIsOpen, setMode, setMessage } = useContext(SignInContext);
   const { rerender, setMapProfileCard, setZoom, setKeyLocationPins, HandleViewOtherProfile } = useContext(BunkmatesContext)
   //state to manage the profile data retrieved from the backend
-  const [profile, setProfile] = useState("");
+  const profile = profileData;
   //state management just for the requestbutton
   const [requestButtonMessage, setRequestButtonMessage] = useState("Inactive")
   const [showIcon, setShowIcon] = useState(false)
@@ -87,21 +92,13 @@ const Profile = () => {
       const userOwnId = requestDict[userId]
       setUserOwnRequest(userOwnId);
     }).finally(() => setIsRequestLoading(false));
-
   }, [])
 
-
-
-  //function to handle fetching the profile data from back end
-  const handleLoad = async () => {
-    const profile = await getProfile();
-    return profile;
-  };
-
   useEffect(() => {
-    //get data from backend when the component first loads works
-    handleLoad().then((profile) => setProfile(profile.data)).finally(() => setIsProfileLoading(""))
-  }, [rerender]);
+    //get data from backend when the component first loads works, use the dispatch associated with the profile slice
+    store.dispatch(fetchProfile()).finally(() => { setIsProfileLoading(!isProfileLoading); })
+    //handleLoad().then((profile) => setProfile(profile.data)).finally(() => setIsProfileLoading(""))
+  }, []);
 
   const handleEditProfile = () => {
     setMessage("Edit Your Profile")
