@@ -8,9 +8,11 @@ import { RxTriangleLeft, RxTriangleRight } from "react-icons/rx";
 import { BsFillCarFrontFill } from "react-icons/bs";
 import { BiCycling } from "react-icons/bi"
 import { RiCloseCircleFill } from "react-icons/ri";
+import { setCenter, setMapProfileCard, setZoom, setKeyLocationPins } from "../../../../features/bunkmate/bunkmateSlice";
+import { useDispatch } from "react-redux";
 
 //Retrieve Key Locations 
-export default function RetrieveKeyLocations({ setKeyLocationPins, coordinates, setZoom, setCenter, setMapProfileCard, request }) {
+export default function RetrieveKeyLocations({ coordinates, request }) {
 
   /*
   ---Hierarchical Structure---
@@ -22,6 +24,7 @@ export default function RetrieveKeyLocations({ setKeyLocationPins, coordinates, 
 
 
   console.log('keyLocations rerendered')
+  const dispatch = useDispatch();
 
   const placesRequest = {
     location: new window.google.maps.LatLng(coordinates),
@@ -36,7 +39,7 @@ export default function RetrieveKeyLocations({ setKeyLocationPins, coordinates, 
 
   function callback(results, status) {
 
-    if (status == window.google.maps.places.PlacesServiceStatus.OK) {
+    if (status === window.google.maps.places.PlacesServiceStatus.OK) {
 
       const storedLocations = []
       const storedCoordinates = []
@@ -50,10 +53,10 @@ export default function RetrieveKeyLocations({ setKeyLocationPins, coordinates, 
       }
 
 
-      setMapProfileCard(null)
-      setZoom(16)
-      setKeyLocationPins(storedLocations)
-      setCenter({ lat: request.idealLocation[0], lng: request.idealLocation[1] })
+      dispatch(setMapProfileCard(null));
+      dispatch(setZoom(16));
+      dispatch(setKeyLocationPins(storedLocations));
+      dispatch(setCenter({ lat: request.idealLocation[0], lng: request.idealLocation[1] }));
     }
 
   }

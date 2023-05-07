@@ -12,9 +12,10 @@ import { InfoWindowF } from '@react-google-maps/api';
 import { MdVerified } from 'react-icons/md';
 import RetrieveKeyLocations from './KeyLocations';
 import { formatContext } from '../../../../Components/GlobalStateManagement/FormatContext';
+import HandleViewOtherProfile from './HandleViewOtherProfile';
 
 
-function SingleMapCard({ HandleViewOtherProfile, BunkmateInfo, request, coordinates, setKeyLocationPins, setZoom, center, setCenter, setMapProfileCard, }) {
+function SingleMapCard({ BunkmateInfo, request, coordinates, center }) {
 
     const [messageButton, setMessageButton] = useState(false)
     const { capitalizedName, calculateAge } = useContext(formatContext)
@@ -59,7 +60,7 @@ function SingleMapCard({ HandleViewOtherProfile, BunkmateInfo, request, coordina
                                         <div className="button-container" style={{ display: 'flex', justifyContent: 'flex-end' }}>
                                             <Tooltip title={"Explore this area"} arrow placement="bottom">
                                                 <IconButton onClick={handleShowEstablishment}>
-                                                    {showEstablishment ? <RetrieveKeyLocations setKeyLocationPins={setKeyLocationPins} coordinates={coordinates} setZoom={setZoom} center={center} setCenter={setCenter} setMapProfileCard={setMapProfileCard} request={request} /> : ""}
+                                                    {showEstablishment ? <RetrieveKeyLocations coordinates={coordinates} center={center} request={request} /> : ""}
                                                     <HiMapPin />
                                                 </IconButton>
                                             </Tooltip>

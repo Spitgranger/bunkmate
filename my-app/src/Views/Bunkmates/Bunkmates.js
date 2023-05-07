@@ -11,7 +11,6 @@ import { SignInContext } from "../../Components/GlobalStateManagement/SignInCont
 import SingleMapCard from "./Components/Map/SingleMapCard"
 import GroupMapCard from "./Components/Map/GroupMapCard"
 import { deleteRequest } from '../../api'
-import { BunkmatesContext } from "../../Components/GlobalStateManagement/BunkmatesContext";
 import { RxTriangleDown } from "react-icons/rx"
 import { MapRequestMarker } from './Components/Map/MapMarkers'
 import { TbSocial, TbSocialOff } from "react-icons/tb";
@@ -19,10 +18,11 @@ import { SocialFeed } from "./Components/SocialFeed/SocialFeed";
 import { useGetUserData } from "./Hooks/useGetUserData";
 import { getPost } from "../../api";
 import { KeyLocationsMarkers } from "./Components/Map/KeyLocations";
-import { formatContext } from "../../Components/GlobalStateManagement/FormatContext";
+import { useDispatch, useSelector } from 'react-redux';
+import { setCenter, setMapProfileCard, setRerender, setZoom } from "../../features/bunkmate/bunkmateSlice";
 
 
-export function MapProfile({ request, setKeyLocationPins, setZoom, center, setCenter, setMapProfileCard, HandleViewOtherProfile, }) {
+export function MapProfile({ request, center }) {
 
     //determines whether to render single or group map card
 
@@ -57,24 +57,14 @@ export function MapProfile({ request, setKeyLocationPins, setZoom, center, setCe
             ? <SingleMapCard
                 BunkmateInfo={BunkmateInfo}
                 request={request}
-                setKeyLocationPins={setKeyLocationPins}
                 coordinates={coordinates}
-                setZoom={setZoom}
                 center={center}
-                setCenter={setCenter}
-                setMapProfileCard={setMapProfileCard}
-                HandleViewOtherProfile={HandleViewOtherProfile}
             />
             : <GroupMapCard
                 BunkmateInfo={BunkmateInfo}
                 request={request}
-                setKeyLocationPins={setKeyLocationPins}
                 coordinates={coordinates}
-                setZoom={setZoom}
                 center={center}
-                setCenter={setCenter}
-                setMapProfileCard={setMapProfileCard}
-                HandleViewOtherProfile={HandleViewOtherProfile}
             />
     )
 }
@@ -93,22 +83,26 @@ const Bunkmates = () => {
     const { localStorageData } = useContext(chatClientContext)
     //sign in context for when the user tries to create a bunkmate request without an account
     const { setIsOpen, setMessage, setMode } = useContext(SignInContext)
-    const { center, setCenter, mapProfileCard, setMapProfileCard, rerender, setRerender, zoom, setZoom, keyLocationPins, setKeyLocationPins, HandleViewOtherProfile, } = useContext(BunkmatesContext)
+
+    //select states from global redux store
+    const dispatch = useDispatch();
+    const center = useSelector(state => state.bunkmate.center);
+    const mapProfileCard = useSelector(state => state.bunkmate.mapProfileCard);
+    const zoom = useSelector(state => state.bunkmate.zoom);
+    const keyLocationPins = useSelector(state => state.bunkmate.keyLocationPins);
 
     //state places autocomplete
     const [selected, setSelected] = useState(null);
     //if the user has a profile then set profileChecker to true else false
     //used to rerender useEffect in Bunkmates.js containing async functions that gets data from backend
     const { loading, listingArray, userRequests, userProfile, userOwnData, isLoaded, } = useGetUserData()
-    const { capitalizedName } = useContext(formatContext)
-
 
     const [statePostArray, setStatePostArray] = useState([])
     //get Social feed informations
     useEffect(() => {
         getPost().then((result) => setStatePostArray(result.data.reverse()));
         if (!zoom) {
-            setZoom(15)
+            dispatch(setZoom(15));
         }
     }, [])
 
@@ -146,16 +140,13 @@ const Bunkmates = () => {
     const handleProfileClickAsync = (e) => {
         const request = userRequests.get(e?.currentTarget?.id)
         //MapProfile decides houses logic for deciding whether to show single or group map card
-        setMapProfileCard(
-            <MapProfile
-                request={request}
-                setKeyLocationPins={setKeyLocationPins}
-                center={center}
-                setCenter={setCenter}
-                setZoom={setZoom}
-                setMapProfileCard={setMapProfileCard}
-                HandleViewOtherProfile={HandleViewOtherProfile}
-            />)
+        dispatch(
+            setMapProfileCard(
+                <MapProfile
+                    request={request}
+                    center={center}
+                />)
+        )
         //store the coordinates of the pin that was clicked on
     }
 
@@ -188,11 +179,11 @@ const Bunkmates = () => {
         return (
             <div style={{ display: 'flex', bottom: '10vh', justifyContent: 'center', position: 'absolute', }}>
                 {/* edit bunkmates request button */}
-                <ActionButton onClick={(e) => { handleRequestClick(); setCenter({ lat: userOwnData.idealLocation[0], lng: userOwnData.idealLocation[1] }); e.stopPropagation() }} bgColor={"black"} title={"Edit Bunkmate Request"} opacity='0.85' />
+                <ActionButton onClick={(e) => { handleRequestClick(); dispatch(setCenter({ lat: userOwnData.idealLocation[0], lng: userOwnData.idealLocation[1] })); e.stopPropagation() }} bgColor={"black"} title={"Edit Bunkmate Request"} opacity='0.85' />
                 <Tooltip arrow title={"Delete Request"}>
                     {/* X buton to delete profiles */}
                     <div>
-                        <ActionButton onClick={(e) => { deleteRequest().then(() => { userRequests.delete(id); setRerender(!rerender); e.stopPropagation() }); }} bgColor={"black"} title={"X"} opacity='0.85' />
+                        <ActionButton onClick={(e) => { deleteRequest().then(() => { userRequests.delete(id); dispatch(setRerender()); e.stopPropagation() }); }} bgColor={"black"} title={"X"} opacity='0.85' />
                     </div>
                 </Tooltip>
             </div>
@@ -223,7 +214,7 @@ const Bunkmates = () => {
 
 
     const handleZoomChange = debounce((newZoomLevel) => {
-        setZoom(newZoomLevel);
+        dispatch(setZoom(newZoomLevel));
     }, 500);
 
 
@@ -265,7 +256,7 @@ const Bunkmates = () => {
                             styles: mapStyles,
                             streetViewControl: false, mapTypeControl: false,
                         }}
-                        onClick={() => { setMapProfileCard(null) }}>
+                        onClick={() => { dispatch(setMapProfileCard(null)) }}>
                         <div id="results" />
                         <Navbar chooseStyle={"glass"} />
                         <section className="bunkamtes__social-feed" style={{ borderRadius: '50%', backgroundColor: 'black', position: 'absolute', top: '275px', height: '40px', width: '40px', right: '10px', }}>
@@ -286,7 +277,7 @@ const Bunkmates = () => {
                             }
                         </section>
                         <KeyLocationsMarkers keyLocationPins={keyLocationPins} center={center} />
-                        {socialFeed ? <SocialFeed userOwnData={userOwnData} userProfile={userProfile} statePostArray={statePostArray} setStatePostArray={setStatePostArray} HandleViewOtherProfile={HandleViewOtherProfile} /> : null}
+                        {socialFeed ? <SocialFeed userOwnData={userOwnData} userProfile={userProfile} statePostArray={statePostArray} setStatePostArray={setStatePostArray} /> : null}
                         {mapProfileCard ?? null}
                         {selected && <MarkerF position={center} icon={"http://maps.google.com/mapfiles/ms/icons/blue.png"} />}
                         {listingArray.map((request, index) => {

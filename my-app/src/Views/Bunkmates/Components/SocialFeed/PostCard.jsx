@@ -18,8 +18,9 @@ import { deletePost, likePost, getRequests } from "../../../../api";
 import { BunkmatesContext } from "../../../../Components/GlobalStateManagement/BunkmatesContext";
 import { MapProfile } from "../../Bunkmates";
 import { CircularProgress } from "@mui/material/";
+import HandleViewOtherProfile from "../Map/HandleViewOtherProfile";
 
-export const PostCard = ({ post, userOwnData, userProfile, setStatePostArray, statePostArray, HandleViewOtherProfile }) => {
+export const PostCard = ({ post, userOwnData, userProfile, setStatePostArray, statePostArray }) => {
 
     console.log('postcard rerender')
     console.log(post)
@@ -125,7 +126,6 @@ export const PostCard = ({ post, userOwnData, userProfile, setStatePostArray, st
                     setCenter={setCenter}
                     setZoom={setZoom}
                     setMapProfileCard={setMapProfileCard}
-                    HandleViewOtherProfile={HandleViewOtherProfile}
                 />)
         }
     }
@@ -142,7 +142,7 @@ export const PostCard = ({ post, userOwnData, userProfile, setStatePostArray, st
         } else if (!post?.request[0]?.address && !isRequestLoading) {
             return ("")
         } else if (post?.request[0]?.address && isRequestLoading) {
-            return (<CircularProgress size={20}/>)
+            return (<CircularProgress size={20} />)
         }
 
     }
