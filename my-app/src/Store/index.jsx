@@ -1,8 +1,8 @@
 import { configureStore } from "@reduxjs/toolkit";
-import bunkmatesReducer from "../Reducers/Bunkmates";
+import profileReducer from '../features/profile/profileSlice'
 
 export default configureStore({
     reducer: {
-        bunkmates: bunkmatesReducer,
+        profile: profileReducer,
     }
 })
