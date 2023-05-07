@@ -5,7 +5,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import CreatePost from './Views/CreatePost';
-import ApplyToListings from './Views/ApplyToListings';
+import Applications from './Views/Applications';
 import Error from './Error';
 import Error404 from './Error404'
 import Bunkmates from './Views/Bunkmates/Bunkmates';
@@ -19,6 +19,7 @@ import BunkmateProvider from './Components/GlobalStateManagement/BunkmatesContex
 import UserDataProvider from './Components/GlobalStateManagement/UserDataContext'
 import { OtherProfile } from './Views/OtherProfile';
 import { Provider } from 'react-redux';
+import ListingDetails from './Components/ListingDetails'
 import store from './Store/index';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -64,7 +65,7 @@ const router = createBrowserRouter([
     errorElement: <Error />,
   },
   {
-    path: "/apply_to_listings",
+    path: "/applications",
     element:
       <BunkmateProvider>
         <UserDataProvider>
@@ -73,7 +74,7 @@ const router = createBrowserRouter([
               <SignInProvider>
                 <ValidationProvider>
                   <Provider store={store}>
-                    <ApplyToListings />
+                    <Applications />
                   </Provider>
                 </ValidationProvider>
               </SignInProvider>
@@ -134,6 +135,26 @@ const router = createBrowserRouter([
                 <ValidationProvider>
                   <Provider store={store}>
                     <OtherProfile />
+                  </Provider>
+                </ValidationProvider>
+              </SignInProvider>
+            </MessageProvider>
+          </FormatProvider>
+        </UserDataProvider>
+      </BunkmateProvider>,
+    errorElement: <Error />
+  },
+  {
+    path: '/listingdetails',
+    element:
+      <BunkmateProvider>
+        <UserDataProvider>
+          <FormatProvider>
+            <MessageProvider>
+              <SignInProvider>
+                <ValidationProvider>
+                  <Provider store={store}>
+                    <ListingDetails />
                   </Provider>
                 </ValidationProvider>
               </SignInProvider>

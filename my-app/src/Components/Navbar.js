@@ -182,7 +182,7 @@ const Navbar = memo(({ chooseStyle }) => {
                 {/*<CheckActive to="/" page="Listings"></CheckActive> */}
                 {/*<CheckActive to="/create" page="Post a Listing"></CheckActive>*/}
                 <NavbarPage toolTipTitle={"Find Roomates"} linkTo={"/bunkmates"} pageName="Bunkmates" />
-                <NavbarPage toolTipTitle={"Apply For Rental Units"} linkTo={"/apply_to_listings"} pageName="Apply to Listings" />
+                <NavbarPage toolTipTitle={"Apply For Rental Units"} linkTo={"/applications"} pageName="Applications" />
                 <NavbarPage toolTipTitle={"Message Bunkmates"} linkTo={"/messages"} pageName="Messages" />
                 <NavbarPage toolTipTitle={"Create Or Edit Profile"} linkTo={"/profile"} pageName="My Profile" />
                 {/*hidden, used for Sign in pages*/}
