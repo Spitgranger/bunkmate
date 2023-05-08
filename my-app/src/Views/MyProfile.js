@@ -20,7 +20,7 @@ import { BsFillClockFill, BsInfinity, BsBriefcaseFill, BsPencil, BsAlarmFill, Bs
 import { FaBook, FaSmoking, FaCannabis, FaWineGlassAlt, FaRegHandshake, FaDog } from 'react-icons/fa'
 import { GrInstagram, GrFacebook, GrLinkedin, GrTwitter } from 'react-icons/gr'
 import { HiMapPin } from 'react-icons/hi2'
-import store from '../Store/index'
+import store from '../store/index'
 //redux
 import { fetchProfile } from '../features/profile/profileSlice'
 import { useSelector } from 'react-redux';
