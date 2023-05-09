@@ -17,10 +17,8 @@ export const fetchProfile = createAsyncThunk('users/fetchUsers', async () => {
     console.log(response)
     return response.data;
 })
-/*
-*@details reducer for bunkmate page
-*@param none 
-*@return none
+/**
+* @details reducer for bunkmate page
 */
 const bunkmateSlice = createSlice({
     name: "bunkmate",
