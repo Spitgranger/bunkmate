@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { Avatar, Card, CardMedia, CardContent, Typography, CardActionArea, Divider, IconButton } from "@mui/material"
+import { Avatar, Card, CardMedia, CardContent, Typography, CardActionArea, Divider, IconButton, Button } from "@mui/material"
 import { useLocation } from "react-router-dom"
 import Navbar from "./Navbar";
 import { BsFillBookmarksFill, BsBookmarks } from "react-icons/bs";
@@ -12,6 +12,11 @@ import { TbElevator } from "react-icons/tb";
 import { RiParkingBoxLine } from "react-icons/ri";
 import { IoMdBasketball } from "react-icons/io";
 import { BiParty } from "react-icons/bi";
+import { ActionButton } from "./Utils/Form";
+import { Link } from "react-router-dom";
+import Modal from "./Utils/Modal";
+import ListingViewer from "./ListingViewer";
+import { IoIosArrowDropleftCircle, IoIosArrowDroprightCircle } from "react-icons/io";
 
 
 /**
@@ -168,7 +173,7 @@ function Gallery({ data }) {
         container: {
             display: 'flex', justifyContent: 'center', height: '100%',
             innerContainer: {
-                display: 'flex', width: '100%', flexDirection: 'row', margin: '20px', borderRadius: '2%', padding: '0%', overflow: 'hidden',
+                display: 'flex', width: '100%', flexDirection: 'row', margin: '20px', borderRadius: '10px', padding: '0%', overflow: 'hidden',
             },
         },
         largeImage: { flex: 2 },
@@ -176,21 +181,161 @@ function Gallery({ data }) {
         smallImage: { margin: '5px' },
 
     }
-    return (
 
+    //Define the state variable for managing the open and close state for viewing the gallery (modal window)
+    const [viewGallery, setViewGallery] = useState(false)
+    //Define the state variable for managing the indexed photo within the ModalGalleryViewer
+    const [galleryIndex, setGalleryIndex] = useState(0)
+
+    /**
+     * @brief event handler for opening the photo gallery
+     * @param {number} index the index of the image retrieved from storage 
+     * @details 
+     * - How viewGallery is handled
+        * - if viewGallery is false then set to true
+     * - How galleryIndex is handled
+        * - if user clicks on an image galleryIndex is set to that index
+        * - if user clicks the forward and backward navigation buttons then index is increased and decreased respectively 
+        * - cyclic gallery viewer
+     * @see setGalleryIndex sets galleryIndex to a certain index depending on situation
+     * @see setViewGallery sets viewGallery to true
+     */
+    const handleOpenGallery = (index) => {
+        setGalleryIndex(index + 1)
+        setViewGallery(true)
+    }
+
+    /**
+     * @brief event handler for opening the photo gallery
+     * 
+     * @details if viewGallery is false then set to true
+     * @see setViewGallery sets viewGallery to true
+     */
+    const handleCloseGallery = () => {
+        setViewGallery(false)
+    }
+
+    /**
+     * @brief This functional UI component showcases to the end user a slideshow gallery of labelled property photos in a modal window
+     * 
+     * @details How the modal gallery viewer is structured
+        * 1. Gallery of photos
+        * 2. forward and backward navigation buttons
+        * 3. Information on the picture:
+            * - The current image
+            * - How many images are left
+            * - label (What part of the unit the picture is from)
+     * @returns {React.ReactElement} a react element that contains the index of the photo and the photo's label
+     */
+    const ModalGalleryViewer = () => {
+
+        const modalGalleryViewerStyles = {
+            bodyContainer: { display: 'flex', alignItems: 'center', flexDirection: 'column' },
+            backwardButton: { display: 'flex', position: 'absolute', top: '50%', left: '0px' },
+            forwardButton: { display: 'flex', position: 'absolute', top: '50%', right: '0px' },
+            photographContainer: { display: 'flex', flexDirection: 'row', width: '100%', height: '100%' },
+            photograph: { borderRadius: '10px', margin: '10px' },
+        }
+
+        /**
+         * @brief event handler for viewing the next image in the gallery
+         * 
+         * @details increases gallery index by 1, if galleryIndex has reached the length of the gallery array then set to 0 else continue to add 1
+         * @see setGalleryIndex sets galleryIndex to add one to old index
+         */
+        const handleForwardClick = () => {
+            return setGalleryIndex(galleryIndex + 1 === data.listing_img.length ? 0 : galleryIndex + 1)
+        }
+
+        /**
+         * @brief event handler for viewing the previous image in the gallery
+         * 
+         * @details decreases gallery index by 1, if galleryIndex has reached the beginnging of the gallery then set to the length of the gallery array
+         * @see setGalleryIndex sets galleryIndex to subtract one from old index
+         */
+        const handleBackwardClick = () => {
+            return setGalleryIndex(galleryIndex - 1 === -1 ? data.listing_img.length - 1 : galleryIndex - 1)
+        }
+
+        /**
+         * @brief This functional UI component showcases to the end user the index of the photo within the gallery and the label of the photo as well
+         * 
+         * @details This card component is located at the bottom of the modal gallery viewer 
+         * @returns {React.ReactElement} a react element that contains the index of the photo and the photo's label
+         */
+        const ImageInfo = () => {
+            const imageInfoStyles = {
+                infoContainer: { display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'row', padding: '10px', borderRadius: '10px' },
+                divider: { heigth: '25px', margin: '10px' },
+            }
+            return (
+                <Card raised sx={imageInfoStyles.infoContainer}>
+                    <Typography color="text.primary" variant="h6">
+                        {data.listing_img_labels[galleryIndex]}
+                    </Typography>
+                    <Divider orientation="vertical" sx={imageInfoStyles.divider} />
+                    <Typography color="text.secondary" variant="h6">
+                        {`${galleryIndex + 1} / ${data.listing_img.length}`}
+                    </Typography>
+                </Card>
+            )
+        }
+
+
+        /**
+         * @brief This functional UI component showcases to the end user the index of the photo within the gallery and the label of the photo as well
+         * 
+         * @details 
+         * - How Slideshow is structured
+            * - Forward and backward navigation buttons
+            * - Currently Selected Image
+         * @returns {React.ReactElement} a react element that contains navigation buttons and the currently selected image
+         */
+        const SlideShow = () => {
+            return (
+                <>
+                    <IconButton onClick={handleBackwardClick} sx={modalGalleryViewerStyles.backwardButton}>
+                        <IoIosArrowDropleftCircle size={30} color={"black"} />
+                    </IconButton>
+                    <CardContent sx={modalGalleryViewerStyles.photographContainer}>
+                        <CardMedia component="img" src={data.listing_img[galleryIndex]} sx={modalGalleryViewerStyles.photograph} />
+                    </CardContent >
+                    <IconButton onClick={handleForwardClick} sx={modalGalleryViewerStyles.forwardButton}>
+                        <IoIosArrowDroprightCircle size={30} color={"black"} />
+                    </IconButton>
+                </>
+            )
+        }
+
+        return (
+            <div style={modalGalleryViewerStyles.bodyContainer}>
+                <SlideShow />
+                <ImageInfo />
+            </div>
+        )
+    }
+
+    return (
         <div style={galleryStyles.container}>
             <CardContent style={galleryStyles.container.innerContainer}>
-                <CardActionArea sx={galleryStyles.largeImage}>
+                <CardActionArea sx={galleryStyles.largeImage} onClick={() => handleOpenGallery(-1)}>
                     <CardMedia component="img" image={data.listing_img[0]} />
                 </CardActionArea>
                 <div style={galleryStyles.smallImagesContainer}>
-                    {data.listing_img.slice(1).map((image) => (
-                        <CardActionArea sx={galleryStyles.smallImage}>
+                    {data.listing_img.slice(1).map((image, index) => (
+                        <CardActionArea sx={galleryStyles.smallImage} onClick={() => handleOpenGallery(index)}>
                             <CardMedia component="img" image={image} />
                         </CardActionArea>
                     ))}
                 </div>
             </CardContent>
+            <Modal
+                flexibleContainer
+                open={viewGallery}
+                onClose={handleCloseGallery}
+                content={<ModalGalleryViewer />}
+                cardTitle={"Photo Gallery"}
+            />
         </div>
     )
 }
@@ -321,7 +466,7 @@ function Property({ data }) {
     }
 
     /**
-     * @brief This event handler uses the setSaveListing hook to toggle the saveListing state between true and false.
+     * @brief This event handler uses the setSaveListing state to toggle the saveListing state between true and false.
      * 
      * @details If setViewMore is currently false then set to true and vice versa
      * @see setViewMore View More / View Less state 
@@ -401,6 +546,9 @@ function Ammenities() {
      * @param {React.ReactElement} icon the icon that's used to complement ammenity listed
      * @param {string} ammenity an ammenity offered by the property
      * @returns {React.ReactElement} a react element that contains one the ammenities that's offered by the property with an icon of the ammenity
+     * 
+     * @example
+     * <Ammenity icon={<MdFillAlarm />} ammenity={"Smoke Alarm"}/>
      */
     const Ammenity = ({ icon, ammenity }) => {
         return (
@@ -503,6 +651,11 @@ function UnitCard({ data }) {
         cardContainer: { width: '85%', padding: '30px', borderRadius: '10px', margin: '20px' },
         priceRange: { padding: '5px', fontWeight: 600 },
         sqftRange: { padding: '5px', fontWeight: 600 },
+        actionButtonContainer: {
+            display: 'flex', justifyContent: 'row',
+            applyNowContainer: { textDecoration: 'none', width: '100%', },
+            bookTourContainer: { width: '100%', margin: '0px 10px 0px 10px' },
+        },
     }
 
     /**
@@ -517,7 +670,6 @@ function UnitCard({ data }) {
             * 6. Number of Baths
             * 7. Square Footage
             * 8. Date Available
-            * 
      * @param {object} unitData stores unit info
      * @returns {React.ReactElement} a react element that contains information on the individual units in a propertyj
      */
@@ -539,9 +691,32 @@ function UnitCard({ data }) {
             },
         }
 
+        //Define the state variable for managing the open and close state for viewing more details about a unit (modal window)
+        const [viewUnitDetails, setViewUnitDetails] = useState(false)
+
+        /**
+         * @brief This event handler sets view unit details to true
+         * 
+         * @details if viewUnitDetails is false then set it to true 
+         * @see setViewUnitDetails set view unit details to true
+         */
+        const handleOpenViewUnit = () => {
+            setViewUnitDetails(true)
+        }
+
+        /**
+         * @brief This event handler sets view unit details to false
+         * 
+         * @details if viewUnitDetails is true then set it to false
+         * @see setViewUnitDetails set view unit details to false
+         */
+        const handleCloseViewUnit = () => {
+            setViewUnitDetails(false)
+        }
+
         return (
             <>
-                <CardActionArea sx={unitStyles.container}>
+                <CardActionArea sx={unitStyles.container} onClick={handleOpenViewUnit}>
                     <CardMedia sx={unitStyles.unitImage} component="img" image={unitData.interiorLayoutImage} />
                     <CardContent sx={unitStyles.unitContainer}>
                         <div style={unitStyles.unitContainer.firstRow}>
@@ -576,6 +751,7 @@ function UnitCard({ data }) {
                 <div style={{ width: '100%', padding: '10px' }}>
                     <Divider sx={{ width: '100%' }} />
                 </div>
+                <Modal flexibleContainer open={viewUnitDetails} onClose={handleCloseViewUnit} content={<ListingViewer data={data} />} cardTitle={"Property Details"} />
             </>
         )
     }
@@ -588,6 +764,17 @@ function UnitCard({ data }) {
             <Typography color="text.secondary" variant="h6" sx={unitCardStyles.sqftRange} >
                 {`${data.listing_details.sqftRange[0]} Sqft - ${data.listing_details.sqftRange[1]} Sqft`}
             </Typography>
+            <div style={unitCardStyles.actionButtonContainer}>
+                <Link
+                    to={"/applications"}
+                    style={unitCardStyles.actionButtonContainer.applyNowContainer}
+                >
+                    <ActionButton title="Apply Now" containerWidth="100%" height="50px" />
+                </Link>
+                <div style={unitCardStyles.actionButtonContainer.bookTourContainer}>
+                    <ActionButton title="Book a Tour" containerWidth="100%" height="50px" />
+                </div>
+            </div>
             {data.listing_details.units.map((unitData) => {
                 return (<Unit unitData={unitData} />)
             })}

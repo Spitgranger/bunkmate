@@ -28,6 +28,7 @@ function App() {
       ],
       date_available: "Jan 8th 2023",
       listing_img: [Apartment, Apartment2, Room, Room2],
+      listing_img_labels: ["Apartment", "Apartment", "Living Room", "Lounge"],
       listing_details: {
         developerName: 'Marshalls Place Condos',
         address: "81 Bay Street Toronto Ontario",
