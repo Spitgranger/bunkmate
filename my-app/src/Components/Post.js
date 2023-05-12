@@ -7,8 +7,8 @@ import { BsFillCircleFill } from 'react-icons/bs'
 import Modal from "./Utils/Modal";
 import { useState } from "react"
 import { Typography } from "@mui/material"
-import ListingViewer from "./ListingViewer"
-import ListingDetails from "./ListingDetails"
+import L2Details from "../Views/listings/l2Details"
+import L1Details from "../Views/listings/l1Details"
 import { Link } from "react-router-dom"
 
 export function Bookmark() {
@@ -121,7 +121,7 @@ export default function Post(info) {
             <Typography color="text.primary" variant="h6" style={{ fontSize: '17px' }}>Available: {info.date_available}</Typography>
           </div>
           <label id="message" >
-            <Link to={"/listingdetails"} state={info} style={{ textDecoration: 'none', color: 'white' }}>
+            <Link to={"/l1Details"} state={info} style={{ textDecoration: 'none', color: 'white' }}>
               <button style={{ display: "none" }}></button>
               <h3>View Details</h3>
             </Link>

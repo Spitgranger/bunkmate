@@ -19,7 +19,7 @@ import BunkmateProvider from './Components/GlobalStateManagement/BunkmatesContex
 import UserDataProvider from './Components/GlobalStateManagement/UserDataContext'
 import { OtherProfile } from './Views/OtherProfile';
 import { Provider } from 'react-redux';
-import ListingDetails from './Components/ListingDetails'
+import L1Details from './Views/listings/l1Details'
 import store from './store/index'
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -145,7 +145,7 @@ const router = createBrowserRouter([
     errorElement: <Error />
   },
   {
-    path: '/listingdetails',
+    path: '/l1details',
     element:
       <BunkmateProvider>
         <UserDataProvider>
@@ -154,7 +154,7 @@ const router = createBrowserRouter([
               <SignInProvider>
                 <ValidationProvider>
                   <Provider store={store}>
-                    <ListingDetails />
+                    <L1Details />
                   </Provider>
                 </ValidationProvider>
               </SignInProvider>
