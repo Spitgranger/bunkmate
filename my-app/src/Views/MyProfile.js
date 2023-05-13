@@ -3,9 +3,8 @@ import './Profile.css'
 import Navbar from '../Components/Navbar';
 import { formatContext } from '../Components/GlobalStateManagement/FormatContext';
 import { SignInContext } from '../Components/GlobalStateManagement/SignInContext';
-import { BunkmatesContext } from '../Components/GlobalStateManagement/BunkmatesContext';
 
-import { getProfile, getRequests } from '../api';
+import { getRequests } from '../api';
 import { ActionButton } from '../Components/Utils/Form';
 import { Link } from 'react-router-dom';
 import { MapProfile } from './Bunkmates/Bunkmates';
@@ -23,7 +22,8 @@ import { HiMapPin } from 'react-icons/hi2'
 import store from '../store/index'
 //redux
 import { fetchProfile } from '../features/profile/profileSlice'
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { setZoom, setMapProfileCard } from '../features/bunkmate/bunkmateSlice';
 
 
 
@@ -38,7 +38,7 @@ import { useSelector } from 'react-redux';
 const Profile = () => {
   console.log("Profile rerender")
   const profileData = useSelector((state) => state.profile);
-
+  const dispatch = useDispatch();
   const pageStyles = {
     page: { display: 'flex', justifyContent: 'center', alignItems: 'flex-end', height: '100%' },
     profileContainer: { display: 'flex', flexFLow: 'row wrap', width: '75%', height: '91vh' },
@@ -61,7 +61,6 @@ const Profile = () => {
 
   const { capitalizedName, calculateAge } = useContext(formatContext);
   const { setIsOpen, setMode, setMessage } = useContext(SignInContext);
-  const { rerender, setMapProfileCard, setZoom, setKeyLocationPins, HandleViewOtherProfile } = useContext(BunkmatesContext)
   //state to manage the profile data retrieved from the backend
   const profile = profileData;
   //state management just for the requestbutton
@@ -69,9 +68,9 @@ const Profile = () => {
   const [showIcon, setShowIcon] = useState(false)
   const [textColor, setTextColor] = useState('red')
   const [userOwnRequest, setUserOwnRequest] = useState("")
-  const { setCenter } = useContext(BunkmatesContext)
   const [isProfileLoading, setIsProfileLoading] = useState(true)
   const [isRequestLoading, setIsRequestLoading] = useState(true)
+
 
   //query localStorage whenever mapProfileCard changes (primarily used to update the state of the "view request button")
   useEffect(() => {
@@ -96,8 +95,9 @@ const Profile = () => {
 
   useEffect(() => {
     //get data from backend when the component first loads works, use the dispatch associated with the profile slice
-    store.dispatch(fetchProfile()).finally(() => { setIsProfileLoading(!isProfileLoading); })
+    dispatch(fetchProfile()).finally(() => { setIsProfileLoading(!isProfileLoading); }).catch(() => { console.log("error has occured"); setIsProfileLoading(false) })
     //handleLoad().then((profile) => setProfile(profile.data)).finally(() => setIsProfileLoading(""))
+
   }, []);
 
   const handleEditProfile = () => {
@@ -145,18 +145,14 @@ const Profile = () => {
   function HandleViewRequest() {
 
     //NOTE: must set zoom else bunkmates page will be grey
-    setZoom(15)
+    dispatch(setZoom(15));
 
     //if the user has an active request then open bunkmates page then center and open up their map profile card
-    setMapProfileCard(
+    dispatch(setMapProfileCard(
       <MapProfile
         request={userOwnRequest}
-        setKeyLocationPins={setKeyLocationPins}
-        setCenter={setCenter}
-        setZoom={setZoom}
-        setMapProfileCard={setMapProfileCard}
-        HandleViewOtherProfile={HandleViewOtherProfile}
-      />)
+      />));
+    console.log(store.getState());
 
   }
 

@@ -12,11 +12,6 @@ const initialState = {
     keyLocationPins: '',
 }
 
-export const fetchProfile = createAsyncThunk('users/fetchUsers', async () => {
-    const response = await getRequests();
-    console.log(response)
-    return response.data;
-})
 /**
 * @details reducer for bunkmate page
 */
@@ -49,11 +44,6 @@ const bunkmateSlice = createSlice({
             state.keyLocationPins = action.payload;
         }
 
-    },
-    extraReducers(builder) {
-        builder.addCase(fetchProfile.fulfilled, (state, action) => {
-            return action.payload
-        })
     },
 })
 export const { setMapProfileCard, setCenter, setRerender, setClick, setZoom, setKeyLocationPins } = bunkmateSlice.actions

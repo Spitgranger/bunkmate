@@ -15,6 +15,9 @@ const profileSlice = createSlice({
         builder.addCase(fetchProfile.fulfilled, (state, action) => {
             return action.payload
         })
+            .addCase(fetchProfile.rejected, (state, action) => {
+                return {}
+            })
     },
 })
 
