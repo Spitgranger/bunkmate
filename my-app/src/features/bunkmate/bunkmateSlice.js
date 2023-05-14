@@ -43,7 +43,6 @@ const bunkmateSlice = createSlice({
         setKeyLocationPins: (state, action) => {
             state.keyLocationPins = action.payload;
         }
-
     },
 })
 export const { setMapProfileCard, setCenter, setRerender, setClick, setZoom, setKeyLocationPins } = bunkmateSlice.actions
