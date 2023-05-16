@@ -1,8 +1,8 @@
-import React, { useContext, useEffect, useRef, useState, memo, useMemo, useId } from "react";
+import React, { useContext, useEffect, useState} from "react";
 import Navbar from "../../Components/Navbar";
-import { GoogleMap, MarkerF, OverlayView, OVERLAY_MOUSE_TARGET, OverlayViewF, MapContext, Polyline, DirectionsService } from "@react-google-maps/api";
+import { GoogleMap, MarkerF, OVERLAY_MOUSE_TARGET, OverlayViewF } from "@react-google-maps/api";
 import mapStyles from '../../data/mapStyles.json'
-import { Card, Typography, IconButton, Tooltip, CircularProgress, CardMedia, CardContent, CardActionArea } from "@mui/material/"
+import { Card, Typography, IconButton, Tooltip, CircularProgress } from "@mui/material/"
 import "./Styles/Bunkmates.css"
 import CreateRequestForm from './Components/RequestForm/CreateRequestForm'
 import { ActionButton } from "../../Components/Utils/Form";
@@ -28,7 +28,7 @@ export function MapProfile({ request, center }) {
     //determines whether to render single or group map card
 
     //store the coordinates of the map pin that was clicked on
-    const [coordinates, setCoordinates] = useState('')
+    const [coordinates, setCoordinates] = useState({})
 
     useEffect(() => {
         setCoordinates({ lat: request.idealLocation[0], lng: request.idealLocation[1] })

@@ -1,7 +1,6 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { getRequests } from "../../api";
+import { createSlice } from "@reduxjs/toolkit";
 
-//Some non serializable values are stored in the redux store eg. mapProfileCard, should fix this to avoid errors in the future.
+//Some non-serializable values are stored in the redux store e.g. mapProfileCard, should fix this to avoid errors in the future.
 //initial state for the bunkmate reducer, stores the mapProfileCard, current google map center, rerender, click, 
 const initialState = {
     mapProfileCard: null,
@@ -13,7 +12,7 @@ const initialState = {
 }
 
 /**
-* @details reducer for bunkmate page
+* @description reducer for bunkmate page
 */
 const bunkmateSlice = createSlice({
     name: "bunkmate",
