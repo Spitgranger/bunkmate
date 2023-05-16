@@ -12,7 +12,6 @@ function App() {
   const keyinfo = [
     {
       profile: "1",
-      listing_img: "?",
       price: "800",
       address: "3452 winchester drive",
       num_roomates: "2",
@@ -79,7 +78,6 @@ function App() {
     },
     {
       profile: "2",
-      listing_img: "?",
       price: "645",
       address: "2451 sherway gardens",
       num_roomates: "4",
@@ -96,7 +94,6 @@ function App() {
     },
     {
       profile: "3",
-      listing_img: "?",
       price: "1100",
       address: "300 21 west street",
       num_roomates: "2",
@@ -113,7 +110,6 @@ function App() {
     },
     {
       profile: "4",
-      listing_img: "?",
       price: "2190",
       address: "2639 Maud Street",
       num_roomates: "2",
@@ -134,7 +130,6 @@ function App() {
     },
     {
       profile: "2",
-      listing_img: "?",
       price: "645",
       address: "2451 sherway gardens",
       num_roomates: "4",
@@ -151,7 +146,6 @@ function App() {
     },
     {
       profile: "2",
-      listing_img: "?",
       price: "645",
       address: "2451 sherway gardens",
       num_roomates: "4",
@@ -168,7 +162,6 @@ function App() {
     },
     {
       profile: "2",
-      listing_img: "?",
       price: "645",
       address: "2451 sherway gardens",
       num_roomates: "4",
@@ -185,7 +178,6 @@ function App() {
     },
     {
       profile: "2",
-      listing_img: "?",
       price: "645",
       address: "2451 sherway gardens",
       num_roomates: "4",
@@ -202,7 +194,6 @@ function App() {
     },
     {
       profile: "2",
-      listing_img: "?",
       price: "645",
       address: "2451 sherway gardens",
       num_roomates: "4",
@@ -219,7 +210,6 @@ function App() {
     },
     {
       profile: "2",
-      listing_img: "?",
       price: "645",
       address: "2451 sherway gardens",
       num_roomates: "4",
@@ -236,7 +226,6 @@ function App() {
     },
     {
       profile: "2",
-      listing_img: "?",
       price: "645",
       address: "2451 sherway gardens",
       num_roomates: "4",
@@ -253,7 +242,6 @@ function App() {
     },
     {
       profile: "2",
-      listing_img: "?",
       price: "645",
       address: "2451 sherway gardens",
       num_roomates: "4",
@@ -270,7 +258,6 @@ function App() {
     },
     {
       profile: "2",
-      listing_img: "?",
       price: "645",
       address: "2451 sherway gardens",
       num_roomates: "4",
@@ -287,7 +274,6 @@ function App() {
     },
     {
       profile: "2",
-      listing_img: "?",
       price: "645",
       address: "2451 sherway gardens",
       num_roomates: "4",
@@ -304,7 +290,6 @@ function App() {
     },
     {
       profile: "2",
-      listing_img: "?",
       price: "645",
       address: "2451 sherway gardens",
       num_roomates: "4",
@@ -321,7 +306,6 @@ function App() {
     },
     {
       profile: "2",
-      listing_img: "?",
       price: "645",
       address: "2451 sherway gardens",
       num_roomates: "4",
@@ -345,7 +329,6 @@ function App() {
         <div style={{ height: '9vh' }} />
         <Navbar />
       </header>
-      <body>
         <section className="Listings">
           {keyinfo.map((info, i) => (
             <Post key={i} {...info} />
@@ -354,7 +337,6 @@ function App() {
         {/* TODO */}
         <section className="map">
         </section>
-      </body>
     </div >
   );
 }
