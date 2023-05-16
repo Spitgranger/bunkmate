@@ -162,7 +162,6 @@ function App() {
     },
     {
       profile: "2",
-      listing_img: "?",
       price: "645",
       address: "2451 sherway gardens",
       num_roomates: "4",
@@ -195,7 +194,6 @@ function App() {
     },
     {
       profile: "2",
-      listing_img: "?",
       price: "645",
       address: "2451 sherway gardens",
       num_roomates: "4",
@@ -331,7 +329,6 @@ function App() {
         <div style={{ height: '9vh' }} />
         <Navbar />
       </header>
-      <body>
         <section className="Listings">
           {keyinfo.map((info, i) => (
             <Post key={i} {...info} />
@@ -340,7 +337,6 @@ function App() {
         {/* TODO */}
         <section className="map">
         </section>
-      </body>
     </div >
   );
 }

@@ -38,6 +38,7 @@ import { setZoom, setMapProfileCard } from '../features/bunkmate/bunkmateSlice';
 const Profile = () => {
   console.log("Profile rerender")
   const profileData = useSelector((state) => state.profile);
+  const error = useSelector(state => state.profile.error)
   const dispatch = useDispatch();
   const pageStyles = {
     page: { display: 'flex', justifyContent: 'center', alignItems: 'flex-end', height: '100%' },
@@ -194,7 +195,7 @@ const Profile = () => {
   //display loading indicator
   //}
 
-  if (profile && !isProfileLoading) {
+  if (profile && !isProfileLoading && !error) {
     return (
       <div style={pageStyles.page}>
         <div style={{ height: '9vh' }} />
@@ -283,7 +284,7 @@ const Profile = () => {
     )
 
   }
-  else if (!profile && !isProfileLoading) {
+  else if (error) {
     return (
       <div className='page-container'>
         <div style={{ height: '9vh' }} />
@@ -294,6 +295,7 @@ const Profile = () => {
       </div>
     )
   } else {
+    console.log(error)
     return (
       <Box style={pageStyles.loadingUi}><CircularProgress size={50} /></Box>)
   }
