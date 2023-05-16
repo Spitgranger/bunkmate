@@ -3,9 +3,9 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, RouterProvider  } from "react-router-dom";
 //import CreatePost from './Views/CreatePost';
-import Applications from './Views/Applications';
+import Applications from './Views/Applications/Applications';
 import Error from './Error';
 import Error404 from './Error404'
 import Bunkmates from './Views/Bunkmates/Bunkmates';
@@ -20,6 +20,7 @@ import UserDataProvider from './Components/GlobalStateManagement/UserDataContext
 import { OtherProfile } from './Views/OtherProfile';
 import { Provider } from 'react-redux';
 import L1Details from './Views/listings/l1Details'
+import L2Details from './Views/listings/l2Details';
 import store from './store/index'
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -155,6 +156,26 @@ const router = createBrowserRouter([
                 <ValidationProvider>
                   <Provider store={store}>
                     <L1Details />
+                  </Provider>
+                </ValidationProvider>
+              </SignInProvider>
+            </MessageProvider>
+          </FormatProvider>
+        </UserDataProvider>
+      </BunkmateProvider>,
+    errorElement: <Error />
+  },
+  {
+    path: '/l2details',
+    element:
+      <BunkmateProvider>
+        <UserDataProvider>
+          <FormatProvider>
+            <MessageProvider>
+              <SignInProvider>
+                <ValidationProvider>
+                  <Provider store={store}>
+                    <L2Details />
                   </Provider>
                 </ValidationProvider>
               </SignInProvider>

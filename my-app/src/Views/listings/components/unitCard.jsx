@@ -1,9 +1,7 @@
-import React, { useState } from "react"
-import { Card, CardMedia, CardContent, Typography, CardActionArea, Divider, IconButton, Button } from "@mui/material"
+import React from "react"
+import { Card, CardMedia, CardContent, Typography, CardActionArea, Divider, } from "@mui/material"
 import { ActionButton } from "../../../Components/Utils/Form";
-import { Link } from "react-router-dom";
-import Modal from "../../../Components/Utils/Modal";
-import ListingViewer from "../l2Details";
+import { Link, useNavigate } from "react-router-dom";
 
 /**
  * @function UnitCard
@@ -93,26 +91,13 @@ export function Unit({ data, unitData, index }) {
     }
 
     //Define the state variable for managing the open and close state for viewing more details about a unit (modal window)
-    const [viewUnitDetails, setViewUnitDetails] = useState(false)
+    const navigate = useNavigate();
 
     /**
-     * @brief This event handler sets view unit details to true
-     * 
-     * @details if viewUnitDetails is false then set it to true 
-     * @see setViewUnitDetails set view unit details to true
+     * @brief This event handler navigates to l2Details
      */
     const handleOpenViewUnit = () => {
-        setViewUnitDetails(true)
-    }
-
-    /**
-     * @brief This event handler sets view unit details to false
-     * 
-     * @details if viewUnitDetails is true then set it to false
-     * @see setViewUnitDetails set view unit details to false
-     */
-    const handleCloseViewUnit = () => {
-        setViewUnitDetails(false)
+        navigate('/l2Details', { state: { data: data, index: index } })
     }
 
     return (
@@ -148,16 +133,10 @@ export function Unit({ data, unitData, index }) {
                         {`Available: ${unitData.dateAvailable}`}
                     </Typography>
                 </CardContent>
-            </CardActionArea>
+            </CardActionArea >
             <div style={{ width: '100%', padding: '10px' }}>
                 <Divider sx={{ width: '100%' }} />
             </div>
-            <Modal
-                flexibleContainer
-                open={viewUnitDetails}
-                onClose={handleCloseViewUnit}
-                content={<ListingViewer data={data} index={index} />}
-                cardTitle={"Property Details"} />
         </>
     )
 }

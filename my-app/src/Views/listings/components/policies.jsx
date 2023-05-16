@@ -42,17 +42,17 @@ export default function Policies() {
 function Policy({ policy }) {
 
     const policyStyles = {
-        policyContainer: {
-            display: 'flex', flexDirection: 'row', alignItems: 'center',
+        policy: {
+            container: {display: 'flex', flexDirection: 'row', alignItems: 'center'},
             bulletPoint: { margin: '10px', fontSize: '18px' },
-            policy: { fontWeight: 600, fontSize: '16px' },
+            policyPoint: { fontWeight: 600, fontSize: '16px' },
         },
     }
 
     return (
-        <div style={policyStyles.policyContainer}>
-            <MdCircle style={policyStyles.policyContainer.bulletPoint} />
-            <Typography color="text.secondary" variant="h5" sx={policyStyles.policyContainer.policy} >
+        <div style={policyStyles.policy.container}>
+            <MdCircle style={policyStyles.policy.bulletPoint} />
+            <Typography color="text.secondary" variant="h5" sx={policyStyles.policy.policyPoint} >
                 {policy}
             </Typography>
         </div>

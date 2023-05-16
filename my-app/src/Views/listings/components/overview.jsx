@@ -51,21 +51,21 @@ export function OverviewPoint({ icon, advantage, explanation }) {
         overviewContainer: {
             display: 'flex', flexDirection: 'row', padding: '10px 5px 10px 5px',
         },
-        textContainer: {
-            padding: '0px 10px 0px 10px',
+        text: {
+            container: {padding: '0px 10px 0px 10px'},
             advantage: { fontWeight: 600, fontSize: '17px', padding: '2px' },
-            explanation: { padding: '10px 0px 10px 0px ', fontWeight: 600, fontSize: '15px', padding: '2px' },
-        },
+            explanation: { padding: '10px 0px 10px 0px ', fontWeight: 600, fontSize: '15px' }
+        }
     }
 
     return (
         <div style={overviewPointStyles.overviewContainer}>
             {icon}
-            <div style={overviewPointStyles.textContainer}>
-                <Typography color="text.primary" variant="h5" sx={overviewPointStyles.textContainer.advantage} >
+            <div style={overviewPointStyles.text.container}>
+                <Typography color="text.primary" variant="h5" sx={overviewPointStyles.text.advantage} >
                     {advantage}
                 </Typography>
-                <Typography color="text.secondary" variant="h5" sx={overviewPointStyles.textContainer.explanation} >
+                <Typography color="text.secondary" variant="h5" sx={overviewPointStyles.text.explanation} >
                     {explanation}
                 </Typography>
             </div>
