@@ -14,13 +14,19 @@ import UnitInfoCard from './UnitInfoCard';
  */
 export default function Summary() {
 
+    const summaryStyles = {
+        container: { display: 'flex', width: '100%', justifyContent: 'center', padding: '3vh' },
+        innerContainer: { display: 'flex', width: '65vw', justifyContent: 'space-around', flexDirection: 'row' },
+        leftSideContainer: { display: 'flex', flexDirection: 'column' },
+        title: { fontWeight: 550 },
+    }
+
     return (
 
-        <div style={{ display: 'flex', width: '100%', justifyContent: 'center', padding: '3vh' }}>
-            <CardContent
-                sx={{ display: 'flex', width: '65vw', justifyContent: 'space-around', flexDirection: 'row' }}>
-                <div style={{ display: 'flex', flexDirection: 'column' }}>
-                    <Typography variant="h4" color="text.secondary" sx={{ fontWeight: '550' }}>
+        <div style={summaryStyles.container}>
+            <CardContent sx={summaryStyles.innerContainer}>
+                <div style={summaryStyles.leftSideContainer}>
+                    <Typography variant="h4" color="text.secondary" sx={summaryStyles.title}>
                         Summary
                     </Typography>
                     <Overview />
