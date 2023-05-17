@@ -34,8 +34,6 @@ export function MapProfile({ request, center }) {
         setCoordinates({ lat: request.idealLocation[0], lng: request.idealLocation[1] })
     }, [request])
 
-
-
     //as well as set bunkmate info at the bottom of the card
     function BunkmateInfo(props) {
         return (
@@ -72,9 +70,6 @@ export function MapProfile({ request, center }) {
 
 
 const Bunkmates = () => {
-    // const dispatch = useDispatch();
-    // const socialFeed = useSelector(state => state.bunkmates.socialFeed.socialFeed);
-    // const requestForm = useSelector(state => state.bunkmates.requestForm.requestForm)
     const [socialFeed, setSocialFeed] = useState(false);
     const [requestForm, setRequestForm] = useState(false);
     const [libraries] = useState(["places"]);
@@ -97,7 +92,7 @@ const Bunkmates = () => {
     const keyLocationPins = useSelector(state => state.bunkmate.keyLocationPins);
 
     //state places autocomplete
-    const [selected, setSelected] = useState(null);
+    const [selected, setSelected] = useState(false);
     //if the user has a profile then set profileChecker to true else false
     //used to rerender useEffect in Bunkmates.js containing async functions that gets data from backend
     const { loading, listingArray, userRequests, userProfile, userOwnData, } = useGetUserData()
@@ -121,7 +116,7 @@ const Bunkmates = () => {
     //contains all requests generated through accounts
 
 
-    if (!isLoaded) {
+    if (!isLoaded || loadError) {
         return <h1>ERROR HAS OCCURED</h1>
     }
 
@@ -158,11 +153,6 @@ const Bunkmates = () => {
         //store the coordinates of the pin that was clicked on
     }
 
-
-
-
-
-
     function BunkmateRequestPage() {
         return (
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', top: '30vh', position: 'absolute', maxWidth: '500px' }}>
@@ -179,8 +169,6 @@ const Bunkmates = () => {
             </div>
         )
     }
-
-
 
     function EditRequestButton() {
         //edit and delete functionality
@@ -206,7 +194,6 @@ const Bunkmates = () => {
         )
     }
 
-
     //delay the zooming in and out of the map to allow time for tiles to render properly
     function debounce(func, delay) {
         let timerId;
@@ -219,7 +206,6 @@ const Bunkmates = () => {
             }, delay);
         };
     }
-
 
     const handleZoomChange = debounce((newZoomLevel) => {
         dispatch(setZoom(newZoomLevel));
@@ -239,8 +225,6 @@ const Bunkmates = () => {
         // dispatch(showSocialFeed(false));
         e.stopPropagation();
     }
-
-
 
     return (
         <div>
@@ -281,7 +265,6 @@ const Bunkmates = () => {
                                             <TbSocial style={{ color: 'white', }} />
                                         </IconButton>
                                     </Tooltip>
-
                             }
                         </section>
                         <KeyLocationsMarkers keyLocationPins={keyLocationPins} center={center} />
@@ -306,7 +289,6 @@ const Bunkmates = () => {
                                 </OverlayViewF >
                             )
                         })}
-
                     </GoogleMap >
                 </div>
                 {
