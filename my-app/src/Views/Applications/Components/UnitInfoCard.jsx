@@ -18,11 +18,11 @@ import React, { useEffect, useState } from 'react';
 export default function UnitInfoCard() {
 
     const cardStyles = {
-        padding: '2%', borderRadius: '20px', display: 'flex', flexDirection: 'column', height: '430px'
+        padding: '1.5%', margin: '3vw', borderRadius: '20px', display: 'flex', flexDirection: 'column', height: '450px', minWidth: '320px'
     }
 
     return (
-        <Card raised sx={cardStyles}>
+        <Card raised sx={cardStyles}>,
             <UnitInfo />
             <Divider />
             <ChangeDetails />
@@ -48,16 +48,17 @@ function UnitInfo() {
         topSide: {
             container: { padding: '10px 0px 10px 0px', display: 'flex', flexDirection: 'row' },
             rightSide: {
-                container: { display: 'flex', flexDirection: 'column', height: '100px', justifyContent: 'flex-start', padding: '10px' },
-                unitInfoContainer: { display: 'flex', flexDirection: 'column', justifyContent: 'space-around' }
+                container: { display: 'flex', flexDirection: 'column', height: '100%', justifyContent: 'flex-start', padding: '10px 10px 0px 10px' },
+                unitInfoContainer: { display: 'flex', flexDirection: 'column', justifyContent: 'space-around', }
             },
         },
         bottomSide: {
             display: 'flex', flexDirection: 'row', justifyContent: 'space-around', padding: '10px 0px 10px 0px'
         },
+        unitPicture: { width: '150px', height: '110px', borderRadius: '5px' },
         unitNumber: { fontSize: '27px', fontWeight: 600 },
         unitPrice: { fontSize: '25px', fontWeight: 600 },
-        unitType: { fontSize: '15px', padding: '0px 5px 5px 5px' },
+        unitType: { fontSize: '17px', },
 
     }
 
@@ -84,7 +85,7 @@ function UnitInfo() {
                 <CardMedia
                     component={"img"}
                     image={"https://www.bankrate.com/2015/06/19095912/low-apprasials-and-condo-associations-can-trip-up-mortgages.jpg?auto=webp&optimize=high&crop=16:9"}
-                    sx={{ width: '150px', borderRadius: '5px' }}
+                    sx={unitInfoStyles.unitPicture}
                 />
                 <div style={unitInfoStyles.topSide.rightSide.container}>
                     <div style={unitInfoStyles.topSide.rightSide.unitInfoContainer}>
@@ -155,9 +156,9 @@ function Addons({ field }) {
 
     const addonStyles = {
         container: {
-            display: 'flex', justifyContent: 'space-between', flexDirection: 'row', padding: '0px 10px 0px 10px'
+            display: 'flex', justifyContent: 'space-between', flexDirection: 'row', padding: '0px 10px 0px 10px', alignItems: 'center'
         },
-        field: { fontWeight: '550' },
+        field: { fontWeight: '550', fontSize: '16px' },
         actionContainer: { display: 'flex', flexDirection: 'row', alignItems: 'center', },
         addonCount: { fontSize: '18px', padding: '5px 10px 0px 10px', minWidth: '45px', display: 'flex', justifyContent: 'center' },
     }

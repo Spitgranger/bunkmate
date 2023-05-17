@@ -15,8 +15,8 @@ import UnitInfoCard from './UnitInfoCard';
 export default function Summary() {
 
     const summaryStyles = {
-        container: { display: 'flex', width: '100%', justifyContent: 'center', padding: '3vh' },
-        innerContainer: { display: 'flex', width: '65vw', justifyContent: 'space-around', flexDirection: 'row' },
+        container: { display: 'flex', justifyContent: 'center', padding: '3vh' },
+        innerContainer: { display: 'flex', justifyContent: 'space-around', flexDirection: 'row' },
         leftSideContainer: { display: 'flex', flexDirection: 'column' },
         title: { fontWeight: 550 },
     }
@@ -32,7 +32,6 @@ export default function Summary() {
                     <Overview />
                     <Policies />
                 </div>
-                <UnitInfoCard />
             </CardContent>
         </div >
     )

@@ -3,6 +3,7 @@ import Navbar from '../../Components/Navbar';
 import { useState } from 'react'
 import Summary from './Components/Summary';
 import UploadsForm from '../../Components/UploadsForm'
+import UnitInfoCard from './Components/UnitInfoCard';
 
 /**
  *
@@ -25,8 +26,10 @@ function Applications() {
         <>
             <div style={{ height: '9vh' }} />
             <Navbar />
-            <Summary />
-
+            <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', width: '100%' }}>
+                <Summary />
+                <UnitInfoCard />
+            </div>
         </>
     )
 }

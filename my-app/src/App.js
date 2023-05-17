@@ -76,6 +76,7 @@ function App() {
         ]
       }
     },
+    /*
     {
       profile: "2",
       price: "645",
@@ -320,6 +321,7 @@ function App() {
       date_available: "May 9th 2024",
       listing_img: [Apartment2, Apartment, Room, Room2],
     },
+    */
   ]
 
 
