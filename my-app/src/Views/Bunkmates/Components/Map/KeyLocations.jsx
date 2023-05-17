@@ -1,14 +1,18 @@
-import { Card, Typography, CardContent, Tooltip } from "@mui/material/"
+import { Card, Typography, CardContent, Tooltip, IconButton } from "@mui/material/"
 import { useEffect, useState } from "react";
-import { OVERLAY_MOUSE_TARGET, OverlayViewF, DistanceMatrixService, } from "@react-google-maps/api";
+import { OVERLAY_MOUSE_TARGET, OverlayViewF, DistanceMatrixService } from "@react-google-maps/api";
 import { MapEducationMarker } from "./MapMarkers";
-import { FaBus, FaWalking } from "react-icons/fa";
+import { FaBus, FaBusAlt, FaWalking } from "react-icons/fa";
 import Divider from "@mui/material/Divider";
-import { RxTriangleRight } from "react-icons/rx";
+import { RxTriangleLeft, RxTriangleRight } from "react-icons/rx";
 import { BsFillCarFrontFill } from "react-icons/bs";
+import { BiCycling } from "react-icons/bi"
+import { RiCloseCircleFill } from "react-icons/ri";
+import { setCenter, setMapProfileCard, setZoom, setKeyLocationPins } from "../../../../features/bunkmate/bunkmateSlice";
+import { useDispatch } from "react-redux";
 
 //Retrieve Key Locations 
-export default function RetrieveKeyLocations({ setKeyLocationPins, coordinates, setZoom, setCenter, setMapProfileCard, request, }) {
+export default function RetrieveKeyLocations({ coordinates, request }) {
 
   /*
   ---Hierarchical Structure---
@@ -18,12 +22,14 @@ export default function RetrieveKeyLocations({ setKeyLocationPins, coordinates, 
       -->RetrieveKeyLocations.jsx
   */
 
+
   console.log('keyLocations rerendered')
+  const dispatch = useDispatch();
 
   const placesRequest = {
     location: new window.google.maps.LatLng(coordinates),
-    radius: '500',
-    types: ['store'],
+    radius: '1000',
+    types: ['university'],
   };
 
   const container = document.getElementById('results');
@@ -33,7 +39,7 @@ export default function RetrieveKeyLocations({ setKeyLocationPins, coordinates, 
 
   function callback(results, status) {
 
-    if (status == window.google.maps.places.PlacesServiceStatus.OK) {
+    if (status === window.google.maps.places.PlacesServiceStatus.OK) {
 
       const storedLocations = []
       const storedCoordinates = []
@@ -47,10 +53,10 @@ export default function RetrieveKeyLocations({ setKeyLocationPins, coordinates, 
       }
 
 
-      setMapProfileCard(null)
-      setZoom(16)
-      setKeyLocationPins(storedLocations)
-      setCenter({ lat: request.idealLocation[0], lng: request.idealLocation[1] })
+      dispatch(setMapProfileCard(null));
+      dispatch(setZoom(16));
+      dispatch(setKeyLocationPins(storedLocations));
+      dispatch(setCenter({ lat: request.idealLocation[0], lng: request.idealLocation[1] }));
     }
 
   }
@@ -70,7 +76,7 @@ export default function RetrieveKeyLocations({ setKeyLocationPins, coordinates, 
 
 
   /*
-  //Did not work as expected
+  //might use later
   //google maps directions
   var directionsService = new window.google.maps.DirectionsService();
   var directionsRenderer = new window.google.maps.DirectionsRenderer();
@@ -119,10 +125,14 @@ export function KeyLocationsMarkers({ keyLocationPins, center }) {
   const [keyLocationData, setKeyLocationData] = useState('');
   //THIS MAKES TOO MANY REQUESTS WHEN FETCHING PHOTO URLS, NEED TO FIX SOON
 
+  //clicking the x button in keylocationinfocard closes the infocard
+  const handleHideData = () => {
+    setKeyLocationData(null)
+  }
 
   return (
     <>
-      <KeyLocationInfoCard keyLocationData={keyLocationData} center={center} />
+      <KeyLocationInfoCard keyLocationData={keyLocationData} center={center} onClick={handleHideData} />
       {keyLocationPins ? keyLocationPins.map((locationData) => {
 
         const handleShowData = () => {
@@ -146,21 +156,32 @@ export function KeyLocationsMarkers({ keyLocationPins, center }) {
 
 //Displays the name and address of the establishment in a card
 //Child Component of KeyLocationsMarkers 
-export function KeyLocationInfoCard({ keyLocationData, center }) {
+export function KeyLocationInfoCard({ keyLocationData, center, onClick }) {
 
   const [distance, setDistance] = useState('');
   const [duration, setDuration] = useState('');
   const [travelMode, setTravelMode] = useState(0);
 
   const travelModes = [
-    ['WALKING', <FaWalking style={{ margin: '0px 10px 0px 0px' }} />],
-    ["DRIVING", <BsFillCarFrontFill style={{ margin: '0px 10px 0px 0px' }} />],
+    ['WALKING', <FaWalking style={{ margin: '0px 5px 0px 0px' }} />],
+    ["DRIVING", <BsFillCarFrontFill style={{ margin: '0px 5px 0px 0px' }} />],
+    ['TRANSIT', <FaBusAlt style={{ margin: '0px 5px 0px 0px' }} />],
+    ['BICYCLING', <BiCycling style={{ margin: '0px 5px 0px 0px' }} />],
   ]
-  const handleCount = () => {
-    if (travelMode < 1) {
+
+  const handleIncrementCount = () => {
+    if (travelMode < travelModes.length - 1) {
       setTravelMode(travelMode + 1)
     } else {
       setTravelMode(0)
+    }
+  }
+
+  const handleDecrementCount = () => {
+    if (travelMode > 0) {
+      setTravelMode(travelMode - 1)
+    } else {
+      setTravelMode(travelModes.length - 1)
     }
   }
 
@@ -179,10 +200,15 @@ export function KeyLocationInfoCard({ keyLocationData, center }) {
 
     return (
       <Card sx={locationDetails.container}> <CardContent sx={locationDetails.postHeader}>
-        <Typography noWrap variant="h5" color="text.primary" sx={{ color: 'white', fontWeight: '700', zIndex: 4, width: '370px', padding: '5px 10px 5px 10px' }} align="left">{keyLocationData.name}</Typography>
-        <Typography noWrap variant="h5" color="text.secondary" sx={{ color: 'grey', fontSize: '18px', zIndex: 4, width: '370px', padding: '0px 10px 0px 10px' }} align="left">{keyLocationData.vicinity} </Typography>
+        <Typography noWrap variant="h5" color="text.primary" sx={{ color: 'white', fontWeight: '700', zIndex: 4, width: '350px', padding: '5px 10px 5px 10px' }} align="left">{keyLocationData.name}</Typography>
+        <Typography noWrap variant="h5" color="text.secondary" sx={{ color: 'grey', fontSize: '18px', zIndex: 4, width: '250px', padding: '0px 10px 0px 10px' }} align="left">{keyLocationData.vicinity} </Typography>
         <div style={{ display: 'flex', justifyContent: 'flex-start', width: '100%' }}>
-          <Typography noWrap variant="h5" color="text.primary" sx={{ color: 'white', fontSize: '18px', zIndex: 4, padding: '0px 5px 0px 10px' }} align="left">
+          <Typography noWrap variant="h5" color="text.primary" sx={{ color: 'white', fontSize: '18px', zIndex: 4, padding: '0px 5px 0px 5px', display: 'flex', alignItems: 'center' }} align="left">
+            <Tooltip arrow title="Previous Travel Mode">
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <RxTriangleLeft size={20} style={{ cursor: 'pointer', height: "100%" }} onClick={handleDecrementCount} />
+              </div>
+            </Tooltip>
             <div style={{ display: 'flex', alignItems: 'center' }}>
               {travelModes[travelMode][1]}
               {distance}
@@ -193,9 +219,9 @@ export function KeyLocationInfoCard({ keyLocationData, center }) {
           </div>
           <Typography noWrap variant="h5" color="text.primary" sx={{ color: 'white', fontSize: '18px', zIndex: 4, padding: '0px 10px 0px 5px' }} align="left"><div style={{ display: 'flex', alignItems: 'center', }}>
             {duration}
-            <Tooltip arrow title="Change Travel Modes">
+            <Tooltip arrow title="Next Travel Mode">
               <div style={{ display: 'flex', alignItems: 'center' }}>
-                <RxTriangleRight size={20} style={{ cursor: 'pointer', height: "100%" }} onClick={handleCount} />
+                <RxTriangleRight size={20} style={{ cursor: 'pointer', height: "100%" }} onClick={handleIncrementCount} />
               </div>
             </Tooltip>
           </div>
@@ -214,8 +240,13 @@ export function KeyLocationInfoCard({ keyLocationData, center }) {
           <div style={locationDetails.imgContainer}>
             {/* See css file more styling*/}
             <div className="img-gradient" >
-              {keyLocationData.photos ?
-                <img style={{ width: '200px', height: '125px', }} src={keyLocationData.photos[0].getUrl()} />
+              <div style={{ zIndex: 1, position: 'absolute', right: '0px', width: '100%', display: 'flex', justifyContent: 'flex-end' }}>
+                <IconButton onClick={onClick}>
+                  <RiCloseCircleFill size={30} style={{ color: 'white', }} />
+                </IconButton>
+              </div>
+              {keyLocationData.photos
+                ? <img style={{ width: '200px', height: '125px', }} src={keyLocationData.photos[0].getUrl()} />
                 : ""}
             </div>
           </div>

@@ -14,7 +14,7 @@ socialFeed.jsx
         -->CommentSection.jsx
 */
 //memoized to prevent parent component from rerendering child component
-export const SocialFeed = memo(({ userOwnData, userProfile, statePostArray, setStatePostArray, HandleViewOtherProfile }) => {
+export const SocialFeed = memo(({ userOwnData, userProfile, statePostArray, setStatePostArray }) => {
     console.log('social feed rerender')
     const Posts = {
         overflowY: 'scroll',
@@ -37,7 +37,6 @@ export const SocialFeed = memo(({ userOwnData, userProfile, statePostArray, setS
                 setStatePostArray={setStatePostArray}
                 userOwnData={userOwnData}
                 userProfile={userProfile}
-                HandleViewOtherProfile={HandleViewOtherProfile}
             />
 
             <div style={Posts}>
@@ -49,7 +48,6 @@ export const SocialFeed = memo(({ userOwnData, userProfile, statePostArray, setS
                             userProfile={userProfile}
                             statePostArray={statePostArray}
                             setStatePostArray={setStatePostArray}
-                            HandleViewOtherProfile={HandleViewOtherProfile}
                         />
                     )
                 })}

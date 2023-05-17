@@ -9,9 +9,10 @@ import { TbMessages, TbMessagesOff } from 'react-icons/tb';
 import { useRef, useState, useContext } from 'react';
 import '../../Styles/GroupMapCard.css'
 import { ActionButton } from '../../../../Components/Utils/Form';
+import HandleViewOtherProfile from './HandleViewOtherProfile';
 
 
-function NestedMapCard({ profile, request, HandleViewOtherProfile }) {
+function NestedMapCard({ profile, request }) {
 
     console.log(profile)
     return (

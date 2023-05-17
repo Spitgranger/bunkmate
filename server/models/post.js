@@ -1,24 +1,21 @@
 import mongoose from 'mongoose';
+//this is the schema for listing posts associated with real estate developer companies
+
+const reqString = {
+    type: String,
+    required: true,
+}
 
 const postSchema = mongoose.Schema({
-    user: {
+    developer: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
         ref: "User",
     },
-    address: {
-        type: String,
-        required: true,
-    },
-    budget: Number,
-    number_of_roomates: Number,
-    start_date: Date,
-    term: String,
-    range: Number,
-    createdAt: {
-        type: Date,
-        default: new Date(),
-    }
+    address: reqString,
+    image: reqString,
+    price: reqString,
+    bedBath: reqString,
 });
 
 const Post = mongoose.model('Post', postSchema);

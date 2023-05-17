@@ -3,9 +3,8 @@ import './Profile.css'
 import Navbar from '../Components/Navbar';
 import { formatContext } from '../Components/GlobalStateManagement/FormatContext';
 import { SignInContext } from '../Components/GlobalStateManagement/SignInContext';
-import { BunkmatesContext } from '../Components/GlobalStateManagement/BunkmatesContext';
 
-import { getProfile, getRequests } from '../api';
+import { getRequests } from '../api';
 import { ActionButton } from '../Components/Utils/Form';
 import { Link } from 'react-router-dom';
 import { MapProfile } from './Bunkmates/Bunkmates';
@@ -20,6 +19,11 @@ import { BsFillClockFill, BsInfinity, BsBriefcaseFill, BsPencil, BsAlarmFill, Bs
 import { FaBook, FaSmoking, FaCannabis, FaWineGlassAlt, FaRegHandshake, FaDog } from 'react-icons/fa'
 import { GrInstagram, GrFacebook, GrLinkedin, GrTwitter } from 'react-icons/gr'
 import { HiMapPin } from 'react-icons/hi2'
+import store from '../store/index'
+//redux
+import { fetchProfile } from '../features/profile/profileSlice'
+import { useDispatch, useSelector } from 'react-redux';
+import { setZoom, setMapProfileCard } from '../features/bunkmate/bunkmateSlice';
 
 
 
@@ -33,7 +37,9 @@ import { HiMapPin } from 'react-icons/hi2'
 
 const Profile = () => {
   console.log("Profile rerender")
-
+  const profileData = useSelector((state) => state.profile);
+  const error = useSelector(state => state.profile.error)
+  const dispatch = useDispatch();
   const pageStyles = {
     page: { display: 'flex', justifyContent: 'center', alignItems: 'flex-end', height: '100%' },
     profileContainer: { display: 'flex', flexFLow: 'row wrap', width: '75%', height: '91vh' },
@@ -56,17 +62,16 @@ const Profile = () => {
 
   const { capitalizedName, calculateAge } = useContext(formatContext);
   const { setIsOpen, setMode, setMessage } = useContext(SignInContext);
-  const { rerender, setMapProfileCard, setZoom, setKeyLocationPins, HandleViewOtherProfile } = useContext(BunkmatesContext)
   //state to manage the profile data retrieved from the backend
-  const [profile, setProfile] = useState("");
+  const profile = profileData;
   //state management just for the requestbutton
   const [requestButtonMessage, setRequestButtonMessage] = useState("Inactive")
   const [showIcon, setShowIcon] = useState(false)
   const [textColor, setTextColor] = useState('red')
   const [userOwnRequest, setUserOwnRequest] = useState("")
-  const { setCenter } = useContext(BunkmatesContext)
   const [isProfileLoading, setIsProfileLoading] = useState(true)
   const [isRequestLoading, setIsRequestLoading] = useState(true)
+
 
   //query localStorage whenever mapProfileCard changes (primarily used to update the state of the "view request button")
   useEffect(() => {
@@ -87,21 +92,14 @@ const Profile = () => {
       const userOwnId = requestDict[userId]
       setUserOwnRequest(userOwnId);
     }).finally(() => setIsRequestLoading(false));
-
   }, [])
 
-
-
-  //function to handle fetching the profile data from back end
-  const handleLoad = async () => {
-    const profile = await getProfile();
-    return profile;
-  };
-
   useEffect(() => {
-    //get data from backend when the component first loads works
-    handleLoad().then((profile) => setProfile(profile.data)).finally(() => setIsProfileLoading(""))
-  }, [rerender]);
+    //get data from backend when the component first loads works, use the dispatch associated with the profile slice
+    dispatch(fetchProfile()).finally(() => { setIsProfileLoading(!isProfileLoading); }).catch(() => { console.log("error has occured"); setIsProfileLoading(false) })
+    //handleLoad().then((profile) => setProfile(profile.data)).finally(() => setIsProfileLoading(""))
+
+  }, []);
 
   const handleEditProfile = () => {
     setMessage("Edit Your Profile")
@@ -148,18 +146,14 @@ const Profile = () => {
   function HandleViewRequest() {
 
     //NOTE: must set zoom else bunkmates page will be grey
-    setZoom(15)
+    dispatch(setZoom(15));
 
     //if the user has an active request then open bunkmates page then center and open up their map profile card
-    setMapProfileCard(
+    dispatch(setMapProfileCard(
       <MapProfile
         request={userOwnRequest}
-        setKeyLocationPins={setKeyLocationPins}
-        setCenter={setCenter}
-        setZoom={setZoom}
-        setMapProfileCard={setMapProfileCard}
-        HandleViewOtherProfile={HandleViewOtherProfile}
-      />)
+      />));
+    console.log(store.getState());
 
   }
 
@@ -201,7 +195,7 @@ const Profile = () => {
   //display loading indicator
   //}
 
-  if (profile && !isProfileLoading) {
+  if (profile && !isProfileLoading && !error) {
     return (
       <div style={pageStyles.page}>
         <div style={{ height: '9vh' }} />
@@ -290,7 +284,7 @@ const Profile = () => {
     )
 
   }
-  else if (!profile && !isProfileLoading) {
+  else if (error) {
     return (
       <div className='page-container'>
         <div style={{ height: '9vh' }} />
@@ -301,6 +295,7 @@ const Profile = () => {
       </div>
     )
   } else {
+    console.log(error)
     return (
       <Box style={pageStyles.loadingUi}><CircularProgress size={50} /></Box>)
   }

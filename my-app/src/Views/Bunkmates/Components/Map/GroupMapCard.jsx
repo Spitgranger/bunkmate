@@ -12,7 +12,7 @@ import { InfoWindowF } from '@react-google-maps/api';
 import { UserDataContext } from '../../../../Components/GlobalStateManagement/UserDataContext';
 import RetrieveKeyLocations from './KeyLocations';
 
-function GroupMapCard({ request, BunkmateInfo, coordinates, setKeyLocationPins, center, setCenter, setMapProfileCard, setZoom, HandleViewOtherProfile, }) {
+function GroupMapCard({ request, BunkmateInfo, coordinates, center, HandleViewOtherProfile, }) {
 
     //subtract 1 because linkchats contains the user's own profile in the array
     const existingBunkmates = request?.linkChats?.length;
@@ -101,7 +101,7 @@ function GroupMapCard({ request, BunkmateInfo, coordinates, setKeyLocationPins, 
                                                 </IconButton>
                                             </Tooltip>
                                             <Tooltip title={"Explore this area"} arrow placement="left">
-                                                <IconButton onClick={() => { RetrieveKeyLocations({ request, coordinates, setKeyLocationPins, setZoom, center, setCenter, setMapProfileCard, }); }} style={{ right: '15px', top: '50px', position: 'absolute', padding: '2px', color: 'white' }}>
+                                                <IconButton onClick={() => { RetrieveKeyLocations({ request, coordinates, center, }); }} style={{ right: '15px', top: '50px', position: 'absolute', padding: '2px', color: 'white' }}>
                                                     <HiMapPin style={{ color: 'white' }} />
                                                 </IconButton>
                                             </Tooltip>

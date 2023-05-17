@@ -1,5 +1,5 @@
 import CommentSection from "./CommentSection";
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import {
     Card,
     Typography,
@@ -14,10 +14,13 @@ import {
 import { AiFillLike } from "react-icons/ai";
 import { BsPinFill, BsThreeDotsVertical } from "react-icons/bs";
 import { MdComment, MdCommentsDisabled } from 'react-icons/md'
-import { deletePost, likePost } from "../../../../api";
+import { deletePost, likePost, getRequests } from "../../../../api";
+import { BunkmatesContext } from "../../../../Components/GlobalStateManagement/BunkmatesContext";
+import { MapProfile } from "../../Bunkmates";
+import { CircularProgress } from "@mui/material/";
+import HandleViewOtherProfile from "../Map/HandleViewOtherProfile";
 
-
-export const PostCard = ({ post, userOwnData, userProfile, setStatePostArray, statePostArray, HandleViewOtherProfile }) => {
+export const PostCard = ({ post, userOwnData, userProfile, setStatePostArray, statePostArray }) => {
 
     console.log('postcard rerender')
     console.log(post)
@@ -33,6 +36,10 @@ export const PostCard = ({ post, userOwnData, userProfile, setStatePostArray, st
     //controls show comments, hide comments state
     const [showComments, setShowComments] = useState(false)
 
+    const [userOwnRequest, setUserOwnRequest] = useState("")
+    const { setMapProfileCard, setKeyLocationPins, setCenter, setZoom } = useContext(BunkmatesContext)
+    const [isRequestLoading, setIsRequestLoading] = useState(true);
+
     const postStyles = {
         postContainer: { marginTop: '10px', flexDirection: 'column', borderRadius: '10px', backgroundColor: 'black', zIndex: '5', width: '400px', right: '75px', display: 'flex', alignItems: 'flex-start', overflowY: 'hidden' },
         postHeader: { display: 'flex', width: '100%', justifyContent: 'space-between', paddingRight: '20px' },
@@ -44,6 +51,31 @@ export const PostCard = ({ post, userOwnData, userProfile, setStatePostArray, st
         divider: { width: '100%', backgroundColor: 'grey', color: "white", height: '100%' },
         commentsContainer: { display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }
     }
+
+
+    //query localStorage whenever mapProfileCard changes (primarily used to update the state of the "view request button")
+    useEffect(() => {
+        //get request data from backend
+        async function handleRequest() {
+            const request = await getRequests();
+            return request
+        }
+        const userId = (post.userId)
+
+        //store user request data
+        handleRequest().then((request) => {
+            const requestDict = {}
+            request.data.map(
+                (user) => {
+                    requestDict[user.user] = user;
+                });
+
+            const userOwnId = requestDict[userId]
+            setUserOwnRequest(userOwnId);
+        }).finally(() => setIsRequestLoading(false));
+
+    }, [])
+
 
     const handleLikeChange = async (id) => {
         //event handler for when the user likes a post
@@ -84,6 +116,39 @@ export const PostCard = ({ post, userOwnData, userProfile, setStatePostArray, st
         setStatePostArray(statePostArray.filter((element) => element._id !== id))
     }
 
+    //clickable link underneath the user's name that will show their active request
+    const handleViewRequest = () => {
+        if (userOwnRequest) {
+            setMapProfileCard(
+                <MapProfile
+                    request={userOwnRequest}
+                    setKeyLocationPins={setKeyLocationPins}
+                    setCenter={setCenter}
+                    setZoom={setZoom}
+                    setMapProfileCard={setMapProfileCard}
+                />)
+        }
+    }
+
+    //only display a loading indicator for posts that actually have an active request
+    const DisplayClickableLink = () => {
+        if (post?.request[0]?.address && !isRequestLoading) {
+            return (
+                <div style={postStyles.userInfo}>
+                    <Tooltip arrow title={`View ${post.profile[0].firstName}'s active request`}>
+                        <Typography sx={{ color: '#9b9b9b', cursor: 'pointer' }} variant="body2" color="text.secondary" noWrap onClick={handleViewRequest}>{post.request[0].address}</Typography>
+                    </Tooltip>
+                </div>)
+        } else if (!post?.request[0]?.address && !isRequestLoading) {
+            return ("")
+        } else if (post?.request[0]?.address && isRequestLoading) {
+            return (<CircularProgress size={20} />)
+        }
+
+    }
+
+
+
     console.log(post)
 
     return (
@@ -97,14 +162,7 @@ export const PostCard = ({ post, userOwnData, userProfile, setStatePostArray, st
                     <div className="bunkmates__post-card__key-info">
                         <Typography sx={{ color: 'white' }} variant="body1" color="text.primary">{post.profile[0].firstName}</Typography>
                         {/* post.location should be an optional field*/}
-                        {post.request[0]?.address
-                            ?
-                            <div style={postStyles.userInfo}>
-                                <Tooltip arrow title={`View ${post.profile[0].firstName}'s active request`}>
-                                    <Typography sx={{ color: '#9b9b9b' }} variant="body2" color="text.secondary" noWrap>{post.request[0].address}</Typography>
-                                </Tooltip>
-                            </div>
-                            : null}
+                        <DisplayClickableLink />
                     </div>
                 </div>
                 {user?.result?._id === post.userId

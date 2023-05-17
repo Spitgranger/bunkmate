@@ -1,4 +1,5 @@
-import { Typography } from "@mui/material";
+import { useState } from "react";
+import { Typography, useScrollTrigger } from "@mui/material";
 import { RiMapPin5Fill } from 'react-icons/ri'
 import { FaGraduationCap } from 'react-icons/fa'
 import { IconButton } from "@mui/material";
@@ -25,11 +26,19 @@ export function MapRequestMarker(props) {
     )
 }
 
-export function MapEducationMarker({ onMouseEnter }) {
+export function MapEducationMarker({ onMouseEnter, onMouseLeave }) {
+
+    //controls the color state of the icons
+    const [gradCapColor, setGradCapColor] = useState('white')
+    const [mapPinColor, setMapPinColor] = useState('#24AEC0')
+
     return (
-        <IconButton sx={{ color: "grey" }} onMouseEnter={onMouseEnter}>
-            <FaGraduationCap color="white" size="17" style={{ position: 'absolute', right: '16px', bottom: '18.5px' }} />
-            <RiMapPin5Fill color="#24AEC0" size="35" />
+        <IconButton sx={{ color: "grey" }}
+            onMouseEnter={() => { onMouseEnter(); setGradCapColor('#24AEC0'); setMapPinColor('white') }}
+            onMouseLeave={() => { setGradCapColor('white'); setMapPinColor('#24AEC0') }}
+        >
+            <FaGraduationCap color={gradCapColor} size="17" style={{ position: 'absolute', right: '16px', bottom: '18.5px' }} />
+            <RiMapPin5Fill color={mapPinColor} size="35" />
         </IconButton>
     )
 }
