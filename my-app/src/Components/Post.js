@@ -17,12 +17,10 @@ export function Bookmark() {
 
     function count(number = 1) {
         return (number++);
-
     }
 
     function handleSaveClick() {
-        return setFill(() => fill + 1)
-
+        return setFill((prevFill) => prevFill + 1)
     }
 
     return (
@@ -38,7 +36,6 @@ export function Bookmark() {
 
 
 export default function Post(info) {
-
 
     const [image, setImage] = useState(0); //image scroll state
     const [viewDetails, setViewDetails] = useState(false); //image scroll state
@@ -60,7 +57,6 @@ export default function Post(info) {
       }
     }
     */
-
 
     return (
         <div className="listing">
