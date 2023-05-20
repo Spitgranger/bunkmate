@@ -5,7 +5,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { createBrowserRouter, RouterProvider  } from "react-router-dom";
 //import CreatePost from './Views/CreatePost';
-import Applications from './Views/Applications/Applications';
+import Applications from './Views/applications/applications';
 import Error from './Error';
 import Error404 from './Error404'
 import Bunkmates from './Views/Bunkmates/Bunkmates';

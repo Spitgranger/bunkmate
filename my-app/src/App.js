@@ -27,6 +27,7 @@ function App() {
       listing_details: {
         developerName: 'Marshalls Place Condos',
         address: "81 Bay Street Toronto Ontario",
+        phoneNumber: '(562) 452 4256',
         priceRange: [1150, 2500],
         sqftRange: [486, 2523],
         overview: "Marshall Place Condos is located in beautiful Toronto, Ontario. Strategically established near Interstates 71, 77, 90, and 480, we are easily accessible from anywhere in the state.We are in proximity to an abundance of fine dining, superb shopping, and thrilling entertainment.Parents will be excited to learn we are zoned for the prestigious Cleveland Metropolitan School District. Choose from spacious one, two, and three bedroom floor plans for rent.Enjoy fully- equipped kitchens, spacious closets, expansive windows, and vaulted ceilings. We offer residents a lifestyle of comfort and convenience.Be sure to bring home your pets as we are a pet- friendly community. Marshall Place offers stellar community amenities that are sure to impress.Enjoy working out in our fitness center or relax at the community space.Our welcoming community provides something for everyone.Schedule a tour today and discover why our address is among the most desired in Cleveland, OH.",
@@ -34,7 +35,8 @@ function App() {
           {
             coverImage: 'https://i.pinimg.com/170x/20/1a/05/201a057fe462c3b77c1efbcf4b8e8e12.jpg',
             title: 'Unit 405',
-            price: 1450,
+            price: 950,
+            petFee: 250,
             currency: 'CAD',
             beds: 0,
             baths: 1,
@@ -44,11 +46,14 @@ function App() {
             numUnitsAvailable: 3,
             listing_img: [Room, Room2, Room, Room, Room2, Room],
             listing_img_labels: ["Living Room", "Lounge", "Living Room", "Lounge", "Living Room", "Lounge"],
+            bunkmateLimit: 5,
+            petLimit: 0,
           },
           {
             coverImage: 'https://www.houseplanshelper.com/images/how-to-read-floor-plans-full-floor-plan.jpg',
             title: 'Unit 425',
             price: 1150,
+            petFee: 225,
             currency: 'CAD',
             beds: 1,
             baths: 1,
@@ -58,11 +63,14 @@ function App() {
             numUnitsAvailable: 1,
             listing_img: [Room, Room2,],
             listing_img_labels: ["Living Room", "Lounge"],
+            bunkmateLimit: 0,
+            petLimit: 1,
           },
           {
             coverImage: 'https://assets-news.housing.com/news/wp-content/uploads/2022/01/29113344/Home-plan-Know-how-to-read-a-floor-plan-or-house-plan-drawing-06.jpg',
             title: 'Unit 245',
             price: 1850,
+            petFee: 150,
             currency: 'USD',
             beds: 2,
             baths: 2,
@@ -72,6 +80,25 @@ function App() {
             numUnitsAvailable: 3,
             listing_img: [Room],
             listing_img_labels: ["Living Room",],
+            bunkmateLimit: 1,
+            petLimit: 3,
+          },
+          {
+            coverImage: 'https://assets-news.housing.com/news/wp-content/uploads/2022/01/29113344/Home-plan-Know-how-to-read-a-floor-plan-or-house-plan-drawing-06.jpg',
+            title: 'Unit 220',
+            price: 1250,
+            petFee: 350,
+            currency: 'USD',
+            beds: 1,
+            baths: 1,
+            sqft: 486,
+            dateAvailable: 'August 17th 2024',
+            type: 'Single Bed',
+            numUnitsAvailable: 2,
+            listing_img: [Room],
+            listing_img_labels: ["Living Room",],
+            bunkmateLimit: 0,
+            petLimit: 0,
           },
         ]
       }
@@ -331,14 +358,14 @@ function App() {
         <div style={{ height: '9vh' }} />
         <Navbar />
       </header>
-        <section className="Listings">
-          {keyinfo.map((info, i) => (
-            <Post key={i} {...info} />
-          ))}
-        </section>
-        {/* TODO */}
-        <section className="map">
-        </section>
+      <section className="Listings">
+        {keyinfo.map((info, i) => (
+          <Post key={i} {...info} />
+        ))}
+      </section>
+      {/* TODO */}
+      <section className="map">
+      </section>
     </div >
   );
 }

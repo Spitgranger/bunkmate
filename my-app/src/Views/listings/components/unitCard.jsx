@@ -37,17 +37,6 @@ export default function UnitCard({ data }) {
             <Typography color="text.secondary" variant="h6" sx={unitCardStyles.sqftRange} >
                 {`${data.listing_details.sqftRange[0]} Sqft - ${data.listing_details.sqftRange[1]} Sqft`}
             </Typography>
-            <div style={unitCardStyles.actionButtonContainer}>
-                <Link
-                    to={"/applications"}
-                    style={unitCardStyles.actionButtonContainer.applyNowContainer}
-                >
-                    <ActionButton title="Apply Now" containerWidth="100%" height="50px" />
-                </Link>
-                <div style={unitCardStyles.actionButtonContainer.bookTourContainer}>
-                    <ActionButton title="Book a Tour" containerWidth="100%" height="50px" />
-                </div>
-            </div>
             {data.listing_details.units.map((unitData, index) => {
                 return (<Unit data={data} unitData={unitData} index={index} />)
             })}
@@ -69,7 +58,7 @@ export default function UnitCard({ data }) {
         * 7. Square Footage
         * 8. Date Available
  * @param {object} unitData stores unit info
- * @param {object} index stores index of unit from list of units
+ * @param {number} index stores index of unit from list of units
  * @returns {React.ReactElement} a react element that contains information on the individual units in a propertyj
  */
 export function Unit({ data, unitData, index }) {

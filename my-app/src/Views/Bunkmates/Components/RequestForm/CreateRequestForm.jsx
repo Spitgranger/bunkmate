@@ -592,7 +592,6 @@ function CreateRequestForm(props) {
           listingsDataHashMap={listingsDataHashMap}
           listingsHashMap={listingsHashMap}
           combinedUserRequest={combinedUserRequest}
-
         />
         : <>
           {showFirstPage
