@@ -1,12 +1,12 @@
-import React, {useEffect} from "react"
-import {CardContent} from "@mui/material"
+import React, { useEffect } from "react"
+import { CardContent } from "@mui/material"
 import Property from "./components/property"
 import Policies from "./components/policies"
 import Overview from "./components/overview"
 import Amenities from "./components/amenities"
 import Gallery from "./components/gallery"
 import StaticInfoBox from "./components/staticInfoBox"
-import {useLocation} from "react-router"
+import { useLocation } from "react-router"
 import Navbar from "../../Components/Navbar"
 
 /**
@@ -18,19 +18,19 @@ import Navbar from "../../Components/Navbar"
  * @param {number} index stores the index of the unit details (parent component is in unitCard.jsx)
  * @details
  * How L2Details is structured
- * Gallery
- * StaticInfoBox
- * Bedrooms (situational)
- * Overview
- * Property
- * Amenities
- * Policies
+    * - Gallery
+    * - StaticInfoBox
+    * - Bedrooms (situational)
+    * - Overview
+    * - Property
+    * - Amenities
+    * - Policies
  * @returns {React.ReactElement} a react element that contains a wealth of information about the property
  */
 export default function L2Details() {
 
     const l2DetailsStyles = {
-        page: {width: '100%', display: 'flex', justifyContent: 'center'},
+        page: { width: '100%', display: 'flex', justifyContent: 'center' },
         container: {
             display: 'flex', justifyContent: 'center', flexDirection: "row", width: '75vw', padding: '40px',
             rightSide: {
@@ -51,8 +51,8 @@ export default function L2Details() {
         },
     }
 
-    const {state} = useLocation();
-    const {data, index} = state
+    const { state } = useLocation();
+    const { data, index } = state
     const images = data.listing_details.units[index]
 
     //useEffect used to render the top of the page instead of the bottom
@@ -62,18 +62,18 @@ export default function L2Details() {
 
     return (
         <>
-            <Navbar/>
-            <div style={{height: '9vh'}}/>
+            <Navbar />
+            <div style={{ height: '9vh' }} />
             <div style={l2DetailsStyles.page}>
                 <div style={l2DetailsStyles.container}>
-                    <Gallery data={images} orientation={"vertical"}/>
+                    <Gallery data={images} orientation={"vertical"} />
                     <CardContent sx={l2DetailsStyles.container.rightSide}>
-                        <StaticInfoBox data={data} index={index}/>
+                        <StaticInfoBox data={data} index={index} />
                         <div style={l2DetailsStyles.container.keyInfo}>
-                            <Overview/>
-                            <Property data={data}/>
-                            <Amenities/>
-                            <Policies/>
+                            <Overview />
+                            <Property data={data} />
+                            <Amenities />
+                            <Policies />
                         </div>
                     </CardContent>
                 </div>

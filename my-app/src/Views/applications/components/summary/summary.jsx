@@ -1,9 +1,11 @@
 import { CardContent, Typography, } from '@mui/material';
-import Overview from "../../listings/components/overview";
-import Policies from "../../listings/components/policies";
-import UnitInfoCard from './UnitInfoCard';
+import Overview from "../../../listings/components/overview";
+import Policies from "../../../listings/components/policies";
+import UnitInfoCard from '../infoCards/unitInfoCard';
 
 /**
+ * @function Summary
+ * 
  * @brief A functional UI component that's reviews the details of the unit and is the first step in the application process 
  * 
  * @details 

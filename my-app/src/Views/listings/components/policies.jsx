@@ -21,7 +21,8 @@ export default function Policies() {
             <Typography color="text.primary" variant="h5" sx={policiesStyles.title}>
                 Policies
             </Typography>
-            <Policy policy="Subletting isn't permitted" />
+            <Policy policy="A maximum of 5 roommates allowed" />
+            <Policy policy="Subleasing isn't permitted" />
             <Policy policy="Pets are allowed" />
             <Policy policy="No smoking on or around the premise" />
             <Policy policy="Must inform landlord prior to bringing guests" />
@@ -43,7 +44,7 @@ function Policy({ policy }) {
 
     const policyStyles = {
         policy: {
-            container: {display: 'flex', flexDirection: 'row', alignItems: 'center'},
+            container: { display: 'flex', flexDirection: 'row', alignItems: 'center' },
             bulletPoint: { margin: '10px', fontSize: '18px' },
             policyPoint: { fontWeight: 600, fontSize: '16px' },
         },

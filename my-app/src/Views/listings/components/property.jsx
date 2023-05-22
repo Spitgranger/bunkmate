@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from "react"
-import {Avatar, CardContent, Typography, Divider,} from "@mui/material"
+import React, { useEffect, useState } from "react"
+import { Avatar, CardContent, Typography, Divider, } from "@mui/material"
 
 /**
  * @function Property
@@ -16,15 +16,15 @@ import {Avatar, CardContent, Typography, Divider,} from "@mui/material"
  * @param {object} data stores listing info that will be used to populate the listing details page
  * @returns {React.ReactElement} a react element that contains information on the property management team and description of the property itself
  */
-export default function Property({data}) {
+export default function Property({ data }) {
 
     const propertyStyles = {
-        container: {margin: '20px 0px 20px 0px'},
-        title: {padding: '10px 0px 10px 0px ', fontWeight: 600,},
-        propertyContainer: {padding: '5px'},
+        container: { margin: '20px 0px 20px 0px' },
+        title: { padding: '10px 0px 10px 0px ', fontWeight: 600, },
+        propertyContainer: { padding: '5px' },
         viewMore: {
-            container: {width: '100%'},
-            viewMoreButton: {color: 'grey', cursor: 'pointer'}
+            container: { width: '100%' },
+            viewMoreButton: { color: 'grey', cursor: 'pointer' }
         }
     }
 
@@ -49,7 +49,7 @@ export default function Property({data}) {
      * @see textOverflowEllipsis true / false text overflow ellipsis
      * @see overViewLength number of characters seen
      */
-    const PropertyInfo = () => {
+    const PropertyDescription = () => {
         if (data.listing_details.overview.length <= maxCharacterLength) {
             setOverflow(false)
             return (data.listing_details.overview)
@@ -87,13 +87,13 @@ export default function Property({data}) {
                 Property
             </Typography>
             <Typography color="text.secondary" sx={propertyStyles.propertyContainer}>
-                <PropertyManagementInfo/>
-                <PropertyInfo/>
+                <PropertyManagementInfo data={data} />
+                <PropertyDescription />
             </Typography>
             {overflow
                 ? <div style={propertyStyles.viewMore.container}>
                     <Divider sx={propertyStyles.viewMore.viewMoreButton}
-                             onClick={handleViewMore}>{viewMore ? "View Less" : "View More"}</Divider>
+                        onClick={handleViewMore}>{viewMore ? "View Less" : "View More"}</Divider>
                 </div>
                 : ""}
         </div>
@@ -102,7 +102,7 @@ export default function Property({data}) {
 
 /**
  * @brief This functional UI component returns some key info on the property management company
- *
+ * @param {object} data this parameter stores data about the unit
  * @details
  * How PropertyManagementInfo component is structured
  * - Company Name
@@ -110,7 +110,7 @@ export default function Property({data}) {
  * - Company Phone Number
  * @returns {React.ReactElement} a react element that returns some information about the property management team
  */
-export function PropertyManagementInfo() {
+export function PropertyManagementInfo({ data }) {
 
     const propertyManagementStyles = {
         managementInfo: {
@@ -120,27 +120,27 @@ export function PropertyManagementInfo() {
             margin: '10px 0px 10px 0px',
             padding: '10px 0px 10px 0px !important'
         },
-        Avatar: {width: '65px', height: '65px', margin: '0px 20px 0px 10px'},
+        Avatar: { width: '65px', height: '65px', margin: '0px 20px 0px 10px' },
         textInfo: {
-            container: {display: 'flex', flexDirection: 'column', justifyContent: 'center'},
-            place: {fontWeight: 700, fontSize: '17px'},
-            address: {fontWeight: 700, fontSize: '15px'},
-            number: {fontWeight: 700, fontSize: '15px'}
+            container: { display: 'flex', flexDirection: 'column', justifyContent: 'center' },
+            place: { fontWeight: 700, fontSize: '17px' },
+            address: { fontWeight: 700, fontSize: '15px' },
+            number: { fontWeight: 700, fontSize: '15px' }
         },
     }
     return (
         <CardContent sx={propertyManagementStyles.managementInfo}>
             <Avatar sx={propertyManagementStyles.Avatar}
-                    src={'https://thumbs.dreamstime.com/b/b-letter-boutique-logo-design-159417325.jpg'}/>
+                src={'https://thumbs.dreamstime.com/b/b-letter-boutique-logo-design-159417325.jpg'} />
             <div style={propertyManagementStyles.textInfo.container}>
                 <Typography color="text.primary" variant="h6" sx={propertyManagementStyles.textInfo.place}>
-                    Marshall's Place
+                    {data.listing_details.developerName}
                 </Typography>
                 <Typography color="text.secondary" variant="h6" sx={propertyManagementStyles.textInfo.address}>
-                    4753 Stewart Street Indianapolis
+                    {data.listing_details.address}
                 </Typography>
                 <Typography color="text.secondary" variant="h6" sx={propertyManagementStyles.textInfo.number}>
-                    +1 (647) 451 4523
+                    {data.listing_details.phoneNumber}
                 </Typography>
 
             </div>

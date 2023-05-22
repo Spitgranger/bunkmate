@@ -3,6 +3,7 @@ import { Typography } from "@mui/material"
 import { IoBedSharp } from "react-icons/io5";
 import { MdVilla } from "react-icons/md";
 import { AiFillDollarCircle, } from "react-icons/ai";
+import { BsPeopleFill } from "react-icons/bs";
 
 /**
  * @function Overview
@@ -23,12 +24,18 @@ export default function Overview() {
             <Typography color="text.primary" variant="h5" sx={overviewStyles.title}>
                 Overview
             </Typography>
-            <OverviewPoint icon={<MdVilla size={30} />} advantage="Room In Villa"
+            <OverviewPoint
+                icon={<MdVilla size={30} />}
+                advantage="Room In Villa"
                 explanation={"Your own room in a home, plus access to shared spaces"} />
-            <OverviewPoint icon={<IoBedSharp size={30} />} advantage="Private rooms for rent"
+            <OverviewPoint
+                icon={<IoBedSharp size={30} />}
+                advantage="Private rooms for rent"
                 explanation={"You can rent one of the bedrooms in the shared home"} />
-            <OverviewPoint icon={<AiFillDollarCircle size={30} />} advantage="Pro-Rated"
-                explanation={"You will not be charged a full monthly cost, if you book partial months"} />
+            <OverviewPoint
+                icon={<BsPeopleFill size={30} />}
+                advantage="Roommates Allowed"
+                explanation={"This Landlord allows you to invite your own roommates"} />
         </div>
     )
 }
