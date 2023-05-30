@@ -1,9 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
-import { Divider, Card, TextField, InputAdornment, Typography, Avatar, Tooltip, tooltipClasses } from '@mui/material';
-import { styled } from '@mui/material/styles';
-import { getProfile } from '../../../../api';
-import { AiFillQuestionCircle } from 'react-icons/ai';
+import {  Card, Typography  } from '@mui/material';
 
 /**
  * @function AddPetsCard
@@ -16,14 +13,13 @@ import { AiFillQuestionCircle } from 'react-icons/ai';
  * How this component is structured
     * - TopInfoContainer (contains information about the remaining rent cost that needs to be allocated)
     * - UserOwnAllocation (contains the user's profile information and an input field to enter the desired amount of rent to be distributed)
-    * - BunkmateAllocation (contaisn an input field for linking roommates and another to enter the desired amount of rent to be distributed)
+    * - BunkmateAllocation (contains an input field for linking roommates and another to enter the desired amount of rent to be distributed)
  * @returns {React.ReactElement} a react element that contains the ability to assign rent costs to your roommates
  */
 export default function AddPetsCard({ data, index }) {
 
-
     const styles = {
-        container: { padding: '10px 25px 10px 25px', margin: '2%', borderRadius: '20px', display: 'flex', flexDirection: 'column', minWidth: '350px' },
+        container: { padding: '10px 25px 10px 25px', margin: '2%', borderRadius: '15px', display: 'flex', flexDirection: 'column', minWidth: '350px' },
         row: { display: 'flex', justifyContent: 'space-between' },
         title: { fontSize: '18px' },
         fee: { fontWeight: 600, fontSize: '17px' },

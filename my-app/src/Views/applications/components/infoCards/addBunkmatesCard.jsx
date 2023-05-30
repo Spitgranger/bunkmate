@@ -1,9 +1,22 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { Divider, Card, TextField, InputAdornment, Typography, Avatar, Tooltip, tooltipClasses } from '@mui/material';
+import {useDispatch, useSelector} from 'react-redux';
+import {
+    Alert,
+    Divider,
+    Card,
+    TextField,
+    InputAdornment,
+    Typography,
+    Avatar,
+    Tooltip,
+    tooltipClasses,
+    AlertTitle
+} from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { getProfile } from '../../../../api';
 import { AiFillQuestionCircle } from 'react-icons/ai';
+import {setContinueDisabled, setBunkmateField} from "../../../../features/applications/applicationsSlice";
+import {bunkmateFieldValidation} from "../../utils/validationUtils";
 
 /**
  * @function AddBunkmatesCard
@@ -16,7 +29,7 @@ import { AiFillQuestionCircle } from 'react-icons/ai';
  * How this component is structured
     * - TopInfoContainer (contains information about the remaining rent cost that needs to be allocated)
     * - UserOwnAllocation (contains the user's profile information and an input field to enter the desired amount of rent to be distributed)
-    * - BunkmateAllocation (contaisn an input field for linking roommates and another to enter the desired amount of rent to be distributed)
+    * - BunkmateAllocation (contains an input field for linking roommates and another to enter the desired amount of rent to be distributed)
  * @returns {React.ReactElement} a react element that contains the ability to assign rent costs to your roommates
  */
 export default function AddBunkmatesCard({ data, index }) {
@@ -25,20 +38,28 @@ export default function AddBunkmatesCard({ data, index }) {
         padding: '5%', margin: '2%', borderRadius: '20px', display: 'flex', flexDirection: 'column', minWidth: '350px',
     }
 
+    const dispatch = useDispatch();
+    //retrieved from global state, can be changed by incrementing or decrementing the bunkmate Addon component
+    const bunkmateCount = useSelector(state => state.applications.bunkmateCount)
+
     //the current unit price that's dependent on the unit selection
     const unitPrice = data.listing_details.units[index].price
 
-    //retrieved from global state, can be changed by incrementing or decrementing the bunkmate Addon component  
-    const bunkmateCount = useSelector(state => state.applications.bunkmateCount)
-
     //the rent cost split across the number of roommates you have
-    //add one to compensate for the user themself, restrict to whole numbers
-    const splitRentCost = (unitPrice / (bunkmateCount + 1)).toFixed(0);
+    //add one to compensate for the user themself, restrict to 2 decimal places
+    const splitRentCost = (unitPrice / (bunkmateCount + 1)).toFixed(2);
 
+    //define state variable for managing the number of rent fields added and removed and the rent amount within each field
+    //bunkmateRent has one empty string by default to compensate for the user's own allocation
+    const [bunkmateRent, setBunkmateRent] = useState([""]);
 
-    //define state variable for managing the number of fields added and removed and the content within each field
-    //bunkmate fields has one empty string by default to compensate for the the user's own allocation
-    const [bunkmateFields, setBunkmateFields] = useState([""]);
+    //define state variable for managing the bunkmate fields added and removed and the contact info within each field
+    //bunkmate field has one empty string by default to compensate for the user's own allocation
+    //retrieve from global store
+    const bunkmateField = useSelector(state => state.applications.bunkmateField);
+
+    //retrieve error messages from global store
+    const globalErrorMessages = useSelector(state => state.applications.globalErrorMessages);
 
     //define state variable for managing the unallocated rent that still needs to be divided
     const [unallocatedRent, setUnallocatedRent] = useState(0);
@@ -47,7 +68,7 @@ export default function AddBunkmatesCard({ data, index }) {
         setUnallocatedRent(data.listing_details.units[index].price)
     }, [index])
 
-    //define state variable for storing user profile 
+    //define state variable for storing user profile
     const [userProfile, setUserProfile] = useState({})
     //get data from backend
     const handleProfile = async () => {
@@ -59,78 +80,108 @@ export default function AddBunkmatesCard({ data, index }) {
         handleProfile().then((profile) => setUserProfile(profile.data));
     }, []);
 
+    //the amount of unallocated rent rounded to 2 decimal places
+    const roundedUnallocatedRent = Math.round(unallocatedRent * 100) / 100;
+    //Validation: useEffect hook used for managing the enabled / disabled state of the continue button
+    useEffect(() => {
+        //check if bunkmateCount is 0, if so then enable continue button
+        if (bunkmateCount === 0){
+            dispatch(setContinueDisabled(false));
+        }
+        //check if bunkmateCount is greater than 0
+        else if (bunkmateCount > 0) {
+            //check if unallocated rent is 0 and all bunkmate fields are filled, if so then enable continue button
+            const isFieldFilled = bunkmateField.slice(1).every(field => field !== '');
+            if (isFieldFilled && roundedUnallocatedRent === 0 && bunkmateField.slice(1).length > 0) {
+                dispatch(setContinueDisabled(false));
+            } else {
+                dispatch(setContinueDisabled(true));
+            }
+        }
+    },[bunkmateCount, unallocatedRent, bunkmateField])
+
+
     /**
-     * @brief event handler for adding values to an index within the array
+     * @brief event handler for adding rent amount to an index within the array
      * 
      * @param {number} index the index within the array of input fields
      * @param {number} value the data retrieved from the input field
-     * @see setBunkmateFields sets bunkmateFields
+     * @see setBunkmateRent sets the bunkmate Rent
      * @see setUnallocatedRent sets unallocatedRent
      */
     const handleRentChange = (index, value) => {
-        const newBunkmateFields = [...bunkmateFields];
-        newBunkmateFields[index] = value;
+        const newBunkmateRent = [...bunkmateRent];
+        newBunkmateRent[index] = value;
 
         let newUnallocatedAmount = unitPrice; // Reset unallocatedRent to default value
         //Goes through each value in the array and only stores integers
-        newBunkmateFields.forEach(input => {
+        newBunkmateRent.forEach(input => {
             const parsedValue = parseFloat(input);
             if (!isNaN(parsedValue)) {
                 newUnallocatedAmount -= parsedValue; // Add valid input values to the unallocatedRent 
             }
         });
-        setBunkmateFields(newBunkmateFields);
+        setBunkmateRent(newBunkmateRent);
         setUnallocatedRent(newUnallocatedAmount);
     };
 
     /**
-     * @brief event handler for adding an extra place holder (empty string) within the array for a new field (adding an input field)
+     * @brief event handler for adding an extra placeholder (empty string) within the array for a new field (adding an input field)
      * 
-     * @see setBunkmateFields sets the bunkmate fields
+     * @see setBunkmateRent sets the bunkmate fields
      */
     const handleAddInput = () => {
-        setBunkmateFields([...bunkmateFields, ""]);
+        setBunkmateRent([...bunkmateRent, ""]);
+        dispatch(setBunkmateField([...bunkmateField, ""]))
     };
 
     /**
      * @brief event handler for removing an element at a specific index within the array (removing an input field)
      * 
      * @param {number} index the index within the array of input fields
-     * @see setBunkmateFields sets bunkmateFields
+     * @see setBunkmateRent sets bunkmateRent
      * @see setUnallocatedRent sets unallocatedRent
      */
     const handleRemoveInput = (index) => {
-        const newInputs = [...bunkmateFields];
-        /*newInputs.splice(index, 1);*/
-        newInputs.pop();
 
+        //recording the name or email values within the array
+        const newFieldAmount = [...bunkmateField];
+        newFieldAmount.pop();
+        dispatch(setBunkmateField(newFieldAmount))
+
+        //recording the rent values within the array
+        const newRentAmount = [...bunkmateRent];
+        /*newInputs.splice(index, 1);*/
+        newRentAmount.pop();
+        //changing the unallocated rent counter
         let newCounter = unitPrice; // Reset unallocatedRent to default value
-        newInputs.forEach(input => {
+        newRentAmount.forEach(input => {
             const parsedValue = parseFloat(input);
             if (!isNaN(parsedValue)) {
-                newCounter -= parsedValue; // Add valid input values to theunallocatedRent 
+                newCounter -= parsedValue; // Add valid input values to the unallocated rent amount
             }
         });
-
-        setBunkmateFields(newInputs);
+        setBunkmateRent(newRentAmount);
         setUnallocatedRent(newCounter);
     };
 
-    //useEffect hook depends on global bunkmateCount chaging to add or remove input fields
+    //useEffect hook depends on global bunkmateCount changing to add or remove input fields
     useEffect(() => {
-        //if index (unit selection) changes, bunkmateCount will be set to 0 and bunkmateFields array and unallocatedRent is set to default state as well
+        //if index (unit selection) changes, bunkmateCount will be set to 0 and bunkmateRent array and unallocatedRent is set to default state as well
+        //set global continueDisabled state to false
         if (bunkmateCount === 0) {
-            setBunkmateFields([""])
+            setBunkmateRent([""])
+            dispatch(setBunkmateField([""]))
             setUnallocatedRent(unitPrice)
         }
         //if bunkmateCount has decreased then remove an input field
-        //subtract 1 because bunkmateFields initially has an extra empty string to compensate for User's Own Allocation
-        else if (bunkmateCount < bunkmateFields.length - 1) {
-            handleRemoveInput();
+        //subtract 1 because bunkmateRent initially has an extra empty string to compensate for User's Own Allocation
+        else if (bunkmateCount < bunkmateRent.length - 1) {
+            handleRemoveInput(index);
         }
         //if bunkmateCount has increased then add an input field
-        //subtract 1 because bunkmateFields initially has an extra empty string to compensate for User's Own Allocation
-        else if (bunkmateCount > bunkmateFields.length - 1) {
+        //subtract 1 because bunkmateRent initially has an extra empty string to compensate for User's Own Allocation
+        else if (bunkmateCount > bunkmateRent.length - 1) {
             handleAddInput();
         }
     }, [bunkmateCount])
@@ -141,23 +192,33 @@ export default function AddBunkmatesCard({ data, index }) {
             ?
             <Card sx={cardStyles} raised>
                 <TopInfoContainer
-                    unallocatedRent={unallocatedRent}
+                    roundedUnallocatedRent={roundedUnallocatedRent}
                 />
-                {bunkmateFields.map((_, index) => {
+                {/*
+                <Alert severity={"error"}>
+                    <AlertTitle>
+                        <strong>Error</strong>
+                    </AlertTitle>
+                    {globalErrorMessages.map( errorMessage => {
+                            return (<li>{errorMessage}</li>)})}
+                </Alert>
+                */}
+                {bunkmateRent.map((_, index) => {
                     return (
                         index === 0
                             ? <UserOwnAllocation
                                 userProfile={userProfile}
                                 index={index}
                                 handleRentChange={handleRentChange}
-                                bunkmateFields={bunkmateFields}
+                                bunkmateRent={bunkmateRent}
                                 splitRentCost={splitRentCost}
                             />
                             : <BunkmateAllocation
                                 index={index}
                                 handleRentChange={handleRentChange}
                                 bunkmateCount={bunkmateCount}
-                                bunkmateFields={bunkmateFields}
+                                bunkmateRent={bunkmateRent}
+                                bunkmateField={bunkmateField}
                                 splitRentCost={splitRentCost}
                             />
                     )
@@ -167,16 +228,17 @@ export default function AddBunkmatesCard({ data, index }) {
     );
 };
 
+
 /**
  * @brief This functional UI component showcases the amount of rent cost that hasn't been distributed yet
  * 
- * @param {number} unallocatedRent is the rounded amount of rent that still needs to be distributed
+ * @param {number} roundedUnallocatedRent is the rounded amount of rent that still needs to be distributed
  * @returns {React.ReactElement}
  * 
  * @example
  * <TopInfoContainer unallocatedRent={500}/>
  */
-function TopInfoContainer({ unallocatedRent }) {
+function TopInfoContainer({ roundedUnallocatedRent }) {
 
     const styles = {
         title: { fontWeight: 600 },
@@ -226,7 +288,7 @@ function TopInfoContainer({ unallocatedRent }) {
                     Unallocated Monthly Rent:
                 </Typography>
                 <Typography color="text.primary" variant="h6" sx={styles.text}>
-                    {`$${Math.round(unallocatedRent)}`}
+                    {`$${roundedUnallocatedRent}`}
                 </Typography>
 
             </div>
@@ -238,9 +300,9 @@ function TopInfoContainer({ unallocatedRent }) {
  * @brief This functional UI component takes up a single row and showcases the amount of rent cost that the user themself has to take on
  * 
  * @param {number} index is the index within the bunkmatesField
- * @param {function} handleRentChange is an event handler function that handles the records the value from an input field
+ * @param {function}  handleRentChange is an event handler function that records the value from an input field
  * @param {object} userProfile stored profile data on the user
- * @param {array} bunkmateFields the values of each input stored in an array
+ * @param {array} bunkmateRent the values of each input stored in an array
  * @param {number} splitRentCost the cost of rent split across numerous bunkmates
  * @returns {React.ReactElement} a react element that contains the user's profile information and an input field to declare rent paying amount
  * 
@@ -249,10 +311,16 @@ function TopInfoContainer({ unallocatedRent }) {
     * index={0} 
     * handleRentChange={handleRentChange} 
     * userProfile={userProfile} 
-    * bunkmateFields={["", "240", "", "500"]
+    * bunkmateRent={["", "240", "", "500"]
  * />
  */
-function UserOwnAllocation({ index, handleRentChange, userProfile, bunkmateFields, splitRentCost }) {
+function UserOwnAllocation(
+    {index,
+    handleRentChange,
+    userProfile,
+    bunkmateRent,
+    splitRentCost,
+    }) {
 
     const styles = {
         divider: { margin: '10px' },
@@ -280,7 +348,8 @@ function UserOwnAllocation({ index, handleRentChange, userProfile, bunkmateField
                     onChange={(e) => handleRentChange(index, e.target.value)}
                     type="number"
                     placeholder={splitRentCost}
-                    value={bunkmateFields[index]}
+                    value={bunkmateRent[index]}
+                    required
                     InputProps={{
                         startAdornment: (
                             <InputAdornment position="start">
@@ -296,21 +365,28 @@ function UserOwnAllocation({ index, handleRentChange, userProfile, bunkmateField
 
 /**
  * @brief This functional UI component takes up a single row and allows you to link bunkmates and showcases the amount of rent cost that the other bunkmates will have to take on
- * 
+ *
+ * @param {function}  handleRentChange is an event handler function that records the value from an input field
  * @param {number} index is the index within the bunkmatesField
- * @param {function} handleRentChange is an event handler function that handles the records the value from an input field
- * @param {array} bunkmateFields the values of each input stored in an array
+ * @param {array} bunkmateRent the values of each input stored in an array
  * @param {number} splitRentCost the cost of rent split across numerous bunkmates
+ * @param {array} bunkmateField each index within the array stores the user's name or email
  * @returns {React.ReactElement} a react element that contains an input field for linking a roommate and another for declaring rent payment amount
  * 
  * @example
  * <BunkmateAllocation 
     * index={1}
     * handleRentChange={handleRentChange}
-    * bunkmateFields={["", 243, "", 500]}
+    * bunkmateRent={["", 243, "", 500]}
  * /> 
  */
-function BunkmateAllocation({ index, handleRentChange, bunkmateFields, splitRentCost }) {
+function BunkmateAllocation(
+    {index,
+    handleRentChange,
+    bunkmateRent,
+    splitRentCost,
+    bunkmateField,}
+) {
 
     const styles = {
         divider: { margin: '10px' },
@@ -321,6 +397,40 @@ function BunkmateAllocation({ index, handleRentChange, bunkmateFields, splitRent
         allocateRentField: { margin: '3%', width: '150px' }
     }
 
+    const dispatch = useDispatch();
+
+    //Validation: define state variable for managing local error message displayed in helperText
+    const [localErrorMessage, setLocalErrorMessage] = useState("");
+    //Validation: define state variable for managing error state for text fields
+    const [error, setError] = useState(false);
+
+    /**
+     * @brief event handler for adding contact information to an index within the array
+     *
+     * @param {number} index the index within the array of input fields
+     * @param {string} value the data retrieved from the input field
+     * @param {function} validation the validation function used to validate the field
+     * @see setBunkmateField sets the bunkmate contact info
+     */
+    const handleBunkmateChange = (index, value, validation) => {
+        const isValid = validation(value)
+        const newBunkmateField = [...bunkmateField];
+        if (isValid){
+            setError(false)
+            setLocalErrorMessage("")
+            newBunkmateField[index] = value;
+            dispatch(setBunkmateField(newBunkmateField));
+        } else {
+            setError(true)
+            setLocalErrorMessage("Please Enter a valid name or email")
+            newBunkmateField[index] = "";
+            dispatch(setBunkmateField(newBunkmateField));
+        }
+    }
+    //retrieve from global store
+    const continueDisabled = useSelector(state => state.applications.continueDisabled);
+
+
     return (
         <>
             <Divider sx={styles.divider} />
@@ -329,8 +439,12 @@ function BunkmateAllocation({ index, handleRentChange, bunkmateFields, splitRent
                     sx={styles.linkBunkmateField}
                     label={`Bunkmate ${index} `}
                     placeholder="@name or email"
+                    onChange={(e) => handleBunkmateChange(index, e.target.value, bunkmateFieldValidation)}
                     type="text"
                     size="small"
+                    error={error}
+                    helperText={localErrorMessage}
+                    required
                 />
                 <TextField
                     id="outlined-basic"
@@ -341,7 +455,8 @@ function BunkmateAllocation({ index, handleRentChange, bunkmateFields, splitRent
                     size="small"
                     onChange={(e) => handleRentChange(index, e.target.value)}
                     placeholder={splitRentCost}
-                    value={bunkmateFields[index]}
+                    value={bunkmateRent[index]}
+                    required
                     InputProps={{
                         startAdornment: (
                             <InputAdornment position="start">

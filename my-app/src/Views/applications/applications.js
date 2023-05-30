@@ -40,10 +40,10 @@ function Applications() {
     }, [])
 
     /* sets the subpage of the form that you're on also controls progress bar*/
-    const [page, setpage] = useState(0);
+    const [page, setPage] = useState(0);
 
     function handleContinueClick() {
-        setpage(() => page + 1)
+        setPage(() => page + 1)
     }
 
     return (

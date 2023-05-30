@@ -1,4 +1,4 @@
-import { CardContent, Card, Typography, IconButton, Tooltip, tooltipClasses } from '@mui/material';
+import {  CardContent, Card, Typography, IconButton, Tooltip, tooltipClasses } from '@mui/material';
 import { styled } from '@mui/material/styles'
 import { CardMedia } from "@mui/material/";
 import Divider from "@mui/material/Divider";
@@ -60,7 +60,7 @@ function UnitInfo({ data, index }) {
         topSide: {
             container: { padding: '10px 0px 10px 0px', display: 'flex', flexDirection: 'row' },
             rightSide: {
-                container: { display: 'flex', flexDirection: 'column', height: '100%', justifyContent: 'flex-start', padding: '10px 20px 0px 20px' },
+                container: { display: 'flex', flexDirection: 'column', height: '100%', justifyContent: 'flex-start', padding: '5px 20px 0px 20px !important' },
                 unitInfoContainer: { display: 'flex', flexDirection: 'column', justifyContent: 'space-around', }
             },
         },
@@ -103,13 +103,13 @@ function UnitInfo({ data, index }) {
                     image={data.listing_details.units[index].listing_img[0]}
                     sx={unitInfoStyles.unitPicture}
                 />
-                <div style={unitInfoStyles.topSide.rightSide.container}>
+                <CardContent sx={unitInfoStyles.topSide.rightSide.container}>
                     <div style={unitInfoStyles.topSide.rightSide.unitInfoContainer}>
                         <Typography variant={"h5"} color={'text.primary'} sx={unitInfoStyles.unitNumber}>{unitData.title}</Typography>
                         <Typography variant={"h5"} color={'text.secondary'} sx={unitInfoStyles.unitPrice}>{`$${unitData.price}`}</Typography>
                         <Typography variant={"h6"} color={'text.secondary'} sx={unitInfoStyles.unitType}>{unitData.type}</Typography>
                     </div>
-                </div>
+                </CardContent>
             </div >
             <div style={unitInfoStyles.bottomSide}>
                 <UnitStats number={unitData.beds} units={"Beds"} />
@@ -178,12 +178,12 @@ function ChangeDetails({ data, index }) {
 }
 
 /**
- * @brief 
+ * @brief A functional UI component that returns counters for the number of bunkmates and pets you're bringing into the unit
  * 
- * @details Child component of ChangeDetails
  * @param {string} field this parameter determines which addon to increment and decrement
  * @param {object} data this parameter stores data on the unit
  * @param {number} index this parameter represents the index within the listings page
+ * @details Child component of ChangeDetails
  * @returns {React.ReactElement} a react element that contains an addition to the property
  * 
  * @example 

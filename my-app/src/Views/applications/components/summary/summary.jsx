@@ -1,7 +1,8 @@
 import { CardContent, Typography, } from '@mui/material';
 import Overview from "../../../listings/components/overview";
 import Policies from "../../../listings/components/policies";
-import UnitInfoCard from '../infoCards/unitInfoCard';
+import {ActionButton} from "../../../../Components/Utils/Form";
+import {useSelector, useDispatch} from "react-redux";
 
 /**
  * @function Summary
@@ -12,6 +13,8 @@ import UnitInfoCard from '../infoCards/unitInfoCard';
  * - How Summary is structured 
     * Left Side: Overview, Policies (Perks offered by the unit and rules set by landlord)
     * Right Side: UnitInfoCard, (key details on the unit and a section for making last minute changes)
+        *  Can also display addBunkmatesCard and addPetsCard depending on the situation
+    *  Continue Button: continue button will only be enabled if bunkmate count is 0 or unalloacted rent is 0
  * @returns {React.ReactElement} a react element that contains information on the unit as well as an interactive portion
  */
 export default function Summary() {
@@ -23,6 +26,13 @@ export default function Summary() {
         title: { fontWeight: 550 },
     }
 
+    //global state for managing enabled/disabled state of the continue button
+    //will only be enabled if...
+        // bunkmateCount is 0
+        // or
+        // all fields are filled out and unallocatedRent is 0
+    const continueDisabled = useSelector(state => state.applications.continueDisabled);
+
     return (
 
         <div style={summaryStyles.container}>
@@ -33,6 +43,11 @@ export default function Summary() {
                     </Typography>
                     <Overview />
                     <Policies />
+                    <ActionButton
+                        title={`Agree & Continue`}
+                        disabled={continueDisabled}
+                        helperText={continueDisabled ? "Please make sure the unallocated monthly rent is $0 and that all required fields are filled out" : null}
+                    />
                 </div>
             </CardContent>
         </div >
