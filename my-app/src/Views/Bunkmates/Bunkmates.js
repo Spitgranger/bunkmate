@@ -1,8 +1,8 @@
-import React, { useContext, useEffect, useRef, useState, memo, useMemo, useId } from "react";
+import React, { useContext, useEffect, useState} from "react";
 import Navbar from "../../Components/Navbar";
-import { GoogleMap, useJsApiLoader, MarkerF, OverlayView, OVERLAY_MOUSE_TARGET, OverlayViewF, MapContext, Polyline, DirectionsService } from "@react-google-maps/api";
+import { GoogleMap, MarkerF, OVERLAY_MOUSE_TARGET, OverlayViewF } from "@react-google-maps/api";
 import mapStyles from '../../data/mapStyles.json'
-import { Card, Typography, IconButton, Tooltip, CircularProgress, CardMedia, CardContent, CardActionArea } from "@mui/material/"
+import { Card, Typography, IconButton, Tooltip, CircularProgress } from "@mui/material/"
 import "./Styles/Bunkmates.css"
 import CreateRequestForm from './Components/RequestForm/CreateRequestForm'
 import { ActionButton } from "../../Components/Utils/Form";
@@ -20,6 +20,7 @@ import { getPost } from "../../api";
 import { KeyLocationsMarkers } from "./Components/Map/KeyLocations";
 import { useDispatch, useSelector } from 'react-redux';
 import { setCenter, setMapProfileCard, setRerender, setZoom } from "../../features/bunkmate/bunkmateSlice";
+import { useJsApiLoader } from "@react-google-maps/api";
 
 
 export function MapProfile({ request, center }) {
@@ -27,13 +28,11 @@ export function MapProfile({ request, center }) {
     //determines whether to render single or group map card
 
     //store the coordinates of the map pin that was clicked on
-    const [coordinates, setCoordinates] = useState('')
+    const [coordinates, setCoordinates] = useState({})
 
     useEffect(() => {
         setCoordinates({ lat: request.idealLocation[0], lng: request.idealLocation[1] })
     }, [request])
-
-
 
     //as well as set bunkmate info at the bottom of the card
     function BunkmateInfo(props) {
@@ -71,12 +70,13 @@ export function MapProfile({ request, center }) {
 
 
 const Bunkmates = () => {
-
-    // const dispatch = useDispatch();
-    // const socialFeed = useSelector(state => state.bunkmates.socialFeed.socialFeed);
-    // const requestForm = useSelector(state => state.bunkmates.requestForm.requestForm)
     const [socialFeed, setSocialFeed] = useState(false);
     const [requestForm, setRequestForm] = useState(false);
+    const [libraries] = useState(["places"]);
+    const { isLoaded, loadError } = useJsApiLoader({
+        googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
+        libraries: libraries,
+    })
 
     const id = JSON.parse(localStorage.getItem("profile"))?.result?._id;
     //retrieve local storage data
@@ -92,18 +92,20 @@ const Bunkmates = () => {
     const keyLocationPins = useSelector(state => state.bunkmate.keyLocationPins);
 
     //state places autocomplete
-    const [selected, setSelected] = useState(null);
+    const [selected, setSelected] = useState(false);
     //if the user has a profile then set profileChecker to true else false
     //used to rerender useEffect in Bunkmates.js containing async functions that gets data from backend
-    const { loading, listingArray, userRequests, userProfile, userOwnData, isLoaded, } = useGetUserData()
+    const { loading, listingArray, userRequests, userProfile, userOwnData, } = useGetUserData()
 
     const [statePostArray, setStatePostArray] = useState([])
     //get Social feed informations
     useEffect(() => {
+        console.log(zoom)
         getPost().then((result) => setStatePostArray(result.data.reverse()));
         if (!zoom) {
             dispatch(setZoom(15));
         }
+
     }, [])
 
 
@@ -114,7 +116,7 @@ const Bunkmates = () => {
     //contains all requests generated through accounts
 
 
-    if (!isLoaded) {
+    if (!isLoaded || loadError) {
         return <h1>ERROR HAS OCCURED</h1>
     }
 
@@ -132,6 +134,7 @@ const Bunkmates = () => {
             setIsOpen(true)
             //if user is logged in and has an existing profile then show them the request page
         } else if (localStorageData && userProfile) {
+            setRequestForm(!requestForm)
             //dispatch(showRequestForm(!requestForm))
         }
     }
@@ -150,11 +153,6 @@ const Bunkmates = () => {
         //store the coordinates of the pin that was clicked on
     }
 
-
-
-
-
-
     function BunkmateRequestPage() {
         return (
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', top: '30vh', position: 'absolute', maxWidth: '500px' }}>
@@ -171,8 +169,6 @@ const Bunkmates = () => {
             </div>
         )
     }
-
-
 
     function EditRequestButton() {
         //edit and delete functionality
@@ -198,7 +194,6 @@ const Bunkmates = () => {
         )
     }
 
-
     //delay the zooming in and out of the map to allow time for tiles to render properly
     function debounce(func, delay) {
         let timerId;
@@ -211,7 +206,6 @@ const Bunkmates = () => {
             }, delay);
         };
     }
-
 
     const handleZoomChange = debounce((newZoomLevel) => {
         dispatch(setZoom(newZoomLevel));
@@ -232,12 +226,9 @@ const Bunkmates = () => {
         e.stopPropagation();
     }
 
-
-
     return (
         <div>
             <div className="content-container">
-
                 {/*
                     mapProfileCard
                         ? null
@@ -246,6 +237,7 @@ const Bunkmates = () => {
                         </div>
                 */}
                 <div className="map-container">
+
                     <GoogleMap
                         id="map"
                         center={center}
@@ -273,7 +265,6 @@ const Bunkmates = () => {
                                             <TbSocial style={{ color: 'white', }} />
                                         </IconButton>
                                     </Tooltip>
-
                             }
                         </section>
                         <KeyLocationsMarkers keyLocationPins={keyLocationPins} center={center} />
@@ -298,7 +289,6 @@ const Bunkmates = () => {
                                 </OverlayViewF >
                             )
                         })}
-
                     </GoogleMap >
                 </div>
                 {
