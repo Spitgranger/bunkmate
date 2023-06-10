@@ -15,7 +15,7 @@ export const makePost = async (req, res) => {
         }
         const newPost = new mediaPost({ ...reqData, userId: req.userId, dateCreated: new Date().toISOString() });
         await newPost.save();
-        res.status(201).json("mediaPost sucessfully created");
+        res.status(201).json(newPost);
 
     } catch (error) {
         console.log(error)
