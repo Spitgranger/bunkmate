@@ -27,9 +27,10 @@ import UnitCard from './components/unitCard'
  * 8. UnitCard
  * @returns {React.ReactElement} a react element that contains a wealth of information about the property
  */
+
 export default function L1Details() {
 
-    const pageStyles = {
+    con<Up>t pageStyles = {
         page: {display: 'flex', alignItems: 'center', width: '100%', flexDirection: 'column', padding: '20px'},
         top: {minWidth: '1200px', maxWidth: '60%'},
         body: {

@@ -26,7 +26,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setZoom, setMapProfileCard } from '../features/bunkmate/bunkmateSlice';
 
 
-
 /*
 '@media (max-width: 1000px)':{
   backgroundColor: 'red'
