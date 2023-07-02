@@ -1,0 +1,30 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express"));
+const dotenv_1 = __importDefault(require("dotenv"));
+const body_parser_1 = __importDefault(require("body-parser"));
+const mongoose_1 = __importDefault(require("mongoose"));
+// import postRoutes from './routes/posts';
+const users_1 = __importDefault(require("./routes/users"));
+const profile_1 = __importDefault(require("./routes/profile"));
+const request_1 = __importDefault(require("./routes/request"));
+// import chatRoutes from "./routes/chat";
+// import mediaPostRoutes from "./routes/mediaPost";
+const app = (0, express_1.default)();
+dotenv_1.default.config();
+app.use(body_parser_1.default.json({ limit: "30mb" }));
+app.use(body_parser_1.default.urlencoded({ limit: "30mb", extended: true }));
+// app.use('/api/posts', postRoutes);
+app.use('/api/users', users_1.default);
+app.use('/api/profile', profile_1.default);
+app.use('/api/request', request_1.default);
+// app.use('/api/chats', chatRoutes);
+// app.use('/api/media', mediaPostRoutes);
+const PORT = process.env.PORT || 5000;
+const CONNECTION_URL = process.env.CONNECTION_URL || "mongodb://127.0.0.1/bunkmate";
+mongoose_1.default.set('strictQuery', false);
+mongoose_1.default.connect(CONNECTION_URL, {})
+    .then(() => { app.listen(PORT, () => console.log(`Server running on port ${PORT}`)); }).catch((error) => { console.log(error.message); });
