@@ -1,6 +1,6 @@
 import React from "react"
 import {useLocation} from "react-router-dom"
-import Navbar from "../../Components/Navbar";
+import Navbar from "../navigation/Navbar";
 import Overview from './components/overview'
 import Gallery from './components/gallery'
 import Property from './components/property'
@@ -30,7 +30,7 @@ import UnitCard from './components/unitCard'
 
 export default function L1Details() {
 
-    con<Up>t pageStyles = {
+    const pageStyles = {
         page: {display: 'flex', alignItems: 'center', width: '100%', flexDirection: 'column', padding: '20px'},
         top: {minWidth: '1200px', maxWidth: '60%'},
         body: {
