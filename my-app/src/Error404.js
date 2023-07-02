@@ -1,10 +1,8 @@
-import Navbar from "./Views/navigation/Navbar";
 import {CardMedia} from "@mui/material/CardMedia";
 
 export default function Error404() {
     return (
         <>
-            <Navbar chooseStyle={'glass'}/>
             <img style={{height: '99.3%', filter: 'blur(1px)'}}
                  src="https://zeevector.com/wp-content/uploads/Clipart/City-Vector-Line-art.png"></img>
             <h1 style={{

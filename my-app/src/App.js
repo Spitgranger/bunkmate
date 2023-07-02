@@ -1,8 +1,5 @@
 import './App.css';
-import Navbar from './Views/navigation/Navbar';
 import Post from './Components/Post';
-
-
 import Apartment2 from "./Components/Assets/apartment.jpg"
 import Apartment from "./Components/Assets/apartment2.jpg"
 import Room from "./Components/Assets/living_space.jpg"
@@ -355,7 +352,6 @@ function App() {
         <div className="App">
             <header className="App-header">
                 <div style={{height: '9vh'}}/>
-                <Navbar/>
             </header>
             <section className="Listings">
                 {keyinfo.map((info, i) => (

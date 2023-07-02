@@ -1,6 +1,5 @@
 import React from "react"
 import {useLocation} from "react-router-dom"
-import Navbar from "../navigation/Navbar";
 import Overview from './components/overview'
 import Gallery from './components/gallery'
 import Property from './components/property'
@@ -59,7 +58,6 @@ export default function L1Details() {
 
     return (
         <>
-            <Navbar/>
             <div style={{height: '9vh'}}/>
             <div style={pageStyles.page}>
                 <div style={pageStyles.top}>

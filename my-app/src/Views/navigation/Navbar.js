@@ -13,7 +13,6 @@ import AccountComponent from "./components/accountComponent";
 
 const Navbar = memo(({chooseStyle}) => {
 
-    console.log('navbar rerender')
     //define state management for managing the styles of the navbar
     const [navStyle, setNavStyle] = useState("nav")
     //used to manage the open close state of the modal window as well as the modal window content
@@ -52,7 +51,7 @@ const Navbar = memo(({chooseStyle}) => {
      * @see CheckActive
      */
     const NavbarPage = ({linkTo, page, toolTipTitle}) => [
-        <Tooltip className={`${navStyle}PageContainer`} title={toolTipTitle}>
+        <Tooltip className={`${navStyle}PageContainer`} title={toolTipTitle} arrow>
             <div><CheckActive to={linkTo} page={page}/></div>
         </Tooltip>
 

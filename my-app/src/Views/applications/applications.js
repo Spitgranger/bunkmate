@@ -1,9 +1,7 @@
 import './styles/applications.css';
-import Navbar from '../navigation/Navbar';
 import {useEffect, useState} from 'react'
 import Summary from './components/summary/summary';
 import UnitInfoCard from './components/infoCards/unitInfoCard';
-import UploadsForm from '../../Components/UploadsForm'
 import {useLocation} from 'react-router';
 import {useDispatch, useSelector} from 'react-redux';
 import {setUnitIndex} from '../../features/applications/applicationsSlice';
@@ -49,7 +47,6 @@ function Applications() {
     return (
         <>
             <div style={{height: '9vh'}}/>
-            <Navbar/>
             <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', width: '100%'}}>
                 <Summary/>
                 <div style={{marginTop: '3vw', display: 'flex', flexDirection: 'column'}}>

@@ -7,7 +7,6 @@ import Amenities from "./components/amenities"
 import Gallery from "./components/gallery"
 import StaticInfoBox from "./components/staticInfoBox"
 import {useLocation} from "react-router"
-import Navbar from "../navigation/Navbar"
 
 /**
  * @function L2Details
@@ -62,7 +61,6 @@ export default function L2Details() {
 
     return (
         <>
-            <Navbar/>
             <div style={{height: '9vh'}}/>
             <div style={l2DetailsStyles.page}>
                 <div style={l2DetailsStyles.container}>

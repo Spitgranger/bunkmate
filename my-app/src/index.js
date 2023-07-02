@@ -35,6 +35,7 @@ const router = createBrowserRouter([
                             <SignInProvider>
                                 <ValidationProvider>
                                     <Provider store={store}>
+                                        <Navbar/>
                                         <App/>
                                     </Provider>
                                 </ValidationProvider>
@@ -76,6 +77,7 @@ const router = createBrowserRouter([
                             <SignInProvider>
                                 <ValidationProvider>
                                     <Provider store={store}>
+                                        <Navbar/>
                                         <Applications/>
                                     </Provider>
                                 </ValidationProvider>
@@ -159,6 +161,7 @@ const router = createBrowserRouter([
                             <SignInProvider>
                                 <ValidationProvider>
                                     <Provider store={store}>
+                                        <Navbar/>
                                         <L1Details/>
                                     </Provider>
                                 </ValidationProvider>
@@ -179,6 +182,7 @@ const router = createBrowserRouter([
                             <SignInProvider>
                                 <ValidationProvider>
                                     <Provider store={store}>
+                                        <Navbar/>
                                         <L2Details/>
                                     </Provider>
                                 </ValidationProvider>
@@ -199,6 +203,7 @@ const router = createBrowserRouter([
                             <SignInProvider>
                                 <ValidationProvider>
                                     <Provider store={store}>
+                                        <Navbar chooseStyle={"glass"}/>
                                         <Error404/>
                                     </Provider>
                                 </ValidationProvider>
