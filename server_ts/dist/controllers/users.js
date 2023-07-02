@@ -29,12 +29,16 @@ const signin = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const existingUser = yield user_1.default.findOne({ email });
         if (!existingUser)
-            return res.status(404).json({ message: "User doesn't exist" });
+            return res.status(404).json({ loggedIn: false, message: "User doesn't exist" });
         const isPasswordCorrect = yield bcrypt_1.default.compare(password, existingUser.password);
         if (!isPasswordCorrect)
-            return res.status(400).json({ message: 'Invalid Credentials' });
+            return res.status(400).json({ loggedIn: false, message: 'Invalid Credentials' });
+        req.session.user = {
+            id: existingUser._id,
+            email: existingUser.email,
+        };
         const token = jsonwebtoken_1.default.sign({ email: existingUser.email, id: existingUser._id }, "test", { expiresIn: "1h" });
-        res.status(200).json({ result: existingUser, token, /*streamToken*/ });
+        res.status(200).json({ result: existingUser, token });
     }
     catch (error) {
         res.status(500).json({ message: 'something went wrong like a gofu' });
@@ -53,13 +57,22 @@ const signup = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const existingUser = yield user_1.default.findOne({ email });
         if (existingUser)
-            return res.status(400).json({ message: 'User already exists. Signin' });
+            return res.status(400).json({ loggedin: false, message: 'User already exists. Please sign in' });
         if (password !== confirmPassword) {
-            return res.status(400).json({ message: 'Passwords do not match' });
+            return res.status(400).json({ loggedin: false, message: 'Passwords do not match' });
         }
         const hashedPassword = yield bcrypt_1.default.hash(password, 12);
-        const result = yield user_1.default.create({ email: email, password: hashedPassword, phoneNumber: phoneNumber, name: name });
+        const result = yield user_1.default.create({
+            email: email,
+            password: hashedPassword,
+            phoneNumber: phoneNumber,
+            name: name
+        });
         const token = jsonwebtoken_1.default.sign({ email: result.email, id: result._id }, "test", { expiresIn: "1h" });
+        req.session.user = {
+            email: result.email,
+            id: result._id,
+        };
         //await streamChat.upsertUser({ id: String(result._id), name: result.name });
         res.status(200).json({ result, token });
         console.log('success');
