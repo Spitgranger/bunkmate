@@ -18,12 +18,12 @@ const mediaPostSchema = mongoose.Schema({
         required: true,
     },
     likes: {
-        type: Number,
-        default: 0,
+        type: [mongoose.SchemaTypes.ObjectId],
+        default: [],
         required: true
     },
     comments: {
-        type: [[String]],
+        type: [mongoose.SchemaTypes.ObjectId],
         required: true,
     }
 })

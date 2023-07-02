@@ -466,3 +466,43 @@ h6 {
     color: white;
     background: aqua;
 }
+
+/* keyLocations.jsx */
+.img-gradient::after {
+    display: block;
+    position: relative;
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 1) 0%, rgba(255, 255, 255, 0) 100%);
+    margin-top: -180px;
+    height: 180px;
+    width: 100%;
+    content: '';
+}
+
+/*Chrome, Safari, Opera*/
+
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #BDBDBD;
+    border-radius: 30px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #6E6E6E;
+}
+
+/*Firefox*/
+body {
+    overflow: -moz-scrollbars-none;
+}
+
+/*Internet Explorer, Edge*/
+body {
+    -ms-overflow-style: none;
+}

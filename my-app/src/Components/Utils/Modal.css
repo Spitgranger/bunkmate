@@ -1,4 +1,20 @@
-.modalStyles {
+.flexibleContainer {
+  position: fixed;
+  display: flex;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #FFF;
+  border-radius: 30px;
+  padding: 10px 20px 20px;
+  z-index: 1000;
+  flex-flow: column nowrap;
+  align-items: center;
+  overflow-y: scroll;
+}
+
+
+.fixedContainer {
   position: fixed;
   display: flex;
   top: 50%;

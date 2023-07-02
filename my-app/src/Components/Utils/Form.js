@@ -178,7 +178,7 @@ export function DropDownMenu({ disabled, helperText, required, autoFocus, inputR
 }
 
 
-function NormalFormSingleLineInput({ required, autoFocus, disabled, onError, onBlur, onChange, error, type, field, placeHolder, helperText, inputAdornment, inputStartAdornment, inputEndAdornment, size, inputRef, value, name }) {
+function NormalFormSingleLineInput({ sx, required, autoFocus, disabled, onError, onBlur, onChange, error, type, field, placeHolder, helperText, inputAdornment, inputStartAdornment, inputEndAdornment, size, inputRef, value, name }) {
   return (
     <>
       <TextField
@@ -187,6 +187,7 @@ function NormalFormSingleLineInput({ required, autoFocus, disabled, onError, onB
         label={field}
         variant="outlined"
         size={size}
+        sx={sx}
         placeholder={placeHolder}
         onChange={onChange}
         onBlur={onBlur}
@@ -279,7 +280,7 @@ function NormalFormMultiLineInput(props) {
             label={props.field}
             multiline
             rows={4}
-            ariant="outlined"
+            variant="outlined"
             error={props.error}
             helperText={props.helperText}
             onBlur={props.onBlur}
@@ -402,6 +403,7 @@ export function ActionButton(props) {
     display: 'flex',
     alignItems: 'flex-start',
     flexDirection: 'column',
+    width: props.containerWidth,
     opacity: props.opacity,
     margin: props.margin ?? '10px',
   }

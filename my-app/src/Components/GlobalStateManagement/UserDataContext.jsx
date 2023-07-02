@@ -1,22 +1,10 @@
 import { createContext, useState } from "react";
-import CreateRequestForm from "../../Views/Bunkmates/Components/CreateRequestForm";
-import { createRequest, createProfile, updateRequest, deleteRequest, getProfiles, deleteProfile } from "../../api";
-import { useNavigate } from "react-router";
+import { createRequest, createProfile, deleteRequest, getProfiles, deleteProfile } from "../../api";
 
-export const BunkmatesContext = createContext(null)
-export const BuildUserContext = createContext(null)
+export const UserDataContext = createContext(null)
 
-export default function MapProvider({ children }) {
-  const navigate = useNavigate()
+export default function UserDataProvider({ children }) {
 
-  //state management for what profile card is shown on the bunkmates page
-  const [mapProfileCard, setMapProfileCard] = useState(null)
-
-  //state management for where to center the google maps page
-  const [center, setCenter] = useState({ lat: 43.642075, lng: -79.385981 });
-  //can be used to rerender components
-  const [rerender, setRerender] = useState(false)
-  const [click, setClick] = useState(false);
 
   const requestHandleSubmit = async (formData) => {
     //record values in backend
@@ -84,11 +72,9 @@ export default function MapProvider({ children }) {
 
 
   return (
-    <BunkmatesContext.Provider value={{ mapProfileCard, setMapProfileCard, center, setCenter, rerender, setRerender, click, setClick }}>
-      <BuildUserContext.Provider value={{ profileHandleSubmit, profileHandleUpdate, requestHandleSubmit, requestHandleUpdate, profileHandleRetrieval }}>
-        {children}
-      </BuildUserContext.Provider>
-    </BunkmatesContext.Provider>
+    <UserDataContext.Provider value={{ profileHandleSubmit, profileHandleUpdate, requestHandleSubmit, requestHandleUpdate, profileHandleRetrieval }}>
+      {children}
+    </UserDataContext.Provider>
   )
 
 }

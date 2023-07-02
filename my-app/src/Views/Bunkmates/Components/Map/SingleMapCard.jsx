@@ -5,17 +5,25 @@ import { SavedListingItem } from './SavedListingItem';
 import { HiMapPin } from 'react-icons/hi2'
 import { GoogleMap, useJsApiLoader, MarkerF, OverlayView, OVERLAY_MOUSE_TARGET, OVERLAY_LAYER, InfoWindow } from "@react-google-maps/api";
 import { Button, Grid, Paper, TextField, Card, Typography, CardActionArea, CardMedia, CardContent, CardActions, IconButton } from "@mui/material/"
-import { ActionButton } from '../../../Components/Utils/Form';
+import { ActionButton } from '../../../../Components/Utils/Form';
 import { TbMessages, TbMessagesOff } from 'react-icons/tb';
-import { useRef, useState, useContext } from 'react';
+import { useRef, useState, useContext, useEffect } from 'react';
 import { InfoWindowF } from '@react-google-maps/api';
 import { MdVerified } from 'react-icons/md';
-import { formatContext } from '../../../Components/GlobalStateManagement/FormatContext';
+import RetrieveKeyLocations from './KeyLocations';
+import { formatContext } from '../../../../Components/GlobalStateManagement/FormatContext';
+import HandleViewOtherProfile from './HandleViewOtherProfile';
 
 
-function SingleMapCard({ BunkmateInfo, request }) {
+function SingleMapCard({ BunkmateInfo, request, coordinates, center }) {
+
     const [messageButton, setMessageButton] = useState(false)
     const { capitalizedName, calculateAge } = useContext(formatContext)
+
+    const [showEstablishment, setShowEstablishment] = useState(false)
+    const handleShowEstablishment = () => {
+        setShowEstablishment(true)
+    }
 
     return (
         <InfoWindowF mapPaneName={"overlayMouseTarget"} position={{ lat: request?.idealLocation[0], lng: request?.idealLocation[1] }}>
@@ -24,8 +32,9 @@ function SingleMapCard({ BunkmateInfo, request }) {
                     <div className="profile-info" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                         <header style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', }}>
                             <div style={{ width: '100%', display: 'flex', flexDirection: 'row', padding: '5px' }}>
-                                <Tooltip title={`View ${capitalizedName(request.profile[0].firstName)}'s profile`} arrow>
-                                    <CardActionArea style={{ width: '125px' }}>
+
+                                <HandleViewOtherProfile data={request ?? ""} content={
+                                    <CardActionArea sx={{ width: '125px', color: "black" }}>
                                         <CardMedia
                                             component="img"
                                             image={request.profile[0].picture}
@@ -33,7 +42,7 @@ function SingleMapCard({ BunkmateInfo, request }) {
                                             sx={{ width: '125px', height: '125px', borderRadius: '5%', }}
                                         />
                                     </CardActionArea>
-                                </Tooltip>
+                                } />
                                 <CardContent style={{ width: '100%', padding: '0px 15px 0px 15px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                                     <div className="card-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                         <div className="first-name">
@@ -49,13 +58,14 @@ function SingleMapCard({ BunkmateInfo, request }) {
                                             </Typography >
                                         </div>
                                         <div className="button-container" style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                                            <Tooltip title={"Pin This Profile"} arrow placement="bottom">
-                                                <IconButton >
+                                            <Tooltip title={"Explore this area"} arrow placement="bottom">
+                                                <IconButton onClick={handleShowEstablishment}>
+                                                    {showEstablishment ? <RetrieveKeyLocations coordinates={coordinates} center={center} request={request} /> : ""}
                                                     <HiMapPin />
                                                 </IconButton>
                                             </Tooltip>
-                                            <Tooltip title={"Message this group"} arrow placement="bottom">
-                                                <IconButton onClick={() => setMessageButton(!messageButton)} >
+                                            <Tooltip title={"Message this person"} arrow placement="bottom">
+                                                <IconButton onClick={() => { setMessageButton(!messageButton) }} >
                                                     {messageButton ? <TbMessagesOff /> : <TbMessages />}
                                                 </IconButton>
                                             </Tooltip>

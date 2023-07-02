@@ -140,11 +140,19 @@ nav ul a.glassCurrentPage {
   margin: 5px;
 }
 
+.App-logo {
+  padding: 15px;
+  object-fit: contain;
+  display: flex;
+  height: 80px;
+  width: 300px;
+  cursor: pointer;
+}
 
-
+/*
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+    animation: App-logo-spin infinite 0.2s linear;
     outline: none;
   }
 }
@@ -158,3 +166,4 @@ nav ul a.glassCurrentPage {
     transform: rotate(360deg);
   }
 }
+*/

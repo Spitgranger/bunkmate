@@ -1,30 +1,26 @@
-import React, { useRef, useEffect, useState, useContext } from 'react';
-import { formatContext } from '../Components/GlobalStateManagement/FormatContext';
-import Navbar from '../Components/Navbar';
-import { getProfile, getRequests } from '../api';
-import { SignInContext } from '../Components/GlobalStateManagement/SignInContext';
-import { ActionButton } from '../Components/Utils/Form';
-import Divider from '@mui/material/Divider'
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
-import Tooltip from "@mui/material/Tooltip";
-import { SavedListingItem } from './Bunkmates/Components/SavedListingItem';
-import { HiMapPin } from 'react-icons/hi2'
+import React, { useEffect, useState, useContext } from 'react';
 import './Profile.css'
-import { GoogleMap, useJsApiLoader, MarkerF, OverlayView, OVERLAY_MOUSE_TARGET, OVERLAY_LAYER, InfoWindow } from "@react-google-maps/api";
-import { CardHeader, Avatar, Button, Grid, Paper, TextField, Card, Typography, CardActionArea, CardMedia, CardContent, CardActions, IconButton } from "@mui/material/"
-import { TbMessages, TbMessagesOff } from 'react-icons/tb';
-import { InfoWindowF } from '@react-google-maps/api';
+import Navbar from '../Components/Navbar';
+import { formatContext } from '../Components/GlobalStateManagement/FormatContext';
+import { SignInContext } from '../Components/GlobalStateManagement/SignInContext';
+import { BunkmatesContext } from '../Components/GlobalStateManagement/BunkmatesContext';
+import { UserDataContext } from '../Components/GlobalStateManagement/UserDataContext';
 import { ValuesObjectContext } from '../Components/GlobalStateManagement/ValidationContext';
+import { ActionButton } from '../Components/Utils/Form';
+import { Box } from '@mui/system';
+import Divider from '@mui/material/Divider'
+import Tooltip from "@mui/material/Tooltip";
+import { CardHeader, Card, Typography, CardMedia, CardContent, IconButton } from "@mui/material/"
+import { HiMapPin } from 'react-icons/hi2'
 import { GrInstagram, GrFacebook, GrLinkedin, GrTwitter } from 'react-icons/gr'
-import { MdVerified, MdPets, MdCleaningServices } from 'react-icons/md';
-import { BsBookmarks, BsBookmarksFill, BsFillClockFill, BsInfinity, BsBriefcaseFill, BsPencil, BsAlarmFill, BsPen } from 'react-icons/bs';
-import { FaBook, FaSmoking, FaCannabis, FaWineGlassAlt, FaRegHandshake, FaDog } from 'react-icons/fa'
 import { BiMessageDetail } from 'react-icons/bi'
-import { Link } from 'react-router-dom';
-import { BunkmatesContext } from '../Components/GlobalStateManagement/UserContext';
+import { MdVerified, MdPets, MdCleaningServices } from 'react-icons/md';
+import { FaBook, FaSmoking, FaCannabis, FaWineGlassAlt, FaRegHandshake, FaDog } from 'react-icons/fa'
+import { BsBookmarks, BsBookmarksFill, BsFillClockFill, BsInfinity, BsBriefcaseFill, BsAlarmFill } from 'react-icons/bs';
 import { MapProfile } from './Bunkmates/Bunkmates';
 import CircularProgress from '@mui/material/CircularProgress';
-import { Box } from '@mui/system';
+import { useLocation, Link } from 'react-router-dom';
+import { getRequests } from '../api';
 
 
 /*
@@ -32,10 +28,11 @@ import { Box } from '@mui/system';
   backgroundColor: 'red'
 }
 */
-//This is the component that handles the user profile, displaying the user details and other things.
+//This is the component that handles the displaying other user's profiles, displaying the user's details and other things.
 
 
-const Profile = () => {
+export function OtherProfile() {
+  console.log("OtherProfile rerender")
 
   const pageStyles = {
     page: { display: 'flex', justifyContent: 'center', alignItems: 'flex-end', height: '100%' },
@@ -58,22 +55,38 @@ const Profile = () => {
   };
 
   const { capitalizedName, calculateAge } = useContext(formatContext);
-  const { setIsOpen, setMode, setMessage } = useContext(SignInContext);
-  const { values } = useContext(ValuesObjectContext);
+  const { rerender, setZoom, mapProfileCard, setMapProfileCard, setKeyLocationPins, HandleViewOtherProfile } = useContext(BunkmatesContext)
   //state to manage the profile data retrieved from the backend
   const [profile, setProfile] = useState("");
   //state to manage the bookmark icon that is shown
   const [bookmark, setBookmark] = useState(false);
   //state management just for the requestbutton
   const [requestButtonMessage, setRequestButtonMessage] = useState("Inactive")
-  const [showIcon, setShowIcon] = useState(null)
+  const [showIcon, setShowIcon] = useState(false)
   const [textColor, setTextColor] = useState('red')
-  const { mapProfileCard, setMapProfileCard } = useContext(BunkmatesContext)
-  const [userRequest, setUserRequest] = useState(null)
   const { setCenter } = useContext(BunkmatesContext)
-  const [loading, setLoading] = useState(<CircularProgress size={50} />)
-  const { rerender, setRerender } = useContext(BunkmatesContext)
+  const [isProfileLoading, setIsProfileLoading] = useState(true)
+  const [isRequestLoading, setIsRequestLoading] = useState(true)
 
+  const { profileHandleRetrieval } = useContext(UserDataContext)
+  const [data, setData] = useState("");
+  const [request, setRequest] = useState("");
+
+  //get other user's request to extract userId
+  const { state } = useLocation();
+  const userId = state.user ?? state.userId
+  //use userId to query the profile of the user
+  const [otherProfile, setOtherProfile] = useState("")
+
+  const handleGetProfiles = async () => {
+    //state contains user id found in userProfile, userOwnData, and post
+    setData(state)
+    const profiles = await profileHandleRetrieval(userId)
+    return profiles
+  }
+  useEffect(() => {
+    handleGetProfiles().then((profiles) => setOtherProfile(profiles.data[0])).finally(() => setIsProfileLoading(""))
+  }, [rerender])
 
   //query localStorage whenever mapProfileCard changes (primarily used to update the state of the "view request button")
   useEffect(() => {
@@ -82,7 +95,6 @@ const Profile = () => {
       const request = await getRequests();
       return request
     }
-    const userId = (JSON.parse(localStorage.getItem("profile"))?.result?._id)
 
     //store user request data
     handleRequest().then((request) => {
@@ -92,30 +104,10 @@ const Profile = () => {
           requestDict[user.user] = user;
         });
       const userOwnId = requestDict[userId]
-      setUserRequest(userOwnId);
-    });
+      setRequest(userOwnId);
+    }).finally(() => setIsRequestLoading(false));
 
-  }, [mapProfileCard])
-
-
-
-  //function to handle fetching the profile data from back end
-  const handleLoad = async () => {
-    const profile = await getProfile();
-    return profile;
-  };
-
-  useEffect(() => {
-    //get data from backend when the component first loads works
-    handleLoad().then((profile) => setProfile(profile.data)).finally(() => setLoading(null))
-  }, [rerender]);
-
-  const handleEditProfile = () => {
-    setMessage("Edit Your Profile")
-    setMode("profileMakerForm")
-    setIsOpen(true)
-  }
-
+  }, [])
 
 
 
@@ -140,40 +132,52 @@ const Profile = () => {
 
   }
 
-  function handleMouseEnter() {
-    setRequestButtonMessage('Make a request');
-    setShowIcon(<HiMapPin />);
-    setTextColor("aqua")
+  function HandleViewRequest() {
+
+    setZoom(15)
+    //don't need to setMapProfileCard here because it was already opened to navigate to the otherprofile page and was stored in global state
+    setCenter({ lat: request.idealLocation[0], lng: request.idealLocation[1] })
+    setMapProfileCard(
+      <MapProfile
+        request={request}
+        setKeyLocationPins={setKeyLocationPins}
+        setCenter={setCenter}
+        setZoom={setZoom}
+        setMapProfileCard={setMapProfileCard}
+        HandleViewOtherProfile={HandleViewOtherProfile}
+      />)
+    //if the user has an active request then open bunkmates page then center and open up their map profile card
+
   }
 
-  function handleMouseLeave() {
-    setRequestButtonMessage('Inactive');
-    setShowIcon(null);
-    setTextColor("red")
+  function DisplayActiveRequest() {
+
+    if (isRequestLoading) {
+      return <div><CircularProgress size={50} sx={{ padding: '10px' }} /></div>
+    } else if (request && !isRequestLoading) {
+      return (
+        <Tooltip arrow title={`${capitalizedName(otherProfile.firstName)} has an active request`}>
+          <Link
+            to="/bunkmates"
+            onClick={HandleViewRequest}
+            style={{ textDecoration: 'none' }}>
+            <ActionButton startIcon={<HiMapPin />} height="30px" title={"View Request"} />
+          </Link>
+        </Tooltip>
+      )
+    }
   }
 
-  const handleViewRequest = () => {
-    setCenter({ lat: userRequest.idealLocation[0], lng: userRequest.idealLocation[1] })
-    setMapProfileCard(<MapProfile profile={userRequest.profile[0]} request={userRequest} />)
-  }
 
 
-  //if profile true and loading indicator false
-  //display profile page
-  //if profile false and loading indicator false
-  //display no profiel exists page
-  //else (profile no proifile, loaindg indicator){
-  //display loading indicator
-  //}
-
-  if (profile && !loading) {
+  if (otherProfile && !isProfileLoading) {
     return (
       <div style={pageStyles.page}>
         <div style={{ height: '9vh' }} />
         <Navbar />
         <div style={pageStyles.profileContainer}>
           <Card sx={pageStyles.leftColumn}>
-            <CardMedia sx={pageStyles.profilePicture} component="img" image={profile.picture} />
+            <CardMedia sx={pageStyles.profilePicture} component="img" image={otherProfile.picture} />
             <CardContent>
               <div style={pageStyles.socialLinks}>
                 <IconButton ><GrInstagram /></IconButton>
@@ -182,36 +186,22 @@ const Profile = () => {
                 <IconButton ><GrTwitter /></IconButton>
               </div>
               <Divider sx={pageStyles.divider} flexItem={true} textAlign='center' >Description</Divider>
-              <Fields iconStart={<BsFillClockFill style={{ color: '#2ACDDD' }} />} fieldTitle="Age" fieldValue={profile.age ?? calculateAge(profile)} />
-              <Fields iconStart={<BsInfinity style={{ color: '#2ACDDD' }} />} fieldTitle="Gender" fieldValue={profile.gender} />
-              <Fields iconStart={<BsBriefcaseFill style={{ color: '#2ACDDD' }} />} fieldTitle="Occupation" fieldValue={profile.employment} />
-              <Fields iconStart={<FaBook style={{ color: '#2ACDDD' }} />} fieldTitle="Current Education" fieldValue={profile.education} />
+              <Fields iconStart={<BsFillClockFill style={{ color: '#2ACDDD' }} />} fieldTitle="Age" fieldValue={otherProfile.age ?? calculateAge(profile)} />
+              <Fields iconStart={<BsInfinity style={{ color: '#2ACDDD' }} />} fieldTitle="Gender" fieldValue={otherProfile.gender} />
+              <Fields iconStart={<BsBriefcaseFill style={{ color: '#2ACDDD' }} />} fieldTitle="Occupation" fieldValue={otherProfile.employment} />
+              <Fields iconStart={<FaBook style={{ color: '#2ACDDD' }} />} fieldTitle="Current Education" fieldValue={otherProfile.education} />
             </CardContent>
           </Card>
           <Card sx={pageStyles.middleColumn}>
             <header style={pageStyles.header}>
               <Tooltip arrow placement="right" title={"Active 3 hours ago"}>
-                <CardHeader sx={pageStyles.cardHeader} titleTypographyProps={pageStyles.name} subheader={profile.email} color="text.primary" title={[capitalizedName(profile.firstName), <MdVerified style={{ color: '#2ACDDD', margin: '5px' }} />]} />
+                <CardHeader sx={pageStyles.cardHeader} titleTypographyProps={pageStyles.name} subheader={otherProfile.email} color="text.primary" title={[capitalizedName(otherProfile.firstName), <MdVerified style={{ color: '#2ACDDD', margin: '5px' }} />]} />
               </Tooltip>
               <div style={pageStyles.actionCenter}>
-                {userRequest
-                  ?
-                  <Tooltip arrow title={`${capitalizedName(profile.firstName)} has an active request`}>
-                    <Link to="/bunkmates" onClick={handleViewRequest} style={{ textDecoration: 'none' }}><ActionButton startIcon={<HiMapPin />} height="30px" title={"View Request"} /></Link>
-                  </Tooltip>
-                  :
-                  <Tooltip arrow title={'Making a request will let people know you are actively looking for bunkmates and will make your profile more visible'}>
-                    <Link to="/bunkmates" style={{ textDecoration: 'none' }} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}><ActionButton bgColor={'black'} color={textColor} startIcon={showIcon} height="30px" title={requestButtonMessage} /></Link>
-                  </Tooltip>
 
+                <DisplayActiveRequest />
 
-                }
-                <Tooltip title={`Edit your profile`}>
-                  <IconButton onClick={handleEditProfile}>
-                    <BsPencil />
-                  </IconButton>
-                </Tooltip>
-                <Tooltip title={`Message ${capitalizedName(profile.firstName)}`}>
+                <Tooltip title={`Message ${capitalizedName(otherProfile.firstName)} `}>
                   <IconButton>
                     <BiMessageDetail />
                   </IconButton>
@@ -219,13 +209,13 @@ const Profile = () => {
                 {bookmark
                   ?
                   <Tooltip arrow title="This profile has been saved!">
-                    <IconButton onClick={(e) => setBookmark(!bookmark)}>
+                    <IconButton onClick={() => setBookmark(!bookmark)}>
                       <BsBookmarksFill style={{ color: '#2ACDDD' }} />
                     </IconButton>
                   </Tooltip>
                   :
                   <Tooltip arrow title="Save this profile">
-                    <IconButton onClick={(e) => setBookmark(!bookmark)}>
+                    <IconButton onClick={() => setBookmark(!bookmark)}>
                       <BsBookmarks />
                     </IconButton>
                   </Tooltip>
@@ -234,34 +224,34 @@ const Profile = () => {
             </header>
             <Divider sx={pageStyles.divider} textAlign='left'>Biography</Divider>
             <CardContent>
-              <Typography sx={pageStyles.biography} variant="body1" color="text.secondary">{profile.about}</Typography>
+              <Typography sx={pageStyles.biography} variant="body1" color="text.secondary">{otherProfile.about}</Typography>
               <Divider sx={pageStyles.divider} textAlign='left'>Habits and Lifestyles</Divider>
               <div style={pageStyles.habitsAndLifestyle}>
                 <section style={pageStyles.fieldsWrapper}>
                   <div style={pageStyles.fields}>
                     <div style={{ width: '100%' }}>
-                      <Fields iconStart={<MdPets style={{ color: '#2ACDDD' }} />} fieldTitle="Own Pets" fieldValue={profile.havePets} />
-                      <Fields iconStart={<BsAlarmFill style={{ color: '#2ACDDD' }} />} fieldTitle="Sleep Schedule" fieldValue={profile.sleepSchedule} />
+                      <Fields iconStart={<MdPets style={{ color: '#2ACDDD' }} />} fieldTitle="Own Pets" fieldValue={otherProfile.havePets} />
+                      <Fields iconStart={<BsAlarmFill style={{ color: '#2ACDDD' }} />} fieldTitle="Sleep Schedule" fieldValue={otherProfile.sleepSchedule} />
                     </div>
                   </div>
                   <div style={pageStyles.fields}>
                     <div style={{ width: '100%' }}>
-                      <Fields iconStart={<MdCleaningServices style={{ color: '#2ACDDD' }} />} fieldTitle="Cleanliness" fieldValue={profile.cleanliness} />
-                      <Fields iconStart={<FaWineGlassAlt style={{ color: '#2ACDDD' }} />} fieldTitle="Drinking" fieldValue={profile.drinking} />
+                      <Fields iconStart={<MdCleaningServices style={{ color: '#2ACDDD' }} />} fieldTitle="Cleanliness" fieldValue={otherProfile.cleanliness} />
+                      <Fields iconStart={<FaWineGlassAlt style={{ color: '#2ACDDD' }} />} fieldTitle="Drinking" fieldValue={otherProfile.drinking} />
                     </div>
                   </div>
                 </section>
                 <section style={pageStyles.fieldsWrapper}>
                   <div style={pageStyles.fields}>
                     <div style={{ width: '100%' }}>
-                      <Fields iconStart={<FaSmoking style={{ color: '#2ACDDD' }} />} fieldTitle="Smoking" fieldValue={profile.smoking} />
-                      <Fields iconStart={<FaCannabis style={{ color: '#2ACDDD' }} />} fieldTitle="Cannabis" fieldValue={profile.cannabis} />
+                      <Fields iconStart={<FaSmoking style={{ color: '#2ACDDD' }} />} fieldTitle="Smoking" fieldValue={otherProfile.smoking} />
+                      <Fields iconStart={<FaCannabis style={{ color: '#2ACDDD' }} />} fieldTitle="Cannabis" fieldValue={otherProfile.cannabis} />
                     </div>
                   </div>
                   <div style={pageStyles.fields}>
                     <div style={{ width: '100%' }}>
-                      <Fields iconStart={<FaRegHandshake style={{ color: '#2ACDDD' }} />} fieldTitle="Ok With Guests" fieldValue={profile.tolerateGuests} />
-                      <Fields iconStart={<FaDog style={{ color: '#2ACDDD' }} />} fieldTitle="Ok With Pets" fieldValue={profile.toleratePets} />
+                      <Fields iconStart={<FaRegHandshake style={{ color: '#2ACDDD' }} />} fieldTitle="Ok With Guests" fieldValue={otherProfile.tolerateGuests} />
+                      <Fields iconStart={<FaDog style={{ color: '#2ACDDD' }} />} fieldTitle="Ok With Pets" fieldValue={otherProfile.toleratePets} />
                     </div>
                   </div>
                 </section>
@@ -283,20 +273,18 @@ const Profile = () => {
     )
 
   }
-  else if (!profile && !loading) {
+  else if (!otherProfile && !isProfileLoading) {
     return (
       <div className='page-container'>
         <div style={{ height: '9vh' }} />
         <Navbar />
         <div className="error-content">
-          <h1>No profile associated with this account</h1>
+          <h1>Profile doesn't exist</h1>
         </div>
       </div>
     )
   } else {
     return (
-      <Box style={pageStyles.loadingUi}>{loading}</Box>)
+      <Box style={pageStyles.loadingUi}><CircularProgress size={50} /></Box>)
   }
 };
-
-export default Profile;

@@ -27,8 +27,8 @@ import {
 
 import { SignInContext } from './GlobalStateManagement/SignInContext';
 import { formatContext } from './GlobalStateManagement/FormatContext';
-import { BuildUserContext } from './GlobalStateManagement/UserContext';
-import { BunkmatesContext } from './GlobalStateManagement/UserContext';
+import { UserDataContext } from './GlobalStateManagement/UserDataContext';
+import { BunkmatesContext } from './GlobalStateManagement/BunkmatesContext';
 
 
 import imageCompression from 'browser-image-compression';
@@ -51,7 +51,7 @@ function ProfileMakerForm({ forwardButton, backwardButton }) {
   const { aboutError, aboutHelperText, handleAboutValidation } = useContext(AboutValidationContext)
   const { isOpen, setIsOpen } = useContext(SignInContext)
   const { calculateAge, capitalizedName } = useContext(formatContext)
-  const { profileHandleSubmit, profileHandleUpdate } = useContext(BuildUserContext)
+  const { profileHandleSubmit, profileHandleUpdate } = useContext(UserDataContext)
   const [userProfile, setUserProfile] = useState("")
   const { rerender, setRerender } = useContext(BunkmatesContext)
 
@@ -250,7 +250,7 @@ function ProfileMakerForm({ forwardButton, backwardButton }) {
     <div style={{ display: 'flex', justifyContent: 'center', borderRadius: "90px" }}>
       {state?.values?.picture ? <img src={state?.values?.picture} style={{ width: "100px", height: "100px", borderRadius: "50px" }}></img> : null}
     </div>
-    <UploadFile helperText="Supported Files: jpg, png" helperTextPos="45%" width="50%" type="file" message="Upload Profile Picture" accept={["image/jpg", "image/jpeg", "image/png"]} endIcon={<CameraAltIcon sx={{ color: "aqua" }} />} handleFileUpload={handleFileUpload} />
+    <UploadFile helperText="Supported Files: jpg, png" helperTextPos="45%" width="50%" type="file" message="Upload Picture" accept={["image/jpg", "image/jpeg", "image/png"]} endIcon={<CameraAltIcon sx={{ color: "aqua" }} />} handleFileUpload={handleFileUpload} />
     <LineBox flex={true} CssTextField={[
       <FormSingleLineInput required="true" size='small' type="text" field="Legal First Name" placeHolder="Sam" onChange={(e) => { handleEmptyStringValidation(e, 'firstName') }} value={state?.values?.firstName} />,
       <FormSingleLineInput required="true" size="small" type="text" field="Legal Last Name" placeHolder="Jenkins" onChange={(e) => { handleEmptyStringValidation(e, 'lastName') }} value={state?.values?.lastName} />,
