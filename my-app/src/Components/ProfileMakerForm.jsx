@@ -31,6 +31,8 @@ import { UserDataContext } from './GlobalStateManagement/UserDataContext';
 import { BunkmatesContext } from './GlobalStateManagement/BunkmatesContext';
 
 
+import imageCompression from 'browser-image-compression';
+
 //styles
 const backButtonStyles = {
   display: 'flex',
@@ -148,10 +150,24 @@ function ProfileMakerForm({ forwardButton, backwardButton }) {
     });
   }
 
-  //converts image to base64-encoded string
-  const handleConversion = (file, callback) => {
+  //converts image + compresses to base64-encoded string
+  const handleConversion = async (file, callback) => {
+    let compressedFile
+    const options = {
+      maxSizeMB: 1,
+      maxWidthOrHeight: 1920,
+    }
+
+    try {
+      compressedFile = await imageCompression(file, options);
+      console.log(compressedFile.size / 1024 / 1024);
+    } catch (error) {
+      console.log(error)
+      return
+    }
+
     let reader = new FileReader();
-    reader.readAsDataURL(file);
+    reader.readAsDataURL(compressedFile);
     reader.onload = function () {
       callback(reader.result);
     };

@@ -1,22 +1,21 @@
 import React from "react"
-import { Typography } from "@mui/material"
-import { IoBedSharp } from "react-icons/io5";
-import { MdVilla } from "react-icons/md";
-import { AiFillDollarCircle, } from "react-icons/ai";
-import { BsPeopleFill } from "react-icons/bs";
+import {Typography} from "@mui/material"
+import {IoBedSharp} from "react-icons/io5";
+import {MdVilla} from "react-icons/md";
+import {BsPeopleFill} from "react-icons/bs";
 
 /**
  * @function Overview
  *
  * @brief A functional UI component that displays an overview section with multiple overview points and takes no props.
- * 
+ *
  * @returns {React.ReactElement} A React element representing the overview section UI component.
  */
 export default function Overview() {
 
     const overviewStyles = {
-        container: { margin: '20px 0px 20px 0px' },
-        title: { padding: '10px 0px 10px 0px ', fontWeight: 600, },
+        container: {margin: '20px 0px 20px 0px'},
+        title: {padding: '10px 0px 10px 0px ', fontWeight: 600,},
     }
 
     return (
@@ -25,17 +24,17 @@ export default function Overview() {
                 Overview
             </Typography>
             <OverviewPoint
-                icon={<MdVilla size={30} />}
+                icon={<MdVilla size={30}/>}
                 advantage="Room In Villa"
-                explanation={"Your own room in a home, plus access to shared spaces"} />
+                explanation={"Your own room in a home, plus access to shared spaces"}/>
             <OverviewPoint
-                icon={<IoBedSharp size={30} />}
+                icon={<IoBedSharp size={30}/>}
                 advantage="Private rooms for rent"
-                explanation={"You can rent one of the bedrooms in the shared home"} />
+                explanation={"You can rent one of the bedrooms in the shared home"}/>
             <OverviewPoint
-                icon={<BsPeopleFill size={30} />}
+                icon={<BsPeopleFill size={30}/>}
                 advantage="Roommates Allowed"
-                explanation={"This Landlord allows you to invite your own roommates"} />
+                explanation={"This Landlord allows you to invite your own roommates"}/>
         </div>
     )
 }
@@ -55,16 +54,16 @@ export default function Overview() {
  *    explanation="This property's security deposit is 60% cheaper than similar properties!"
  * />
  */
-export function OverviewPoint({ icon, advantage, explanation }) {
+export function OverviewPoint({icon, advantage, explanation}) {
 
     const overviewPointStyles = {
         overviewContainer: {
             display: 'flex', flexDirection: 'row', padding: '10px 5px 10px 5px',
         },
         text: {
-            container: { padding: '0px 10px 0px 10px' },
-            advantage: { fontWeight: 600, fontSize: '17px', padding: '2px' },
-            explanation: { padding: '10px 0px 10px 0px ', fontWeight: 600, fontSize: '15px' }
+            container: {padding: '0px 10px 0px 10px'},
+            advantage: {fontWeight: 600, fontSize: '17px', padding: '2px'},
+            explanation: {padding: '10px 0px 10px 0px ', fontWeight: 600, fontSize: '15px'}
         }
     }
 

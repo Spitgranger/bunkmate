@@ -1,6 +1,6 @@
 import React from "react"
 import {useLocation} from "react-router-dom"
-import Navbar from "../../Components/Navbar";
+import Navbar from "../navigation/Navbar";
 import Overview from './components/overview'
 import Gallery from './components/gallery'
 import Property from './components/property'
@@ -27,6 +27,7 @@ import UnitCard from './components/unitCard'
  * 8. UnitCard
  * @returns {React.ReactElement} a react element that contains a wealth of information about the property
  */
+
 export default function L1Details() {
 
     const pageStyles = {
