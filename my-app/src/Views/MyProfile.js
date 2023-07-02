@@ -1,6 +1,5 @@
 import React, {useEffect, useState, useContext} from 'react';
 import './Profile.css'
-import Navbar from './navigation/Navbar';
 import {formatContext} from '../Components/GlobalStateManagement/FormatContext';
 import {SignInContext} from '../Components/GlobalStateManagement/SignInContext';
 
@@ -35,7 +34,6 @@ import {setZoom, setMapProfileCard} from '../features/bunkmate/bunkmateSlice';
 
 
 const Profile = () => {
-    console.log("Profile rerender")
     const profileData = useSelector((state) => state.profile);
     const error = useSelector(state => state.profile.error)
     const dispatch = useDispatch();
@@ -209,7 +207,7 @@ const Profile = () => {
     //if profile true and loading indicator false
     //display profile page
     //if profile false and loading indicator false
-    //display no profiel exists page
+    //display no profile exists page
     //else (profile no proifile, loaindg indicator){
     //display loading indicator
     //}
@@ -218,7 +216,6 @@ const Profile = () => {
         return (
             <div style={pageStyles.page}>
                 <div style={{height: '9vh'}}/>
-                <Navbar/>
                 <div style={pageStyles.profileContainer}>
                     <Card sx={pageStyles.leftColumn}>
                         <CardMedia sx={pageStyles.profilePicture} component="img" image={profile.picture}/>
@@ -322,7 +319,6 @@ const Profile = () => {
         return (
             <div className='page-container'>
                 <div style={{height: '9vh'}}/>
-                <Navbar/>
                 <div className="error-content">
                     <h1>No profile associated with this account</h1>
                 </div>

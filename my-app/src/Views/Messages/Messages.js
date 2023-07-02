@@ -112,7 +112,6 @@ const Messages = () => {
         return (
             <>
                 <div style={{height: '9vh'}}/>
-                <Navbar/>
                 <div style={{display: 'flex', justifyContent: 'center', margin: '100px'}}>
                     <h1 style={{height: '49px'}}>You need to be logged in to message</h1>
                 </div>

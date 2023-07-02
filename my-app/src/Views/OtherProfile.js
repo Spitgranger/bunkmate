@@ -194,7 +194,6 @@ export function OtherProfile() {
         return (
             <div style={pageStyles.page}>
                 <div style={{height: '9vh'}}/>
-                <Navbar/>
                 <div style={pageStyles.profileContainer}>
                     <Card sx={pageStyles.leftColumn}>
                         <CardMedia sx={pageStyles.profilePicture} component="img" image={otherProfile.picture}/>

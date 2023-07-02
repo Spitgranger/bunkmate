@@ -1,5 +1,4 @@
 import React, {useContext, useEffect, useState} from "react";
-import Navbar from "../navigation/Navbar";
 import {GoogleMap, MarkerF, OVERLAY_MOUSE_TARGET, OverlayViewF} from "@react-google-maps/api";
 import mapStyles from '../../data/mapStyles.json'
 import {Card, Typography, IconButton, Tooltip, CircularProgress} from "@mui/material/"
@@ -99,7 +98,7 @@ const Bunkmates = () => {
     const {loading, listingArray, userRequests, userProfile, userOwnData,} = useGetUserData()
 
     const [statePostArray, setStatePostArray] = useState([])
-    //get Social feed informations
+    //get Social feed information
     useEffect(() => {
         console.log(zoom)
         getPost().then((result) => setStatePostArray(result.data.reverse()));
@@ -275,7 +274,6 @@ const Bunkmates = () => {
                             dispatch(setMapProfileCard(null))
                         }}>
                         <div id="results"/>
-                        <Navbar chooseStyle={"glass"}/>
                         <section className="bunkamtes__social-feed" style={{
                             borderRadius: '50%',
                             backgroundColor: 'black',
