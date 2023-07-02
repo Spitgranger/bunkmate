@@ -18,7 +18,7 @@ export default function ValidationProvider({ children }) {
       const profile = await getProfile()
       return profile
     }
-    handleProfile().then((profile) => { setValues(profile.data); console.log(profile.data) });
+    handleProfile().then((profile) => { setValues(profile.data); });
   }, [])
 
 
@@ -88,7 +88,7 @@ export default function ValidationProvider({ children }) {
   const [globalError, setGlobalError] = useState(true)
 
   const handleGlobalError = (fieldError) => {
-    console.log(fieldError)
+    //console.log(fieldError)
     //checks to see if all items within the object are false
     if (Object.values(fieldError).every(val => val === false)) {
       setGlobalError(false)
@@ -261,7 +261,7 @@ export default function ValidationProvider({ children }) {
   }
 
   useEffect(() => {
-    console.log(values)
+    //console.log(values)
     handleCreditLogic(handleCreditValidation(values));
     handlePhoneLogic(handlePhoneValidation(values));
     handleEmailValidation(values);

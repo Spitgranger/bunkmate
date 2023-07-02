@@ -78,6 +78,7 @@ const Bunkmates = () => {
         libraries: libraries,
     })
 
+
     const id = JSON.parse(localStorage.getItem("profile"))?.result?._id;
     //retrieve local storage data
     const { localStorageData } = useContext(chatClientContext)
@@ -107,6 +108,7 @@ const Bunkmates = () => {
         }
 
     }, [])
+
 
 
     //THIS LOGIC ONLY WORKS FOR NOW PROBABLY CHANGE THE API ENDPOINT TO RETURN A BOOLEAN THAT IS EITHER TRUE OR FALSE
@@ -149,6 +151,7 @@ const Bunkmates = () => {
                     request={request}
                     center={center}
                 />)
+
         )
         //store the coordinates of the pin that was clicked on
     }
@@ -267,9 +270,11 @@ const Bunkmates = () => {
                                     </Tooltip>
                             }
                         </section>
+
                         <KeyLocationsMarkers keyLocationPins={keyLocationPins} center={center} />
                         {socialFeed ? <SocialFeed userOwnData={userOwnData} userProfile={userProfile} statePostArray={statePostArray} setStatePostArray={setStatePostArray} /> : null}
                         {mapProfileCard ?? null}
+
                         {selected && <MarkerF position={center} icon={"http://maps.google.com/mapfiles/ms/icons/blue.png"} />}
                         {listingArray.map((request, index) => {
                             return (
