@@ -12,7 +12,14 @@ import { InfoWindowF } from '@react-google-maps/api';
 import { UserDataContext } from '../../../../Components/GlobalStateManagement/UserDataContext';
 import RetrieveKeyLocations from './KeyLocations';
 
-function GroupMapCard({ request, BunkmateInfo, coordinates, center, HandleViewOtherProfile, }) {
+interface GroupMapCardProps {
+    request: object
+    BunkmateInfo: object
+    coordinates: object
+    center: object
+    HandleViewOtherProfile: Function
+}
+function GroupMapCard({ request, BunkmateInfo, coordinates, center, HandleViewOtherProfile, }: GroupMapCardProps) {
 
     //subtract 1 because linkchats contains the user's own profile in the array
     const existingBunkmates = request?.linkChats?.length;

@@ -7,7 +7,7 @@ import CreateRequestForm from './Components/RequestForm/CreateRequestForm'
 import {ActionButton} from "../../Components/Utils/Form.jsx";
 import {SignInContext} from "../../Components/GlobalStateManagement/SignInContext";
 import SingleMapCard from "./Components/Map/SingleMapCard"
-import GroupMapCard from "./Components/Map/GroupMapCard"
+import GroupMapCard from "./Components/Map/GroupMapCard.tsx"
 import {deleteRequest} from '../../api'
 import {RxTriangleDown} from "react-icons/rx"
 import {MapRequestMarker} from './Components/Map/MapMarkers'

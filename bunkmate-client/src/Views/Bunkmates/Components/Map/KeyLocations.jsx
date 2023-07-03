@@ -17,7 +17,7 @@ export default function RetrieveKeyLocations({ coordinates, request }) {
   /*
   ---Hierarchical Structure---
   
-  SingleMapCard.jsx & GroupMapCard.jsx
+  SingleMapCard.jsx & GroupMapCard.tsx
       |
       -->RetrieveKeyLocations.jsx
   */

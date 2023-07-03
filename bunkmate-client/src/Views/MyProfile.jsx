@@ -38,7 +38,7 @@ const Profile = () => {
     const error = useSelector(state => state.profile.error)
     const dispatch = useDispatch();
     const pageStyles = {
-        page: {display: 'flex', justifyContent: 'center', alignItems: 'flex-end', height: '100%'},
+        page: {display: 'flex', justifyContent: 'center', alignItems: 'flex-end', height: '100vh'},
         profileContainer: {display: 'flex', flexFLow: 'row wrap', width: '75%', height: '91vh'},
         leftColumn: {flex: 1, margin: '30px', borderRadius: '15px', padding: '15px', minWidth: '350px',},
         rightColumn: {flex: 1, margin: '30px', borderRadius: '15px', padding: '10px'},
