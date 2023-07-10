@@ -2,7 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
-import { Server } from 'socket.io';
+import {Server} from 'socket.io';
 import userRoutes from './routes/users';
 import profileRoutes from './routes/profile';
 import requestRoutes from './routes/request';
@@ -23,16 +23,17 @@ let redisStore = new (RedisStore as any)({
 
 const io = new Server(server, {
     cors: {
-        origin: ["http://localhost:3000"],
+        origin: ["http://localhost:3000", "http://localhost:5173"],
         credentials: true,
     }
 });
-io.on("connect", () => {});
+io.on("connect", () => {
+});
 
 dotenv.config();
 
 app.use(cors({
-    origin: "http://localhost:3000",
+    origin: "http://localhost:5173",
     credentials: true,
 }));
 app.use(helmet());
@@ -49,8 +50,8 @@ app.use(session({
         sameSite: process.env.ENVIRONMENT === "production" ? "none" : "lax",
     }
 }))
-app.use(bodyParser.json({ limit: "30mb" }));
-app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
+app.use(bodyParser.json({limit: "30mb"}));
+app.use(bodyParser.urlencoded({limit: "30mb", extended: true}));
 app.use('/api/users', userRoutes);
 app.use('/api/profile', profileRoutes);
 app.use('/api/request', requestRoutes);
@@ -60,4 +61,8 @@ const CONNECTION_URL = process.env.CONNECTION_URL || "mongodb://127.0.0.1/bunkma
 
 mongoose.set('strictQuery', false)
 mongoose.connect(CONNECTION_URL, {})
-    .then(() => { server.listen(PORT, () => console.log(`Server running on port ${PORT}`)) }).catch((error) => { console.log(error.message) });
+    .then(() => {
+        server.listen(PORT, () => console.log(`Server running on port ${PORT}`))
+    }).catch((error) => {
+    console.log(error.message)
+});

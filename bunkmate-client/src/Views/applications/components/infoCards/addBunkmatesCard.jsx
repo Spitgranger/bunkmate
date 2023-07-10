@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {
     Alert,
@@ -12,27 +12,27 @@ import {
     tooltipClasses,
     AlertTitle
 } from '@mui/material';
-import { styled } from '@mui/material/styles';
-import { getProfile } from '../../../../api';
-import { AiFillQuestionCircle } from 'react-icons/ai';
-import {setContinueDisabled, setBunkmateField} from "../../../../features/applications/applicationsSlice";
+import {styled} from '@mui/material/styles';
+import {getProfile} from '../../../../api/index';
+import {AiFillQuestionCircle} from 'react-icons/ai';
+import {setContinueDisabled, setBunkmateField} from "../../../../features/applications/applicationsSlice.js";
 import {bunkmateFieldValidation} from "../../utils/validationUtils";
 
 /**
  * @function AddBunkmatesCard
- * 
+ *
  * @brief this functional UI component allows users to link bunkmates and divide up the rent cost amongst everyone
- * 
+ *
  * @param {object} data this object stores data on the unit
  * @param {number} index this number represents the index within the listings page
  * @details
  * How this component is structured
-    * - TopInfoContainer (contains information about the remaining rent cost that needs to be allocated)
-    * - UserOwnAllocation (contains the user's profile information and an input field to enter the desired amount of rent to be distributed)
-    * - BunkmateAllocation (contains an input field for linking roommates and another to enter the desired amount of rent to be distributed)
+ * - TopInfoContainer (contains information about the remaining rent cost that needs to be allocated)
+ * - UserOwnAllocation (contains the user's profile information and an input field to enter the desired amount of rent to be distributed)
+ * - BunkmateAllocation (contains an input field for linking roommates and another to enter the desired amount of rent to be distributed)
  * @returns {React.ReactElement} a react element that contains the ability to assign rent costs to your roommates
  */
-export default function AddBunkmatesCard({ data, index }) {
+export default function AddBunkmatesCard({data, index}) {
 
     const cardStyles = {
         padding: '5%', margin: '2%', borderRadius: '20px', display: 'flex', flexDirection: 'column', minWidth: '350px',
@@ -85,7 +85,7 @@ export default function AddBunkmatesCard({ data, index }) {
     //Validation: useEffect hook used for managing the enabled / disabled state of the continue button
     useEffect(() => {
         //check if bunkmateCount is 0, if so then enable continue button
-        if (bunkmateCount === 0){
+        if (bunkmateCount === 0) {
             dispatch(setContinueDisabled(false));
         }
         //check if bunkmateCount is greater than 0
@@ -98,12 +98,12 @@ export default function AddBunkmatesCard({ data, index }) {
                 dispatch(setContinueDisabled(true));
             }
         }
-    },[bunkmateCount, unallocatedRent, bunkmateField])
+    }, [bunkmateCount, unallocatedRent, bunkmateField])
 
 
     /**
      * @brief event handler for adding rent amount to an index within the array
-     * 
+     *
      * @param {number} index the index within the array of input fields
      * @param {number} value the data retrieved from the input field
      * @see setBunkmateRent sets the bunkmate Rent
@@ -127,7 +127,7 @@ export default function AddBunkmatesCard({ data, index }) {
 
     /**
      * @brief event handler for adding an extra placeholder (empty string) within the array for a new field (adding an input field)
-     * 
+     *
      * @see setBunkmateRent sets the bunkmate fields
      */
     const handleAddInput = () => {
@@ -137,7 +137,7 @@ export default function AddBunkmatesCard({ data, index }) {
 
     /**
      * @brief event handler for removing an element at a specific index within the array (removing an input field)
-     * 
+     *
      * @param {number} index the index within the array of input fields
      * @see setBunkmateRent sets bunkmateRent
      * @see setUnallocatedRent sets unallocatedRent
@@ -174,19 +174,20 @@ export default function AddBunkmatesCard({ data, index }) {
             dispatch(setBunkmateField([""]))
             setUnallocatedRent(unitPrice)
         }
-        //if bunkmateCount has decreased then remove an input field
+            //if bunkmateCount has decreased then remove an input field
         //subtract 1 because bunkmateRent initially has an extra empty string to compensate for User's Own Allocation
         else if (bunkmateCount < bunkmateRent.length - 1) {
             handleRemoveInput(index);
         }
-        //if bunkmateCount has increased then add an input field
+            //if bunkmateCount has increased then add an input field
         //subtract 1 because bunkmateRent initially has an extra empty string to compensate for User's Own Allocation
         else if (bunkmateCount > bunkmateRent.length - 1) {
             handleAddInput();
         }
     }, [bunkmateCount])
 
-    {/* Only display the card if bunkmateCount is 1 or greater */ }
+    {/* Only display the card if bunkmateCount is 1 or greater */
+    }
     return (
         bunkmateCount >= 1
             ?
@@ -223,7 +224,7 @@ export default function AddBunkmatesCard({ data, index }) {
                             />
                     )
                 })}
-            </Card >
+            </Card>
             : null
     );
 };
@@ -231,28 +232,28 @@ export default function AddBunkmatesCard({ data, index }) {
 
 /**
  * @brief This functional UI component showcases the amount of rent cost that hasn't been distributed yet
- * 
+ *
  * @param {number} roundedUnallocatedRent is the rounded amount of rent that still needs to be distributed
  * @returns {React.ReactElement}
- * 
+ *
  * @example
  * <TopInfoContainer unallocatedRent={500}/>
  */
-function TopInfoContainer({ roundedUnallocatedRent }) {
+function TopInfoContainer({roundedUnallocatedRent}) {
 
     const styles = {
-        title: { fontWeight: 600 },
-        unAllocatedContainer: { width: '100%', display: 'flex', flexDirection: 'row', },
-        questionMarkIconContainer: { display: 'flex', alignItems: 'center' },
-        questionMarkIcon: { cursor: 'pointer', height: '100%', margin: '0px 0px 5px 5px', color: 'grey' },
-        text: { fontSize: '16px', fontWeight: 600 },
-        tooltipText: { fontSize: '15px' },
+        title: {fontWeight: 600},
+        unAllocatedContainer: {width: '100%', display: 'flex', flexDirection: 'row',},
+        questionMarkIconContainer: {display: 'flex', alignItems: 'center'},
+        questionMarkIcon: {cursor: 'pointer', height: '100%', margin: '0px 0px 5px 5px', color: 'grey'},
+        text: {fontSize: '16px', fontWeight: 600},
+        tooltipText: {fontSize: '15px'},
     }
 
     //styled tooltip
-    const HtmlTooltip = styled(({ className, ...props }) => (
-        <Tooltip {...props} classes={{ popper: className }} />
-    ))(({ theme }) => ({
+    const HtmlTooltip = styled(({className, ...props}) => (
+        <Tooltip {...props} classes={{popper: className}}/>
+    ))(({theme}) => ({
         [`& .${tooltipClasses.tooltip}`]: {
             backgroundColor: '#f5f5f9',
             color: 'rgba(0, 0, 0, 0.87)',
@@ -267,7 +268,7 @@ function TopInfoContainer({ roundedUnallocatedRent }) {
 
     return (
         <>
-            <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'row', justifyContent: 'flex-start' }}>
+            <div style={{display: 'flex', alignItems: 'center', flexDirection: 'row', justifyContent: 'flex-start'}}>
                 <Typography color="text.primary" variant="h6" sx={styles.title}>
                     Invite Bunkmates
                 </Typography>
@@ -279,10 +280,10 @@ function TopInfoContainer({ roundedUnallocatedRent }) {
                     </Typography>
                 }>
                     <div style={styles.questionMarkIconContainer}>
-                        <AiFillQuestionCircle style={styles.questionMarkIcon} />
+                        <AiFillQuestionCircle style={styles.questionMarkIcon}/>
                     </div>
                 </HtmlTooltip>
-            </div >
+            </div>
             <div style={styles.unAllocatedContainer}>
                 <Typography color="text.secondary" variant="h6" sx={styles.text}>
                     Unallocated Monthly Rent:
@@ -298,44 +299,45 @@ function TopInfoContainer({ roundedUnallocatedRent }) {
 
 /**
  * @brief This functional UI component takes up a single row and showcases the amount of rent cost that the user themself has to take on
- * 
+ *
  * @param {number} index is the index within the bunkmatesField
  * @param {function}  handleRentChange is an event handler function that records the value from an input field
  * @param {object} userProfile stored profile data on the user
  * @param {array} bunkmateRent the values of each input stored in an array
  * @param {number} splitRentCost the cost of rent split across numerous bunkmates
  * @returns {React.ReactElement} a react element that contains the user's profile information and an input field to declare rent paying amount
- * 
+ *
  * @example
- * <UserOwnAllocation 
-    * index={0} 
-    * handleRentChange={handleRentChange} 
-    * userProfile={userProfile} 
-    * bunkmateRent={["", "240", "", "500"]
+ * <UserOwnAllocation
+ * index={0}
+ * handleRentChange={handleRentChange}
+ * userProfile={userProfile}
+ * bunkmateRent={["", "240", "", "500"]
  * />
  */
 function UserOwnAllocation(
-    {index,
-    handleRentChange,
-    userProfile,
-    bunkmateRent,
-    splitRentCost,
+    {
+        index,
+        handleRentChange,
+        userProfile,
+        bunkmateRent,
+        splitRentCost,
     }) {
 
     const styles = {
-        divider: { margin: '10px' },
-        container: { display: 'flex', flexDirection: 'row' },
-        profileContainer: { display: 'flex', alignItems: 'center', margin: '3%', width: '200px' },
-        firstName: { fontSize: '18px', fontWeight: 550, padding: '0px 20px 0px 20px' },
-        inputField: { margin: '3%', width: '150px' },
+        divider: {margin: '10px'},
+        container: {display: 'flex', flexDirection: 'row'},
+        profileContainer: {display: 'flex', alignItems: 'center', margin: '3%', width: '200px'},
+        firstName: {fontSize: '18px', fontWeight: 550, padding: '0px 20px 0px 20px'},
+        inputField: {margin: '3%', width: '150px'},
     }
 
     return (
         <>
-            <Divider sx={styles.divider} />
-            <div style={styles.container} >
+            <Divider sx={styles.divider}/>
+            <div style={styles.container}>
                 <div style={styles.profileContainer}>
-                    <Avatar src={userProfile?.picture} alt={`${userProfile?.firstName}'s avatar`} />
+                    <Avatar src={userProfile?.picture} alt={`${userProfile?.firstName}'s avatar`}/>
                     <Typography color="text.secondary" variant="h6" sx={styles.firstName}>
                         {userProfile?.firstName}
                     </Typography>
@@ -358,7 +360,7 @@ function UserOwnAllocation(
                         ),
                     }}
                 />
-            </div >
+            </div>
         </>
     )
 }
@@ -372,29 +374,31 @@ function UserOwnAllocation(
  * @param {number} splitRentCost the cost of rent split across numerous bunkmates
  * @param {array} bunkmateField each index within the array stores the user's name or email
  * @returns {React.ReactElement} a react element that contains an input field for linking a roommate and another for declaring rent payment amount
- * 
+ *
  * @example
- * <BunkmateAllocation 
-    * index={1}
-    * handleRentChange={handleRentChange}
-    * bunkmateRent={["", 243, "", 500]}
- * /> 
+ * <BunkmateAllocation
+ * index={1}
+ * handleRentChange={handleRentChange}
+ * bunkmateRent={["", 243, "", 500]}
+ * />
  */
 function BunkmateAllocation(
-    {index,
-    handleRentChange,
-    bunkmateRent,
-    splitRentCost,
-    bunkmateField,}
+    {
+        index,
+        handleRentChange,
+        bunkmateRent,
+        splitRentCost,
+        bunkmateField,
+    }
 ) {
 
     const styles = {
-        divider: { margin: '10px' },
-        container: { display: 'flex', flexDirection: 'row' },
-        profileContainer: { display: 'flex', alignItems: 'center', margin: '3%', width: '200px' },
-        firstName: { fontSize: '18px', fontWeight: 550, padding: '0px 20px 0px 20px' },
-        linkBunkmateField: { margin: '3%', width: '200px' },
-        allocateRentField: { margin: '3%', width: '150px' }
+        divider: {margin: '10px'},
+        container: {display: 'flex', flexDirection: 'row'},
+        profileContainer: {display: 'flex', alignItems: 'center', margin: '3%', width: '200px'},
+        firstName: {fontSize: '18px', fontWeight: 550, padding: '0px 20px 0px 20px'},
+        linkBunkmateField: {margin: '3%', width: '200px'},
+        allocateRentField: {margin: '3%', width: '150px'}
     }
 
     const dispatch = useDispatch();
@@ -415,7 +419,7 @@ function BunkmateAllocation(
     const handleBunkmateChange = (index, value, validation) => {
         const isValid = validation(value)
         const newBunkmateField = [...bunkmateField];
-        if (isValid){
+        if (isValid) {
             setError(false)
             setLocalErrorMessage("")
             newBunkmateField[index] = value;
@@ -433,7 +437,7 @@ function BunkmateAllocation(
 
     return (
         <>
-            <Divider sx={styles.divider} />
+            <Divider sx={styles.divider}/>
             <div style={styles.container}>
                 <TextField
                     sx={styles.linkBunkmateField}

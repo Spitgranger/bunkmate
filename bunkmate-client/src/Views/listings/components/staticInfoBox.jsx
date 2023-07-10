@@ -1,6 +1,6 @@
-import { Typography, Divider, IconButton } from "@mui/material"
-import { ActionButton } from "../../../Components/Utils/Form.jsx"
-import { Link } from "react-router-dom"
+import {Typography, Divider, IconButton} from "@mui/material"
+import {ActionButton} from "../../../Components/Utils/Form.tsx"
+import {Link} from "react-router-dom"
 import Actions from "./Actions"
 
 /**
@@ -13,12 +13,12 @@ import Actions from "./Actions"
  * @param {number} index stores the index of the unit details (inherited props from l2Details)
  * @returns {React.ReactElement} a react element that contains the most important information about the unit
  */
-export default function StaticInfoBox({ data, index }) {
+export default function StaticInfoBox({data, index}) {
 
     return (
         <>
-            <UnitDetails data={data} index={index} />
-            <ActionBox data={data} index={index} />
+            <UnitDetails data={data} index={index}/>
+            <ActionBox data={data} index={index}/>
         </>
 
     )
@@ -40,19 +40,19 @@ export default function StaticInfoBox({ data, index }) {
  * 7. Type of unit (duplex, studio)
  * @returns {JSX.Element} a jsx element that contains key information on the unit
  */
-const UnitDetails = ({ data, index }) => {
+const UnitDetails = ({data, index}) => {
 
     const unitDetailsStyles = {
-        container: { margin: '0px 15px 0px 15px', width: '100%' },
-        title: { padding: '10px 0px 10px 0px', fontWeight: 800 },
-        price: { padding: '5px', fontWeight: 600 },
-        dateAvailable: { padding: '5px', color: 'grey' },
-        divider: { margin: '0px 5px 0px 5px' },
+        container: {margin: '0px 15px 0px 15px', width: '100%'},
+        title: {padding: '10px 0px 10px 0px', fontWeight: 800},
+        price: {padding: '5px', fontWeight: 600},
+        dateAvailable: {padding: '5px', color: 'grey'},
+        divider: {margin: '0px 5px 0px 5px'},
         keyInfo: {
-            container: { display: 'flex', flexDirection: 'row' },
-            interior: { margin: '0px 5px 0px 5px', color: 'grey' }
+            container: {display: 'flex', flexDirection: 'row'},
+            interior: {margin: '0px 5px 0px 5px', color: 'grey'}
         },
-        firstRow: { display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
+        firstRow: {display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'},
     }
 
     return (
@@ -61,7 +61,7 @@ const UnitDetails = ({ data, index }) => {
                 <Typography color="text.primary" variant="h4" sx={unitDetailsStyles.title}>
                     {data.listing_details.units[index].title}
                 </Typography>
-                <Actions />
+                <Actions/>
             </div>
             <Typography color="text.secondary" variant="h5" sx={unitDetailsStyles.price}>
                 {`$${data.listing_details.units[index].price} ${data.listing_details.units[index].currency} / Month`}
@@ -73,20 +73,20 @@ const UnitDetails = ({ data, index }) => {
                 <Typography color="text.secondary" variant="h6" sx={unitDetailsStyles.keyInfo.interior}>
                     {`${data.listing_details.units[index].beds} Beds`}
                 </Typography>
-                <div><Divider orientation="vertical" sx={unitDetailsStyles.divider} /></div>
+                <div><Divider orientation="vertical" sx={unitDetailsStyles.divider}/></div>
                 <Typography color="text.secondary" variant="h6" sx={unitDetailsStyles.keyInfo.interior}>
                     {`${data.listing_details.units[index].baths} Baths`}
                 </Typography>
-                <div><Divider orientation="vertical" sx={unitDetailsStyles.divider} /></div>
+                <div><Divider orientation="vertical" sx={unitDetailsStyles.divider}/></div>
                 <Typography color="text.secondary" variant="h6" sx={unitDetailsStyles.keyInfo.interior}>
                     {`${data.listing_details.units[index].sqft} Sqft`}
                 </Typography>
-                <div><Divider orientation="vertical" sx={unitDetailsStyles.divider} /></div>
+                <div><Divider orientation="vertical" sx={unitDetailsStyles.divider}/></div>
                 <Typography color="text.secondary" variant="h6" sx={unitDetailsStyles.keyInfo.interior}>
                     {`${data.listing_details.units[index].type}`}
                 </Typography>
             </div>
-        </div >
+        </div>
     )
 }
 
@@ -97,11 +97,11 @@ const UnitDetails = ({ data, index }) => {
  * @details User can choose to either start their application or book a tour
  * @returns {React.ReactElement} a react element that contains 2 action buttons
  */
-const ActionBox = ({ data, index }) => {
+const ActionBox = ({data, index}) => {
 
     const styles = {
-        container: { display: 'flex', justifyContent: 'center', width: '100%' },
-        link: { textDecoration: 'none', width: '50%', margin: '0px 10px 0px 10px' },
+        container: {display: 'flex', justifyContent: 'center', width: '100%'},
+        link: {textDecoration: 'none', width: '50%', margin: '0px 10px 0px 10px'},
     }
 
     return (
@@ -109,11 +109,11 @@ const ActionBox = ({ data, index }) => {
             <Link
                 to={"/applications"}
                 style={styles.link}
-                state={{ data, index }}
+                state={{data, index}}
             >
-                <ActionButton title="Apply Now" containerWidth="100%" height="50px" />
+                <ActionButton title="Apply Now" containerWidth="100%" height="50px"/>
             </Link>
-            <ActionButton title="Book a Tour" containerWidth="50%" height="50px" />
+            <ActionButton title="Book a Tour" containerWidth="50%" height="50px"/>
         </div>
     )
 }

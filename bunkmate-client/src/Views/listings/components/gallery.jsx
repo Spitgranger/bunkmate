@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react"
-import { Card, CardMedia, CardContent, Typography, CardActionArea, Divider, IconButton } from "@mui/material"
-import Modal from "../../../Components/Utils/Modal.jsx";
-import { IoIosArrowDropleftCircle, IoIosArrowDroprightCircle } from "react-icons/io";
+import React, {useEffect, useState} from "react"
+import {Card, CardMedia, CardContent, Typography, CardActionArea, Divider, IconButton} from "@mui/material"
+import Modal from "../../../Components/Utils/Modal.tsx";
+import {IoIosArrowDropleftCircle, IoIosArrowDroprightCircle} from "react-icons/io";
 
 /**
  * @function Gallery
@@ -13,7 +13,7 @@ import { IoIosArrowDropleftCircle, IoIosArrowDroprightCircle } from "react-icons
  * @param {string} orientation determines the orientation that the gallery will be displayed in (vertical or horizontal)
  * @returns {React.ReactElement} a react element that contains gallery photos of the property
  */
-export default function Gallery({ data, orientation }) {
+export default function Gallery({data, orientation}) {
 
     //style used in L1 listings
     const galleryHorizontalStyles = {
@@ -39,8 +39,8 @@ export default function Gallery({ data, orientation }) {
             overflow: 'scroll',
             justifyContent: 'space-between'
         },
-        largeImage: { flex: 2.5, },
-        smallImage: { marginBottom: '10px', },
+        largeImage: {flex: 2.5,},
+        smallImage: {marginBottom: '10px',},
 
     }
 
@@ -64,7 +64,7 @@ export default function Gallery({ data, orientation }) {
             marginTop: '10px'
         },
         largeImage: {},
-        smallImage: { maxWidth: '49%', marginBottom: '15px' },
+        smallImage: {maxWidth: '49%', marginBottom: '15px'},
     }
 
     //Define the state variable for managing which style is displayed
@@ -116,12 +116,12 @@ export default function Gallery({ data, orientation }) {
         <div style={galleryStyles.container}>
             <CardContent style={galleryStyles.container.innerContainer}>
                 <CardActionArea sx={galleryStyles.largeImage} onClick={() => handleOpenGallery(-1)}>
-                    <CardMedia component="img" image={data.listing_img[0]} />
+                    <CardMedia component="img" image={data.listing_img[0]}/>
                 </CardActionArea>
                 <div style={galleryStyles.smallImagesContainer}>
                     {data.listing_img.slice(1).map((image, index) => (
                         <CardActionArea sx={galleryStyles.smallImage} onClick={() => handleOpenGallery(index)}>
-                            <CardMedia component="img" image={image} />
+                            <CardMedia component="img" image={image}/>
                         </CardActionArea>
                     ))}
                 </div>
@@ -131,7 +131,7 @@ export default function Gallery({ data, orientation }) {
                 open={viewGallery}
                 onClose={handleCloseGallery}
                 content={<ModalGalleryViewer data={data} galleryIndex={galleryIndex}
-                    setGalleryIndex={setGalleryIndex} />}
+                                             setGalleryIndex={setGalleryIndex}/>}
                 cardTitle={"Photo Gallery"}
             />
         </div>
@@ -150,14 +150,14 @@ export default function Gallery({ data, orientation }) {
  * - label (What part of the unit the picture is from)
  * @returns {React.ReactElement} a react element that contains the index of the photo and the photo's label
  */
-export function ModalGalleryViewer({ data, galleryIndex, setGalleryIndex }) {
+export function ModalGalleryViewer({data, galleryIndex, setGalleryIndex}) {
 
     const modalGalleryViewerStyles = {
-        bodyContainer: { display: 'flex', alignItems: 'center', flexDirection: 'column' },
-        backwardButton: { display: 'flex', position: 'absolute', top: '50%', left: '0px' },
-        forwardButton: { display: 'flex', position: 'absolute', top: '50%', right: '0px' },
-        photographContainer: { display: 'flex', flexDirection: 'row', width: '100%', height: '70vh' },
-        photograph: { borderRadius: '10px', margin: '10px', height: '70vh', },
+        bodyContainer: {display: 'flex', alignItems: 'center', flexDirection: 'column'},
+        backwardButton: {display: 'flex', position: 'absolute', top: '50%', left: '0px'},
+        forwardButton: {display: 'flex', position: 'absolute', top: '50%', right: '0px'},
+        photographContainer: {display: 'flex', flexDirection: 'row', width: '100%', height: '70vh'},
+        photograph: {borderRadius: '10px', margin: '10px', height: '70vh',},
     }
 
 
@@ -177,14 +177,14 @@ export function ModalGalleryViewer({ data, galleryIndex, setGalleryIndex }) {
                 padding: '10px',
                 borderRadius: '10px'
             },
-            divider: { height: '25px', margin: '10px' },
+            divider: {height: '25px', margin: '10px'},
         }
         return (
             <Card raised sx={imageInfoStyles.infoContainer}>
-                <Typography color="text.primar" variant="h6" sx={{ fontWeight: '550' }}>
+                <Typography color="text.primar" variant="h6" sx={{fontWeight: '550'}}>
                     {data.listing_img_labels[galleryIndex]}
                 </Typography>
-                <Divider orientation="vertical" sx={imageInfoStyles.divider} />
+                <Divider orientation="vertical" sx={imageInfoStyles.divider}/>
                 <Typography color="text.secondary" variant="h6">
                     {`${galleryIndex + 1} / ${data.listing_img.length}`}
                 </Typography>
@@ -244,14 +244,14 @@ export function ModalGalleryViewer({ data, galleryIndex, setGalleryIndex }) {
         return (
             <>
                 <IconButton onClick={handleBackwardClick} sx={modalGalleryViewerStyles.backwardButton}>
-                    <IoIosArrowDropleftCircle size={30} colkor={"black"} />
+                    <IoIosArrowDropleftCircle size={30} colkor={"black"}/>
                 </IconButton>
                 <CardContent sx={modalGalleryViewerStyles.photographContainer}>
                     <CardMedia component="img" src={data.listing_img[galleryIndex]}
-                        sx={modalGalleryViewerStyles.photograph} />
+                               sx={modalGalleryViewerStyles.photograph}/>
                 </CardContent>
                 <IconButton onClick={handleForwardClick} sx={modalGalleryViewerStyles.forwardButton}>
-                    <IoIosArrowDroprightCircle size={30} color={"black"} />
+                    <IoIosArrowDroprightCircle size={30} color={"black"}/>
                 </IconButton>
             </>
         )
@@ -259,8 +259,8 @@ export function ModalGalleryViewer({ data, galleryIndex, setGalleryIndex }) {
 
     return (
         <div style={modalGalleryViewerStyles.bodyContainer}>
-            <SlideShow />
-            <ImageInfo />
+            <SlideShow/>
+            <ImageInfo/>
         </div>
     )
 }

@@ -19,7 +19,7 @@
 // } from 'stream-chat-react';
 // import CircularProgress from '@mui/material/CircularProgress';
 //
-// import Navbar from '../navigation/Navbar.jsx';
+// import Navbar from '../navigation/Navbar.tsx';
 // import SignInProvider from '../../Components/GlobalStateManagement/SignInContext';
 // import {useClient} from './hooks/useClient';
 // import './Messages.css';

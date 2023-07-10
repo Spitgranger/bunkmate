@@ -24,14 +24,15 @@ let redisStore = new connect_redis_1.default({
 });
 const io = new socket_io_1.Server(server, {
     cors: {
-        origin: ["http://localhost:3000"],
+        origin: ["http://localhost:3000", "http://localhost:5173"],
         credentials: true,
     }
 });
-io.on("connect", () => { });
+io.on("connect", () => {
+});
 dotenv_1.default.config();
 app.use((0, cors_1.default)({
-    origin: "http://localhost:3000",
+    origin: "http://localhost:5173",
     credentials: true,
 }));
 app.use((0, helmet_1.default)());
@@ -57,4 +58,8 @@ const PORT = process.env.PORT || 5000;
 const CONNECTION_URL = process.env.CONNECTION_URL || "mongodb://127.0.0.1/bunkmate";
 mongoose_1.default.set('strictQuery', false);
 mongoose_1.default.connect(CONNECTION_URL, {})
-    .then(() => { server.listen(PORT, () => console.log(`Server running on port ${PORT}`)); }).catch((error) => { console.log(error.message); });
+    .then(() => {
+    server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+}).catch((error) => {
+    console.log(error.message);
+});
