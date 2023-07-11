@@ -138,11 +138,13 @@ const Bunkmates: React.FC = (): React.ReactElement => {
         return (
             <div style={{display: 'flex', bottom: '10vh', justifyContent: 'center', position: 'absolute',}}>
                 {/* edit bunkmates request button */}
-                <ActionButton onClick={(e: SyntheticEvent): void => {
-                    handleRequestClick();
-                    dispatch(setCenter({lat: userOwnData.idealLocation[0], lng: userOwnData.idealLocation[1]}))
-                    e.stopPropagation()
-                }} bgColor={"black"} title={"Edit Bunkmate Request"} opacity='0.85'/>
+                {userOwnData
+                    ? <ActionButton onClick={(e: SyntheticEvent): void => {
+                        handleRequestClick();
+                        dispatch(setCenter({lat: userOwnData.idealLocation[0], lng: userOwnData.idealLocation[1]}))
+                        e.stopPropagation()
+                    }} bgColor={"black"} title={"Edit Bunkmate Request"} opacity='0.85'/>
+                    : null}
                 <Tooltip arrow title={"Delete Request"}>
                     {/* X button to delete profiles */}
                     <div>

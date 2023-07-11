@@ -11,8 +11,8 @@ export interface FieldsProps {
     iconStart: ReactElement<any, any>
     fieldTitle: string
     fieldValue: string
-    primaryStyles?: [key: string]
-    bodyStyles?: [key: string]
+    primaryStyles?: { [key: string]: string | number }
+    bodyStyles?: { [key: string]: string | number }
 }
 
 /**@brief type for dictionary that contains all user requests userID used as key*/

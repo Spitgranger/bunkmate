@@ -1,16 +1,25 @@
 import {createContext, ReactNode} from "react";
 
-export const formatContext = createContext(null)
+interface Birthday {
+    birthday: string
+}
+
+interface FormatContextProps {
+    capitalizedName: (name: string) => string
+    calculateAge: (profile: Birthday) => number
+}
+
+const DefaultFormatContextProps = {
+    capitalizedName: () => "",
+    calculateAge: () => 0
+}
+export const formatContext = createContext<FormatContextProps>(DefaultFormatContextProps)
 
 export default function FormatProvider({children}: { children: ReactNode }) {
 
     const capitalizedName = (name: string): string => {
         return `${name.charAt(0).toUpperCase() + name.slice(1)}`
     };
-
-    interface Birthday {
-        birthday: string
-    }
 
     const calculateAge = (profile: Birthday) => {
         const birthdate: string = profile.birthday;

@@ -74,7 +74,6 @@ export function OtherProfile() {
     const [isRequestLoading, setIsRequestLoading] = useState(true)
 
     const {profileHandleRetrieval} = useContext(UserDataContext)
-    const [data, setData] = useState("");
     const [request, setRequest] = useState<Request | undefined>();
 
     //get other user's request to extract userId
@@ -85,11 +84,12 @@ export function OtherProfile() {
 
     const handleGetProfiles = async () => {
         //state contains user id found in userProfile, userOwnData, and post
-        setData(state)
         return await profileHandleRetrieval(userId)
     }
     useEffect(() => {
-        handleGetProfiles().then((profiles) => setOtherProfile(profiles.data[0])).finally(() => setIsProfileLoading(false))
+        handleGetProfiles()
+            .then((profiles) => setOtherProfile(profiles.data[0]))
+            .finally(() => setIsProfileLoading(false))
     }, [rerender])
 
     //query localStorage whenever mapProfileCard changes (primarily used to update the state of the "view request button")
@@ -303,4 +303,4 @@ export function OtherProfile() {
         return (
             <Box style={pageStyles.loadingUi}><CircularProgress size={50}/></Box>)
     }
-};
+}

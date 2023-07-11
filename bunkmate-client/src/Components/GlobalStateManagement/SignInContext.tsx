@@ -1,6 +1,37 @@
 import {JSX, useState, createContext, ReactNode} from 'react';
+import React from 'react'
 
-export const SignInContext = createContext(null)
+
+type SetState<T> = React.Dispatch<React.SetStateAction<T>>
+
+interface SignInContextProps {
+    isOpen: boolean
+    setIsOpen: SetState<boolean>
+    mode: string
+    setMode: SetState<string>
+    message: string
+    setMessage: SetState<string>
+    userProfile: string
+    setUserProfile: SetState<string>
+    handleSignInEmail: () => void
+    handleSignUpEmail: () => void
+    handlePhone: () => void
+    handleProfile: () => void
+}
+
+const DefaultSignInContextProps = {
+    isOpen: false, setIsOpen: () => undefined,
+    mode: "signInEmail", setMode: () => undefined,
+    message: "Sign In or Sign Up", setMessage: () => undefined,
+    userProfile: "", setUserProfile: () => undefined,
+    handleSignInEmail: () => undefined,
+    handleSignUpEmail: () => undefined,
+    handlePhone: () => undefined,
+    handleProfile: () => undefined
+}
+
+
+export const SignInContext = createContext<SignInContextProps>(DefaultSignInContextProps)
 
 export default function SignInProvider({children}: { children: ReactNode }): JSX.Element {
 
@@ -44,8 +75,7 @@ export default function SignInProvider({children}: { children: ReactNode }): JSX
                 isOpen, setIsOpen,
                 mode, setMode,
                 message, setMessage,
-                userProfile,
-                setUserProfile,
+                userProfile, setUserProfile,
                 handleSignInEmail,
                 handleSignUpEmail,
                 handlePhone,

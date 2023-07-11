@@ -24,15 +24,8 @@ import {useAppDispatch, useAppSelector} from "../../store/hooks.ts";
 import {FieldsProps, NestedStyles, RequestDict} from "./types/profileTypes.ts";
 import {Request} from 'MapTypes'
 
-
-/*
-'@media (max-width: 1000px)':{
-  backgroundColor: 'red'
-}
-*/
-
 //This is the component that handles the user's own profile, displaying the user details and other things.
-const Profile = (): Element => {
+const Profile = () => {
     const pageStyles: NestedStyles = {
         wholePage: {
             display: 'flex',
