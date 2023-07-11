@@ -49,13 +49,13 @@ const io = new Server(server, {
     }
 });
 
-
 dotenv.config();
 
 app.use(cors({
     origin: "http://localhost:5173",
     credentials: true,
 }));
+
 app.use(helmet());
 app.use(express.json());
 app.use(sessionMiddleware);
@@ -72,6 +72,7 @@ io.on("connect", (Socket) => {
     socket.on("disconnecting", () => onDisconnect(socket));
     socket.on("sendMessage", (message) => {receiveMessage(socket, message)})
 });
+
 
 app.use(bodyParser.json({limit: "30mb"}));
 app.use(bodyParser.urlencoded({limit: "30mb", extended: true}));

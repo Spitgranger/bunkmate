@@ -1,5 +1,5 @@
 import {useDispatch, useSelector} from "react-redux";
-import {setGlobalErrorMessages} from "../../../features/applications/applicationsSlice";
+import {setGlobalErrorMessages} from "../../../features/applications/applicationsSlice.js";
 
 /**
  * @brief function checks whether bunkmate field has the correct syntax
@@ -17,7 +17,7 @@ export function bunkmateFieldValidation(value) {
         return true
     } else if (usedSpecialCharacter) {
         return true
-    } else if (!usedSpecialCharacter || !isValidEmailSyntax){
+    } else if (!usedSpecialCharacter || !isValidEmailSyntax) {
         errorMessages.push(
             "Inputs must start with '@' symbol",
             "Emails must have valid syntax: example@gmail.com"
