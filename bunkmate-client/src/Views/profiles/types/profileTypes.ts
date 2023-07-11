@@ -1,4 +1,5 @@
 import {ReactElement} from "react";
+import {Request} from "MapTypes";
 
 /**@brief Nested object styles*/
 export interface NestedStyles {
@@ -13,3 +14,6 @@ export interface FieldsProps {
     primaryStyles?: [key: string]
     bodyStyles?: [key: string]
 }
+
+/**@brief type for dictionary that contains all user requests userID used as key*/
+export type RequestDict = { [key: string]: Request }

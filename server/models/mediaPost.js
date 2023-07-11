@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-const mediaPostSchema = mongoose.Schema({
+const mediaPostSchema = new mongoose.Schema({
     dateCreated: {
         type: Date,
         required: true,

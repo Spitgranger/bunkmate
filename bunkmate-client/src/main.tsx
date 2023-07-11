@@ -14,6 +14,8 @@ import UserDataProvider from './Components/GlobalStateManagement/UserDataContext
 import {OtherProfile} from './Views/profiles/OtherProfile.tsx';
 import {Provider} from 'react-redux';
 import Navbar from "./Views/navigation/Navbar";
+import {ChakraProvider} from "@chakra-ui/react";
+import Messages from "./Views/Messages/Messages.tsx";
 import store from './store'
 
 const getRoot: HTMLElement | null = document.getElementById("root")
@@ -69,27 +71,21 @@ if (getRoot) {
                         </SignInProvider>
                     </FormatProvider>
                 </UserDataProvider>,
-            errorElement: <Error/>
-        },
-        {
-            path: '/messages',
-            element:
-                <UserDataProvider>
-                    <FormatProvider>
-                        <SignInProvider>
-                            <ValidationProvider>
-                                <Provider store={store}>
-                                    <Navbar/>
-                                </Provider>
-                            </ValidationProvider>
-                        </SignInProvider>
-                    </FormatProvider>
-                </UserDataProvider>,
-            errorElement: <Error/>
-        },
-        {
-            path: '/otherprofile',
-            element:
+        errorElement: <Error/>
+    },
+    {
+        path: '/messages',
+        element:
+            <ChakraProvider>
+                <Provider store={store}>
+                    <Messages/>
+                </Provider>
+            </ChakraProvider>,
+        errorElement: <Error/>
+    },
+    {
+        path: '/otherprofile',
+        element:
                 <UserDataProvider>
                     <FormatProvider>
                         <SignInProvider>
@@ -122,7 +118,6 @@ if (getRoot) {
         },
 
     ]);
-
 
     root.render(
         <React.StrictMode>

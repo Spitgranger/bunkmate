@@ -22,6 +22,7 @@ import {setCenter, setZoom} from "../../features/bunkmate/bunkmateSlice.ts";
 import {useDispatch} from "react-redux";
 import {FieldsProps, NestedStyles} from "./types/profileTypes.ts";
 import {Request, Profile} from "MapTypes";
+import {RequestDict} from "./types/profileTypes.ts";
 
 
 /*
@@ -98,7 +99,6 @@ export function OtherProfile() {
             return await getRequests();
         }
 
-        type RequestDict = { [key: string]: Request }
         //store user request data
         handleRequest().then((request) => {
             const requestDict: RequestDict = {}
@@ -137,17 +137,19 @@ export function OtherProfile() {
     }
 
     function HandleViewRequest() {
+        if (request) {
 
-        dispatch(setZoom(15))
-        dispatch(setCenter({lat: request.idealLocation[0], lng: request.idealLocation[1]}))
-        //don't need to setMapProfileCard here because it was already opened to navigate to the otherprofile page and was stored in global state
-        /*setMapProfileCard(
-            <MapProfile
-                request={request}
-                center={center}
-            />)*/
-        //if the user has an active request then open bunkmates page then center and open up their map profile card
+            dispatch(setZoom(15))
+            dispatch(setCenter({lat: request.idealLocation[0], lng: request.idealLocation[1]}))
+            //don't need to setMapProfileCard here because it was already opened to navigate to the otherprofile page and was stored in global state
+            /*setMapProfileCard(
+                <MapProfile
+                    request={request}
+                    center={center}
+                />)*/
+            //if the user has an active request then open bunkmates page then center and open up their map profile card
 
+        }
     }
 
     function DisplayActiveRequest() {
@@ -156,7 +158,7 @@ export function OtherProfile() {
             return <div><CircularProgress size={50} sx={{padding: '10px'}}/></div>
         } else if (request && !isRequestLoading) {
             return (
-                <Tooltip arrow title={`${otherProfile.firstName} has an active request`}>
+                <Tooltip arrow title={otherProfile ? `${otherProfile.firstName} has an active request` : null}>
                     <Link
                         to="/bunkmates"
                         onClick={HandleViewRequest}

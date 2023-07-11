@@ -17,12 +17,11 @@ import {BsFillClockFill, BsInfinity, BsBriefcaseFill, BsPencil, BsAlarmFill} fro
 import {FaBook, FaSmoking, FaCannabis, FaWineGlassAlt, FaRegHandshake, FaDog} from 'react-icons/fa'
 import {GrInstagram, GrFacebook, GrLinkedin, GrTwitter} from 'react-icons/gr'
 import {HiMapPin} from 'react-icons/hi2'
-import store from '../../store'
 //redux
 import {fetchProfile} from '../../features/profile/profileSlice.ts'
 import {setZoom, setMapProfileCard} from '../../features/bunkmate/bunkmateSlice.ts';
 import {useAppDispatch, useAppSelector} from "../../store/hooks.ts";
-import {FieldsProps, NestedStyles} from "./types/profileTypes.ts";
+import {FieldsProps, NestedStyles, RequestDict} from "./types/profileTypes.ts";
 import {Request} from 'MapTypes'
 
 
@@ -33,7 +32,7 @@ import {Request} from 'MapTypes'
 */
 
 //This is the component that handles the user's own profile, displaying the user details and other things.
-const Profile = () => {
+const Profile = (): Element => {
     const pageStyles: NestedStyles = {
         wholePage: {
             display: 'flex',
@@ -81,7 +80,7 @@ const Profile = () => {
     const [requestButtonMessage, setRequestButtonMessage] = useState("Inactive")
     const [showIcon, setShowIcon] = useState(false)
     const [textColor, setTextColor] = useState('red')
-    const [userOwnRequest, setUserOwnRequest] = useState<Request>({})
+    const [userOwnRequest, setUserOwnRequest] = useState<Request | undefined>()
     const [isProfileLoading, setIsProfileLoading] = useState(true)
     const [isRequestLoading, setIsRequestLoading] = useState(true)
 
@@ -98,10 +97,10 @@ const Profile = () => {
 
         //store user request data
         handleRequest().then((request) => {
-            const requestDict = {}
+            const requestDict: RequestDict = {}
             if (userId) {
                 request.data.map(
-                    (user) => {
+                    (user: Request): void => {
                         requestDict[user.user] = user;
                     });
                 const userRequest = requestDict[userId]
@@ -113,7 +112,7 @@ const Profile = () => {
     }, [])
 
     const dispatch = useAppDispatch();
-    useEffect(() => {
+    useEffect((): void => {
         //get data from backend when the component first loads works, use the dispatch associated with the profile slice
         dispatch(fetchProfile()).finally(() => {
             setIsProfileLoading(!isProfileLoading);
@@ -125,7 +124,7 @@ const Profile = () => {
 
     }, []);
 
-    const handleEditProfile = () => {
+    const handleEditProfile = (): void => {
         setMessage("Edit Your Profile")
         setMode("profileMakerForm")
         setIsOpen(true)
@@ -169,16 +168,17 @@ const Profile = () => {
     }
 
     function HandleViewRequest() {
+        if (userOwnRequest) {
+            //NOTE: must set zoom else bunkmates page will be grey
+            dispatch(setZoom(15));
 
-        //NOTE: must set zoom else bunkmates page will be grey
-        dispatch(setZoom(15));
-
-        //if the user has an active request then open bunkmates page then center and open up their map profile card
-        dispatch(setMapProfileCard(
-            <MapProfile
-                request={userOwnRequest}
-            />));
-        console.log(store.getState());
+            //if the user has an active request then open bunkmates page then center and open up their map profile card
+            dispatch(setMapProfileCard(
+                <MapProfile
+                    request={userOwnRequest}
+                    center={{lat: userOwnRequest.idealLocation[0], lng: userOwnRequest.idealLocation[1]}}
+                />));
+        }
 
     }
 
@@ -218,7 +218,7 @@ const Profile = () => {
     //display profile page
     //if profile false and loading indicator false
     //display no profile exists page
-    //else (profile no proifile, loaindg indicator){
+    //else (profile no profile, loading indicator){
     //display loading indicator
     //}
 

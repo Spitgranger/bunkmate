@@ -5,6 +5,7 @@ export interface User extends Document {
     phoneNumber: Number,
     password: string,
     name: string,
+    chatId: string,
 }
 
 const userSchema = new Schema<User>({
@@ -24,6 +25,10 @@ const userSchema = new Schema<User>({
         type: String,
         required: false,
     },
+    chatId: {
+        type: String,
+        required: true,
+    }
 });
 
 const User = model<User>('User', userSchema);

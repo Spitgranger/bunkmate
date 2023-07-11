@@ -58,6 +58,7 @@ const Bunkmates: React.FC = (): React.ReactElement => {
     */
     //if the user has a profile then set profileChecker to true else false
     //used to rerender useEffect in Bunkmates.jsx containing async functions that gets data from backend
+
     const {isLoaded, loadError, loading, listingArray, userRequests, userProfile, userOwnData,} = useGetUserData()
 
     //THIS LOGIC ONLY WORKS FOR NOW PROBABLY CHANGE THE API ENDPOINT TO RETURN A BOOLEAN THAT IS EITHER TRUE OR FALSE

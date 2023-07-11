@@ -138,6 +138,7 @@ const SecondPageForm = ({
 
     //store user request data
     const {requestHandleSubmit, requestHandleUpdate} = useContext(UserDataContext)
+
     //used to rerender useEffect in Bunkmates.tsx containing async functions that gets data from backend
     const reduxDispatch = useDispatch()
 
@@ -227,6 +228,7 @@ const SecondPageForm = ({
         //only return the second page values if the user requests "as myself"
         const {listingObject, ...modifiedSecondPageValues} = state.secondPageValues
         const {request} = state.firstPageValues
+
         //update the button titles in Bunkmates.tsx
         if (state?.firstPageValues?.request === "As myself") {
             //if listing object is "None" then don't even submit a listingObject key
