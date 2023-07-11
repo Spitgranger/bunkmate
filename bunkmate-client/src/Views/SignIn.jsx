@@ -14,6 +14,7 @@ import ProfileMakerForm from "../Components/ProfileMakerForm";
 import { getProfile } from '../api'
 import { SignInContext } from "../Components/GlobalStateManagement/SignInContext";
 import Divider from "@mui/material/Divider";
+import useSocket from "./useSocket.tsx";
 
 
 function SignInPartner({ company, logo, onClick }) {
@@ -67,8 +68,8 @@ async function validateLogin(e, data) {
     localStorage.setItem('profile', JSON.stringify(jsonResponse.data));
     return "Success!";
   } catch (error) {
-    console.log(error.response.data.message)
-    switch (error.response.data.message) {
+    console.log(error?.response?.data?.message)
+    switch (error?.response?.data?.message) {
       case "User doesn't exist":
         return "User doesn't exist";
       case "Invalid Credentials":

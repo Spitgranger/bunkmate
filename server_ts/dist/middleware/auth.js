@@ -12,7 +12,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.authorizeSocketUser = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const redis_1 = __importDefault(require("../redis"));
 const auth = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b;
     try {
@@ -34,4 +36,25 @@ const auth = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () 
         res.status(403).json("must be logged in");
     }
 });
+const authorizeSocketUser = (Socket, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const socket = Socket;
+        const token = socket.handshake.auth.token;
+        let decodedData;
+        if (token !== undefined) {
+            decodedData = jsonwebtoken_1.default.verify(token, 'test');
+        }
+        if (decodedData !== undefined) {
+            socket.user = decodedData;
+        }
+        console.log(socket.user);
+        redis_1.default.hset(`chatid:${socket.user.email}`, "chatid", socket.user.chatId);
+        next();
+    }
+    catch (error) {
+        console.log(error);
+        next(new Error("Unauthorized"));
+    }
+});
+exports.authorizeSocketUser = authorizeSocketUser;
 exports.default = auth;

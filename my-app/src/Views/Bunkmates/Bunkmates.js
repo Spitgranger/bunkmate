@@ -94,7 +94,7 @@ const Bunkmates = () => {
     //state places autocomplete
     const [selected, setSelected] = useState(false);
     //if the user has a profile then set profileChecker to true else false
-    //used to rerender useEffect in Bunkmates.js containing async functions that gets data from backend
+    //used to rerender useEffect in Bunkmates.jsx containing async functions that gets data from backend
     const {loading, listingArray, userRequests, userProfile, userOwnData,} = useGetUserData()
 
     const [statePostArray, setStatePostArray] = useState([])

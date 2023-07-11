@@ -17,6 +17,7 @@ const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const user_1 = __importDefault(require("../models/user"));
 const dotenv_1 = __importDefault(require("dotenv"));
+const uuid_1 = require("uuid");
 dotenv_1.default.config();
 /**
  * Controller for signin route. extracts user from database and checks to see if provided password matches,
@@ -33,11 +34,12 @@ const signin = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const isPasswordCorrect = yield bcrypt_1.default.compare(password, existingUser.password);
         if (!isPasswordCorrect)
             return res.status(400).json({ loggedIn: false, message: 'Invalid Credentials' });
-        req.session.user = {
-            id: existingUser._id,
-            email: existingUser.email,
-        };
-        const token = jsonwebtoken_1.default.sign({ email: existingUser.email, id: existingUser._id }, "test", { expiresIn: "1h" });
+        // req.session.user = {
+        //     id: existingUser._id,
+        //     email: existingUser.email,
+        //     chatId: existingUser.chatId,
+        // }
+        const token = jsonwebtoken_1.default.sign({ email: existingUser.email, id: existingUser._id, chatId: existingUser.chatId }, "test", { expiresIn: "1h" });
         res.status(200).json({ result: existingUser, token });
     }
     catch (error) {
@@ -66,13 +68,15 @@ const signup = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             email: email,
             password: hashedPassword,
             phoneNumber: phoneNumber,
-            name: name
+            name: name,
+            chatId: (0, uuid_1.v4)(),
         });
         const token = jsonwebtoken_1.default.sign({ email: result.email, id: result._id }, "test", { expiresIn: "1h" });
-        req.session.user = {
-            email: result.email,
-            id: result._id,
-        };
+        // req.session.user = {
+        //     email: result.email,
+        //     id: result._id,
+        //     chatId: result.chatId,
+        // };
         //await streamChat.upsertUser({ id: String(result._id), name: result.name });
         res.status(200).json({ result, token });
         console.log('success');

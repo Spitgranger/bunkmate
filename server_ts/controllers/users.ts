@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import UserModel, {User} from '../models/user';
 import dotenv from 'dotenv';
 import {Request, Response} from "express";
-import session from 'express-session';
+import {v4 as uuidv4} from 'uuid';
 
 declare module 'express-session' {
     export interface SessionData {
@@ -26,11 +26,12 @@ export const signin = async (req: Request, res: Response) => {
         if (!existingUser) return res.status(404).json({loggedIn: false, message: "User doesn't exist"})
         const isPasswordCorrect: boolean = await bcrypt.compare(password, existingUser.password);
         if (!isPasswordCorrect) return res.status(400).json({loggedIn: false, message: 'Invalid Credentials'})
-        req.session.user = {
-            id: existingUser._id,
-            email: existingUser.email,
-        }
-        const token = jwt.sign({email: existingUser.email, id: existingUser._id}, "test", {expiresIn: "1h"});
+        // req.session.user = {
+        //     id: existingUser._id,
+        //     email: existingUser.email,
+        //     chatId: existingUser.chatId,
+        // }
+        const token = jwt.sign({email: existingUser.email, id: existingUser._id, chatId: existingUser.chatId}, "test", {expiresIn: "1h"});
         res.status(200).json({result: existingUser, token});
     } catch (error) {
         res.status(500).json({message: 'something went wrong like a gofu'})
@@ -57,16 +58,19 @@ export const signup = async (req: Request, res: Response) => {
             email: email,
             password: hashedPassword,
             phoneNumber: phoneNumber,
-            name: name
+            name: name,
+            chatId: uuidv4(),
         });
         const token: String = jwt.sign({email: result.email, id: result._id}, "test", {expiresIn: "1h"});
-        req.session.user = {
-            email: result.email,
-            id: result._id,
-        };
+        // req.session.user = {
+        //     email: result.email,
+        //     id: result._id,
+        //     chatId: result.chatId,
+        // };
         //await streamChat.upsertUser({ id: String(result._id), name: result.name });
         res.status(200).json({result, token});
         console.log('success');
+
     } catch (error) {
         res.status(500).json({message: 'something went wrong like a gofu'})
         console.log(error)

@@ -73,7 +73,7 @@ function ProfileMakerForm({ forwardButton, backwardButton }) {
 
 
   const handleSubmit = (values) => {
-    //rerenders the useEffect which fetches info from backend in profile.js
+    //rerenders the useEffect which fetches info from backend in profile.ts
     //if user already has a profile then update it else submit it
     if (userProfile) {
       profileHandleUpdate(values).then(() => { setRerender(!rerender) })

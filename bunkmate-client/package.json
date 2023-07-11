@@ -10,8 +10,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@emotion/react": "^11.10.6",
-    "@emotion/styled": "^11.10.6",
+    "@chakra-ui/form-control": "^2.0.18",
+    "@chakra-ui/icons": "^2.0.19",
+    "@chakra-ui/react": "^2.7.1",
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.11.0",
     "@mui/material": "^5.11.10",
     "@mui/x-date-pickers": "^5.0.15",
@@ -25,6 +28,8 @@
     "buffer-es6": "^4.9.3",
     "dayjs": "^1.11.9",
     "dotenv": "^16.0.3",
+    "formik": "^2.4.2",
+    "framer-motion": "^10.12.18",
     "http-proxy-middleware": "^2.0.6",
     "jwt-decode": "^3.1.2",
     "lodash": "^4.17.21",
@@ -37,7 +42,8 @@
     "react-router-dom": "^6.7.0",
     "router-dom": "^2.2.10",
     "socket.io-client": "^4.7.1",
-    "use-places-autocomplete": "^4.0.0"
+    "use-places-autocomplete": "^4.0.0",
+    "yup": "^1.2.0"
   },
   "devDependencies": {
     "@types/react": "^18.0.37",

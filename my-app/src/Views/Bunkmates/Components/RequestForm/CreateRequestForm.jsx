@@ -140,7 +140,7 @@ const SecondPageForm = ({
 
     //store user request data
     const {requestHandleSubmit, requestHandleUpdate} = useContext(UserDataContext)
-    //used to rerender useEffect in Bunkmates.js containing async functions that gets data from backend
+    //used to rerender useEffect in Bunkmates.jsx containing async functions that gets data from backend
     const {rerender, setRerender} = useContext(BunkmatesContext)
     const {click, setClick} = useContext(BunkmatesContext);
 
@@ -240,7 +240,7 @@ const SecondPageForm = ({
         //only return the second page values if the user requests "as myself"
         const {listingObject, ...modifiedSecondPageValues} = state.secondPageValues
         const {request} = state.firstPageValues
-        //update the button titles in Bunkmates.js
+        //update the button titles in Bunkmates.jsx
         if (state?.firstPageValues?.request === "As myself") {
             //if listing object is "None" then don't even submit a listingObject key
             if (state?.secondPageValues?.listingObject === "None") {

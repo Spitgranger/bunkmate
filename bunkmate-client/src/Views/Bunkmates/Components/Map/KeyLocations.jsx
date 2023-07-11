@@ -194,7 +194,7 @@ export function KeyLocationInfoCard({ keyLocationData, center, onClick }) {
 
     const locationDetails = {
       container: { width: '400px', height: '125px', borderRadius: '10px', backgroundColor: 'black', position: 'absolute', top: '130px', zIndex: '6', right: '60px', display: 'flex', alignItems: 'flex-start' },
-      postHeader: { width: '400px', display: 'flex', width: '100%', padding: '15px', flexDirection: 'column', position: 'absolute' },
+      postHeader: { width: '400px', display: 'flex', padding: '15px', flexDirection: 'column', position: 'absolute' },
       imgContainer: { width: '400px', display: 'flex', justifyContent: 'flex-end' }
     }
 

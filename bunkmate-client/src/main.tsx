@@ -19,6 +19,8 @@ import L1Details from './Views/listings/l1Details'
 import L2Details from './Views/listings/l2Details';
 import Navbar from "./Views/navigation/Navbar";
 import store from './store/index'
+import {ChakraProvider} from "@chakra-ui/react";
+import Messages from "./Views/Messages/Messages.tsx";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 const router = createBrowserRouter([
@@ -101,19 +103,13 @@ const router = createBrowserRouter([
     {
         path: '/messages',
         element:
-            <BunkmateProvider>
-                <UserDataProvider>
-                    <FormatProvider>
-                        <SignInProvider>
-                            <ValidationProvider>
-                                <Provider store={store}>
-                                    <Navbar/>
-                                </Provider>
-                            </ValidationProvider>
-                        </SignInProvider>
-                    </FormatProvider>
-                </UserDataProvider>
-            </BunkmateProvider>,
+            <ChakraProvider>
+
+                <Provider store={store}>
+                    <Messages/>
+                </Provider>
+
+            </ChakraProvider>,
         errorElement: <Error/>
     },
     {

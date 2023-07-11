@@ -17,7 +17,7 @@ export default function RetrieveKeyLocations({ coordinates, request }) {
   /*
   ---Hierarchical Structure---
   
-  SingleMapCard.jsx & GroupMapCard.jsx
+  SingleMapCard.jsx & GroupMapCard.tsx
       |
       -->RetrieveKeyLocations.jsx
   */
@@ -116,7 +116,7 @@ export function KeyLocationsMarkers({ keyLocationPins, center }) {
   /*
   ---Hierarchical Structure---
   
-  Bunkmates.js
+  Bunkmates.jsx
       |
       -->KeyLocationsMarkers.jsx
   */

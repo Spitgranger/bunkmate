@@ -19,7 +19,7 @@ export const updatePost = (id, updatedPost) => API.patch(`/posts/${id}`, updated
 //export const deletePost = (id) => API.delete(`/posts/${id}`)
 //export const likePost = (id) => API.patch(`/posts/${id}/likePost`)
 
-export const signIn = (formData) => API.post('/users/signin', formData)
+export const signIn = (formData) => API.post('/users/signin', formData, {withCredentials: true,})
 export const signUp = (formData) => API.post('/users/signup', formData)
 
 export const createProfile = (formData) => API.post('/profile', formData);
