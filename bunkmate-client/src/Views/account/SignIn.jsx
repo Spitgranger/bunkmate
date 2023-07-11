@@ -1,7 +1,7 @@
 import {useState, useContext, useEffect, useRef} from "react"
 import "./SignIn.css"
-import Modal from "../Components/Utils/Modal.tsx";
-import {LineBox, DropDownMenu, FormSingleLineInput, ActionButton} from '../Components/Utils/Form.tsx';
+import Modal from "../../Components/Utils/Modal.tsx";
+import {LineBox, DropDownMenu, FormSingleLineInput, ActionButton} from '../../Components/Utils/Form.tsx';
 import {Button} from "@mui/material";
 import {FcGoogle} from 'react-icons/fc'
 import {IoLogoFacebook} from 'react-icons/io'
@@ -9,9 +9,9 @@ import {BsApple} from 'react-icons/bs'
 import {MdEmail} from 'react-icons/md'
 import {BsPhoneFill} from "react-icons/bs";
 import {useNavigate} from "react-router-dom";
-import {signIn, signUp} from "../api/index";
-import ProfileMakerForm from "../Components/ProfileMakerForm";
-import {SignInContext} from "../Components/GlobalStateManagement/SignInContext";
+import {signIn, signUp} from "../../api";
+import ProfileMakerForm from "../../Components/ProfileMakerForm";
+import {SignInContext} from "../../Components/GlobalStateManagement/SignInContext";
 import Divider from "@mui/material/Divider";
 
 

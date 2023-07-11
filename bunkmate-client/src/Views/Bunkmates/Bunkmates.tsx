@@ -12,7 +12,7 @@ import {MapRequestMarker} from './Components/Map/MapMarkers'
 import {useGetUserData} from './Hooks/useGetUserData'
 import {SignInContext} from '../../Components/GlobalStateManagement/SignInContext'
 import {setCenter, setMapProfileCard, setRerender} from "../../features/bunkmate/bunkmateSlice";
-import {MapCardProps, ActionHandler, Request} from 'MapCardTypes'
+import {MapCardProps, ActionHandler, Request} from 'MapTypes'
 import {RootState} from "../../store";
 import mapStyles from '../../data/mapStyles.json'
 import {useAppDispatch, useAppSelector} from "../../store/hooks.ts";
@@ -64,7 +64,7 @@ const Bunkmates: React.FC = (): React.ReactElement => {
     //contains the user's own data
 
     //dictionary that stores the userId as the key and the object as the value
-    //contains all requests generated through accounts
+    //contains all requests generated through account
 
 
     if (!isLoaded || loadError) {

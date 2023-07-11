@@ -21,7 +21,7 @@
 //
 // import Navbar from '../navigation/Navbar.tsx';
 // import SignInProvider from '../../Components/GlobalStateManagement/SignInContext';
-// import {useClient} from './hooks/useClient';
+// import {useClient} from './types/useClient';
 // import './Messages.css';
 //
 // import {IoMdMore} from 'react-icons/io'

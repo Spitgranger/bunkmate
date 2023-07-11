@@ -1,6 +1,6 @@
 import {createContext} from "react";
-import {createRequest, createProfile, deleteRequest, getProfiles, deleteProfile} from "../../api/index";
-import {Profile} from "MapCardTypes";
+import {createRequest, createProfile, deleteRequest, getProfiles, deleteProfile} from "../../api";
+import {Profile} from "MapTypes";
 import {AxiosResponse} from "axios";
 
 type RequestHandleSubmit = (formData: Object) => Promise<void>
@@ -47,7 +47,7 @@ export default function UserDataProvider({children}: any) {
         }
     }
 
-    const requestHandleUpdate: RequestHandleUpdate = async (userRequestData) => {
+    const requestHandleUpdate: RequestHandleUpdate = async (userRequestData: object) => {
         try {
             //superior method
             await deleteRequest()

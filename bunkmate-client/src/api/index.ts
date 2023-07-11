@@ -30,7 +30,7 @@ export const deleteProfile = () => API.delete(`/profile`)
 
 //need to separate each profile id by . when using getProfiles endpoint
 export const getProfiles = (profiles: string) => API.get(`/profile/${profiles}`)
-export const createRequest = (formData: object) => API.post('/request', formData);
+export const createRequest = (formData: string) => API.post('/request', formData);
 export const getRequests = () => API.get('/request');
 export const deleteRequest = () => API.delete('/request');
 export const getListings = () => API.get("/posts");

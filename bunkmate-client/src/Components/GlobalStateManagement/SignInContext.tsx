@@ -1,8 +1,8 @@
-import {JSX, useState, createContext} from 'react';
+import {JSX, useState, createContext, ReactNode} from 'react';
 
 export const SignInContext = createContext(null)
 
-export default function SignInProvider({children}): JSX.Element {
+export default function SignInProvider({children}: { children: ReactNode }): JSX.Element {
 
 
     //manages the open and closed state of modal window

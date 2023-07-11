@@ -1,7 +1,7 @@
 import {Tooltip} from "@mui/material";
 import {Link} from "react-router-dom";
 import React from 'react'
-import {Profile, Request} from 'MapCardTypes'
+import {Profile, Request} from 'MapTypes'
 
 interface HandleViewOtherProfileProps {
     data: Profile | Request

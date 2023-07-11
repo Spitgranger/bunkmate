@@ -22,8 +22,9 @@ import {
 import {SignInContext} from './GlobalStateManagement/SignInContext';
 import {formatContext} from './GlobalStateManagement/FormatContext';
 import {UserDataContext} from './GlobalStateManagement/UserDataContext';
-import {useAppDispatch, useAppSelector} from "../store/hooks.ts";
+import {useAppDispatch} from "../store/hooks.ts";
 import {setRerender} from "../features/bunkmate/bunkmateSlice.ts";
+import {getProfile} from "../api";
 
 
 import imageCompression from 'browser-image-compression';

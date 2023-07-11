@@ -201,7 +201,7 @@ const SecondPageForm = ({
             const address = listingsHashMap.get(state?.secondPageValues?.listingObject)//state?.secondPageValues?.listingObject?.address;
             const geocoder = new window.google.maps.Geocoder();
             geocoder.geocode({address}, (results, status) => {
-                if (status === "OK" && results[0].geometry) {
+                if (status === "OK" && results) {
                     const lat = results[0].geometry.location.lat();
                     const lng = results[0].geometry.location.lng();
                     const coordinates = [lat, lng]
@@ -222,16 +222,6 @@ const SecondPageForm = ({
         }
     }, [state?.secondPageValues?.listingObject])
 
-
-    const handleListingDisplay = () => {
-        //only for the "listing in Mind" field
-        if (state?.secondPageValues?.listingObject === "None") {
-            return ("None")
-        } else {
-            console.log(listingsDataHashMap.get(state?.secondPageValues?.listingObject))
-            return (listingsDataHashMap.get(state?.secondPageValues?.listingObject))
-        }
-    }
 
     const handleSubmit = () => {
         //only return the second page values if the user requests "as myself"

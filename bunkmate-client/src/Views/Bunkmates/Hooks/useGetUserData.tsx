@@ -1,6 +1,6 @@
 import {useState, useEffect, SetStateAction} from 'react'
 import {getRequests, getProfile} from "../../../api";
-import {Request} from 'MapCardTypes'
+import {Request} from 'MapTypes'
 import {AxiosResponse} from "axios";
 import {useAppDispatch, useAppSelector} from "../../../store/hooks.ts";
 import {RootState} from "../../../store";
