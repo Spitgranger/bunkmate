@@ -11,7 +11,7 @@ import {SignInContext} from '../../Components/GlobalStateManagement/SignInContex
 import AccountComponent from "./components/accountComponent.jsx";
 import debounce from 'lodash/debounce'
 
-const Navbar = memo(({chooseStyle}) => {
+const Navbar = memo(({chooseStyle}: {chooseStyle: string}) => {
 
     //define state management for managing the styles of the navbar
     const [navStyle, setNavStyle] = useState("nav")

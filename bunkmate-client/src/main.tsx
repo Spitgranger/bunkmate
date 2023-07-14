@@ -30,7 +30,7 @@ if (getRoot) {
                         <SignInProvider>
                             <ValidationProvider>
                                 <Provider store={store}>
-                                    <Navbar/>
+                                    <Navbar chooseStyle={""}/>
                                     <App/>
                                 </Provider>
                             </ValidationProvider>
@@ -47,7 +47,7 @@ if (getRoot) {
                         <SignInProvider>
                             <ValidationProvider>
                                 <Provider store={store}>
-                                    <Navbar/>
+                                    <Navbar chooseStyle={""}/>
                                     <Profile/>
                                 </Provider>
                             </ValidationProvider>
@@ -91,7 +91,7 @@ if (getRoot) {
                         <SignInProvider>
                             <ValidationProvider>
                                 <Provider store={store}>
-                                    <Navbar/>
+                                    <Navbar chooseStyle={""}/>
                                     <OtherProfile/>
                                 </Provider>
                             </ValidationProvider>
