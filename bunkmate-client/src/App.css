@@ -1,0 +1,24 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200&display=swap');
+
+* {
+  font-family: Poppins;
+}
+
+.App {
+  background-color: white;
+  height: 100vh;
+  justify-items: center;
+}
+
+
+.App-header {
+  display: flex;
+}
+
+.Listings {
+  margin-left: 20%;
+  margin-right: 20%;
+  justify-content: center;
+  display: flex;
+  flex-wrap: wrap;
+}
