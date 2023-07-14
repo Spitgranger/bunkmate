@@ -1,26 +1,36 @@
-import { createContext } from "react";
+import {createContext, ReactNode} from "react";
 
-export const formatContext = createContext(null)
+interface Birthday {
+    birthday: string
+}
 
-export default function FormatProvider({ children }) {
+interface FormatContextProps {
+    capitalizedName: (name: string) => string
+    calculateAge: (profile: Birthday) => number
+}
 
-  const capitalizedName = (name) => {
-    return `${name.charAt(0).toUpperCase() + name.slice(1)}`
-  };
+const DefaultFormatContextProps = {
+    capitalizedName: () => "",
+    calculateAge: () => 0
+}
+export const formatContext = createContext<FormatContextProps>(DefaultFormatContextProps)
 
+export default function FormatProvider({children}: { children: ReactNode }) {
 
-  const calculateAge = (profile) => {
-    console.log(profile)
-    const birthdate = profile.birthday
-    const currentDate = new Date().toISOString().slice(0, 10);
-    const age = Math.floor((new Date(currentDate) - new Date(birthdate)) / 31557600000) //31557600000 is the number of milliseconds in a year
-    return age
-  }
+    const capitalizedName = (name: string): string => {
+        return `${name.charAt(0).toUpperCase() + name.slice(1)}`
+    };
 
-  return (
-    <formatContext.Provider value={{ capitalizedName, calculateAge }}>
-      {children}
-    </formatContext.Provider>
-  )
+    const calculateAge = (profile: Birthday) => {
+        const birthdate: string = profile.birthday;
+        const currentDate: string = new Date().toISOString().slice(0, 10);
+        return Math.floor((new Date(currentDate).getTime() - new Date(birthdate).getTime()) / 31557600000);
+    };
+
+    return (
+        <formatContext.Provider value={{capitalizedName, calculateAge}}>
+            {children}
+        </formatContext.Provider>
+    )
 
 }

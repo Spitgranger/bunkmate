@@ -6,12 +6,12 @@ import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import Error from './Error';
 import Error404 from "./Error404.tsx";
 import Bunkmates from './Views/Bunkmates/Bunkmates';
-import Profile from './Views/MyProfile.tsx';
+import Profile from './Views/profiles/MyProfile.tsx';
 import SignInProvider from './Components/GlobalStateManagement/SignInContext';
 import ValidationProvider from './Components/GlobalStateManagement/ValidationContext';
 import FormatProvider from './Components/GlobalStateManagement/FormatContext';
 import UserDataProvider from './Components/GlobalStateManagement/UserDataContext'
-import {OtherProfile} from './Views/OtherProfile';
+import {OtherProfile} from './Views/profiles/OtherProfile.tsx';
 import {Provider} from 'react-redux';
 import Navbar from "./Views/navigation/Navbar";
 import {ChakraProvider} from "@chakra-ui/react";

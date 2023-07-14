@@ -1,6 +1,6 @@
 import React from "react";
 import {Typography} from "@mui/material";
-import {Request} from 'MapCardTypes'
+import {Request} from 'MapTypes'
 
 interface MapRequestMarkerProps {
     request: Request

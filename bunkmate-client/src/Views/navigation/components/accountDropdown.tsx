@@ -1,9 +1,16 @@
 import {Avatar, Menu, MenuItem, Divider, Tooltip, IconButton, ListItemIcon} from '@mui/material';
-import {useState, useContext} from 'react';
+import React, {useState, useContext} from 'react';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import LoginIcon from '@mui/icons-material/Login';
 import Logout from '@mui/icons-material/Logout';
 import {SignInContext} from "../../../Components/GlobalStateManagement/SignInContext";
+import {Profile} from 'MapTypes'
+
+interface AccountDropdownProps {
+    handleLogout: () => void
+    user: string
+    userProfile: Profile
+}
 
 /**
  * @constructor
@@ -11,12 +18,12 @@ import {SignInContext} from "../../../Components/GlobalStateManagement/SignInCon
  * @brief an avatar component that when clicked displays a dropdown menu
  *
  * @param {Function} handleLogout
- * @param {object} user
+ * @param {string} user
  * @param {object} userProfile
  * @returns {JSX.Element} an avatar component and dropdown menu
  */
-const AccountComponent = ({handleLogout, user, userProfile}) => {
-
+const AccountDropdown = ({handleLogout, user, userProfile}: AccountDropdownProps) => {
+    console.log(user)
     //controls the tethered and untethered state drop down menu
     const [currentTarget, setCurrentTarget] = useState(null)
     //open close state of dropdown menu
@@ -26,7 +33,7 @@ const AccountComponent = ({handleLogout, user, userProfile}) => {
 
 
     //controls what react element the dropdown menu is tethered to
-    const handleClick = (event) => {
+    const handleClick = (event): void => {
         setCurrentTarget(event.currentTarget);
     }
 
@@ -84,7 +91,8 @@ const AccountComponent = ({handleLogout, user, userProfile}) => {
             </AccountDropDownMenu>
         </>)
 }
-export default AccountComponent;
+export default AccountDropdown;
+
 
 /**
  * @brief The drop-down menu component
@@ -135,6 +143,13 @@ const AccountDropDownMenu = ({children, open, handleClose, currentTarget}) => {
         </>
     )
 }
+
+interface StyledMenuItemProps {
+    pageName: string
+    icon: React.ReactElement
+    handleAction: () => void
+}
+
 /**
  * @brief component for a single menu item within the drop-down menu
  *
@@ -143,7 +158,7 @@ const AccountDropDownMenu = ({children, open, handleClose, currentTarget}) => {
  * @param handleAction event handler for on click event listener
  * @returns {JSX.Element} a styled menu item for the account drop down menu component
  */
-const StyledMenuItem = ({pageName, icon, handleAction}) => {
+const StyledMenuItem = ({pageName, icon, handleAction}: StyledMenuItemProps) => {
 
     return (
         <MenuItem sx={{padding: '10px', color: 'black'}} onClick={handleAction}>

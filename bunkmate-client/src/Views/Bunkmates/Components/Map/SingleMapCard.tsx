@@ -12,7 +12,7 @@ import {
 import {InfoWindowF} from '@react-google-maps/api';
 import {BunkmateInfo} from "../../Bunkmates.tsx";
 import HandleViewOtherProfile from "./HandleViewOtherProfile.tsx";
-import {Request} from 'MapCardTypes'
+import {Request} from 'MapTypes'
 
 function SingleMapCard(request: Request) {
 

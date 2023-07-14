@@ -9,7 +9,7 @@ import {
 import '../../Styles/GroupMapCard.css'
 import HandleViewOtherProfile from "./HandleViewOtherProfile.tsx";
 import React from 'react'
-import {Profile} from 'MapCardTypes'
+import {Profile} from 'MapTypes'
 
 /**
  * @brief info on the roommates associated with the user that made the request

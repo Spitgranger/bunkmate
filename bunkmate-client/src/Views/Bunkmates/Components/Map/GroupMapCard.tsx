@@ -7,7 +7,7 @@ import {TbMessages, TbMessagesOff} from 'react-icons/tb';
 import {SavedListingItem} from './SavedListingItem.tsx';
 import {InfoWindowF} from '@react-google-maps/api';
 import {BunkmateInfo} from "../../Bunkmates.tsx";
-import {ActionHandler, Request, SumFunction} from 'MapCardTypes'
+import {ActionHandler, Request, SumFunction} from 'MapTypes'
 import '../../Styles/GroupMapCard.css'
 
 /**

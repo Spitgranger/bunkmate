@@ -1,15 +1,16 @@
 import bunkmate_logo from '../../Components/Assets/bunkmate_logo.png'
 import './styles/Navbar.css';
 import {Link, useResolvedPath, useMatch} from 'react-router-dom';
-import RenderWhich from '../SignIn.jsx';
+import RenderWhich from '../account/SignIn.jsx';
 import {Tooltip} from '@mui/material';
 import {useState, useContext, useEffect, memo} from 'react';
 import {useNavigate} from 'react-router-dom';
 import decode from 'jwt-decode';
 import {getProfile} from '../../api';
 import {SignInContext} from '../../Components/GlobalStateManagement/SignInContext.js';
-import AccountComponent from "./components/accountComponent.jsx";
+import AccountDropdown from "./components/accountDropdown.tsx";
 import debounce from 'lodash/debounce'
+import {JSX} from 'react'
 
 const Navbar = memo(({chooseStyle}: {chooseStyle: string}) => {
 
@@ -18,9 +19,16 @@ const Navbar = memo(({chooseStyle}: {chooseStyle: string}) => {
     //used to manage the open close state of the modal window as well as the modal window content
     const {setIsOpen, setMode, setMessage} = useContext(SignInContext);
     //used to for accessing and managing user data from local storage
-    const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile')))
+    const RetrievedData: string | null = localStorage.getItem("profile")
+    const [user, setUser] = useState(RetrievedData ? JSON.parse(RetrievedData) : "")
     //Used to handle retrieving user data from api
     const [userProfile, setUserProfile] = useState("")
+
+    interface CheckActiveProps {
+        to: string
+        page: string | JSX.Element
+        props?: object
+    }
 
     /**
      * @brief checks if current page is the active page, if so then underline page in aqua
@@ -30,7 +38,7 @@ const Navbar = memo(({chooseStyle}: {chooseStyle: string}) => {
      * @param {object} props the props object
      * @returns {JSX.Element}
      */
-    const CheckActive = ({to, page, ...props}) => {
+    const CheckActive = ({to, page, ...props}: CheckActiveProps) => {
         //check if the page is the currently active page, if so then highlight it
         const fullPath = useResolvedPath(to)
         const isActive = useMatch({path: fullPath.pathname, end: true})
@@ -39,6 +47,12 @@ const Navbar = memo(({chooseStyle}: {chooseStyle: string}) => {
                 {page}
             </Link>
         )
+    }
+
+    interface NavbarPageProps {
+        linkTo: string
+        page: string | JSX.Element
+        toolTipTitle: string
     }
 
     /**
@@ -50,7 +64,7 @@ const Navbar = memo(({chooseStyle}: {chooseStyle: string}) => {
      * @returns {JSX.Element[]} A navbar page with tooltip component
      * @see CheckActive
      */
-    const NavbarPage = ({linkTo, page, toolTipTitle}) => [
+    const NavbarPage = ({linkTo, page, toolTipTitle}: NavbarPageProps) => [
         <Tooltip className={`${navStyle}PageContainer`} title={toolTipTitle} arrow>
             <div><CheckActive to={linkTo} page={page}/></div>
         </Tooltip>
@@ -95,18 +109,20 @@ const Navbar = memo(({chooseStyle}: {chooseStyle: string}) => {
      */
     const handleLogout = () => {
         localStorage.clear()
-        setUser(null);
+        setUser("");
         navigate("/");
         document.location.reload();
     }
 
     //useEffect to check if user's JWT is expired, if it is logout.
     useEffect(() => {
-        const token = user?.token;
-        if (token) {
-            const decodedToken = decode(token);
-            if (decodedToken.exp * 1000 < new Date().getTime()) {
-                handleLogout();
+        if (user) {
+            const token = user.token;
+            if (token) {
+                const decodedToken: { exp: number } = decode(token);
+                if (decodedToken.exp * 1000 < new Date().getTime()) {
+                    handleLogout();
+                }
             }
         }
     }, [user])
@@ -122,7 +138,7 @@ const Navbar = memo(({chooseStyle}: {chooseStyle: string}) => {
                 <NavbarPage toolTipTitle={"Create Or Edit Profile"} linkTo={"/profile"} page="My Profile"/>
                 {/*hidden, used for Sign in pages*/}
                 <RenderWhich/>
-                <AccountComponent
+                <AccountDropdown
                     handleLogout={handleLogout}
                     user={user}
                     userProfile={userProfile}

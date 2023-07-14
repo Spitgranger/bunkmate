@@ -1,4 +1,4 @@
-declare module 'MapCardTypes' {
+declare module 'MapTypes' {
 
     /**object properties containing info about the rental unit*/
     export interface Listing {

@@ -1,9 +1,9 @@
 import {createContext} from "react";
-import {createRequest, createProfile, deleteRequest, getProfiles, deleteProfile} from "../../api/index";
-import {Profile} from "MapCardTypes";
+import {createRequest, createProfile, deleteRequest, getProfiles, deleteProfile} from "../../api";
+import {Profile} from "MapTypes";
 import {AxiosResponse} from "axios";
 
-type RequestHandleSubmit = (formData: Object) => Promise<void>
+type RequestHandleSubmit = (formData: string) => Promise<void>
 type ProfileHandleUpdate = (profile: Object) => Promise<AxiosResponse<any, any> | undefined>
 type RequestHandleUpdate = (id: string, userRequestData: object) => Promise<AxiosResponse<any, any> | undefined>
 type ProfileHandleRetrieval = (profileString: string) => Promise<AxiosResponse<any, any> | undefined>
@@ -17,14 +17,14 @@ interface UserDataContextProps {
     profileHandleSubmit: ProfileHandleSubmit
 }
 
-const defaultUserDataContextProps = {
+const DefaultUserDataContextProps = {
     requestHandleSubmit: async () => undefined,
     profileHandleUpdate: async () => undefined,
     requestHandleUpdate: async () => undefined,
     profileHandleRetrieval: async () => undefined,
     profileHandleSubmit: () => undefined
 }
-export const UserDataContext = createContext<UserDataContextProps>(defaultUserDataContextProps)
+export const UserDataContext = createContext<UserDataContextProps>(DefaultUserDataContextProps)
 export default function UserDataProvider({children}: any) {
 
     const requestHandleSubmit: RequestHandleSubmit = async (formData) => {
@@ -47,7 +47,7 @@ export default function UserDataProvider({children}: any) {
         }
     }
 
-    const requestHandleUpdate: RequestHandleUpdate = async (userRequestData) => {
+    const requestHandleUpdate: RequestHandleUpdate = async (userRequestData: string) => {
         try {
             //superior method
             await deleteRequest()

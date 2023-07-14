@@ -1,5 +1,5 @@
-import {createContext, useState, useEffect} from 'react';
-import {getProfile} from '../../api/index';
+import {createContext, useState, useEffect, ReactNode} from 'react';
+import {getProfile} from '../../api';
 import dayjs from 'dayjs';
 
 export const LinkValidationContext = createContext(null)
@@ -12,11 +12,10 @@ export const EmailValidationContext = createContext(null)
 export const AboutValidationContext = createContext(null)
 export const GlobalValidationContext = createContext(null)
 
-export default function ValidationProvider({children}) {
+export default function ValidationProvider({children}: { children: ReactNode }) {
     useEffect(() => {
         const handleProfile = async () => {
-            const profile = await getProfile()
-            return profile
+            return await getProfile()
         }
         handleProfile().then((profile) => {
             setValues(profile.data);
