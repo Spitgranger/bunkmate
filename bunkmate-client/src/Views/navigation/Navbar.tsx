@@ -12,7 +12,7 @@ import AccountDropdown from "./components/accountDropdown.tsx";
 import debounce from 'lodash/debounce'
 import {JSX} from 'react'
 
-const Navbar = memo(({chooseStyle}: { chooseStyle: string }) => {
+const Navbar = memo(({chooseStyle}: {chooseStyle: string}) => {
 
     //define state management for managing the styles of the navbar
     const [navStyle, setNavStyle] = useState("nav")
@@ -93,7 +93,7 @@ const Navbar = memo(({chooseStyle}: { chooseStyle: string }) => {
     useEffect(() => {
         if (user) {
             debouncedHandleProfile()
-                .then((profile) => setUserProfile(profile.data))
+                .then((profile ) => setUserProfile(profile.data))
                 .catch(() => {
                     setMessage("Get Matched With Bunkmates!");
                     setMode('profileMakerForm');

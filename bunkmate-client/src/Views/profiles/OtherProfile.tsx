@@ -293,7 +293,7 @@ export function OtherProfile() {
         return (
             <div className='page-container'>
                 <div style={{height: '9vh'}}/>
-                <Navbar/>
+                <Navbar chooseStyle={""}/>
                 <div className="error-content">
                     <h1>Profile doesn't exist</h1>
                 </div>

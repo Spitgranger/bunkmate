@@ -28,7 +28,7 @@ if (getRoot) {
                     <FormatProvider>
                         <SignInProvider>
                             <Provider store={store}>
-                                <Navbar/>
+                                <Navbar chooseStyle={""}/>
                                 <App/>
                             </Provider>
                         </SignInProvider>
@@ -43,7 +43,7 @@ if (getRoot) {
                     <FormatProvider>
                         <SignInProvider>
                             <Provider store={store}>
-                                <Navbar/>
+                                <Navbar chooseStyle={""}/>
                                 <Profile/>
                             </Provider>
                         </SignInProvider>
@@ -83,7 +83,7 @@ if (getRoot) {
                     <FormatProvider>
                         <SignInProvider>
                             <Provider store={store}>
-                                <Navbar/>
+                                <Navbar chooseStyle={""}/>
                                 <OtherProfile/>
                             </Provider>
                         </SignInProvider>
