@@ -1,5 +1,5 @@
 import {createContext} from "react";
-import {createRequest, createProfile, deleteRequest, getProfiles, deleteProfile} from "../../api";
+import {createRequest, createProfile, deleteRequest, getProfiles, deleteProfile} from "../api";
 import {Profile} from "MapTypes";
 import {AxiosResponse} from "axios";
 

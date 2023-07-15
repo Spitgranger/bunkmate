@@ -3,7 +3,7 @@ import React, {useState, useContext} from 'react';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import LoginIcon from '@mui/icons-material/Login';
 import Logout from '@mui/icons-material/Logout';
-import {SignInContext} from "../../../Components/GlobalStateManagement/SignInContext";
+import {SignInContext} from "../../../globalContext/SignInContext";
 import {Profile} from 'MapTypes'
 
 interface AccountDropdownProps {

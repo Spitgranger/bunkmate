@@ -1,9 +1,9 @@
 import {useEffect, useState, useContext} from 'react';
 import './styles/Profile.css'
-import {SignInContext} from '../../Components/GlobalStateManagement/SignInContext.tsx';
+import {SignInContext} from '../../globalContext/SignInContext.tsx';
 
 import {getRequests} from '../../api';
-import {ActionButton} from "../../Components/Utils/Form.tsx";
+import {ActionButton} from "../../Utils/form.tsx";
 import {Link} from 'react-router-dom';
 import {MapProfile} from '../Bunkmates/Bunkmates.tsx';
 

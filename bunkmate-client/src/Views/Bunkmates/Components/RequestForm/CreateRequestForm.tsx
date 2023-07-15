@@ -1,4 +1,13 @@
-import React, {useState, useReducer, useContext, useEffect, useRef, EventHandler, SyntheticEvent} from 'react'
+import React, {
+    useState,
+    useReducer,
+    useContext,
+    useEffect,
+    useRef,
+    EventHandler,
+    SyntheticEvent,
+    ChangeEvent
+} from 'react'
 import {getListings, getProfile} from '../../../../api';
 import {
     FormSection,
@@ -10,9 +19,9 @@ import {
     FormMultiLineInput,
     MultipleSelectCheckmarks,
     UploadFile,
-} from '../../../../Components/Utils/Form.tsx';
+} from '../../../../Utils/form.tsx';
 import {SavedListingItem} from '../Map/SavedListingItem.tsx';
-import {UserDataContext} from '../../../../Components/GlobalStateManagement/UserDataContext';
+import {UserDataContext} from '../../../../globalContext/UserDataContext';
 import {setRerender} from "../../../../features/bunkmate/bunkmateSlice.ts";
 
 import {Typography} from '@mui/material'
@@ -98,8 +107,10 @@ const FirstPageForm = ({
         {/* belongs below*/}
         < LineBox flex={true} CssTextField={[
             <MultipleSelectCheckmarks value={state?.firstPageValues?.groupTags} helperText="Optional" title="Group tags"
-                                      onChange={(e) => handleEmptyStringValidation(e.target.value, 'groupTags', 'firstPageValues')}
-                                      menuItems={['Non Smokers', 'Have Pets', "Have Jobs", 'Students', 'Have Children', 'LGBTQ Friendly', 'Cannabis Friendly']}/>,
+                                      onChange={(e: ChangeEvent<HTMLInputElement>) => handleEmptyStringValidation(e.target.value, 'groupTags', 'firstPageValues')}
+                                      menuItems={['Non Smokers', 'Have Pets', "Have Jobs", 'Students', 'Have Children', 'LGBTQ Friendly', 'Cannabis Friendly']}
+                                      required={false}
+            />,
             <DropDownMenu helperText={"Link your bunkmates"} required={true} value={chatMenuItems[index]}
                           onChange={(e) => {
                               console.log(e.explicitOriginalTarget.attributes.index.value);
@@ -303,12 +314,17 @@ const SecondPageForm = ({
             }
 
             <LineBox flex={true} CssTextField={[
-                <DatePicker required={true} onChange={(e) => {
-                    handleEmptyStringValidation(e, 'dateValue', 'secondPageValues', true);
-                }} value={state?.secondPageValues?.dateValue} label="Move In Date"/>,
+                <DatePicker
+                    required={true}
+                    onChange={(e) => {
+                        handleEmptyStringValidation(e, 'dateValue', 'secondPageValues', true);
+                    }}
+                    value={state?.secondPageValues?.dateValue}
+                    disabled={false}
+                    label="Move In Date"/>,
                 <FormSingleLineInput required={true} inputAdornment={true} inputStartAdornment={"$"}
                                      inputEndAdornment="/m" value={state?.secondPageValues?.rentBudget}
-                                     onChange={(e) => handleEmptyStringValidation(e.target.value, 'rentBudget', 'secondPageValues')}
+                                     onChange={(value) => handleEmptyStringValidation(value, 'rentBudget', 'secondPageValues')}
                                      size="small" field={labelTitle} type="number" placeHolder="ex. 900"/>,
 
             ]}/>

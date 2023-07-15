@@ -1,6 +1,6 @@
 import React from "react"
 import {Card, CardMedia, CardContent, Typography, CardActionArea, Divider,} from "@mui/material"
-import {ActionButton} from "../../../Components/Utils/Form.tsx";
+import {ActionButton} from "../../../Utils/form.tsx";
 import {Link, useNavigate} from "react-router-dom";
 
 /**

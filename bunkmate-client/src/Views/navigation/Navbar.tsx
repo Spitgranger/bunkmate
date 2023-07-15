@@ -1,4 +1,4 @@
-import bunkmate_logo from '../../Components/Assets/bunkmate_logo.png'
+import bunkmate_logo from '../../assets/bunkmate_logo.png'
 import './styles/Navbar.css';
 import {Link, useResolvedPath, useMatch} from 'react-router-dom';
 import RenderWhich from '../account/SignIn.jsx';
@@ -7,12 +7,12 @@ import {useState, useContext, useEffect, memo} from 'react';
 import {useNavigate} from 'react-router-dom';
 import decode from 'jwt-decode';
 import {getProfile} from '../../api';
-import {SignInContext} from '../../Components/GlobalStateManagement/SignInContext.js';
+import {SignInContext} from '../../globalContext/SignInContext.js';
 import AccountDropdown from "./components/accountDropdown.tsx";
 import debounce from 'lodash/debounce'
 import {JSX} from 'react'
 
-const Navbar = memo(({chooseStyle}: {chooseStyle: string}) => {
+const Navbar = memo(({chooseStyle}: { chooseStyle: string }) => {
 
     //define state management for managing the styles of the navbar
     const [navStyle, setNavStyle] = useState("nav")
@@ -93,7 +93,7 @@ const Navbar = memo(({chooseStyle}: {chooseStyle: string}) => {
     useEffect(() => {
         if (user) {
             debouncedHandleProfile()
-                .then((profile ) => setUserProfile(profile.data))
+                .then((profile) => setUserProfile(profile.data))
                 .catch(() => {
                     setMessage("Get Matched With Bunkmates!");
                     setMode('profileMakerForm');

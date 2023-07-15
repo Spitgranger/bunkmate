@@ -1,7 +1,7 @@
 import {CardContent, Typography,} from '@mui/material';
 import Overview from "../../../listings/components/overview";
 import Policies from "../../../listings/components/policies";
-import {ActionButton} from "../../../../Components/Utils/Form.tsx";
+import {ActionButton} from "../../../../Utils/form.tsx";
 import {useSelector, useDispatch} from "react-redux";
 
 /**

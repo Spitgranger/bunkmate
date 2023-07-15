@@ -1,7 +1,7 @@
-import socket from "../store/socketContext.ts";
+import socket from "../../store/socketContext.ts";
 import React, {SetStateAction, useEffect} from 'react';
-import {Conversations} from "./Messages/Messages.tsx";
-import {Messages} from "./Messages/Messages.tsx"
+import {Conversations} from "../../Views/Messages/Messages.tsx";
+import {Messages} from "../../Views/Messages/Messages.tsx"
 
 const useSocket = (setConversation: React.Dispatch<React.SetStateAction<Conversations>>, setMessages: React.Dispatch<SetStateAction<Messages>>) => {
     useEffect(() => {
@@ -21,10 +21,20 @@ const useSocket = (setConversation: React.Dispatch<React.SetStateAction<Conversa
             })
         };
 
-        const conversations = (conversations: Conversations) => {setConversation(conversations); console.log(conversations)}
-        const messages = (messages: Messages) => {setMessages(messages); console.log(messages)};
-        const sendMessage = (message: {message: string, to: string, from: string}) => { setMessages(prevMessages => [message, ...prevMessages])};
-        const initializeMessages = (messages: Messages) => {setMessages(messages)};
+        const conversations = (conversations: Conversations) => {
+            setConversation(conversations);
+            console.log(conversations)
+        }
+        const messages = (messages: Messages) => {
+            setMessages(messages);
+            console.log(messages)
+        };
+        const sendMessage = (message: { message: string, to: string, from: string }) => {
+            setMessages(prevMessages => [message, ...prevMessages])
+        };
+        const initializeMessages = (messages: Messages) => {
+            setMessages(messages)
+        };
 
         socket.on("connected", connected);
         socket.on("conversations", conversations);

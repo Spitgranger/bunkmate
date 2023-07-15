@@ -7,9 +7,9 @@ import Error from './Error';
 import Error404 from "./Error404.tsx";
 import Bunkmates from './Views/Bunkmates/Bunkmates';
 import Profile from './Views/profiles/MyProfile.tsx';
-import SignInProvider from './Components/GlobalStateManagement/SignInContext';
-import FormatProvider from './Components/GlobalStateManagement/FormatContext';
-import UserDataProvider from './Components/GlobalStateManagement/UserDataContext'
+import SignInProvider from './globalContext/SignInContext';
+import FormatProvider from './globalContext/FormatContext';
+import UserDataProvider from './globalContext/UserDataContext'
 import {OtherProfile} from './Views/profiles/OtherProfile.tsx';
 import {Provider} from 'react-redux';
 import Navbar from "./Views/navigation/Navbar";

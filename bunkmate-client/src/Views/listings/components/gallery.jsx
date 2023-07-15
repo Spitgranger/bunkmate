@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react"
 import {Card, CardMedia, CardContent, Typography, CardActionArea, Divider, IconButton} from "@mui/material"
-import Modal from "../../../Components/Utils/Modal.tsx";
+import Modal from "../../../Utils/Modal.tsx";
 import {IoIosArrowDropleftCircle, IoIosArrowDroprightCircle} from "react-icons/io";
 
 /**

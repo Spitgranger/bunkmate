@@ -1,4 +1,4 @@
-import {JSX, useContext, SyntheticEvent} from 'react'
+import {JSX, useContext, SyntheticEvent, useState} from 'react'
 import {
     DatePicker,
     FormSection,
@@ -8,11 +8,13 @@ import {
     FormSingleLineInput,
     FormMultiLineInput,
     LineBox,
-} from './Utils/Form.tsx';
+} from '../../Utils/form.tsx';
 import {IoChevronForward} from 'react-icons/io5';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
-import {SignInContext} from './GlobalStateManagement/SignInContext';
+import {SignInContext} from '../../globalContext/SignInContext.tsx';
 import imageCompression from 'browser-image-compression';
+import {DateType} from '../../Utils/types'
+
 
 //styles
 /*const backButtonStyles = {
@@ -38,6 +40,16 @@ function ProfileMakerForm(): JSX.Element {
             console.log(error)
         }
     };*/
+
+    const [fields, setFields] = useState<{ [key: string]: DateType }>({})
+    type HandleRecordField = (value: DateType, field: string) => void
+
+    const handleRecordField: HandleRecordField = (value, field) => {
+        const recordedFields = {...fields}
+        recordedFields[field] = value
+        setFields(recordedFields)
+    }
+
 
     //get data from backend when the component first loads works
 
@@ -139,8 +151,10 @@ function ProfileMakerForm(): JSX.Element {
                 label="Gender"
                 menuItem={["Male", "Female", "Other"]}/>,
             <DatePicker
-                required="true"
-                label="Birthday"/>,
+                label="Birthday"
+                disabled={false}
+                required={true}
+                onChange={(value: DateType) => handleRecordField(value, "birthday")}/>,
         ]}/>
         <div id="multiline">
             <FormMultiLineInput required="true" placeHolder="Tell us a bit about yourself" type="text"

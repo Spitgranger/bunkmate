@@ -1,4 +1,4 @@
-import "./Form.css"
+import "./form.css"
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField';
@@ -6,7 +6,7 @@ import * as React from 'react';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
+import Select, {SelectChangeEvent} from '@mui/material/Select';
 import {LocalizationProvider} from '@mui/x-date-pickers/LocalizationProvider';
 import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs';
 import {DesktopDatePicker} from '@mui/x-date-pickers/DesktopDatePicker';
@@ -14,25 +14,53 @@ import Stack from '@mui/material/Stack';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import Checkbox from '@mui/material/Checkbox';
 import {FormHelperText, InputAdornment, Typography} from "@mui/material";
-import {useState, memo} from 'react'
+import {useState, memo, ReactNode} from 'react'
 import {BsFillCheckCircleFill} from "react-icons/bs";
 import {MdOutlineError} from "react-icons/md";
+import {DateType, DropDownMenuProps} from "./types/form.ts";
 
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-    PaperProps: {
-        style: {
-            maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-            width: 250,
+interface MultipleSelectProps {
+    value: string
+    helperText: string
+    title: string
+    menuItems: string[]
+    required: boolean
+    onChange: Function
+}
+
+/**
+ * @constructor
+ *
+ * @brief An MUI dropdown menu component that allows you to select numerous menu items
+ *
+ * @param value - the value to be displayed
+ * @param helperText - helper-text to provide the user more information
+ * @param title - title of the input field
+ * @param menuItems - An array of menu items
+ * @param required - is the field required?
+ * @param onChange - Expose the event listener
+ * @returns {ReactNode} A multi-select drop-down component
+ */
+export function MultipleSelectCheckmarks({
+                                             value,
+                                             helperText,
+                                             title,
+                                             menuItems,
+                                             required,
+                                             onChange
+                                         }: MultipleSelectProps) {
+    const [personName, setPersonName] = React.useState<string[]>([]);
+    const ITEM_HEIGHT = 48;
+    const ITEM_PADDING_TOP = 8;
+    const MenuProps = {
+        PaperProps: {
+            style: {
+                maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+                width: 250,
+            },
         },
-    },
-};
-
-export function MultipleSelectCheckmarks({value, helperText, title, menuItems, required, onChange}) {
-    const [personName, setPersonName] = React.useState([]);
-
-    const handleChange = (event: Event): void => {
+    };
+    const handleChange = (event: SelectChangeEvent<any>): void => {
         const {target: {value},} = event;
         setPersonName(
             // On autofill, we get a string value.
@@ -47,7 +75,7 @@ export function MultipleSelectCheckmarks({value, helperText, title, menuItems, r
                 id="multiple-checkbox"
                 multiple
                 value={value || personName}
-                onChange={(event) => {
+                onChange={(event: SelectChangeEvent<any>): void => {
                     handleChange(event);
                     onChange(event);
                 }}
@@ -69,14 +97,27 @@ export function MultipleSelectCheckmarks({value, helperText, title, menuItems, r
     );
 }
 
-export function DatePicker({label, onChange, value, required, disabled}) {
-    /*
-    const [initialDate, setInitialDate] = React.useState(dayjs('2022-09-15T21:11:54'));
+interface DatePickerProps {
+    label: string
+    onChange: (value: DateType, keyInputValue?: string | undefined) => void
+    value?: string
+    required: boolean
+    disabled: boolean
+}
 
-    const handleChange = (newValue) => {
-      setInitialDate(newValue);
-    };
-    */
+/**
+ * @constructor
+ *
+ * @brief A MUI component used for selecting a date from either a calendar adornment or from the input field
+ *
+ * @param label - the title of the input component
+ * @param onChange - Expose the special event listener for Date Picker
+ * @param value - value displayed in the date picker
+ * @param required - is the field required?
+ * @param disabled - is the field disabled
+ * @returns {ReactNode} returns a input field and a date picker adornment
+ */
+export function DatePicker({label, onChange, value, required, disabled}: DatePickerProps) {
 
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -94,8 +135,22 @@ export function DatePicker({label, onChange, value, required, disabled}) {
     );
 }
 
-export function LineBox({flex, CssTextField}) {
-    const check = flex ? 1 : null; //if true then make use flex: 1 else: use flex null
+interface LineBoxProps {
+    flex: boolean
+    CssTextField: ReactNode[]
+}
+
+/**
+ * @constructor
+ *
+ * @brief Styled wrapper for one or numerous MUI input fields
+ *
+ * @param {boolean} flex - Make container flex or not
+ * @param {ReactNode[]} CssTextField - The MUI input fields to be wrapped
+ * @returns {ReactNode} Box component that wraps around input fields
+ */
+export function LineBox({flex, CssTextField}: LineBoxProps): ReactNode {
+    const check: 1 | null = flex ? 1 : null; //if true then make use flex: 1 else: use flex null
     return (
         <Box
             component="form"
@@ -113,26 +168,25 @@ export function LineBox({flex, CssTextField}) {
     );
 }
 
-/*
-fuck this useless complex syntax
-
-const CssTextField = styled(TextField)({
-  '& label': {
-    color: '#5c5c5c',
-  },
-
-  '& label.Mui-focused': {
-    color: '#2497b7'
-  },
-  "& .MuiOutlinedInput-root": {
-    "&.Mui-focused fieldset": {
-      borderColor: '#2497b7',
-    }
-  }
-});
-
-*/
-
+/**
+ * @constructor
+ *
+ * @brief A dropdown menu that allows you to select one menu item
+ *
+ * @param disabled - is the field disabled?
+ * @param helperText - helper-text to provide the user more information
+ * @param required - is the field required?
+ * @param autoFocus -
+ * @param inputRef -
+ * @param defaultValue - the default value to be displayed
+ * @param value - the value to be displayed
+ * @param onChange - Expose the special event listener
+ * @param label - the title the component
+ * @param menuItem - An array of menu items
+ * @param maxHeight - Constrain the height of the dropdown menu
+ * @param menuItemWidth - Constrain the width of the dropdown menu
+ * @returns {ReactNode} An mui component that returns a dropdown menu on click
+ */
 export function DropDownMenu({
                                  disabled,
                                  helperText,
@@ -146,7 +200,7 @@ export function DropDownMenu({
                                  menuItem,
                                  maxHeight,
                                  menuItemWidth
-                             }) {
+                             }: DropDownMenuProps) {
 
     const MenuProps = {
         PaperProps: {
@@ -176,7 +230,7 @@ export function DropDownMenu({
                 required={required}
                 disabled={disabled}
             >
-                {menuItem.map((item, i) => {
+                {menuItem.map((item: string, i: number) => {
                     return (
                         <MenuItem index={i} key={i} value={item}>
                             {Array.isArray(item) ? item.join(", ") : item}
@@ -248,6 +302,25 @@ function NormalFormSingleLineInput({
     )
 }
 
+/**
+ * @constructor
+ *
+ * @brief
+ *
+ * @param required - is the field required?
+ * @param onBlur -
+ * @param onChange -
+ * @param error -
+ * @param type -
+ * @param field -
+ * @param placeHolder -
+ * @param helperText -
+ * @param inputAdornment -
+ * @param inputStartAdornment -
+ * @param inputEndAdornment -
+ * @param inputRef - The input ref
+ * @param value -
+ */
 export function FormSingleLineAddressInput({
                                                required,
                                                onBlur,
@@ -343,7 +416,7 @@ function NormalFormMultiLineInput(props) {
 
 export function UploadFile(props) {
 
-    //setFile to current file only if conditions are satifised
+    //setFile to current file only if conditions are satisfied
     const [file, setFile] = useState(null) //**********STORE FILES IN BACKEND***************
     //changes state depending on correct file type upload
     const [helperText, setHelperText] = useState(props.helperText)
@@ -443,8 +516,9 @@ export function ActionButton(props) {
      * Functional props: onClick, onSubmit, type, endIcon, startIcon, disabled, title
      * Style props: bgColor, fontSize,
      */
+    type Styles = { [key: string]: string | { [key: string]: string } }
 
-    const buttonStyles = {
+    const buttonStyles: Styles = {
         backgroundColor: props.bgColor ?? "#383838",
         color: props.color ?? 'white',
         borderRadius: props.borderRadius ?? "10px",
@@ -455,7 +529,7 @@ export function ActionButton(props) {
         whiteSpace: 'nowrap',
         ':hover': {backgroundColor: props.hoverBgColor ?? 'black', color: props.hoverColor ?? "aqua"},
     }
-    const containerStyles = {
+    const containerStyles: Styles = {
         display: 'flex',
         alignItems: 'flex-start',
         flexDirection: 'column',
@@ -504,6 +578,10 @@ export function FormSection({title, message, children}) {
     );
 }
 
+
+//FOR FUTURE REFERENCE DO NOT DELETE
+//FORM PROGRESS BAR CODE
+/*
 export function FormProgressBar({steps, currentStep, children}) {
     const progressPercentage = (currentStep / steps) * 100;
     return (
@@ -518,10 +596,7 @@ export function FormProgressBar({steps, currentStep, children}) {
         </div>
     );
 };
-
-
-//FOR FUTURE REFERENCE DO NOT DELETE
-//FORM PROGRESS BAR CODE
+ */
 
 
 /* sets the subpage of the form that you're on

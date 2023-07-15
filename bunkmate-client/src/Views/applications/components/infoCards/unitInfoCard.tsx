@@ -2,7 +2,7 @@ import {CardContent, Card, Typography, IconButton, Tooltip, tooltipClasses} from
 import {styled} from '@mui/material/styles'
 import {CardMedia} from "@mui/material/";
 import Divider from "@mui/material/Divider";
-import {DropDownMenu} from '../../../../Components/Utils/Form.tsx';
+import {DropDownMenu} from '../../../../Utils/form.tsx';
 import {AiFillMinusCircle, AiFillPlusCircle} from 'react-icons/ai';
 import {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';

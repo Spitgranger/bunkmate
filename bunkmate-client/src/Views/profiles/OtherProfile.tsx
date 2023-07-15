@@ -1,8 +1,8 @@
 import {useEffect, useState, useContext} from 'react';
 import './styles/Profile.css'
 import Navbar from '../navigation/Navbar.tsx';
-import {UserDataContext} from '../../Components/GlobalStateManagement/UserDataContext.tsx';
-import {ActionButton} from '../../Components/Utils/Form.tsx';
+import {UserDataContext} from '../../globalContext/UserDataContext.tsx';
+import {ActionButton} from '../../Utils/form.tsx';
 import {Box} from '@mui/system';
 import Divider from '@mui/material/Divider'
 import Tooltip from "@mui/material/Tooltip";
@@ -88,7 +88,8 @@ export function OtherProfile() {
     }
     useEffect(() => {
         handleGetProfiles()
-            .then((profiles) => setOtherProfile(profiles.data[0]))
+            .then((profiles) => profiles ? setOtherProfile(profiles.data[0]) : null)
+            .catch((error) => console.log("An error has occurred while trying to fetch profile data", error))
             .finally(() => setIsProfileLoading(false))
     }, [rerender])
 

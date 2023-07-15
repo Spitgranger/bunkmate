@@ -1,5 +1,5 @@
 import {Typography, Divider, IconButton} from "@mui/material"
-import {ActionButton} from "../../../Components/Utils/Form.tsx"
+import {ActionButton} from "../../../Utils/form.tsx"
 import {Link} from "react-router-dom"
 import Actions from "./Actions"
 

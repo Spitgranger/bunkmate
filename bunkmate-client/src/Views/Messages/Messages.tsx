@@ -3,10 +3,10 @@ import {Grid, GridItem, Tabs} from "@chakra-ui/react";
 import React from "react";
 import MessagingSidebar from "./components/MessagingSidebar.tsx";
 import ChatArea from "./components/ChatArea.tsx";
-import useSocket from "../useSocket.tsx";
+import useSocket from "../../Utils/hooks/useSocket.tsx";
 
-export type Conversations = {username: string, chatId: string, connected: string}[];
-export type Messages = {message: string, to: string, from: string}[];
+export type Conversations = { username: string, chatId: string, connected: string }[];
+export type Messages = { message: string, to: string, from: string }[];
 
 interface ConversationContextType {
     conversation: Conversations;
@@ -38,7 +38,6 @@ const Message = () => {
     const [conversation, setConversation] = useState<Conversations>([]);
     const [messages, setMessages] = useState<Messages>([]);
     const [conversationIndex, setConversationIndex] = useState(0);
-
 
 
     useEffect(() => {
