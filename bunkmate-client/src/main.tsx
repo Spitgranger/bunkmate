@@ -8,7 +8,6 @@ import Error404 from "./Error404.tsx";
 import Bunkmates from './Views/Bunkmates/Bunkmates';
 import Profile from './Views/profiles/MyProfile.tsx';
 import SignInProvider from './Components/GlobalStateManagement/SignInContext';
-import ValidationProvider from './Components/GlobalStateManagement/ValidationContext';
 import FormatProvider from './Components/GlobalStateManagement/FormatContext';
 import UserDataProvider from './Components/GlobalStateManagement/UserDataContext'
 import {OtherProfile} from './Views/profiles/OtherProfile.tsx';
@@ -28,12 +27,10 @@ if (getRoot) {
                 <UserDataProvider>
                     <FormatProvider>
                         <SignInProvider>
-                            <ValidationProvider>
-                                <Provider store={store}>
-                                    <Navbar/>
-                                    <App/>
-                                </Provider>
-                            </ValidationProvider>
+                            <Provider store={store}>
+                                <Navbar/>
+                                <App/>
+                            </Provider>
                         </SignInProvider>
                     </FormatProvider>
                 </UserDataProvider>,
@@ -45,12 +42,10 @@ if (getRoot) {
                 <UserDataProvider>
                     <FormatProvider>
                         <SignInProvider>
-                            <ValidationProvider>
-                                <Provider store={store}>
-                                    <Navbar/>
-                                    <Profile/>
-                                </Provider>
-                            </ValidationProvider>
+                            <Provider store={store}>
+                                <Navbar/>
+                                <Profile/>
+                            </Provider>
                         </SignInProvider>
                     </FormatProvider>
                 </UserDataProvider>,
@@ -62,39 +57,35 @@ if (getRoot) {
                 <UserDataProvider>
                     <FormatProvider>
                         <SignInProvider>
-                            <ValidationProvider>
-                                <Provider store={store}>
-                                    <Navbar chooseStyle={"glass"}/>
-                                    <Bunkmates/>
-                                </Provider>
-                            </ValidationProvider>
+                            <Provider store={store}>
+                                <Navbar chooseStyle={"glass"}/>
+                                <Bunkmates/>
+                            </Provider>
                         </SignInProvider>
                     </FormatProvider>
                 </UserDataProvider>,
-        errorElement: <Error/>
-    },
-    {
-        path: '/messages',
-        element:
-            <ChakraProvider>
-                <Provider store={store}>
-                    <Messages/>
-                </Provider>
-            </ChakraProvider>,
-        errorElement: <Error/>
-    },
-    {
-        path: '/otherprofile',
-        element:
+            errorElement: <Error/>
+        },
+        {
+            path: '/messages',
+            element:
+                <ChakraProvider>
+                    <Provider store={store}>
+                        <Messages/>
+                    </Provider>
+                </ChakraProvider>,
+            errorElement: <Error/>
+        },
+        {
+            path: '/otherprofile',
+            element:
                 <UserDataProvider>
                     <FormatProvider>
                         <SignInProvider>
-                            <ValidationProvider>
-                                <Provider store={store}>
-                                    <Navbar/>
-                                    <OtherProfile/>
-                                </Provider>
-                            </ValidationProvider>
+                            <Provider store={store}>
+                                <Navbar/>
+                                <OtherProfile/>
+                            </Provider>
                         </SignInProvider>
                     </FormatProvider>
                 </UserDataProvider>,
@@ -106,12 +97,10 @@ if (getRoot) {
                 <UserDataProvider>
                     <FormatProvider>
                         <SignInProvider>
-                            <ValidationProvider>
-                                <Provider store={store}>
-                                    <Navbar chooseStyle={"glass"}/>
-                                    <Error404/>
-                                </Provider>
-                            </ValidationProvider>
+                            <Provider store={store}>
+                                <Navbar chooseStyle={"glass"}/>
+                                <Error404/>
+                            </Provider>
                         </SignInProvider>
                     </FormatProvider>
                 </UserDataProvider>

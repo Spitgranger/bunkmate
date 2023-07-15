@@ -176,7 +176,6 @@ export function DropDownMenu({
                 required={required}
                 disabled={disabled}
             >
-
                 {menuItem.map((item, i) => {
                     return (
                         <MenuItem index={i} key={i} value={item}>

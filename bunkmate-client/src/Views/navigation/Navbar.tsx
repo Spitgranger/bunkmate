@@ -12,7 +12,7 @@ import AccountDropdown from "./components/accountDropdown.tsx";
 import debounce from 'lodash/debounce'
 import {JSX} from 'react'
 
-const Navbar = memo(({chooseStyle}) => {
+const Navbar = memo(({chooseStyle}: { chooseStyle: string }) => {
 
     //define state management for managing the styles of the navbar
     const [navStyle, setNavStyle] = useState("nav")
