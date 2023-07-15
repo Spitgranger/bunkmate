@@ -93,7 +93,7 @@ const Navbar = memo(({chooseStyle}: {chooseStyle: string}) => {
     useEffect(() => {
         if (user) {
             debouncedHandleProfile()
-                .then((profile) => setUserProfile(profile.data))
+                .then((profile ) => setUserProfile(profile.data))
                 .catch(() => {
                     setMessage("Get Matched With Bunkmates!");
                     setMode('profileMakerForm');

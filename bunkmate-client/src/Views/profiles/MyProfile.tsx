@@ -64,7 +64,7 @@ const Profile = () => {
         loadingUi: {display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100wh', height: '100vh'}
     };
 
-    const profileData = useAppSelector(state => state.profile);
+    const profileData = useAppSelector(state => state.profile.profile);
     const error = useAppSelector((state) => state.profile.error)
     const {setIsOpen, setMode, setMessage} = useContext(SignInContext);
     //state to manage the profile data retrieved from the backend
