@@ -21,7 +21,12 @@ const auth = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () 
         const authReq = req;
         const token = (_b = (_a = req === null || req === void 0 ? void 0 : req.headers) === null || _a === void 0 ? void 0 : _a.authorization) === null || _b === void 0 ? void 0 : _b.split(' ')[1];
         if (token !== undefined) {
+            const existsInBlacklist = yield redis_1.default.hget(`blacklist:${token}`, "exists");
+            if (existsInBlacklist) {
+                res.status(403).json("Unauthorized as token has already been invalidated");
+            }
             let decodedData;
+            console.log("decode");
             decodedData = jsonwebtoken_1.default.verify(token, 'test');
             authReq.userId = decodedData === null || decodedData === void 0 ? void 0 : decodedData.id;
             req = authReq;

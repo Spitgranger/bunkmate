@@ -12,12 +12,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.signup = exports.signin = void 0;
+exports.signout = exports.signup = exports.signin = void 0;
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const user_1 = __importDefault(require("../models/user"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const uuid_1 = require("uuid");
+const redis_1 = __importDefault(require("../redis"));
 dotenv_1.default.config();
 /**
  * Controller for signin route. extracts user from database and checks to see if provided password matches,
@@ -87,3 +88,27 @@ const signup = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.signup = signup;
+/**
+ * @description Controller function to sign-out users and invalidate their tokens.
+ * @param req {Request} The request object where we retrieve the token.
+ * @param res {Response} The response object
+ */
+const signout = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a, _b;
+    const token = (_b = (_a = req === null || req === void 0 ? void 0 : req.headers) === null || _a === void 0 ? void 0 : _a.authorization) === null || _b === void 0 ? void 0 : _b.split(' ')[1];
+    if (token !== undefined) {
+        const decodedToken = yield jsonwebtoken_1.default.verify(token, "test");
+        let expiry;
+        (decodedToken === null || decodedToken === void 0 ? void 0 : decodedToken.exp) ? expiry = decodedToken.exp : expiry = -1;
+        //In this case the token has already expired or expiry date is invalid so adding it to the blacklist is unnecessary.
+        if (expiry < 0 || expiry === -1) {
+            return;
+        }
+        //Calculate seconds until the JWT expires
+        const secondsTillExpiry = Math.ceil(expiry - (Date.now() / 1000));
+        //Execute the redis query where we add the token to a hashset with key blacklist:token and value exists. This key expires when the jwt expires.
+        const response = yield redis_1.default.multi().hset(`blacklist:${token}`, "exists", 1).expire(`blacklist:${token}`, secondsTillExpiry).exec();
+        return;
+    }
+});
+exports.signout = signout;

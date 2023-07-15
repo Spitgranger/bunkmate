@@ -14,6 +14,10 @@ const auth = async (req: Request, res: Response, next: NextFunction) => {
         const authReq = req as AuthMiddlewareRequest;
         const token = req?.headers?.authorization?.split(' ')[1];
         if (token !== undefined) {
+            const existsInBlacklist = await redisClient.hget(`blacklist:${token}`, "exists");
+            if (existsInBlacklist) {
+                res.status(403).json("Unauthorized as token has already been invalidated");
+            }
             let decodedData;
             decodedData = jwt.verify(token, 'test') as JwtPayload;
             authReq.userId = decodedData?.id;
@@ -24,7 +28,7 @@ const auth = async (req: Request, res: Response, next: NextFunction) => {
         }
     } catch (error) {
         console.log(error);
-        res.status(403).json("must be logged in");
+        res.status(403).json("must be logged in and/or invalid token");
     }
 }
 

@@ -8,8 +8,17 @@ import {Profile} from 'MapTypes'
 
 interface AccountDropdownProps {
     handleLogout: () => void
-    user: string
-    userProfile: Profile
+    user: {
+        result:
+            {_id: string,
+                email: string,
+                phoneNumber: number,
+                password: string,
+                name: string,
+                chatId: string
+            }
+    }
+    userProfile: Profile | undefined
 }
 
 /**
@@ -25,7 +34,7 @@ interface AccountDropdownProps {
 const AccountDropdown = ({handleLogout, user, userProfile}: AccountDropdownProps) => {
     console.log(user)
     //controls the tethered and untethered state drop down menu
-    const [currentTarget, setCurrentTarget] = useState(null)
+    const [currentTarget, setCurrentTarget] = useState<HTMLElement | undefined>(undefined);
     //open close state of dropdown menu
     const open = Boolean(currentTarget)
     //used to manage the open close state of the modal window as well as the modal window content
@@ -33,13 +42,13 @@ const AccountDropdown = ({handleLogout, user, userProfile}: AccountDropdownProps
 
 
     //controls what react element the dropdown menu is tethered to
-    const handleClick = (event): void => {
+    const handleClick = (event: React.MouseEvent<HTMLButtonElement>): void => {
         setCurrentTarget(event.currentTarget);
     }
 
     //un-tethers the dropdown menu to the React element
     const handleClose = () => {
-        setCurrentTarget(null)
+        setCurrentTarget(undefined);
     }
 
     return (
@@ -93,6 +102,12 @@ const AccountDropdown = ({handleLogout, user, userProfile}: AccountDropdownProps
 }
 export default AccountDropdown;
 
+interface AccountDropDownMenuProps {
+    children: JSX.Element[] | JSX.Element
+    open: boolean
+    handleClose: () => void
+    currentTarget: HTMLElement | undefined
+}
 
 /**
  * @brief The drop-down menu component
@@ -100,7 +115,7 @@ export default AccountDropdown;
  * @param {JSX.Element} children the menu items that will be inside the dropdown menu
  * @param {boolean} open opens when the referenced target is clicked
  * @param {Function} handleClose clicking away from referenced target closes the drop-down menu
- * @param {HTMLElement | null} currentTarget the component to which the dropdown menu is anchored to
+ * @param {HTMLElement | undefined} currentTarget the component to which the dropdown menu is anchored to
  *
  * @details
  * - if the user has an account it will display their name and the option to logout
@@ -108,7 +123,7 @@ export default AccountDropdown;
  *
  * @returns {JSX.Element} the entire drop-down menu with its menu items
  */
-const AccountDropDownMenu = ({children, open, handleClose, currentTarget}) => {
+const AccountDropDownMenu = ({children, open, handleClose, currentTarget}: AccountDropDownMenuProps) => {
 
     const dropDownStyles = {
         overflow: 'visible',
@@ -147,7 +162,7 @@ const AccountDropDownMenu = ({children, open, handleClose, currentTarget}) => {
 interface StyledMenuItemProps {
     pageName: string
     icon: React.ReactElement
-    handleAction: () => void
+    handleAction?: () => void
 }
 
 /**

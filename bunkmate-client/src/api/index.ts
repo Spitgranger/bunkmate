@@ -22,6 +22,7 @@ API.interceptors.request.use((req) => {
 
 export const signIn = (formData: object) => API.post('/users/signin', formData)
 export const signUp = (formData: object) => API.post('/users/signup', formData)
+export const signOut = () => API.get('/users/logout');
 
 export const createProfile = (formData: object) => API.post('/profile', formData);
 export const getProfile = () => API.get('/profile');
@@ -34,6 +35,7 @@ export const createRequest = (formData: string) => API.post('/request', formData
 export const getRequests = () => API.get('/request');
 export const deleteRequest = () => API.delete('/request');
 export const getListings = () => API.get("/posts");
+
 //export const getChats = (chatData: object) => API.get(`/chats/${chatData.id}/${chatData.token}`);
 //export const updateRequest = (id: string, formData: object) => API.patch(`/request/${id}`, formData);
 
