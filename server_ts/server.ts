@@ -21,7 +21,6 @@ let redisStore = new (RedisStore as any)({
     client: redisClient,
 });
 
-
 declare module 'express-session' {
     interface SessionData {
         email: string,

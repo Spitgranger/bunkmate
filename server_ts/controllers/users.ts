@@ -1,9 +1,10 @@
 import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
+import jwt, {JwtPayload} from 'jsonwebtoken';
 import UserModel, {User} from '../models/user';
 import dotenv from 'dotenv';
 import {Request, Response} from "express";
 import {v4 as uuidv4} from 'uuid';
+import redisClient from "../redis";
 
 declare module 'express-session' {
     export interface SessionData {
@@ -75,4 +76,27 @@ export const signup = async (req: Request, res: Response) => {
         res.status(500).json({message: 'something went wrong like a gofu'})
         console.log(error)
     }
+}
+/**
+ * @description Controller function to sign-out users and invalidate their tokens.
+ * @param req {Request} The request object where we retrieve the token.
+ * @param res {Response} The response object
+ */
+export const signout = async (req: Request, res: Response) => {
+    const token = req?.headers?.authorization?.split(' ')[1];
+    if (token !== undefined) {
+        const decodedToken: JwtPayload = await jwt.verify(token, "test") as JwtPayload;
+        let expiry: number;
+        decodedToken?.exp ? expiry = decodedToken.exp : expiry = -1;
+        //In this case the token has already expired or expiry date is invalid so adding it to the blacklist is unnecessary.
+        if (expiry < 0 || expiry === -1) {
+            return
+        }
+        //Calculate seconds until the JWT expires
+        const secondsTillExpiry: number = Math.ceil(expiry - (Date.now()/1000));
+        //Execute the redis query where we add the token to a hashset with key blacklist:token and value exists. This key expires when the jwt expires.
+        const response = await redisClient.multi().hset(`blacklist:${token}`, "exists", 1).expire(`blacklist:${token}`, secondsTillExpiry).exec();
+        return
+    }
+
 }

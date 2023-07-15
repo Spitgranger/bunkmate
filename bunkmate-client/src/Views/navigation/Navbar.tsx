@@ -1,16 +1,18 @@
 import bunkmate_logo from '../../Components/Assets/bunkmate_logo.png'
 import './styles/Navbar.css';
 import {Link, useResolvedPath, useMatch} from 'react-router-dom';
-import RenderWhich from '../account/SignIn.jsx';
+import RenderWhich from '../account/SignIn.tsx';
 import {Tooltip} from '@mui/material';
 import {useState, useContext, useEffect, memo} from 'react';
 import {useNavigate} from 'react-router-dom';
 import decode from 'jwt-decode';
-import {getProfile} from '../../api';
+import {getProfile, signOut} from '../../api';
 import {SignInContext} from '../../Components/GlobalStateManagement/SignInContext.js';
 import AccountDropdown from "./components/accountDropdown.tsx";
 import debounce from 'lodash/debounce'
 import {JSX} from 'react'
+import {Profile} from "MapTypes";
+import {AxiosResponse} from "axios";
 
 const Navbar = memo(({chooseStyle}: {chooseStyle: string}) => {
 
@@ -22,7 +24,7 @@ const Navbar = memo(({chooseStyle}: {chooseStyle: string}) => {
     const RetrievedData: string | null = localStorage.getItem("profile")
     const [user, setUser] = useState(RetrievedData ? JSON.parse(RetrievedData) : "")
     //Used to handle retrieving user data from api
-    const [userProfile, setUserProfile] = useState("")
+    const [userProfile, setUserProfile] = useState<Profile | undefined>(undefined);
 
     interface CheckActiveProps {
         to: string
@@ -82,7 +84,7 @@ const Navbar = memo(({chooseStyle}: {chooseStyle: string}) => {
         }
     }, [CheckActive])
 
-    const debouncedHandleProfile = debounce(async () => {
+    const debouncedHandleProfile = debounce(async (): Promise<any> => {
         await getProfile;
     }, 1000, {leading: true});
 
@@ -93,7 +95,7 @@ const Navbar = memo(({chooseStyle}: {chooseStyle: string}) => {
     useEffect(() => {
         if (user) {
             debouncedHandleProfile()
-                .then((profile ) => setUserProfile(profile.data))
+                .then((profile: AxiosResponse) => setUserProfile(profile.data))
                 .catch(() => {
                     setMessage("Get Matched With Bunkmates!");
                     setMode('profileMakerForm');
@@ -107,7 +109,8 @@ const Navbar = memo(({chooseStyle}: {chooseStyle: string}) => {
     /**
      * @brief if JWT is expired then setUser object to null, clear local storage, navigate to home page and finally reload
      */
-    const handleLogout = () => {
+    const handleLogout = async () => {
+        await void signOut();
         localStorage.clear()
         setUser("");
         navigate("/");
