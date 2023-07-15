@@ -26,7 +26,6 @@ const auth = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () 
                 res.status(403).json("Unauthorized as token has already been invalidated");
             }
             let decodedData;
-            console.log("decode");
             decodedData = jsonwebtoken_1.default.verify(token, 'test');
             authReq.userId = decodedData === null || decodedData === void 0 ? void 0 : decodedData.id;
             req = authReq;
@@ -34,11 +33,13 @@ const auth = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () 
         }
         else {
             res.status(500).json("Error when parsing access token");
+            return;
         }
     }
     catch (error) {
         console.log(error);
-        res.status(403).json("must be logged in");
+        res.status(403).json("must be logged in and/or invalid token");
+        return;
     }
 });
 const authorizeSocketUser = (Socket, next) => __awaiter(void 0, void 0, void 0, function* () {

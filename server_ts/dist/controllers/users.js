@@ -83,7 +83,7 @@ const signup = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         console.log('success');
     }
     catch (error) {
-        res.status(500).json({ message: 'something went wrong like a gofu' });
+        res.status(500).json({ message: 'something went wrong during the signup process' });
         console.log(error);
     }
 });

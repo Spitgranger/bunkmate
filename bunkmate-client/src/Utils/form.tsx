@@ -1,7 +1,8 @@
 import "./form.css"
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button'
-import TextField from '@mui/material/TextField';
+import TextField, {TextFieldPropsSizeOverrides} from '@mui/material/TextField';
+import {OverridableStringUnion} from '@mui/types';
 import * as React from 'react';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
@@ -243,6 +244,27 @@ export function DropDownMenu({
     );
 }
 
+interface NormalFormSingleLineInputProps {
+    sx: object
+    required: boolean
+    autoFocus: boolean
+    disabled: boolean
+    onError: () => void
+    onBlur: () => void
+    onChange: () => void
+    error: boolean
+    type: string
+    field: string
+    placeHolder: string
+    helperText: string
+    inputAdornment: boolean
+    inputStartAdornment: React.ReactElement
+    inputEndAdornment: React.ReactElement
+    size: OverridableStringUnion<"small" | "medium", TextFieldPropsSizeOverrides> | undefined
+    inputRef: React.Ref<any>
+    value: string
+    name: string
+}
 
 function NormalFormSingleLineInput({
                                        sx,
@@ -264,7 +286,7 @@ function NormalFormSingleLineInput({
                                        inputRef,
                                        value,
                                        name
-                                   }) {
+                                   }: NormalFormSingleLineInputProps) {
     return (
         <>
             <TextField
@@ -290,7 +312,7 @@ function NormalFormSingleLineInput({
                         <InputAdornment position="end">
                             {inputEndAdornment}
                         </InputAdornment>)
-                } : null}
+                } : undefined}
                 type={type}
                 inputRef={inputRef}
                 value={value}

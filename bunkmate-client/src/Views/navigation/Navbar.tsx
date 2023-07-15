@@ -1,4 +1,4 @@
-import bunkmate_logo from '../../Components/Assets/bunkmate_logo.png'
+import bunkmate_logo from '../../assets/bunkmate_logo.png'
 import './styles/Navbar.css';
 import {Link, useResolvedPath, useMatch} from 'react-router-dom';
 import RenderWhich from '../account/SignIn.tsx';
@@ -7,7 +7,7 @@ import {useState, useContext, useEffect, memo} from 'react';
 import {useNavigate} from 'react-router-dom';
 import decode from 'jwt-decode';
 import {getProfile, signOut} from '../../api';
-import {SignInContext} from '../../Components/GlobalStateManagement/SignInContext.js';
+import {SignInContext} from '../../globalContext/SignInContext.tsx';
 import AccountDropdown from "./components/accountDropdown.tsx";
 import debounce from 'lodash/debounce'
 import {JSX} from 'react'
