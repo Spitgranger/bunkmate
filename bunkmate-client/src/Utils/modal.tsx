@@ -1,9 +1,28 @@
 import ReactDom from "react-dom";
-import "./modal.css"
+import React from 'react'
+import "./Modal.css"
 import IconButton from "@mui/material/IconButton";
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 
-export default function Modal({open, children, onClose, modalMessage, content, flexibleContainer, cardTitle}) {
+interface ModalProps {
+    open: boolean
+    children?: React.ReactElement[] | React.ReactElement
+    onClose: () => void
+    modalMessage: string
+    content?: React.ReactElement
+    cardTitle?: string
+    flexibleContainer?: boolean
+}
+
+export default function Modal({
+                                  open,
+                                  children,
+                                  onClose,
+                                  modalMessage,
+                                  content,
+                                  flexibleContainer,
+                                  cardTitle
+                              }: ModalProps) {
 
     if (!open) return null
 
@@ -25,7 +44,7 @@ export default function Modal({open, children, onClose, modalMessage, content, f
                 </div>
             </div>
         </>,
-        document.getElementById('portal')
+        document.getElementById('portal')!
     )
 }
 ;

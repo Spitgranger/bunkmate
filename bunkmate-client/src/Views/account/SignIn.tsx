@@ -1,6 +1,6 @@
 import React, {useState, useContext, useEffect} from "react"
 import "./SignIn.css"
-import Modal from "../../Utils/Modal.tsx";
+import Modal from "../../Utils/modal.tsx";
 import {LineBox, DropDownMenu, FormSingleLineInput, ActionButton} from '../../Utils/form.tsx';
 import {Button} from "@mui/material";
 import {FcGoogle} from 'react-icons/fc'
@@ -210,7 +210,8 @@ async function handleSignUp(e: Event, data: object) {
  */
 export function SignUpEmail() {
 
-    {/* Change default to the user's current location */}
+    {/* Change default to the user's current location */
+    }
     const [data, setData] = useState({phoneNumber: '', name: '', email: '', password: '', confirmPassword: ''});
     const {setMode, setMessage} = useContext(SignInContext)
 
