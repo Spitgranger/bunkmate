@@ -73,7 +73,7 @@ export const signup = async (req: Request, res: Response) => {
         console.log('success');
 
     } catch (error) {
-        res.status(500).json({message: 'something went wrong like a gofu'})
+        res.status(500).json({message: 'something went wrong during the signup process'})
         console.log(error)
     }
 }

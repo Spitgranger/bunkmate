@@ -1,6 +1,6 @@
 import ReactDom from "react-dom";
 import React from 'react'
-import "./Modal.css"
+import "./modal.css"
 import IconButton from "@mui/material/IconButton";
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 

@@ -33,11 +33,13 @@ const auth = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () 
         }
         else {
             res.status(500).json("Error when parsing access token");
+            return;
         }
     }
     catch (error) {
         console.log(error);
         res.status(403).json("must be logged in and/or invalid token");
+        return;
     }
 });
 const authorizeSocketUser = (Socket, next) => __awaiter(void 0, void 0, void 0, function* () {
