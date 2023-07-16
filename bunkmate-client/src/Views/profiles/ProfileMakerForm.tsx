@@ -13,7 +13,8 @@ import {IoChevronForward} from 'react-icons/io5';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import {SignInContext} from '../../globalContext/SignInContext.tsx';
 import imageCompression from 'browser-image-compression';
-import {DateType} from '../../Utils/types'
+import {DateType} from "../../Utils/types/form.ts";
+import {SelectChangeEvent} from "@mui/material/Select";
 
 
 //styles
@@ -41,8 +42,8 @@ function ProfileMakerForm(): JSX.Element {
         }
     };*/
 
-    const [fields, setFields] = useState<{ [key: string]: DateType }>({})
-    type HandleRecordField = (value: DateType, field: string) => void
+    const [fields, setFields] = useState<{ [key: string]: DateType | SelectChangeEvent }>({})
+    type HandleRecordField = (value: DateType | SelectChangeEvent, field: string) => void
 
     const handleRecordField: HandleRecordField = (value, field) => {
         const recordedFields = {...fields}
@@ -147,9 +148,13 @@ function ProfileMakerForm(): JSX.Element {
             handleFileUpload={handleFileUpload}/>
         <LineBox flex={true} CssTextField={[
             <DropDownMenu
-                required="true"
+                required={true}
                 label="Gender"
-                menuItem={["Male", "Female", "Other"]}/>,
+                menuItem={["Male", "Female", "Other"]}
+                disabled={false}
+                onChange={(value) => handleRecordField(value, "ownPets")}
+                value={fields.ownPets}
+            />,
             <DatePicker
                 label="Birthday"
                 disabled={false}
@@ -162,49 +167,86 @@ function ProfileMakerForm(): JSX.Element {
         </div>
 
         <LineBox flex={true} CssTextField={[
-            <DropDownMenu required="true"
+            <DropDownMenu required={true}
                           label="Own pets?"
-                          menuItem={["Yes", "No"]}/>,
-            <DropDownMenu required="true"
+                          menuItem={["Yes", "No"]}
+                          disabled={false}
+                          onChange={(value) => handleRecordField(value, "ownPets")}
+                          value={fields.ownPets}
+            />,
+
+            <DropDownMenu required={true}
                           label="Sleep Schedule"
-                          menuItem={["Early Bird", "Normal", "Night Owl"]}/>,
+                          menuItem={["Early Bird", "Normal", "Night Owl"]}
+                          disabled={false}
+                          onChange={(value) => handleRecordField(value, "sleepSchedule")}
+                          value={fields.ownPets}
+            />,
         ]}/>
 
         <LineBox flex={true} CssTextField={[
-            <DropDownMenu required="true"
+            <DropDownMenu required={true}
                           label="Cleanliness"
-                          menuItem={["Not clean", "Clean", "Very Clean"]}/>,
-            <DropDownMenu required="true"
+                          menuItem={["Not clean", "Clean", "Very Clean"]}
+                          disabled={false}
+                          onChange={(value) => handleRecordField(value, "cleanliness")}
+                          value={fields.cleanliness}
+            />,
+            <DropDownMenu required={true}
                           label="Drinking"
-                          menuItem={["Don't Drink", "Light Drinker", "Moderate Drinker", "Heavy Drinker"]}/>,
+                          menuItem={["Don't Drink", "Light Drinker", "Moderate Drinker", "Heavy Drinker"]}
+                          disabled={false}
+                          onChange={(value) => handleRecordField(value, "drinking")}
+                          value={fields.drinking}
+            />,
         ]}/>
 
         <LineBox flex={true} CssTextField={[
-            <DropDownMenu required="true"
+            <DropDownMenu required={true}
                           label="Smoking"
-                          menuItem={["Don't Smoke", "Light Smoker", "Moderate Smoker", "Heavy Smoker"]}/>,
-            <DropDownMenu required="true"
+                          menuItem={["Don't Smoke", "Light Smoker", "Moderate Smoker", "Heavy Smoker"]}
+                          disabled={false}
+                          onChange={(value) => handleRecordField(value, "smoking")}
+                          value={fields.smoking}
+            />,
+            <DropDownMenu required={true}
                           label="Current Education"
-                          menuItem={["Not in School", "High School", "Undergraduate Studies", "Graduate Studies"]}/>,
+                          menuItem={["Not in School", "High School", "Undergraduate Studies", "Graduate Studies"]}
+                          disabled={false}
+                          onChange={(value) => handleRecordField(value, "education")}
+                          value={fields.education}
+            />,
         ]}/>
 
         <LineBox flex={true} CssTextField={[
-            <DropDownMenu required="true"
+            <DropDownMenu required={true}
                           label="Cannabis"
-                          menuItem={["No Cannabis Use", "Light Cannabis Use", "Moderate Cannabis Use", "Heavy Cannabis User"]}/>,
-            <FormSingleLineInput required="true"
+                          menuItem={["No Cannabis Use", "Light Cannabis Use", "Moderate Cannabis Use", "Heavy Cannabis User"]}
+                          disabled={false}
+                          onChange={(value) => handleRecordField(value, "cannabis")}
+                          value={fields.cannabis}
+            />,
+            <FormSingleLineInput required={true}
                                  size="small"
                                  type="text"
                                  field="Occupation" placeHolder="ex. Student/Pharmacist"/>,
         ]}/>
 
         <LineBox flex={true} CssTextField={[
-            <DropDownMenu required="true"
+            <DropDownMenu required={true}
                           label="Ok with guests?"
-                          menuItem={["Yes", "No"]}/>,
-            <DropDownMenu required="true"
+                          menuItem={["Yes", "No"]}
+                          disabled={false}
+                          onChange={(value) => handleRecordField(value, "guests")}
+                          value={fields.guests}
+            />,
+            <DropDownMenu required={true}
                           label="Ok with pets?"
-                          menuItem={["Yes", "No"]}/>,
+                          menuItem={["Yes", "No"]}
+                          disabled={false}
+                          onChange={(value) => handleRecordField(value, "pets")}
+                          value={fields.pets}
+            />,
         ]}/>
 
 

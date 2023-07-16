@@ -17,7 +17,7 @@ import {FormHelperText, InputAdornment, Typography} from "@mui/material";
 import {useState, memo, ReactNode} from 'react'
 import {BsFillCheckCircleFill} from "react-icons/bs";
 import {MdOutlineError} from "react-icons/md";
-import {DateType, DropDownMenuProps} from "./types/form.ts";
+import {DateType, DropDownMenuProps, FormSectionProps} from "./types/form.ts";
 
 interface MultipleSelectProps {
     value: string
@@ -176,8 +176,8 @@ export function LineBox({flex, CssTextField}: LineBoxProps): ReactNode {
  * @param disabled - is the field disabled?
  * @param helperText - helper-text to provide the user more information
  * @param required - is the field required?
- * @param autoFocus -
- * @param inputRef -
+ * @param autoFocus - automatically focus on one of the menu items
+ * @param inputRef - the underlying html
  * @param defaultValue - the default value to be displayed
  * @param value - the value to be displayed
  * @param onChange - Expose the special event listener
@@ -232,7 +232,7 @@ export function DropDownMenu({
             >
                 {menuItem.map((item: string, i: number) => {
                     return (
-                        <MenuItem index={i} key={i} value={item}>
+                        <MenuItem key={i} value={item}>
                             {Array.isArray(item) ? item.join(", ") : item}
                         </MenuItem>
                     );
@@ -563,10 +563,20 @@ export function ActionButton(props) {
     );
 }
 
-export function FormSection({title, message, children}) {
+/**
+ * @constructor
+ *
+ * @brief Wrapper that styles the form section area
+ *
+ * @param title - the title of the form
+ * @param message - the message explaining what the purpose of the section of the form is for
+ * @param children - Any react elements such as input fields
+ */
+export function FormSection({title, message, children}: FormSectionProps) {
     return (
         <>
-            <h2 className="profile">{title}
+            <h2 className="profile">
+                {title}
             </h2>
             <h5>
                 <i>

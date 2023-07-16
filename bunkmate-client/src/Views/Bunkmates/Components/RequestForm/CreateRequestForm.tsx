@@ -330,30 +330,40 @@ const SecondPageForm = ({
             ]}/>
 
             <LineBox flex={true} CssTextField={[
-                <DropDownMenu required={true} defaultValue="1-3 months" value={state?.secondPageValues?.idealLengthStay}
+                <DropDownMenu required={true}
+                              defaultValue="1-3 months"
+                              value={state?.secondPageValues?.idealLengthStay}
                               onChange={(e) => handleEmptyStringValidation(e.target.value, 'idealLengthStay', 'secondPageValues')}
                               label="Ideal length of stay"
-                              menuItem={["1-3 months", "4-6 months", "7-12 months", "1+ years"]}/>,
+                              menuItem={["1-3 months", "4-6 months", "7-12 months", "1+ years"]}
+                              disabled={false}/>,
                 <Box sx={{height: '0px'}}>
                     <Typography>
-
                         {"Preferred Age *"}
                     </Typography>
-                    <Slider getAriaLabel={() => 'Bunkmate Age range'} slots onChange={handleRangeChange}
-                            valueLabelDisplay="auto" value={state?.secondPageValues?.rangeSliderValue}
-                            getAriaValueText={ariaValuetext} min={16} max={100} size="small"/>
+                    <Slider
+                        getAriaLabel={() => 'Bunkmate Age range'}
+                        slots
+                        onChange={handleRangeChange}
+                        valueLabelDisplay="auto" value={state?.secondPageValues?.rangeSliderValue}
+                        getAriaValueText={ariaValuetext} min={16} max={100} size="small"/>
                 </Box>,
             ]}/>
 
 
             <LineBox flex={true} CssTextField={[
-                <DropDownMenu required={true} value={state?.secondPageValues?.roommateGender}
+                <DropDownMenu required={true}
+                              value={state?.secondPageValues?.roommateGender}
                               onChange={(e) => handleEmptyStringValidation(e.target.value, 'roommateGender', 'secondPageValues')}
-                              label="Preferred Gender" menuItem={["Any", "Male", "Female", "Other"]}/>,
+                              label="Preferred Gender" menuItem={["Any", "Male", "Female", "Other"]}
+                              disabled={false}
+                />,
                 <DropDownMenu required={true} value={state?.secondPageValues?.numRoommates}
                               onChange={(e) => handleEmptyStringValidation(e.target.value, 'numRoommates', 'secondPageValues')}
                               label="Seeking..."
-                              menuItem={["1 Bunkmate", "2 Bunkmates", "3 Bunkmates", "4 Bunkmates", '5+ Bunkmates']}/>,
+                              menuItem={["1 Bunkmate", "2 Bunkmates", "3 Bunkmates", "4 Bunkmates", '5+ Bunkmates']}
+                              disabled={false}
+                />,
             ]}/>
 
             {/* disable cotinue button if the user has not filled out all mandatory fields and / or still has errors*/}

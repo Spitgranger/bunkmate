@@ -7,15 +7,21 @@ export type DateType = string | number | undefined | null
 /*parameter types for the drop-down menu component*/
 export interface DropDownMenuProps {
     disabled: boolean
-    helperText: string
+    helperText?: string
     required: boolean
-    autoFocus: boolean
-    inputRef: Ref<any> | null
-    defaultValue: string
-    value: string
+    autoFocus?: boolean
+    inputRef?: Ref<any> | null
+    defaultValue?: string
+    value: string | DateType | SelectChangeEvent
     onChange: (event: SelectChangeEvent, child: ReactNode) => void
     label: string
     menuItem: string[]
-    maxHeight: string
-    menuItemWidth: string
+    maxHeight?: string
+    menuItemWidth?: string
+}
+
+export interface FormSectionProps {
+    title: string
+    message: string
+    children?: ReactNode
 }
