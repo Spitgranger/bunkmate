@@ -1,27 +1,4 @@
 "use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -37,7 +14,6 @@ const request_1 = __importDefault(require("./routes/request"));
 const http_1 = __importDefault(require("http"));
 const helmet_1 = __importDefault(require("helmet"));
 const cors_1 = __importDefault(require("cors"));
-const session_1 = __importStar(require("./middleware/session"));
 const connect_redis_1 = __importDefault(require("connect-redis"));
 const redis_1 = __importDefault(require("./redis"));
 const auth_1 = require("./middleware/auth");
@@ -60,8 +36,8 @@ app.use((0, cors_1.default)({
 }));
 app.use((0, helmet_1.default)());
 app.use(express_1.default.json());
-app.use(session_1.default);
-io.use((0, session_1.wrap)(session_1.default));
+//app.use(sessionMiddleware);
+//io.use(wrap(sessionMiddleware));
 io.use(auth_1.authorizeSocketUser);
 io.on("connect", (Socket) => {
     const socket = Socket;

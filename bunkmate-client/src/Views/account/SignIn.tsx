@@ -13,6 +13,7 @@ import {signIn, signUp} from "../../api";
 import ProfileMakerForm from "../profiles/ProfileMakerForm.tsx";
 import {SignInContext} from "../../globalContext/SignInContext";
 import Divider from "@mui/material/Divider";
+import {SelectChangeEvent} from "@mui/material/Select";
 
 interface SignInPartnerProps {
     company: string
@@ -80,7 +81,7 @@ export default function RenderWhich() {
  * @param data {Object} The object containing the data to be sent to the API endpoint signIn
  * @return Promise<"Success!" | "User doesn't exist" | "Invalid Credentials" | undefined>
  */
-async function validateLogin(e: Event, data: object) {
+async function validateLogin(e: React.MouseEvent<HTMLAnchorElement>, data: object) {
     //validate login credentials
     e.preventDefault();
     try {
@@ -117,7 +118,7 @@ export function SignInEmail() {
         const target = e.target as HTMLTextAreaElement
         setData((prevData) => ({...prevData, [target?.name]: target?.value}))
     }
-    const handleSignIn = async (e: Event) => {
+    const handleSignIn = async (e: React.MouseEvent<HTMLAnchorElement>) => {
         //Verify login details
         const response = await validateLogin(e, data);
         //5 lines below are pretty much garbage need to figure out how to extract error message
@@ -172,7 +173,7 @@ export function SignInEmail() {
                     Don't have an account? Sign Up!
                 </div>
             </div>
-            <ActionButton width="100%" type="submit" title="Submit" onClick={(e: Event) => {
+            <ActionButton width="100%" type="submit" title="Submit" disabled={false} onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
                 void handleSignIn(e)
             }}/>
             <Divider sx={{fontSize: '12px'}}>
@@ -196,7 +197,7 @@ export function SignInEmail() {
  * @param e {Event} The event object that is required to prevent page refresh
  * @param data {object} The object containing the data that is to be passed to endpoint signUp
  */
-async function handleSignUp(e: Event, data: object) {
+async function handleSignUp(e: React.MouseEvent<HTMLAnchorElement>, data: object) {
     //Record user data after signing up
     e.preventDefault();
     const response = await signUp(data);
@@ -215,11 +216,11 @@ export function SignUpEmail() {
     const [data, setData] = useState({phoneNumber: '', name: '', email: '', password: '', confirmPassword: ''});
     const {setMode, setMessage} = useContext(SignInContext)
 
-    const handleFieldChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleFieldChange = (e: SelectChangeEvent<string | undefined>) => {
         setData((prevData) => ({...prevData, [e.target.name]: e.target.value}))
     }
 
-    const handleRegularSignUpEmail = (e: Event, data: object) => {
+    const handleRegularSignUpEmail = (e: React.MouseEvent<HTMLAnchorElement>, data: object) => {
         //Changes to sign in mode once sign up is complete
         void handleSignUp(e, data)
         setMessage("Sign In With Email")
@@ -331,9 +332,9 @@ export function SignInPhone() {
 
     {/* TODO Change default to the user's current location */
     }
-    const [field, setField] = useState('United States (+1)')
+    const [field, setField] = useState<string | undefined>('United States (+1)')
 
-    const handleFieldChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleFieldChange = (event: SelectChangeEvent<string | undefined>) => {
         setField(event.target.value);
     }
 

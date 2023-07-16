@@ -57,8 +57,8 @@ app.use(cors({
 
 app.use(helmet());
 app.use(express.json());
-app.use(sessionMiddleware);
-io.use(wrap(sessionMiddleware));
+//app.use(sessionMiddleware);
+//io.use(wrap(sessionMiddleware));
 io.use(authorizeSocketUser);
 io.on("connect", (Socket) => {
     const socket = <SessionSocket>Socket;

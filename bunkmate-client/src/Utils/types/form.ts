@@ -30,9 +30,9 @@ export interface DropDownMenuProps {
     /**the default value to be displayed*/
     defaultValue?: string
     /**the value to be displayed in the input box*/
-    value: string | null
+    value: string | undefined
     /** Expose the special event listener*/
-    onChange: (event: SelectChangeEvent<string | null>, child?: ReactNode) => void
+    onChange: (event: SelectChangeEvent<string | undefined>, child?: ReactNode) => void
     /** the title the component*/
     label: string
     /** An array of menu items*/
@@ -56,11 +56,11 @@ export interface NormalFormSingleLineInputProps {
     /**Custom styles for text field component*/
     sx?: object
     /**Is the field required?*/
-    required: boolean
+    required?: boolean
     /**If true then the input element is focused on the first mount*/
     autoFocus?: boolean
     /**Is the field disabled?*/
-    disabled: boolean
+    disabled?: boolean
     /**Event listener for errors*/
     onError?: () => void
     /**Event listener for changing component focus*/
