@@ -16,7 +16,6 @@ import imageCompression from 'browser-image-compression';
 import {DateType} from "../../Utils/types/form.ts";
 import {SelectChangeEvent} from "@mui/material/Select";
 
-
 //styles
 /*const backButtonStyles = {
     display: 'flex',
@@ -42,13 +41,18 @@ function ProfileMakerForm(): JSX.Element {
         }
     };*/
 
-    const [fields, setFields] = useState<{ [key: string]: DateType | SelectChangeEvent }>({})
-    type HandleRecordField = (value: DateType | SelectChangeEvent, field: string) => void
+    const [fields, setFields] = useState<{ [key: string]: string | null }>({})
+    type HandleRecordField = (value: SelectChangeEvent<string | null>, field: string) => void
 
     const handleRecordField: HandleRecordField = (value, field) => {
         const recordedFields = {...fields}
-        recordedFields[field] = value
+        recordedFields[field] = value.toString()
         setFields(recordedFields)
+    }
+
+    //Todo
+    const handleDateConversion = (dateValue: DateType): void => {
+        console.log(dateValue)
     }
 
 
@@ -142,7 +146,7 @@ function ProfileMakerForm(): JSX.Element {
             width="50%"
             type="file"
             message="Upload Picture"
-            accept={["image/jpg", "image/jpeg", "image/png"]}
+            accept={"image/jpeg,image/png,image/jpg"}
             endIcon={<CameraAltIcon
                 sx={{color: "aqua"}}/>}
             handleFileUpload={handleFileUpload}/>
@@ -159,10 +163,15 @@ function ProfileMakerForm(): JSX.Element {
                 label="Birthday"
                 disabled={false}
                 required={true}
-                onChange={(value: DateType) => handleRecordField(value, "birthday")}/>,
+                onChange={(dateValue: DateType) => handleDateConversion(dateValue)}
+            />
         ]}/>
         <div id="multiline">
-            <FormMultiLineInput required="true" placeHolder="Tell us a bit about yourself" type="text"
+            <FormMultiLineInput required={true}
+                                placeHolder="Tell us a bit about yourself"
+                                onChange={(value) => handleRecordField(value, "about")}
+                                value={fields.about}
+                                disabled={false}
                                 field="About Me"/>
         </div>
 
@@ -229,7 +238,11 @@ function ProfileMakerForm(): JSX.Element {
             <FormSingleLineInput required={true}
                                  size="small"
                                  type="text"
-                                 field="Occupation" placeHolder="ex. Student/Pharmacist"/>,
+                                 field="Occupation"
+                                 disabled={false}
+                                 onChange={(value) => handleRecordField(value, "occupation")}
+                                 value={fields.occupation}
+                                 placeHolder="ex. Student/Pharmacist"/>,
         ]}/>
 
         <LineBox flex={true} CssTextField={[

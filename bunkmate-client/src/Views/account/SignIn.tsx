@@ -297,8 +297,12 @@ export function SignUpEmail() {
                         Already have an account? Sign In!
                     </div>
                 </div>
-                <ActionButton width="100%" type="submit" title="Submit"
-                              onClick={(e: Event) => handleRegularSignUpEmail(e, data)}/>
+                <ActionButton
+                    width="100%"
+                    disabled={false}
+                    type="submit"
+                    title="Submit"
+                    onClick={(e) => handleRegularSignUpEmail(e, data)}/>
                 <Divider sx={{fontSize: '12px'}}>
                     or
                 </Divider>
@@ -346,6 +350,8 @@ export function SignInPhone() {
             <div className="content">
                 <LineBox flex={false} CssTextField={[
                     <DropDownMenu
+                        required={true}
+                        disabled={false}
                         onChange={handleFieldChange}
                         value={field}
                         label='Country Code'
@@ -353,11 +359,13 @@ export function SignInPhone() {
                     />,
                     <FormSingleLineInput
                         field="Phone Number"
+                        required={true}
+                        disabled={false}
                         placeHolder="6471234567"
+                        onChange={handleFieldChange}
                         inputAdornment={true}
                         size="small"
                         type="number"
-                        inputAdornmentText={`+${MenuItem[field]}`}
                     />]
                 }/>
                 <div className="disclaimerContainer">
@@ -368,10 +376,15 @@ export function SignInPhone() {
                         <u style={{cursor: 'pointer'}}>Privacy Policy</u>
                     </h6>
                 </div>
-                <ActionButton width="100%" type="submit" title="Submit" onClick={() => {
-                    setMode("signUpEmail");
-                    setMessage("Sign Up Now")
-                }}/>
+                <ActionButton
+                    width="100%"
+                    type="submit"
+                    title="Submit"
+                    disabled={false}
+                    onClick={() => {
+                        setMode("signUpEmail");
+                        setMessage("Sign Up Now")
+                    }}/>
                 <Divider style={{fontSize: '12px'}}>
                     or
                 </Divider>

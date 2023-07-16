@@ -121,7 +121,7 @@ const FirstPageForm = ({
         <LineBox flex={true} CssTextField={[
             <UploadFile helperText="Optional: Supported Files: jpg, jpeg, png" helperTextPos="85%" width="100%"
                         height="40px" type="file" message="Upload Group Photo"
-                        accept={["image/jpg", "image/jpeg", "image/png"]}
+                        accept={"image/jpeg,image/png,image/jpg"}
                         endIcon={<CameraAltIcon sx={{color: "aqua"}}/>} handleFileUpload={handleFileUpload}/>,
         ]}/>
         <div id="multiline">

@@ -125,10 +125,16 @@ const Bunkmates: React.FC = (): React.ReactElement => {
     function CreateRequestButton(): React.ReactElement {
         return (
             <div style={{display: 'flex', bottom: '10vh', justifyContent: 'center', position: 'absolute',}}>
-                <ActionButton onClick={(e: SyntheticEvent): void => {
-                    handleRequestClick();
-                    e.stopPropagation()
-                }} bgColor={"black"} title={"Create Bunkmate Request"} opacity='0.85'/>
+                <ActionButton
+                    onClick={(e: SyntheticEvent): void => {
+                        handleRequestClick();
+                        e.stopPropagation()
+                    }}
+                    disabled={false}
+                    type={"button"}
+                    bgColor={"black"}
+                    title={"Create Bunkmate Request"}
+                    opacity='0.85'/>
             </div>
         )
     }
@@ -139,24 +145,36 @@ const Bunkmates: React.FC = (): React.ReactElement => {
             <div style={{display: 'flex', bottom: '10vh', justifyContent: 'center', position: 'absolute',}}>
                 {/* edit bunkmates request button */}
                 {userOwnData
-                    ? <ActionButton onClick={(e: SyntheticEvent): void => {
-                        handleRequestClick();
-                        dispatch(setCenter({lat: userOwnData.idealLocation[0], lng: userOwnData.idealLocation[1]}))
-                        e.stopPropagation()
-                    }} bgColor={"black"} title={"Edit Bunkmate Request"} opacity='0.85'/>
+                    ? <ActionButton
+                        onClick={(e: SyntheticEvent): void => {
+                            handleRequestClick();
+                            dispatch(setCenter({lat: userOwnData.idealLocation[0], lng: userOwnData.idealLocation[1]}))
+                            e.stopPropagation()
+                        }}
+                        bgColor={"black"}
+                        type={"button"}
+                        disabled={false}
+                        title={"Edit Bunkmate Request"}
+                        opacity='0.85'/>
                     : null}
                 <Tooltip arrow title={"Delete Request"}>
                     {/* X button to delete profiles */}
                     <div>
-                        <ActionButton onClick={(e: SyntheticEvent): void => {
-                            if (typeof id === "string") {
-                                deleteRequest().then(() => {
-                                    userRequests.delete(id)
-                                    dispatch(setRerender());
-                                    e.stopPropagation()
-                                });
-                            }
-                        }} bgColor={"black"} title={"X"} opacity='0.85'/>
+                        <ActionButton
+                            onClick={(e: SyntheticEvent): void => {
+                                if (typeof id === "string") {
+                                    deleteRequest().then(() => {
+                                        userRequests.delete(id)
+                                        dispatch(setRerender());
+                                        e.stopPropagation()
+                                    });
+                                }
+                            }}
+                            type={"button"}
+                            disabled={false}
+                            bgColor={"black"}
+                            title={"X"}
+                            opacity='0.85'/>
                     </div>
                 </Tooltip>
             </div>
@@ -166,8 +184,14 @@ const Bunkmates: React.FC = (): React.ReactElement => {
     function LoadingUi(): React.ReactElement {
         return (
             <div style={{display: 'flex', bottom: '10vh', justifyContent: 'center', position: 'absolute'}}>
-                <ActionButton opacity={0.85} bgColor="black" height='55px' title={<CircularProgress size={35}/>}
-                              paddingTop="12px"/>
+                <ActionButton
+                    opacity={'0.85'}
+                    type={"button"}
+                    disabled={false}
+                    bgColor="black"
+                    height='55px'
+                    title={<CircularProgress size={35}/>}
+                    paddingTop="12px"/>
             </div>
         )
     }
