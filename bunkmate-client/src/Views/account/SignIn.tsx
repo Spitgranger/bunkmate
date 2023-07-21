@@ -125,7 +125,7 @@ export function SignInEmail() {
         setError(response);
     }
 
-    //if no errors and user doesn't already have a profile then display profilemaker
+    //if no errors and user doesn't already have a profile then display profile maker
     useEffect(() => {
         if (error === "Success!") {
             navigate(0)
@@ -140,6 +140,7 @@ export function SignInEmail() {
             {error != "default" ? <h4>{error}</h4> : null}
             <LineBox flex={false} CssTextField={[
                 <FormSingleLineInput
+                    id={"email"}
                     name="email"
                     field="Email"
                     placeHolder="example@example.com"
@@ -148,6 +149,7 @@ export function SignInEmail() {
                     onChange={handleFieldChange}
                 />,
                 <FormSingleLineInput
+                    id={"password"}
                     name="password"
                     field="Password"
                     size="small"
@@ -173,9 +175,10 @@ export function SignInEmail() {
                     Don't have an account? Sign Up!
                 </div>
             </div>
-            <ActionButton width="100%" type="submit" title="Submit" disabled={false} onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
-                void handleSignIn(e)
-            }}/>
+            <ActionButton width="100%" type="submit" title="Submit" disabled={false}
+                          onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
+                              void handleSignIn(e)
+                          }}/>
             <Divider sx={{fontSize: '12px'}}>
                 or
             </Divider>
@@ -232,6 +235,7 @@ export function SignUpEmail() {
             <div className="content">
                 <LineBox flex={true} CssTextField={[
                     <FormSingleLineInput
+                        id={"name"}
                         name="name"
                         field="First Name"
                         size="small"
@@ -240,6 +244,7 @@ export function SignUpEmail() {
                         onChange={handleFieldChange}
                     />,
                     <FormSingleLineInput
+                        id={"phoneNumber"}
                         name="phoneNumber"
                         field="Phone Number"
                         placeHolder="6473547123"
@@ -252,6 +257,7 @@ export function SignUpEmail() {
                 />
                 <LineBox flex={true} CssTextField={[
                     <FormSingleLineInput
+                        id={"email"}
                         name="email"
                         field="Email"
                         placeHolder="example@example.com"
@@ -264,6 +270,7 @@ export function SignUpEmail() {
                 />
                 <LineBox flex={true} CssTextField={[
                     <FormSingleLineInput
+                        id={"password"}
                         name="password"
                         field="Password"
                         size="small"
@@ -272,6 +279,7 @@ export function SignUpEmail() {
                         onChange={handleFieldChange}
                     />,
                     <FormSingleLineInput
+                        id={"confirmPassword"}
                         name="confirmPassword"
                         field="Confirm Password"
                         size="small"
@@ -351,6 +359,8 @@ export function SignInPhone() {
             <div className="content">
                 <LineBox flex={false} CssTextField={[
                     <DropDownMenu
+                        id={"countryCode"}
+                        name={"countryCode"}
                         required={true}
                         disabled={false}
                         onChange={handleFieldChange}
@@ -359,6 +369,8 @@ export function SignInPhone() {
                         menuItem={keys}
                     />,
                     <FormSingleLineInput
+                        id={"Phone Number"}
+                        name={"Phone Number"}
                         field="Phone Number"
                         required={true}
                         disabled={false}

@@ -1,4 +1,4 @@
-import {JSX, useContext, SyntheticEvent, useState} from 'react'
+import {JSX, SyntheticEvent} from 'react'
 import {
     DatePicker,
     FormSection,
@@ -11,23 +11,32 @@ import {
 } from '../../Utils/form.tsx';
 import {IoChevronForward} from 'react-icons/io5';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
-import {SignInContext} from '../../globalContext/SignInContext.tsx';
 import imageCompression from 'browser-image-compression';
-import {DateType} from "../../Utils/types/form.ts";
-import {SelectChangeEvent} from "@mui/material/Select";
-
-//styles
-/*const backButtonStyles = {
-    display: 'flex',
-    alignItems: 'center',
-    padding: '8px'
-}*/
-
+import {useFormik} from "formik";
+import {profileFormSchema} from './schemas'
+import {InitialValuesType} from "./types/profileTypes.ts";
 
 //everything below will be displayed within a modal window, this page is shown after signing up for an account
 function ProfileMakerForm(): JSX.Element {
 
-    const {setIsOpen} = useContext(SignInContext)
+    const formik = useFormik({
+        initialValues: {
+            gender: "", birthday: "", about: "",
+            sleepSchedule: "", education: "", smoking: "",
+            drinking: "", cleanliness: "", toleratePets: "",
+            havePets: "", tolerateGuests: "", cannabis: "",
+            occupation: "", picture: ""
+        },
+        validationSchema: profileFormSchema,
+        onSubmit: (
+            values: InitialValuesType,
+        ): void => {
+            console.log(values)
+        }
+    })
+
+    console.log(formik.values, formik.touched, formik.errors)
+
     //const {profileHandleSubmit, profileHandleUpdate} = useContext(UserDataContext)
     //const reduxDispatch = useAppDispatch()
 
@@ -41,18 +50,15 @@ function ProfileMakerForm(): JSX.Element {
         }
     };*/
 
-    const [fields, setFields] = useState<{ [key: string]: string | null }>({})
-    type HandleRecordField = (value: SelectChangeEvent<string | null>, field: string) => void
-
-    const handleRecordField: HandleRecordField = (value, field) => {
-        const recordedFields = {...fields}
-        recordedFields[field] = value.toString()
-        setFields(recordedFields)
-    }
 
     //Todo
-    const handleDateConversion = (dateValue: DateType): void => {
-        console.log(dateValue)
+    const handleDateConversion = (dateValue: Date): void => {
+        try {
+            formik.setFieldValue('birthday', dateValue.toISOString().split('T')[0])
+        } catch (error) {
+            formik.setFieldValue('birthday', "")
+            console.log("An error occurred during the date conversion: ", error)
+        }
     }
 
 
@@ -80,8 +86,11 @@ function ProfileMakerForm(): JSX.Element {
         const fileInput = e.target as HTMLInputElement
         if (fileInput.files && fileInput.files.length > 0) {
             handleConversion(fileInput.files[0], (base64String) => {
-                console.log(base64String)
-            }).catch((error) => console.log(error));
+                formik.setFieldValue("picture", base64String)
+            }).catch((error) => {
+                    console.log("An error occurred while trying to convert profile picture to base64 string: ", error)
+                }
+            );
         }
     }
 
@@ -92,15 +101,16 @@ function ProfileMakerForm(): JSX.Element {
             maxSizeMB: 1,
             maxWidthOrHeight: 1920,
         }
-
         try {
             compressedFile = await imageCompression(file, options);
             console.log(compressedFile.size / 1024 / 1024);
+
         } catch (error) {
             console.log(error)
+            //if the file uploaded is invalid then set picture field back to empty string
+            await formik.setFieldValue("picture", "")
             return
         }
-
         let reader = new FileReader();
         reader.readAsDataURL(compressedFile);
         reader.onload = function (): void {
@@ -121,12 +131,6 @@ function ProfileMakerForm(): JSX.Element {
                 </h3>
             </label>)
     }*/
-
-    //handle closing the modal window
-    const handleClose = () => {
-        setIsOpen(false)
-    }
-
 
     return (<>
         <FormSection title="My Profile"
@@ -150,128 +154,206 @@ function ProfileMakerForm(): JSX.Element {
             endIcon={<CameraAltIcon
                 sx={{color: "aqua"}}/>}
             handleFileUpload={handleFileUpload}/>
+
         <LineBox flex={true} CssTextField={[
             <DropDownMenu
-                required={true}
+                id={"gender"}
+                name={"gender"}
                 label="Gender"
+                required={true}
+                onBlur={formik.handleBlur}
+                error={!!formik.errors.gender && formik.touched.gender}
+                helperText={formik.touched.gender ? formik.errors.gender : ""}
                 menuItem={["Male", "Female", "Other"]}
                 disabled={false}
-                onChange={(value) => handleRecordField(value, "ownPets")}
-                value={fields.ownPets}
+                onChange={formik.handleChange}
+                value={formik.values.gender}
             />,
             <DatePicker
                 label="Birthday"
                 disabled={false}
                 required={true}
-                onChange={(dateValue: DateType) => handleDateConversion(dateValue)}
+                value={formik.values.birthday}
+                onBlur={formik.handleBlur}
+                error={!!formik.errors.birthday && !formik.values.birthday}
+                helperText={formik.values.birthday ? "" : formik.errors.birthday}
+                onChange={(dateValue: Date) => {
+                    handleDateConversion(dateValue);
+                    console.log(formik.touched.birthday)
+                }}
             />
         ]}/>
         <div id="multiline">
-            <FormMultiLineInput required={true}
-                                placeHolder="Tell us a bit about yourself"
-                                onChange={(value) => handleRecordField(value, "about")}
-                                value={fields.about}
-                                disabled={false}
-                                field="About Me"/>
+            <FormMultiLineInput
+                required={true}
+                id="about"
+                name="about"
+                field="About Me"
+                placeHolder="Tell us a bit about yourself"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                error={!!formik.errors.about && formik.touched.about}
+                helperText={formik.touched.about ? formik.errors.about : ""}
+                value={formik.values.about}
+                disabled={false}
+            />
         </div>
 
         <LineBox flex={true} CssTextField={[
-            <DropDownMenu required={true}
-                          label="Own pets?"
-                          menuItem={["Yes", "No"]}
-                          disabled={false}
-                          onChange={(value) => handleRecordField(value, "ownPets")}
-                          value={fields.ownPets}
+            <DropDownMenu
+                id={'havePets'}
+                name={'havePets'}
+                required={true}
+                onBlur={formik.handleBlur}
+                error={!!formik.errors.havePets && formik.touched.havePets}
+                helperText={formik.touched.havePets ? formik.errors.havePets : ""}
+                label="Own Pets?"
+                menuItem={["Yes", "No"]}
+                disabled={false}
+                onChange={formik.handleChange}
+                value={formik.values.havePets}
             />,
 
-            <DropDownMenu required={true}
-                          label="Sleep Schedule"
-                          menuItem={["Early Bird", "Normal", "Night Owl"]}
-                          disabled={false}
-                          onChange={(value) => handleRecordField(value, "sleepSchedule")}
-                          value={fields.ownPets}
+            <DropDownMenu
+                id={'sleepSchedule'}
+                name={'sleepSchedule'}
+                required={true}
+                onBlur={formik.handleBlur}
+                error={!!formik.errors.sleepSchedule && formik.touched.sleepSchedule}
+                helperText={formik.touched.sleepSchedule ? formik.errors.sleepSchedule : ""}
+                label="Sleep Schedule"
+                menuItem={["Early Bird", "Normal", "Night Owl"]}
+                disabled={false}
+                onChange={formik.handleChange}
+                value={formik.values.sleepSchedule}
             />,
         ]}/>
 
         <LineBox flex={true} CssTextField={[
-            <DropDownMenu required={true}
-                          label="Cleanliness"
-                          menuItem={["Not clean", "Clean", "Very Clean"]}
-                          disabled={false}
-                          onChange={(value) => handleRecordField(value, "cleanliness")}
-                          value={fields.cleanliness}
+            <DropDownMenu
+                id={"cleanliness"}
+                name={"cleanliness"}
+                required={true}
+                onBlur={formik.handleBlur}
+                error={!!formik.errors.cleanliness && formik.touched.cleanliness}
+                helperText={formik.touched.cleanliness ? formik.errors.cleanliness : ""}
+                label="Cleanliness"
+                menuItem={["Not clean", "Clean", "Very Clean"]}
+                disabled={false}
+                onChange={formik.handleChange}
+                value={formik.values.cleanliness}
             />,
-            <DropDownMenu required={true}
-                          label="Drinking"
-                          menuItem={["Don't Drink", "Light Drinker", "Moderate Drinker", "Heavy Drinker"]}
-                          disabled={false}
-                          onChange={(value) => handleRecordField(value, "drinking")}
-                          value={fields.drinking}
-            />,
-        ]}/>
-
-        <LineBox flex={true} CssTextField={[
-            <DropDownMenu required={true}
-                          label="Smoking"
-                          menuItem={["Don't Smoke", "Light Smoker", "Moderate Smoker", "Heavy Smoker"]}
-                          disabled={false}
-                          onChange={(value) => handleRecordField(value, "smoking")}
-                          value={fields.smoking}
-            />,
-            <DropDownMenu required={true}
-                          label="Current Education"
-                          menuItem={["Not in School", "High School", "Undergraduate Studies", "Graduate Studies"]}
-                          disabled={false}
-                          onChange={(value) => handleRecordField(value, "education")}
-                          value={fields.education}
+            <DropDownMenu
+                id={"drinking"}
+                name={"drinking"}
+                required={true}
+                onBlur={formik.handleBlur}
+                error={!!formik.errors.drinking && formik.touched.drinking}
+                helperText={formik.touched.drinking ? formik.errors.drinking : ""}
+                label="Drinking"
+                menuItem={["Don't Drink", "Light Drinker", "Moderate Drinker", "Heavy Drinker"]}
+                disabled={false}
+                onChange={formik.handleChange}
+                value={formik.values.drinking}
             />,
         ]}/>
 
         <LineBox flex={true} CssTextField={[
-            <DropDownMenu required={true}
-                          label="Cannabis"
-                          menuItem={["No Cannabis Use", "Light Cannabis Use", "Moderate Cannabis Use", "Heavy Cannabis User"]}
-                          disabled={false}
-                          onChange={(value) => handleRecordField(value, "cannabis")}
-                          value={fields.cannabis}
+            <DropDownMenu
+                id={"smoking"}
+                name={"smoking"}
+                required={true}
+                onBlur={formik.handleBlur}
+                error={!!formik.errors.smoking && formik.touched.smoking}
+                helperText={formik.touched.smoking ? formik.errors.smoking : ""}
+                label="Smoking"
+                menuItem={["Don't Smoke", "Light Smoker", "Moderate Smoker", "Heavy Smoker"]}
+                disabled={false}
+                onChange={formik.handleChange}
+                value={formik.values.smoking}
             />,
-            <FormSingleLineInput required={true}
-                                 size="small"
-                                 type="text"
-                                 field="Occupation"
-                                 disabled={false}
-                                 onChange={(value) => handleRecordField(value, "occupation")}
-                                 value={fields.occupation}
-                                 placeHolder="ex. Student/Pharmacist"/>,
+            <DropDownMenu
+                id={"education"}
+                name={"education"}
+                required={true}
+                onBlur={formik.handleBlur}
+                error={!!formik.errors.education && formik.touched.education}
+                helperText={formik.touched.education ? formik.errors.education : ""}
+                label="Current Education"
+                menuItem={["Not in School", "High School", "Undergraduate Studies", "Graduate Studies"]}
+                disabled={false}
+                onChange={formik.handleChange}
+                value={formik.values.education}
+            />,
         ]}/>
 
         <LineBox flex={true} CssTextField={[
-            <DropDownMenu required={true}
-                          label="Ok with guests?"
-                          menuItem={["Yes", "No"]}
-                          disabled={false}
-                          onChange={(value) => handleRecordField(value, "guests")}
-                          value={fields.guests}
+            <DropDownMenu
+                id={"cannabis"}
+                name={"cannabis"}
+                required={true}
+                label="Cannabis"
+                onBlur={formik.handleBlur}
+                error={!!formik.errors.cannabis && formik.touched.cannabis}
+                helperText={formik.touched.cannabis ? formik.errors.cannabis : ""}
+                menuItem={["No Cannabis Use", "Light Cannabis Use", "Moderate Cannabis Use", "Heavy Cannabis User"]}
+                disabled={false}
+                onChange={formik.handleChange}
+                value={formik.values.cannabis}
             />,
-            <DropDownMenu required={true}
-                          label="Ok with pets?"
-                          menuItem={["Yes", "No"]}
-                          disabled={false}
-                          onChange={(value) => handleRecordField(value, "pets")}
-                          value={fields.pets}
-            />,
+            <FormSingleLineInput
+                id={"occupation"}
+                name={"occupation"}
+                required={true}
+                onBlur={formik.handleBlur}
+                error={!!formik.errors.occupation && formik.touched.occupation}
+                helperText={formik.touched.occupation ? formik.errors.occupation : ""}
+                size="small"
+                type="text"
+                field="Occupation"
+                disabled={false}
+                onChange={formik.handleChange}
+                value={formik.values.occupation}
+                placeHolder="ex. Student/Pharmacist"/>,
         ]}/>
 
-
+        <LineBox flex={true} CssTextField={[
+            <DropDownMenu
+                id={"tolerateGuests"}
+                name={"tolerateGuests"}
+                required={true}
+                onBlur={formik.handleBlur}
+                error={!!formik.errors.tolerateGuests && formik.touched.tolerateGuests}
+                helperText={formik.touched.tolerateGuests ? formik.errors.tolerateGuests : ""}
+                label="Ok With Guests?"
+                menuItem={["Yes", "No"]}
+                disabled={false}
+                onChange={formik.handleChange}
+                value={formik.values.tolerateGuests}
+            />,
+            <DropDownMenu
+                id={"toleratePets"}
+                name={"toleratePets"}
+                required={true}
+                onBlur={formik.handleBlur}
+                error={!!formik.errors.toleratePets && formik.touched.toleratePets}
+                helperText={formik.touched.toleratePets ? formik.errors.toleratePets : ""}
+                label="Ok With Pets?"
+                menuItem={["Yes", "No"]}
+                disabled={false}
+                onChange={formik.handleChange}
+                value={formik.values.toleratePets}
+            />,
+        ]}/>
         <ActionButton
-            disabled={false}
+            disabled={Object.keys(formik.errors).length !== 0}
             fontSize="15px"
-            width="100%"
-            onClick={() => {
-                /*handleSubmit(state?.values);*/
-                handleClose();
-                /*localStorage.setItem("page1", JSON.stringify(values));*/
-            }} type="submit" title="SUBMIT" endIcon={<IoChevronForward color="aqua"/>}/>
+            width={"100%"}
+            margin={"0px"}
+            onClick={formik.handleSubmit}
+            type="submit"
+            title="SUBMIT"
+            endIcon={<IoChevronForward color="aqua"/>}/>
     </>)
 }
 

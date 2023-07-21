@@ -17,3 +17,21 @@ export interface FieldsProps {
 
 /**@brief type for dictionary that contains all user requests userID used as key*/
 export type RequestDict = { [key: string]: Request }
+
+/**parameters of formik initial field values*/
+export interface InitialValuesType {
+    gender: string
+    birthday: string
+    about: string
+    sleepSchedule: string
+    education: string
+    smoking: string
+    drinking: string
+    cleanliness: string
+    toleratePets: string
+    havePets: string
+    tolerateGuests: string
+    cannabis: string
+    occupation: string
+    picture: string
+}

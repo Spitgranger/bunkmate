@@ -1,4 +1,12 @@
-import {FormEventHandler, MouseEventHandler, ReactNode, Ref, SyntheticEvent} from "react";
+import {
+    FocusEventHandler,
+    FormEventHandler,
+    MouseEventHandler,
+    ReactEventHandler,
+    ReactNode,
+    Ref,
+    SyntheticEvent
+} from "react";
 import * as React from "react";
 import {OverridableStringUnion} from "@mui/types";
 import {TextFieldPropsSizeOverrides} from "@mui/material/TextField";
@@ -17,10 +25,14 @@ export interface LineBoxProps {
 
 /** parameter types for the drop-down menu component*/
 export interface DropDownMenuProps {
+    /**Needed for formik, must match the initial value being used*/
+    id: string
+    /**Needed for formik, must match the initial value being used*/
+    name: string
     /**is the field disabled?*/
     disabled: boolean
     /**located under the text-field, it can provide the user with more info*/
-    helperText?: string
+    helperText?: string | undefined
     /**is the field required?*/
     required: boolean
     /** If true then the input is focused on the first mount*/
@@ -41,6 +53,10 @@ export interface DropDownMenuProps {
     maxHeight?: string
     /** Constrain the width of the dropdown menu*/
     menuItemWidth?: string
+    /**if true then the component will be highlighted in red*/
+    error?: boolean
+    /**Event listener used to track if component has been visited or not*/
+    onBlur?: FocusEventHandler<HTMLInputElement | HTMLTextAreaElement> | undefined
 }
 
 /**Parameter types for the form section components*/
@@ -53,6 +69,10 @@ export interface FormSectionProps {
 
 /**Parameter types for single line input component*/
 export interface NormalFormSingleLineInputProps {
+    /**Needed for formik, must match the initial value being used*/
+    id: string
+    /**Needed for formik, must match the initial value being used*/
+    name: string
     /**Custom styles for text field component*/
     sx?: object
     /**Is the field required?*/
@@ -62,9 +82,9 @@ export interface NormalFormSingleLineInputProps {
     /**Is the field disabled?*/
     disabled?: boolean
     /**Event listener for errors*/
-    onError?: () => void
+    onError?: ReactEventHandler<HTMLDivElement> | undefined
     /**Event listener for changing component focus*/
-    onBlur?: () => void
+    onBlur?: FocusEventHandler<HTMLInputElement | HTMLTextAreaElement> | undefined
     /**Event listener for any event changes*/
     onChange: (value: any) => void
     /**if true then the component will be highlighted in red*/
@@ -76,7 +96,7 @@ export interface NormalFormSingleLineInputProps {
     /**Greyed out read only value within the text field*/
     placeHolder?: string
     /**located under the text-field, it can provide the user with more info*/
-    helperText?: string
+    helperText?: string | undefined
     /**Should an input adornment be displayed?*/
     inputAdornment?: boolean
     /**Functional icon located at the start of the text-field*/
@@ -88,13 +108,15 @@ export interface NormalFormSingleLineInputProps {
     /**ref the underlying html*/
     inputRef?: React.Ref<any>
     /**The value to be displayed*/
-    value?: string | null
-    /**Name attribute for the input component*/
-    name?: string
+    value?: string | undefined
 }
 
 /**Parameter types for multiline line input component*/
 export interface NormalMultiLineInputProps {
+    /**Needed for formik, must match the initial value being used*/
+    id: string
+    /**Needed for formik, must match the initial value being used*/
+    name: string
     /**Custom styles for text field component*/
     sx?: object
     /**Is the field required?*/
@@ -104,7 +126,7 @@ export interface NormalMultiLineInputProps {
     /**Is the field disabled?*/
     disabled?: boolean
     /**Event listener for changing component focus*/
-    onBlur?: () => void
+    onBlur?: FocusEventHandler<HTMLInputElement | HTMLTextAreaElement> | undefined
     /**Event listener for any event changes*/
     onChange: (value: any) => void
     /**if true then the component will be highlighted in red*/
@@ -112,15 +134,19 @@ export interface NormalMultiLineInputProps {
     /**Greyed out read only value within the text field*/
     placeHolder?: string
     /**located under the text-field, it can provide the user with more info*/
-    helperText?: string
+    helperText?: string | undefined
     /**The title of the component*/
     field: string
     /**The value to be displayed*/
-    value: string | null
+    value: string | undefined
 }
 
 /**parameter types for the date picker component*/
 export interface DatePickerProps {
+    /**Expose the on blur event listener*/
+    onBlur?: FocusEventHandler<HTMLInputElement | HTMLTextAreaElement> | undefined
+    /**controls error state and changes the mui design if error is true*/
+    error: boolean
     /**the title of the input component*/
     label: string
     /**Expose the special event listener for Date Picker*/
@@ -131,6 +157,8 @@ export interface DatePickerProps {
     required: boolean
     /**is the field disabled*/
     disabled: boolean
+    /**Used to display error message*/
+    helperText: string | undefined
 }
 
 /**parameter types for multiple select component*/
@@ -152,7 +180,7 @@ export interface MultipleSelectProps {
 /**parameter types for upload files component*/
 export interface UploadFileProps {
     /**located under the text-field, it can provide the user with more info*/
-    helperText?: string
+    helperText?: string | undefined
     /**Icon that's displayed at the start of the component*/
     startIcon?: ReactNode
     /**Icon that's displayed at the end of the component*/
@@ -188,7 +216,7 @@ export interface ActionButtonProps {
     /**The title of the component*/
     title: string | ReactNode
     /**located under the text-field, it can provide the user with more info*/
-    helperText?: string
+    helperText?: string | undefined
     /**The icon located at the start of component*/
     startIcon?: ReactNode
     /**The icon located at the end of component*/

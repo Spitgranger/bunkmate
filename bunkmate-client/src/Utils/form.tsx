@@ -90,7 +90,7 @@ MultipleSelectCheckmarks({value, helperText, title, menuItems, required, onChang
  *
  * @brief A MUI component used for selecting a date from either a calendar adornment or from the input field
  */
-export function DatePicker({label, onChange, value, required, disabled}: DatePickerProps) {
+export function DatePicker({helperText, onBlur, error, label, onChange, value, required, disabled}: DatePickerProps) {
 
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -101,7 +101,14 @@ export function DatePicker({label, onChange, value, required, disabled}: DatePic
                     value={value}
                     onChange={onChange}
                     disabled={disabled}
-                    renderInput={(params) => <TextField {...params} size="small" required={required}/>}
+                    renderInput={(params) =>
+                        <TextField {...params}
+                                   error={error}
+                                   size="small"
+                                   helperText={helperText}
+                                   required={required}
+                                   onBlur={onBlur}
+                        />}
                 />
             </Stack>
         </LocalizationProvider>
@@ -155,10 +162,13 @@ export function DropDownMenu(props: DropDownMenuProps): ReactNode {
                 id="select-small" required={props.required}>{props.label}
             </InputLabel>
             <Select
-                labelId="simple-select-label"
-                id="simple-select"
+                labelId={props.id}
+                id={props.id}
+                name={props.name}
                 value={props.value}
                 onChange={props.onChange}
+                onBlur={props.onBlur}
+                error={props.error}
                 defaultValue={props.defaultValue}
                 label={props.label}
                 MenuProps={MenuProps}
@@ -191,7 +201,7 @@ function NormalFormSingleLineInput(props: NormalFormSingleLineInputProps) {
         <>
             <TextField
                 name={props.name}
-                id="outlined-basic"
+                id={props.id}
                 label={props.field}
                 variant="outlined"
                 size={props.size}
@@ -304,7 +314,8 @@ function NormalFormMultiLineInput(props: NormalMultiLineInputProps): ReactNode {
             >
                 <div>
                     <TextField
-                        id="outlined-multiline-static"
+                        id={props.id}
+                        name={props.name}
                         fullWidth
                         placeholder={props.placeHolder}
                         label={props.field}
