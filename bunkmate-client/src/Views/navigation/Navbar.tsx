@@ -14,7 +14,7 @@ import {JSX} from 'react'
 import {Profile} from "MapTypes";
 import {AxiosResponse} from "axios";
 
-const Navbar = memo(({chooseStyle}: {chooseStyle: string}) => {
+const Navbar = memo(({chooseStyle}: { chooseStyle?: string }) => {
 
     //define state management for managing the styles of the navbar
     const [navStyle, setNavStyle] = useState("nav")

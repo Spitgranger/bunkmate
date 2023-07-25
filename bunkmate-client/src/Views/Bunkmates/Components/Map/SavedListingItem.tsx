@@ -8,7 +8,7 @@ interface SavedListingItemProps {
     address: string
     price: string
     bedBath: string
-    addressWidth: string
+    addressWidth?: string
     totalBunkmates?: number
 }
 

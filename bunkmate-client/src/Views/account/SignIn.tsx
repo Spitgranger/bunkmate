@@ -175,7 +175,11 @@ export function SignInEmail() {
                     Don't have an account? Sign Up!
                 </div>
             </div>
-            <ActionButton width="100%" type="submit" title="Submit" disabled={false}
+            <ActionButton width="100%"
+                          type="submit"
+                          margin={"15px 0px 15px 0px"}
+                          title="Submit"
+                          disabled={false}
                           onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
                               void handleSignIn(e)
                           }}/>
@@ -309,6 +313,7 @@ export function SignUpEmail() {
                 <ActionButton
                     width="100%"
                     disabled={false}
+                    margin={"15px 0px 15px 0px"}
                     type="submit"
                     title="Submit"
                     onClick={(e) => handleRegularSignUpEmail(e, data)}/>

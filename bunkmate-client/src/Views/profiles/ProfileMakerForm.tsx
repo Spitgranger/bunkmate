@@ -81,7 +81,6 @@ function ProfileMakerForm(): JSX.Element {
     }
      */
 
-    //special handle event function just to file uploads
     const handleFileUpload = (e: SyntheticEvent): void => {
         const fileInput = e.target as HTMLInputElement
         if (fileInput.files && fileInput.files.length > 0) {
@@ -350,7 +349,7 @@ function ProfileMakerForm(): JSX.Element {
             fontSize="15px"
             width={"100%"}
             margin={"0px"}
-            onClick={formik.handleSubmit}
+            onClick={(e) => formik.handleSubmit(e)}
             type="submit"
             title="SUBMIT"
             endIcon={<IoChevronForward color="aqua"/>}/>

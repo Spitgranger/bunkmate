@@ -1,5 +1,5 @@
 import {
-    FocusEventHandler,
+    FocusEventHandler, FormEvent,
     FormEventHandler,
     MouseEventHandler,
     ReactEventHandler,
@@ -11,9 +11,6 @@ import * as React from "react";
 import {OverridableStringUnion} from "@mui/types";
 import {TextFieldPropsSizeOverrides} from "@mui/material/TextField";
 import {SelectChangeEvent} from "@mui/material/Select";
-
-/* Value from on change event listener for the date picker component*/
-export type DateType = string | number | undefined | null
 
 /**parameter types for the line box component*/
 export interface LineBoxProps {
@@ -86,7 +83,7 @@ export interface NormalFormSingleLineInputProps {
     /**Event listener for changing component focus*/
     onBlur?: FocusEventHandler<HTMLInputElement | HTMLTextAreaElement> | undefined
     /**Event listener for any event changes*/
-    onChange: (value: any) => void
+    onChange?: (value: any) => void
     /**if true then the component will be highlighted in red*/
     error?: boolean
     /**Type of input element it should be a valid HTML5 input element*/
@@ -100,9 +97,9 @@ export interface NormalFormSingleLineInputProps {
     /**Should an input adornment be displayed?*/
     inputAdornment?: boolean
     /**Functional icon located at the start of the text-field*/
-    inputStartAdornment?: React.ReactElement
+    inputStartAdornment?: React.ReactElement | string
     /**Functional icon located at the end of the text-field*/
-    inputEndAdornment?: React.ReactElement
+    inputEndAdornment?: React.ReactElement | string
     /**small or medium-sized text field size*/
     size: OverridableStringUnion<"small" | "medium", TextFieldPropsSizeOverrides> | undefined
     /**ref the underlying html*/
@@ -150,7 +147,7 @@ export interface DatePickerProps {
     /**the title of the input component*/
     label: string
     /**Expose the special event listener for Date Picker*/
-    onChange: (value: DateType, keyInputValue?: string | undefined) => void
+    onChange: (value: Date, keyInputValue?: string | undefined) => void
     /**value displayed in the date picker*/
     value?: string
     /**is the field required*/
@@ -208,7 +205,7 @@ export interface UploadFileProps {
 /**The parameter types for the action button component*/
 export interface ActionButtonProps {
     /**Expose the on click event listener*/
-    onClick?: MouseEventHandler<HTMLAnchorElement> | undefined
+    onClick?: MouseEventHandler<HTMLAnchorElement> | FormEvent<HTMLFormElement> | undefined
     /**Expose the on submit event listener*/
     onSubmit?: FormEventHandler<HTMLAnchorElement> | undefined
     /**The button type: "button" | "reset" | "submit"*/

@@ -40,7 +40,7 @@ const ChatArea = ({chatid}: ChatAreaProps) => {
             </TabPanels>
             <ChatBox chatid={chatid}/>
         </VStack>) : (
-        <VStack justify="center" pt="5rem" w="100vw">
+        <VStack justify="center" pt="5rem" w="100%">
             <TabPanels>
                 <TabPanel>
                     <Text textAlign="center" fontSize="lg">No Active Conversations</Text>

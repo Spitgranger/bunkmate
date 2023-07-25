@@ -13,7 +13,7 @@ import UserDataProvider from './globalContext/UserDataContext'
 import {OtherProfile} from './Views/profiles/OtherProfile.tsx';
 import {Provider} from 'react-redux';
 import Navbar from "./Views/navigation/Navbar";
-import {ChakraProvider} from "@chakra-ui/react";
+import {ChakraProvider, extendTheme} from "@chakra-ui/react";
 import Messages from "./Views/Messages/Messages.tsx";
 import store from './store'
 
@@ -69,11 +69,16 @@ if (getRoot) {
         {
             path: '/messages',
             element:
-                <ChakraProvider>
-                    <Provider store={store}>
-                        <Messages/>
-                    </Provider>
-                </ChakraProvider>,
+                <UserDataProvider>
+                    <FormatProvider>
+                        <SignInProvider>
+                            <Provider store={store}>
+                                <Navbar/>
+                                <Messages/>
+                            </Provider>,
+                        </SignInProvider>
+                    </FormatProvider>
+                </UserDataProvider>,
             errorElement: <Error/>
         },
         {

@@ -1,5 +1,5 @@
 import {createContext, useEffect, useState} from 'react';
-import {Grid, GridItem, Tabs} from "@chakra-ui/react";
+import {ChakraProvider, Grid, GridItem, Tabs} from "@chakra-ui/react";
 import React from "react";
 import MessagingSidebar from "./components/MessagingSidebar.tsx";
 import ChatArea from "./components/ChatArea.tsx";
@@ -50,18 +50,21 @@ const Message = () => {
 
     user && useSocket(setConversation, setMessages);
     return (
-        <ConversationContext.Provider value={{conversation, setConversation}}>
-            <Grid templateColumns="repeat(10, 1fr)" h="100vh" as={Tabs} onChange={handleTabChange as any}>
-                <GridItem colSpan={3} borderRight="1px solid grey">
-                    <MessagingSidebar/>
-                </GridItem>
-                <GridItem colSpan={7} maxH="100vh">
-                    <MessagesContext.Provider value={{messages, setMessages}}>
-                        <ChatArea chatid={conversation![conversationIndex]?.chatId}/>
-                    </MessagesContext.Provider>
-                </GridItem>
-            </Grid>
-        </ConversationContext.Provider>
+        <ChakraProvider>
+            <div style={{height: '9vh'}}/>
+            <ConversationContext.Provider value={{conversation, setConversation}}>
+                <Grid templateColumns="repeat(10, 1fr)" h="100vh" as={Tabs} onChange={handleTabChange as any}>
+                    <GridItem colSpan={3} borderRight="1px solid grey">
+                        <MessagingSidebar/>
+                    </GridItem>
+                    <GridItem colSpan={7} maxH="100vh">
+                        <MessagesContext.Provider value={{messages, setMessages}}>
+                            <ChatArea chatid={conversation![conversationIndex]?.chatId}/>
+                        </MessagesContext.Provider>
+                    </GridItem>
+                </Grid>
+            </ConversationContext.Provider>
+        </ChakraProvider>
     )
 }
 export default Message;
