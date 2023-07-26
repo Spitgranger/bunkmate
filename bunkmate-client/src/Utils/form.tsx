@@ -15,9 +15,10 @@ import Stack from '@mui/material/Stack';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import Checkbox from '@mui/material/Checkbox';
 import {FormHelperText, InputAdornment, Typography} from "@mui/material";
-import {useState, memo, ReactNode, FormEvent} from 'react'
+import {useState, memo, ReactNode, FormEvent, useEffect, useCallback} from 'react'
 import {BsFillCheckCircleFill} from "react-icons/bs";
 import {MdOutlineError} from "react-icons/md";
+import {useDebouncedCallback} from "use-debounce";
 import {
     LineBoxProps,
     NormalFormSingleLineInputProps,
@@ -295,6 +296,56 @@ const arePropsEqual = (newProps: Readonly<NormalFormSingleLineInputProps | Norma
 
 export const FormMultiLineInput = memo(NormalFormMultiLineInput, arePropsEqual);
 export const FormSingleLineInput = memo(NormalFormSingleLineInput, arePropsEqual);
+
+
+/**
+ * @description Wrapper for NormalFormMultiLineInput to debounce the onChange function to improve performance
+ * @see NormalFormMultiLineInput
+ * @see NormalMultiLineInputProps
+ * @param props {NormalMultiLineInputProps} Same for the undebounced component
+ */
+export const NormalFormMultiLineInputWrapper = (props: NormalMultiLineInputProps): ReactNode => {
+    const [innerValue, setInnerValue] = useState<string>("");
+    useEffect(() => {
+        if (props.value) {
+            setInnerValue(props.value as string);
+        } else {
+            setInnerValue('');
+        }
+    }, [props.value]);
+
+    const debouncedHandleOnChange = useDebouncedCallback(
+        (event: React.ChangeEvent<HTMLInputElement>) => {
+            if (props.onChange) {
+                props.onChange(event);
+            }
+        },
+        200
+    );
+
+    const handleOnchange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+        event.persist();
+        const newValue = event.currentTarget.value;
+        setInnerValue(newValue);
+        debouncedHandleOnChange(event);
+
+    }, []);
+
+    return (
+        <NormalFormMultiLineInput
+            id={props.id}
+            name={props.name}
+            placeHolder={props.placeHolder}
+            field={props.field}
+            error={props.error}
+            helperText={props.helperText}
+            onBlur={props.onBlur}
+            required={props.required}
+            onChange={handleOnchange}
+            value={innerValue}/>
+    );
+
+}
 
 /**
  * @constructor
