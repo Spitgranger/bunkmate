@@ -2,21 +2,13 @@ import {Schema, SchemaTypes, model, Document} from 'mongoose';
 
 export interface Profile extends Document {
     user: Object,
+    gender: string,
     firstName: string,
     lastName: string,
-    gender: string,
-    email: string,
-    employment: string,
-    phone: string,
     birthday: string,
-    address: string,
-    province: string,
-    city: string,
-    country: string,
     education: string,
     picture: string,
     about: string,
-    age: string,
     havePets: string,
     sleepSchedule: string,
     cleanliness: string,
@@ -35,45 +27,17 @@ const profileSchema = new Schema<Profile>({
     },
     firstName: {
         type: String,
-        required: true,
+        required: true
     },
     lastName: {
         type: String,
-        required: true,
+        required: true
     },
     gender: {
         type: String,
         required: true,
     },
-    email: {
-        type: String,
-        required: true,
-    },
-    employment: {
-        type: String,
-        required: true,
-    },
-    phone: {
-        type: String,
-        required: true,
-    },
     birthday: {
-        type: String,
-        required: true,
-    },
-    address: {
-        type: String,
-        required: true,
-    },
-    province: {
-        type: String,
-        required: true,
-    },
-    city: {
-        type: String,
-        required: true,
-    },
-    country: {
         type: String,
         required: true,
     },
@@ -86,10 +50,6 @@ const profileSchema = new Schema<Profile>({
         required: true,
     },
     about: {
-        type: String,
-        required: true,
-    },
-    age: {
         type: String,
         required: true,
     },

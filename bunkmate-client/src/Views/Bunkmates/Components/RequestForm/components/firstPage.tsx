@@ -9,8 +9,7 @@ import {
     DropDownMenu,
     FormMultiLineInput,
     MultipleSelectCheckmarks,
-    UploadFileProps
-} from "../../../../../Utils/types/form.ts";
+} from "../../../../../Utils/form.tsx";
 
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 

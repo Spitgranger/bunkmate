@@ -6,7 +6,6 @@ import {
     UploadFile,
     DropDownMenu,
     FormSingleLineInput,
-    FormMultiLineInput,
     LineBox, NormalFormMultiLineInputWrapper,
 } from '../../Utils/form.tsx';
 import {IoChevronForward} from 'react-icons/io5';
@@ -15,6 +14,7 @@ import imageCompression from 'browser-image-compression';
 import {useFormik} from "formik";
 import {profileFormSchema} from './schemas'
 import {InitialValuesType} from "./types/profileTypes.ts";
+import {createProfile} from '../../api'
 
 //everything below will be displayed within a modal window, this page is shown after signing up for an account
 function ProfileMakerForm(): JSX.Element {
@@ -349,7 +349,7 @@ function ProfileMakerForm(): JSX.Element {
             fontSize="15px"
             width={"100%"}
             margin={"0px"}
-            onClick={(e) => formik.handleSubmit(e)}
+            onClick={() => createProfile(formik.values)}
             type="submit"
             title="SUBMIT"
             endIcon={<IoChevronForward color="aqua"/>}/>

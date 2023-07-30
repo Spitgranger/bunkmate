@@ -9,9 +9,9 @@ import {
     FormSingleLineInput,
     DatePicker,
     DropDownMenu,
-} from '../../../../Utils/form.tsx';
-import {UserDataContext} from '../../../../globalContext/UserDataContext';
-import {setRerender} from "../../../../features/bunkmate/bunkmateSlice.ts";
+} from '../../../../../Utils/form.tsx';
+import {UserDataContext} from '../../../../../globalContext/UserDataContext.tsx'
+import {setRerender} from "../../../../../features/bunkmate/bunkmateSlice.ts"
 
 import {Typography} from '@mui/material'
 import Slider from '@mui/material/Slider'

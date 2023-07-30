@@ -2,7 +2,7 @@ import {useEffect, useState, useContext} from 'react';
 import './styles/Profile.css'
 import {SignInContext} from '../../globalContext/SignInContext.tsx';
 
-import {getRequests} from '../../api';
+import {getProfile, getRequests} from '../../api';
 import {ActionButton} from "../../Utils/form.tsx";
 import {Link} from 'react-router-dom';
 import {MapProfile} from '../Bunkmates/Bunkmates.tsx';
@@ -122,7 +122,6 @@ const Profile = () => {
         setMode("profileMakerForm")
         setIsOpen(true)
     }
-
 
     const Fields = ({iconStart, fieldTitle, fieldValue, primaryStyles, bodyStyles}: FieldsProps) => {
         //Note: disable display flex to have values appear below keys

@@ -6,47 +6,11 @@ const profileSchema = new mongoose_1.Schema({
         type: mongoose_1.SchemaTypes.ObjectId,
         ref: "User",
     },
-    firstName: {
-        type: String,
-        required: true,
-    },
-    lastName: {
-        type: String,
-        required: true,
-    },
     gender: {
         type: String,
         required: true,
     },
-    email: {
-        type: String,
-        required: true,
-    },
-    employment: {
-        type: String,
-        required: true,
-    },
-    phone: {
-        type: String,
-        required: true,
-    },
     birthday: {
-        type: String,
-        required: true,
-    },
-    address: {
-        type: String,
-        required: true,
-    },
-    province: {
-        type: String,
-        required: true,
-    },
-    city: {
-        type: String,
-        required: true,
-    },
-    country: {
         type: String,
         required: true,
     },
@@ -59,10 +23,6 @@ const profileSchema = new mongoose_1.Schema({
         required: true,
     },
     about: {
-        type: String,
-        required: true,
-    },
-    age: {
         type: String,
         required: true,
     },
