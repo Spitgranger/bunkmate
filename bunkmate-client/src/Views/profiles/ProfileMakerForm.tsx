@@ -7,7 +7,7 @@ import {
     DropDownMenu,
     FormSingleLineInput,
     FormMultiLineInput,
-    LineBox,
+    LineBox, NormalFormMultiLineInputWrapper,
 } from '../../Utils/form.tsx';
 import {IoChevronForward} from 'react-icons/io5';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
@@ -183,7 +183,7 @@ function ProfileMakerForm(): JSX.Element {
             />
         ]}/>
         <div id="multiline">
-            <FormMultiLineInput
+            <NormalFormMultiLineInputWrapper
                 required={true}
                 id="about"
                 name="about"
@@ -345,7 +345,7 @@ function ProfileMakerForm(): JSX.Element {
             />,
         ]}/>
         <ActionButton
-            disabled={Object.keys(formik.errors).length !== 0}
+            disabled={!(formik.dirty && formik.isValid)}
             fontSize="15px"
             width={"100%"}
             margin={"0px"}
