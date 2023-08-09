@@ -20,4 +20,9 @@ export const profileFormSchema = yup.object().shape({
     cannabis: yup.string().required(fieldRequiredMsg),
     occupation: yup.string().required(fieldRequiredMsg),
     picture: yup.string().required(fieldRequiredMsg),
+    instagram: yup.string(),
+    facebook: yup.string(),
+    linkedin: yup.string(),
+    twitter: yup.string(),
+
 })

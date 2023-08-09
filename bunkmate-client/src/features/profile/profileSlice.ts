@@ -1,7 +1,30 @@
 import {createSlice, createAsyncThunk} from "@reduxjs/toolkit";
 import {getProfile} from "../../api";
 
-const initialState = {error: false}
+const initialState = {
+    firstName: "",
+    instagram: "",
+    facebook: "",
+    linkedin: "",
+    twitter: "",
+    age: "",
+    gender: "",
+    employment: "",
+    education: "",
+    email: "",
+    error: true,
+    picture: "",
+    profile: "",
+    about: "",
+    havePets: "",
+    sleepSchedule: "",
+    cleanliness: "",
+    drinking: "",
+    smoking: "",
+    cannabis: "",
+    toleratePets: "",
+    tolerateGuests: "",
+}
 
 export const fetchProfile = createAsyncThunk('users/fetchUsers', async () => {
     const response = await getProfile();

@@ -2,7 +2,7 @@ import {useEffect, useState, useContext} from 'react';
 import './styles/Profile.css'
 import {SignInContext} from '../../globalContext/SignInContext.tsx';
 
-import {getProfile, getRequests} from '../../api';
+import {getRequests} from '../../api';
 import {ActionButton} from "../../Utils/form.tsx";
 import {Link} from 'react-router-dom';
 import {MapProfile} from '../Bunkmates/Bunkmates.tsx';
@@ -184,7 +184,12 @@ const Profile = () => {
                         to="/bunkmates"
                         onClick={HandleViewRequest}
                         style={{textDecoration: 'none'}}>
-                        <ActionButton startIcon={<HiMapPin/>} height="30px" title={"View Request"}/>
+                        <ActionButton
+                            disabled={false}
+                            type={"button"}
+                            startIcon={<HiMapPin/>}
+                            height="30px"
+                            title={"View Request"}/>
                     </Link>
                 </Tooltip>
             )
@@ -197,14 +202,17 @@ const Profile = () => {
                         style={{textDecoration: 'none'}}
                         onMouseEnter={handleMouseEnter}
                         onMouseLeave={handleMouseLeave}>
-                        <ActionButton bgColor={'black'} color={textColor} startIcon={showIcon ? <HiMapPin/> : ""}
+                        <ActionButton bgColor={'black'}
+                                      type={"button"}
+                                      disabled={false}
+                                      color={textColor}
+                                      startIcon={showIcon ? <HiMapPin/> : ""}
                                       height="30px" title={requestButtonMessage}/>
                     </Link>
                 </Tooltip>
             )
         }
     }
-
 
     //if profile true and loading indicator false
     //display profile page
@@ -220,19 +228,35 @@ const Profile = () => {
                 <div style={{height: '9vh'}}/>
                 <div style={pageStyles.profileContainer}>
                     <Card sx={pageStyles.leftColumn}>
-                        <CardMedia sx={pageStyles.profilePicture} component="img" image={profile.picture}/>
+                        <CardMedia
+                            sx={pageStyles.profilePicture}
+                            component="img"
+                            image={profile.picture}/>
                         <CardContent>
                             <div style={pageStyles.socialLinks}>
-                                <IconButton><GrInstagram/></IconButton>
-                                <IconButton><GrFacebook/></IconButton>
-                                <IconButton><GrLinkedin/></IconButton>
-                                <IconButton><GrTwitter/></IconButton>
+                                <Link to={profile.instagram} target={"_blank"}>
+                                    <IconButton><GrInstagram/></IconButton>
+                                </Link>
+                                <Link to={profile.facebook} target={"_blank"}>
+                                    <IconButton><GrFacebook/></IconButton>
+                                </Link>
+                                <Link to={profile.linkedin} target={"_blank"}>
+                                    <IconButton><GrLinkedin/></IconButton>
+                                </Link>
+                                <Link to={profile.twitter} target={"_blank"}>
+                                    <IconButton><GrTwitter/></IconButton>
+                                </Link>
                             </div>
                             <Divider sx={pageStyles.divider} flexItem={true} textAlign='center'>Description</Divider>
-                            <Fields iconStart={<BsFillClockFill style={{color: '#2ACDDD'}}/>} fieldTitle="Age"
-                                    fieldValue={profile.age}/>
-                            <Fields iconStart={<BsInfinity style={{color: '#2ACDDD'}}/>} fieldTitle="Gender"
-                                    fieldValue={profile.gender}/>
+                            <Fields
+                                iconStart={<BsFillClockFill
+                                    style={{color: '#2ACDDD'}}/>}
+                                fieldTitle="Age"
+                                fieldValue={profile.age}/>
+                            <Fields
+                                iconStart={<BsInfinity style={{color: '#2ACDDD'}}/>}
+                                fieldTitle="Gender"
+                                fieldValue={profile.gender}/>
                             <Fields iconStart={<BsBriefcaseFill style={{color: '#2ACDDD'}}/>} fieldTitle="Occupation"
                                     fieldValue={profile.employment}/>
                             <Fields iconStart={<FaBook style={{color: '#2ACDDD'}}/>} fieldTitle="Current Education"
@@ -303,16 +327,6 @@ const Profile = () => {
                             </div>
                         </CardContent>
                     </Card>
-                    {/*
-    <Card sx={pageStyles.rightColumn}>
-      <CardHeader title="Saved Listing"/>
-      <CardContent>
-        <Fields fieldTitle="Bingham Condos" fieldKey=""/>
-        <Fields fieldTitle="Bingham Condos" fieldKey=""/>
-        <Fields fieldTitle="Bingham Condos" fieldKey=""/>
-      </CardContent>
-    </Card>
-    */}
                 </div>
             </div>
         )

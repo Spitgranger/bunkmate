@@ -34,4 +34,9 @@ export interface InitialValuesType {
     cannabis: string
     occupation: string
     picture: string
+    instagram: string
+    facebook: string
+    twitter: string
+    linkedin: string
+
 }

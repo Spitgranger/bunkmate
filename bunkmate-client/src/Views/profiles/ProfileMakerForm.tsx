@@ -1,4 +1,4 @@
-import {JSX, SyntheticEvent} from 'react'
+import {JSX, SyntheticEvent, useContext} from 'react'
 import {
     DatePicker,
     FormSection,
@@ -15,6 +15,8 @@ import {useFormik} from "formik";
 import {profileFormSchema} from './schemas'
 import {InitialValuesType} from "./types/profileTypes.ts";
 import {createProfile} from '../../api'
+import {SignInContext} from '../../globalContext/SignInContext.tsx'
+import {FaInstagram, FaFacebook, FaLinkedin, FaTwitter} from "react-icons/fa";
 
 //everything below will be displayed within a modal window, this page is shown after signing up for an account
 function ProfileMakerForm(): JSX.Element {
@@ -25,7 +27,8 @@ function ProfileMakerForm(): JSX.Element {
             sleepSchedule: "", education: "", smoking: "",
             drinking: "", cleanliness: "", toleratePets: "",
             havePets: "", tolerateGuests: "", cannabis: "",
-            occupation: "", picture: ""
+            occupation: "", picture: "", instagram: "", facebook: "",
+            linkedin: "", twitter: "",
         },
         validationSchema: profileFormSchema,
         onSubmit: (
@@ -36,7 +39,7 @@ function ProfileMakerForm(): JSX.Element {
     })
 
     console.log(formik.values, formik.touched, formik.errors)
-
+    const {setIsOpen} = useContext(SignInContext)
     //const {profileHandleSubmit, profileHandleUpdate} = useContext(UserDataContext)
     //const reduxDispatch = useAppDispatch()
 
@@ -130,6 +133,13 @@ function ProfileMakerForm(): JSX.Element {
                 </h3>
             </label>)
     }*/
+
+    const handleSubmitProfile = async () => {
+        createProfile(formik.values)
+            .then(() => console.log('success'))
+            .catch((error) => console.log(error))
+        setIsOpen(false)
+    }
 
     return (<>
         <FormSection title="My Profile"
@@ -344,12 +354,83 @@ function ProfileMakerForm(): JSX.Element {
                 value={formik.values.toleratePets}
             />,
         ]}/>
+
+        <LineBox flex={true} CssTextField={[
+            <FormSingleLineInput
+                id={"instagram"}
+                name={"instagram"}
+                required={false}
+                onBlur={formik.handleBlur}
+                size="small"
+                type="text"
+                field="Instagram"
+                inputAdornment={true}
+                inputStartAdornment={<FaInstagram/>}
+                disabled={false}
+                onChange={formik.handleChange}
+                value={formik.values.instagram}
+                placeHolder="Optional"/>,
+        ]}/>
+        <LineBox flex={true} CssTextField={[
+            <FormSingleLineInput
+                id={"facebook"}
+                name={"facebook"}
+                required={false}
+                onBlur={formik.handleBlur}
+                size="small"
+                type="text"
+                field="Facebook"
+                inputAdornment={true}
+                inputStartAdornment={<FaFacebook/>}
+                disabled={false}
+                onChange={formik.handleChange}
+                value={formik.values.facebook}
+                placeHolder="Optional"/>,
+        ]}/>
+        <LineBox flex={true} CssTextField={[
+            <FormSingleLineInput
+                id={"linkedin"}
+                name={"linkedin"}
+                required={false}
+                onBlur={formik.handleBlur}
+                size="small"
+                type="text"
+                field="Linkedin"
+                inputAdornment={true}
+                inputStartAdornment={<FaLinkedin/>}
+                disabled={false}
+                onChange={formik.handleChange}
+                value={formik.values.linkedin}
+                placeHolder="Optional"
+            />,
+        ]}/>
+        <LineBox flex={true} CssTextField={[
+            <FormSingleLineInput
+                id={"twitter"}
+                name={"twitter"}
+                required={false}
+                onBlur={formik.handleBlur}
+                size="small"
+                type="text"
+                inputAdornment={true}
+                inputStartAdornment={<FaTwitter/>}
+                field="Twitter"
+                disabled={false}
+                onChange={formik.handleChange}
+                value={formik.values.twitter}
+                placeHolder="Optional"
+            />,
+        ]}/>
+
         <ActionButton
             disabled={!(formik.dirty && formik.isValid)}
             fontSize="15px"
             width={"100%"}
             margin={"0px"}
-            onClick={() => createProfile(formik.values)}
+            onClick={() => {
+                handleSubmitProfile()
+                    .catch((error) => console.log(error))
+            }}
             type="submit"
             title="SUBMIT"
             endIcon={<IoChevronForward color="aqua"/>}/>

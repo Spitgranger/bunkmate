@@ -18,6 +18,10 @@ export interface Profile extends Document {
     occupation: string,
     tolerateGuests: string,
     toleratePets: string,
+    instagram: string
+    facebook: string
+    twitter: string
+    linkedin: string
 }
 
 const profileSchema = new Schema<Profile>({
@@ -89,6 +93,22 @@ const profileSchema = new Schema<Profile>({
         type: String,
         required: true,
     },
+    instagram: {
+        type: String,
+        required: false,
+    },
+    facebook: {
+        type: String,
+        required: false,
+    },
+    twitter: {
+        type: String,
+        required: false,
+    },
+    linkedin: {
+        type: String,
+        required: false
+    }
 });
 
 const ProfileModel = model<Profile>('Profile', profileSchema);

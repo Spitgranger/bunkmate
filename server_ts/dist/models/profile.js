@@ -6,6 +6,14 @@ const profileSchema = new mongoose_1.Schema({
         type: mongoose_1.SchemaTypes.ObjectId,
         ref: "User",
     },
+    firstName: {
+        type: String,
+        required: true
+    },
+    lastName: {
+        type: String,
+        required: true
+    },
     gender: {
         type: String,
         required: true,
@@ -62,6 +70,22 @@ const profileSchema = new mongoose_1.Schema({
         type: String,
         required: true,
     },
+    instagram: {
+        type: String,
+        required: false,
+    },
+    facebook: {
+        type: String,
+        required: false,
+    },
+    twitter: {
+        type: String,
+        required: false,
+    },
+    linkedin: {
+        type: String,
+        required: false
+    }
 });
 const ProfileModel = (0, mongoose_1.model)('Profile', profileSchema);
 exports.default = ProfileModel;

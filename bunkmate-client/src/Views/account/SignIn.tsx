@@ -220,7 +220,14 @@ export function SignUpEmail() {
 
     {/* Change default to the user's current location */
     }
-    const [data, setData] = useState({phoneNumber: '', name: '', email: '', password: '', confirmPassword: ''});
+    const [data, setData] = useState({
+        phoneNumber: '',
+        firstName: '',
+        lastName: '',
+        email: '',
+        password: '',
+        confirmPassword: ''
+    });
     const {setMode, setMessage} = useContext(SignInContext)
 
     const handleFieldChange = (e: SelectChangeEvent<string | undefined>) => {
@@ -239,27 +246,34 @@ export function SignUpEmail() {
             <div className="content">
                 <LineBox flex={true} CssTextField={[
                     <FormSingleLineInput
-                        id={"name"}
-                        name="name"
+                        id={"firstName"}
+                        name="firstName"
                         field="First Name"
                         size="small"
-                        type="name"
-                        value={data.name}
+                        value={data.firstName}
                         onChange={handleFieldChange}
                     />,
                     <FormSingleLineInput
-                        id={"phoneNumber"}
-                        name="phoneNumber"
-                        field="Phone Number"
-                        placeHolder="6473547123"
+                        id={"lastName"}
+                        name="lastName"
+                        field="Last Name"
                         size="small"
-                        value={data.phoneNumber}
+                        value={data.lastName}
                         onChange={handleFieldChange}
                     />,
                 ]
                 }
                 />
                 <LineBox flex={true} CssTextField={[
+                    <FormSingleLineInput
+                        id={"phoneNumber"}
+                        name="phoneNumber"
+                        field="Phone Number"
+                        placeHolder="6473457343"
+                        size="small"
+                        value={data.phoneNumber}
+                        onChange={handleFieldChange}
+                    />,
                     <FormSingleLineInput
                         id={"email"}
                         name="email"
