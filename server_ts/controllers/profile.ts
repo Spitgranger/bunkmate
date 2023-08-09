@@ -29,7 +29,7 @@ export const createProfile = async (req: Request, res: Response) => {
 export const getProfile = async (req: Request, res: Response) => {
     try {
         const request: ClientRequest = req as ClientRequest;
-        const profile = await Profile.findOne({ user: request.userId }).select("country about address age birthday cannabis city cleanliness credit drinking education email employment firstName gender havePets lastName occupation phone picture province sleepSchedule smoking tolerateGuests toleratePets");
+        const profile = await Profile.findOne({ user: request.userId }).select("country about address age birthday cannabis city cleanliness credit drinking education email employment firstName gender havePets lastName occupation phone picture province sleepSchedule smoking tolerateGuests toleratePets instagram twitter linkedin facebook");
         if (profile) {
             res.status(200).json(profile);
         } else {
