@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteProfile = exports.getProfiles = exports.getProfile = exports.createProfile = void 0;
 const profile_1 = __importDefault(require("../models/profile"));
+const user_1 = __importDefault(require("../models/user"));
 const createProfile = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const profileData = req.body;
     console.log(profileData);
@@ -25,7 +26,8 @@ const createProfile = (req, res) => __awaiter(void 0, void 0, void 0, function* 
             res.status(409).json("profile already exists");
             return;
         }
-        const newProfile = new profile_1.default(Object.assign(Object.assign({}, profileData), { user: request.userId }));
+        const user = yield user_1.default.findOne({ _id: request.userId });
+        const newProfile = new profile_1.default(Object.assign(Object.assign({}, profileData), { user: request.userId, lastName: user === null || user === void 0 ? void 0 : user.lastName, firstName: user === null || user === void 0 ? void 0 : user.firstName }));
         yield newProfile.save();
         res.status(201).json(newProfile);
     }

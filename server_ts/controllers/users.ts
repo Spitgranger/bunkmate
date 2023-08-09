@@ -47,7 +47,7 @@ export const signin = async (req: Request, res: Response) => {
  * @param res Response object
  */
 export const signup = async (req: Request, res: Response) => {
-    const {email, password, confirmPassword, phoneNumber, name} = req.body;
+    const {email, password, confirmPassword, phoneNumber, firstName, lastName} = req.body;
     try {
         const existingUser: User | null = await UserModel.findOne({email});
         if (existingUser) return res.status(400).json({loggedin: false, message: 'User already exists. Please sign in'});
@@ -59,7 +59,8 @@ export const signup = async (req: Request, res: Response) => {
             email: email,
             password: hashedPassword,
             phoneNumber: phoneNumber,
-            name: name,
+            firstName: firstName,
+            lastName: lastName,
             chatId: uuidv4(),
         });
         const token: String = jwt.sign({email: result.email, id: result._id}, "test", {expiresIn: "1h"});

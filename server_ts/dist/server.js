@@ -35,20 +35,20 @@ app.use((0, cors_1.default)({
     credentials: true,
 }));
 app.use((0, helmet_1.default)());
-app.use(express_1.default.json());
+app.use(express_1.default.json({ limit: '10mb' }));
 //app.use(sessionMiddleware);
 //io.use(wrap(sessionMiddleware));
 io.use(auth_1.authorizeSocketUser);
 io.on("connect", (Socket) => {
     const socket = Socket;
-    (0, socketController_1.initializeUser)(socket);
+    void (0, socketController_1.initializeUser)(socket);
     // console.log(socket.id);
     // console.log(socket.request.session.user);
     // console.log(socket.request.session.user.email);
     //On starting a new conversation
-    socket.on("start_conversation", (username, callback) => { (0, socketController_1.startConversation)(socket, username, callback); });
+    socket.on("start_conversation", (username, callback) => { void (0, socketController_1.startConversation)(socket, username, callback); });
     socket.on("disconnecting", () => (0, socketController_1.onDisconnect)(socket));
-    socket.on("sendMessage", (message) => { (0, socketController_1.receiveMessage)(socket, message); });
+    socket.on("sendMessage", (message) => { void (0, socketController_1.receiveMessage)(socket, message); });
 });
 app.use(body_parser_1.default.json({ limit: "30mb" }));
 app.use(body_parser_1.default.urlencoded({ limit: "30mb", extended: true }));

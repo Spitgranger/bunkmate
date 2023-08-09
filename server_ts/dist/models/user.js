@@ -14,9 +14,13 @@ const userSchema = new mongoose_1.Schema({
         type: String,
         required: true,
     },
-    name: {
+    firstName: {
         type: String,
-        required: false,
+        required: true,
+    },
+    lastName: {
+        type: String,
+        required: true,
     },
     chatId: {
         type: String,

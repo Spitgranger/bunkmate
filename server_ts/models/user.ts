@@ -4,7 +4,8 @@ export interface User extends Document {
     email: string,
     phoneNumber: Number,
     password: string,
-    name: string,
+    firstName: string,
+    lastName: string,
     chatId: string,
 }
 
@@ -21,9 +22,13 @@ const userSchema = new Schema<User>({
         type: String,
         required: true,
     },
-    name: {
+    firstName: {
         type: String,
-        required: false,
+        required: true,
+    },
+    lastName: {
+        type: String,
+        required: true,
     },
     chatId: {
         type: String,

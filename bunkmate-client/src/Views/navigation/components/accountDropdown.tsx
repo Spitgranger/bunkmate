@@ -14,7 +14,7 @@ interface AccountDropdownProps {
                 email: string,
                 phoneNumber: number,
                 password: string,
-                name: string,
+                firstName: string,
                 chatId: string
             }
     }
@@ -78,7 +78,7 @@ const AccountDropdown = ({handleLogout, user, userProfile}: AccountDropdownProps
                 {user
                     ? <>
                         <StyledMenuItem icon={<AssignmentIndIcon/>}
-                                        pageName={`${user?.result?.name}'s account`}/>
+                                        pageName={`${user?.result?.firstName}'s account`}/>
                         <Divider/>
                         <StyledMenuItem handleAction={handleLogout} icon={<Logout/>} pageName={"Logout"}/>
                     </>

@@ -1,7 +1,6 @@
 import Profile from '../models/profile';
-import mongoose from 'mongoose';
 import {Request, Response} from "express";
-
+import User from '../models/user';
 interface ClientRequest extends Request {
     userId: string,
 }
@@ -17,7 +16,8 @@ export const createProfile = async (req: Request, res: Response) => {
             res.status(409).json("profile already exists");
             return;
         }
-        const newProfile = new Profile({ ...profileData, user: request.userId })
+        const user = await User.findOne({_id: request.userId});
+        const newProfile = new Profile({ ...profileData, user: request.userId, lastName: user?.lastName, firstName: user?.firstName });
         await newProfile.save();
         res.status(201).json(newProfile);
     } catch (error: any) {

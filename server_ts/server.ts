@@ -56,20 +56,20 @@ app.use(cors({
 }));
 
 app.use(helmet());
-app.use(express.json());
+app.use(express.json({limit: '10mb'}));
 //app.use(sessionMiddleware);
 //io.use(wrap(sessionMiddleware));
 io.use(authorizeSocketUser);
 io.on("connect", (Socket) => {
     const socket = <SessionSocket>Socket;
-    initializeUser(socket);
+    void initializeUser(socket);
     // console.log(socket.id);
     // console.log(socket.request.session.user);
     // console.log(socket.request.session.user.email);
     //On starting a new conversation
-    socket.on("start_conversation", (username, callback) => {startConversation(socket, username, callback)});
+    socket.on("start_conversation", (username, callback) => {void startConversation(socket, username, callback)});
     socket.on("disconnecting", () => onDisconnect(socket));
-    socket.on("sendMessage", (message) => {receiveMessage(socket, message)})
+    socket.on("sendMessage", (message) => {void receiveMessage(socket, message)})
 });
 
 

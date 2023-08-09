@@ -56,7 +56,7 @@ exports.signin = signin;
  * @param res Response object
  */
 const signup = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { email, password, confirmPassword, phoneNumber, name } = req.body;
+    const { email, password, confirmPassword, phoneNumber, firstName, lastName } = req.body;
     try {
         const existingUser = yield user_1.default.findOne({ email });
         if (existingUser)
@@ -69,7 +69,8 @@ const signup = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             email: email,
             password: hashedPassword,
             phoneNumber: phoneNumber,
-            name: name,
+            firstName: firstName,
+            lastName: lastName,
             chatId: (0, uuid_1.v4)(),
         });
         const token = jsonwebtoken_1.default.sign({ email: result.email, id: result._id }, "test", { expiresIn: "1h" });
