@@ -40,7 +40,7 @@ exports.createProfile = createProfile;
 const getProfile = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const request = req;
-        const profile = yield profile_1.default.findOne({ user: request.userId }).select("country about address age birthday cannabis city cleanliness credit drinking education email employment firstName gender havePets lastName occupation phone picture province sleepSchedule smoking tolerateGuests toleratePets");
+        const profile = yield profile_1.default.findOne({ user: request.userId }).select("country about address age birthday cannabis city cleanliness credit drinking education email employment firstName gender havePets lastName occupation phone picture province sleepSchedule smoking tolerateGuests toleratePets instagram twitter linkedin facebook");
         if (profile) {
             res.status(200).json(profile);
         }

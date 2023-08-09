@@ -24,6 +24,7 @@ import {useAppDispatch, useAppSelector} from "../../store/hooks.ts";
 import {FieldsProps, NestedStyles, RequestDict} from "./types/profileTypes.ts";
 import {Request} from 'MapTypes'
 
+
 //This is the component that handles the user's own profile, displaying the user details and other things.
 const Profile = () => {
     const pageStyles: NestedStyles = {
@@ -159,6 +160,13 @@ const Profile = () => {
         setTextColor("red")
     }
 
+    const calculateAge = (profile: Birthday) => {
+        const birthdate: string = profile.birthday;
+        const currentDate: string = new Date().toISOString().slice(0, 10);
+        const numAge = Math.floor((new Date(currentDate).getTime() - new Date(birthdate).getTime()) / 31557600000);
+        return numAge.toString()
+    };
+
     function HandleViewRequest() {
         if (userOwnRequest) {
             //NOTE: must set zoom else bunkmates page will be grey
@@ -222,6 +230,7 @@ const Profile = () => {
     //display loading indicator
     //}
 
+
     if (profile && !isProfileLoading && !error) {
         return (
             <div style={pageStyles.wholePage}>
@@ -234,31 +243,39 @@ const Profile = () => {
                             image={profile.picture}/>
                         <CardContent>
                             <div style={pageStyles.socialLinks}>
-                                <Link to={profile.instagram} target={"_blank"}>
-                                    <IconButton><GrInstagram/></IconButton>
-                                </Link>
-                                <Link to={profile.facebook} target={"_blank"}>
-                                    <IconButton><GrFacebook/></IconButton>
-                                </Link>
-                                <Link to={profile.linkedin} target={"_blank"}>
-                                    <IconButton><GrLinkedin/></IconButton>
-                                </Link>
-                                <Link to={profile.twitter} target={"_blank"}>
-                                    <IconButton><GrTwitter/></IconButton>
-                                </Link>
+                                {profile.instagram
+                                    ? <Link to={profile.instagram} target={"_blank"}>
+                                        <IconButton><GrInstagram/></IconButton>
+                                    </Link>
+                                    : null}
+                                {profile.facebook
+                                    ? <Link to={profile.facebook} target={"_blank"}>
+                                        <IconButton><GrFacebook/></IconButton>
+                                    </Link>
+                                    : null}
+                                {profile.linkedin
+                                    ? <Link to={profile.linkedin} target={"_blank"}>
+                                        <IconButton><GrLinkedin/></IconButton>
+                                    </Link>
+                                    : null}
+                                {profile.twitter
+                                    ? <Link to={profile.twitter} target={"_blank"}>
+                                        <IconButton><GrTwitter/></IconButton>
+                                    </Link>
+                                    : null}
                             </div>
                             <Divider sx={pageStyles.divider} flexItem={true} textAlign='center'>Description</Divider>
                             <Fields
                                 iconStart={<BsFillClockFill
                                     style={{color: '#2ACDDD'}}/>}
                                 fieldTitle="Age"
-                                fieldValue={profile.age}/>
+                                fieldValue={calculateAge(profile)}/>
                             <Fields
                                 iconStart={<BsInfinity style={{color: '#2ACDDD'}}/>}
                                 fieldTitle="Gender"
                                 fieldValue={profile.gender}/>
                             <Fields iconStart={<BsBriefcaseFill style={{color: '#2ACDDD'}}/>} fieldTitle="Occupation"
-                                    fieldValue={profile.employment}/>
+                                    fieldValue={profile.occupation}/>
                             <Fields iconStart={<FaBook style={{color: '#2ACDDD'}}/>} fieldTitle="Current Education"
                                     fieldValue={profile.education}/>
                         </CardContent>

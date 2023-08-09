@@ -22,7 +22,6 @@ interface SignInPartnerProps {
 }
 
 /**
- *
  * @param company {string} The string that is the name of the sign in provider
  * @param logo {React.ReactElement} The logo (imported from MUI icons) that is ReactElement representing the company logo
  * @param onClick {() => void} The onClick event handler function that decides what to do when partner button clicked, optional for now as functionality not implemented
