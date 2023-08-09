@@ -1,5 +1,5 @@
 import React, {EventHandler, SyntheticEvent, useContext, useState} from "react";
-import {GoogleMap, OVERLAY_MOUSE_TARGET, OverlayViewF} from "@react-google-maps/api";
+import {GoogleMap, MarkerF, OVERLAY_MOUSE_TARGET, OverlayViewF} from "@react-google-maps/api";
 import {Card, Typography, Tooltip, CircularProgress} from "@mui/material/"
 import "./Styles/Bunkmates.css"
 import CreateRequestForm from './Components/RequestForm/CreateRequestForm'
@@ -16,6 +16,7 @@ import {MapCardProps, ActionHandler, Request} from 'MapTypes'
 import {RootState} from "../../store";
 import mapStyles from '../../data/mapStyles.json'
 import {useAppDispatch, useAppSelector} from "../../store/hooks.ts";
+import PlacesAutocomplete from "./Components/Map/PlacesAutocomplete.tsx";
 
 export function MapProfile({request, center}: MapCardProps) {
 
@@ -53,9 +54,9 @@ const Bunkmates: React.FC = (): React.ReactElement => {
     const center = useAppSelector((state: RootState) => state.bunkmate.center)
 
     //state places autocomplete
-    /*
+
     const [selected, setSelected] = useState<boolean>(false);
-    */
+
     //if the user has a profile then set profileChecker to true else false
     //used to rerender useEffect in Bunkmates.jsx containing async functions that gets data from backend
 
@@ -219,13 +220,13 @@ const Bunkmates: React.FC = (): React.ReactElement => {
     return (
         <div>
             <div className="content-container">
-                {/*
+                {
                     mapProfileCard
                         ? null
                         : <div className="search-bar-container" style={{ height: '200px', top: '19vh', position: 'absolute', display: 'flex', justifyContent: 'center' }}>
                             <PlacesAutocomplete setSelected={setSelected} setCenter={setCenter} />
                         </div>
-                */}
+                }
                 <div className="map-container">
 
                     <GoogleMap
@@ -242,8 +243,8 @@ const Bunkmates: React.FC = (): React.ReactElement => {
                         }}>
 
                         {mapProfileCard ?? null}
-                        {/*selected &&
-                            <MarkerF position={center} icon={"http://maps.google.com/mapfiles/ms/icons/blue.png"}/>*/}
+                        {selected &&
+                            <MarkerF position={center} icon={"http://maps.google.com/mapfiles/ms/icons/blue.png"}/>}
                         {listingArray.map((request: Request, index: number) => {
                             return (
                                 <OverlayViewF

@@ -3,9 +3,11 @@ import usePlacesAutocomplete, {
     getLatLng,
 } from "use-places-autocomplete";
 import {Paper, TextField} from "@mui/material";
-import {SyntheticEvent} from "react";
+import React from "react";
+import {useAppDispatch} from "../../../../store/hooks.ts";
 
-const PlacesAutocomplete = (props) => {
+const PlacesAutocomplete = (props: any) => {
+    const dispatch = useAppDispatch();
     const {
         ready,
         value,
@@ -20,13 +22,13 @@ const PlacesAutocomplete = (props) => {
 
     });
 
-    const handleInput = (e: SyntheticEvent<HTMLInputElement>): void => {
+    const handleInput = (e: React.ChangeEvent<HTMLInputElement>): void => {
         // Update the keyword of the input element
         setValue(e.target.value);
     };
 
     const handleSelect =
-        ({description}) =>
+        ({description}: {description: string}) =>
             () => {
                 // When user selects a place, we can replace the keyword without request data from API
                 // by setting the second parameter to "false"
@@ -36,9 +38,9 @@ const PlacesAutocomplete = (props) => {
                 // Get latitude and longitude via utility functions
                 getGeocode({address: description}).then((results) => {
                     const {lat, lng} = getLatLng(results[0]);
-                    console.log("📍 Coordinates: ", {lat, lng});
+                    //console.log("📍 Coordinates: ", {lat, lng});
                     props.setSelected({lat, lng});
-                    props.setCenter({lat, lng});
+                    dispatch(props.setCenter({lat, lng}));
                 });
             };
 
