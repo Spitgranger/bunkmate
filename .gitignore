@@ -1,6 +1,8 @@
 .env
 /node_modules
+/bunkmate-client/node_modules
 /server/node_modules
 /server_ts/node_modules
 .DS_Store
 /.idea
+/my-app/node_modules
